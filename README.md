@@ -90,3 +90,33 @@ tested revision and actual counts.
 ## Non-goals
 
 WolfTrap v0.1 does not perform external penetration testing, reproduce an intrusion campaign, provide offensive payloads, validate a live product, or expand into HERCULES, Ground Truth, MobiPute, financial systems, blockchain effects, or deployment. Owner authority remains with Stackbleed — Governable Intelligence.
+
+## Stage 2: autonomous synthetic frontier (local candidate)
+
+Stage 2 adds an unattended, bounded multi-seed sweep over all **55/55**
+pairwise compositions of the existing 11 synthetic scenario families. Each seed
+retains its complete case schedules, findings, JSON/Markdown reports, and
+completion manifests. A stage-2 aggregate manifest is marked `COMPLETE` only
+after its summary and constituent reports have been written. A single failing
+control, missing unit-test attestation, truncated pair frontier, source change,
+or infrastructure error prevents a `PASS`.
+
+```bash
+export PYTHONPATH=src
+python -m wolftrap.test_runner --output reports/unit-tests.json
+python -m wolftrap sweep --seed 20261113 --seed-count 3 \
+  --mutation-budget 128 --unit-test-summary reports/unit-tests.json \
+  --output-dir reports/stage2
+```
+
+Each seed runs with the same explicit bound of 55 interaction pairs, plus a
+bounded mutation and schedule frontier. A `PASS` proves only this finite
+synthetic qualification, not the correctness of an external system or an
+exhaustive security analysis. A finding against a deliberately defective
+sentinel is not a real-world vulnerability.
+
+**No model integration has been enabled in Stage 2.** The optional GPT-5.6 Sol
+/ Daybreak Blue hypothesis boundary remains disabled. Stage 2 reads no API
+key, sends no network request, spends no credits, and exposes no external
+target. A future model suggestion will have to become a schema-valid,
+bounded deterministic case before the independent oracle can classify it.

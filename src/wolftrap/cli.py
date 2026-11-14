@@ -20,6 +20,7 @@ from .report import (
 from .revision import capture_source_revision
 from .runner import RunConfiguration, run_research
 from .scenario import ScenarioValidationError, load_corpus
+from .stage2 import STAGE2_MANIFEST, STAGE2_REPORT, Stage2Configuration, run_stage2
 from .system import SYSTEMS
 
 
@@ -120,6 +121,34 @@ def _list_scenarios(arguments: argparse.Namespace) -> int:
     return 0
 
 
+def _sweep(arguments: argparse.Namespace) -> int:
+    """Run bounded, complete-pair synthetic campaigns without a model/API."""
+
+    revision = capture_source_revision()
+    outcome = run_stage2(
+        Stage2Configuration(
+            first_seed=arguments.seed,
+            seed_count=arguments.seed_count,
+            mutation_budget=arguments.mutation_budget,
+            system_id=arguments.sut,
+        ),
+        output_dir=arguments.output_dir,
+        unit_test_summary=_unit_summary(arguments.unit_test_summary, revision.to_dict()),
+    )
+    summary = outcome.report["summary"]
+    pairs = outcome.report["pair_coverage"]
+    print(
+        f"{outcome.report['qualification']['status']}: "
+        f"{summary['campaigns_executed']} seed(s), "
+        f"{summary['cases_executed']} cases, "
+        f"{pairs['unique_pairs_reached']}/{pairs['candidate_pairs']} scenario pairs, "
+        f"{summary['findings']} synthetic finding(s)."
+    )
+    print(f"Summary: {Path(arguments.output_dir) / STAGE2_REPORT}")
+    print(f"Completion manifest: {Path(arguments.output_dir) / STAGE2_MANIFEST}")
+    return outcome.exit_code
+
+
 def _reproduce(arguments: argparse.Namespace) -> int:
     if re.fullmatch(r"WOLFTRAP-F-[A-F0-9]{20}", arguments.finding_id) is None:
         raise ValueError("finding id has an invalid format")
@@ -215,6 +244,17 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--unit-test-summary")
     run.add_argument("--output-dir", default="reports")
     run.set_defaults(handler=_run)
+
+    sweep = subparsers.add_parser(
+        "sweep", help="run autonomous full-pair synthetic research across bounded seeds"
+    )
+    sweep.add_argument("--seed", type=int, default=20261113)
+    sweep.add_argument("--seed-count", type=int, default=3)
+    sweep.add_argument("--mutation-budget", type=int, default=128)
+    sweep.add_argument("--sut", choices=sorted(SYSTEMS), default="correct-v1")
+    sweep.add_argument("--unit-test-summary")
+    sweep.add_argument("--output-dir", default="reports/stage2")
+    sweep.set_defaults(handler=_sweep)
 
     listing = subparsers.add_parser("list-scenarios", help="list local corpus entries")
     listing.add_argument("--scenario-directory")

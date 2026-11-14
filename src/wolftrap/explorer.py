@@ -460,7 +460,15 @@ def _mutated_case(
             ),
             unknown_recovery=unknown_recovery,
         )
-        control = "NEGATIVE" if ("revocation_timing" in schedule_axes or unknown_recovery) else "MIXED"
+        # A crash after five advances occurs *after* the synthetic effect has
+        # committed.  Revoking or losing authority during subsequent recovery
+        # cannot retroactively erase that legitimate effect.  Mark only
+        # pre-commit revocation/unknown-recovery schedules as strict negatives.
+        control = (
+            "NEGATIVE"
+            if crash_site < 5 and ("revocation_timing" in schedule_axes or unknown_recovery)
+            else "MIXED"
+        )
     elif "simulated_crash" in schedule_axes:
         commands = _crash_commands(
             request.request_id,
