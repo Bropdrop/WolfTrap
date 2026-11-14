@@ -9,6 +9,7 @@ import sys
 from pathlib import Path
 from typing import Any, Mapping
 
+from .build_scan import MANIFEST_NAME as BUILD_SCAN_MANIFEST, scan_build
 from .execution import execute_case
 from .model import ExperimentCase
 from .report import (
@@ -149,6 +150,21 @@ def _sweep(arguments: argparse.Namespace) -> int:
     return outcome.exit_code
 
 
+def _scan_build(arguments: argparse.Namespace) -> int:
+    """Produce bounded local static triage; never execute inspected code."""
+    outcome = scan_build(arguments.root, arguments.output_dir)
+    summary = outcome.report["summary"]
+    print(
+        f"{outcome.report['qualification']['status']}: "
+        f"{summary['files_inspected']} files, "
+        f"{summary['findings']} review-required signal(s), "
+        f"{summary['errors']} unknown input(s)."
+    )
+    print(f"Evidence: {Path(arguments.output_dir)}")
+    print(f"Manifest: {Path(arguments.output_dir) / BUILD_SCAN_MANIFEST}")
+    return outcome.exit_code
+
+
 def _reproduce(arguments: argparse.Namespace) -> int:
     if re.fullmatch(r"WOLFTRAP-F-[A-F0-9]{20}", arguments.finding_id) is None:
         raise ValueError("finding id has an invalid format")
@@ -226,7 +242,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="wolftrap",
         description=(
-            "Bounded synthetic authorization adversarial research; no external targets."
+            "WolfTrap: no external targets. Bounded synthetic research and offline "
+            "local build inspection."
         ),
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -255,6 +272,14 @@ def build_parser() -> argparse.ArgumentParser:
     sweep.add_argument("--unit-test-summary")
     sweep.add_argument("--output-dir", default="reports/stage2")
     sweep.set_defaults(handler=_sweep)
+
+    scanner = subparsers.add_parser(
+        "scan-build",
+        help="inspect local GitHub Actions and container build definitions without execution",
+    )
+    scanner.add_argument("--root", required=True, help="local source directory to inspect read-only")
+    scanner.add_argument("--output-dir", required=True, help="fresh evidence directory outside source")
+    scanner.set_defaults(handler=_scan_build)
 
     listing = subparsers.add_parser("list-scenarios", help="list local corpus entries")
     listing.add_argument("--scenario-directory")

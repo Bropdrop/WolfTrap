@@ -120,3 +120,33 @@ sentinel is not a real-world vulnerability.
 key, sends no network request, spends no credits, and exposes no external
 target. A future model suggestion will have to become a schema-valid,
 bounded deterministic case before the independent oracle can classify it.
+
+## Stage 3 candidate: scan your own build, offline
+
+WolfTrap Stage 3 adds a read-only local configuration inspector. It identifies
+*conditional* GitHub Actions trust-boundary chains and Dockerfile supply-chain
+signals, then produces JSON, Markdown, SARIF 2.1.0, and a SHA-256 evidence
+manifest. Counterfactual explanations list the factors that would need to
+change to break each composite detection. It does not execute inspected code.
+
+Install the optional YAML parser in the environment running the scanner:
+
+    python -m pip install -e '.[build-scan]'
+
+Inspect your own local project and write results **outside** that project:
+
+    wolftrap scan-build --root /path/to/my-project --output-dir /path/to/new-evidence
+
+The root must be a local directory; URLs and network targets are unsupported.
+Only top-level Dockerfile/Containerfile and GitHub Actions workflows are read,
+with strict file-count and byte bounds. No secrets, source lines, subprocesses,
+model calls, network calls, deployment, or credential use are required. The
+scanner currently supports a finite rule set; it is not a general-purpose code
+scanner, container image vulnerability scanner, or a certificate of security.
+
+Exit status `0` means no supported pattern matched; `1` means human review is
+required; `2` means incomplete/unsupported input and never implies safety.
+Reports use `REVIEW_REQUIRED`, **not CONFIRMED EXPLOIT**. SARIF can be ingested
+by compatible code-scanning tools under a separately authorized workflow.
+See [Stage 3 build inspection](docs/build-inspection.md) for threat scope,
+counterfactuals, usage, and interpretation.
