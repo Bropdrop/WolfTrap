@@ -69,7 +69,7 @@ race windows, and both positive and negative controls. `--scenario` is a targete
 diagnostic mode; it intentionally returns a non-qualifying result because it does
 not exercise the complete gate.
 
-The GitHub Actions workflow runs only when manually dispatched. It runs the test suite and a fixed-budget synthetic qualification, then uploads the report directory as an artifact even when qualification fails. There are no push, pull-request, or scheduled triggers.
+The GitHub Actions workflow automatically runs a bounded Stage 2 qualification on pushes to the exact `feat/wolftrap-autonomous-stage2-v0_2` branch. It also supports manual dispatch using a validated seed. Each run executes the unit suite and the same fixed three-seed, 128-mutation, 55-pairs-per-seed synthetic qualification, verifies the aggregate completion manifest, and retains the evidence as a GitHub Actions artifact for 14 days even if qualification fails. There are no scheduled, pull-request, external-target, model, or paid-API triggers.
 
 ## Evidence and provenance
 
@@ -91,7 +91,7 @@ tested revision and actual counts.
 
 WolfTrap v0.1 does not perform external penetration testing, reproduce an intrusion campaign, provide offensive payloads, validate a live product, or expand into HERCULES, Ground Truth, MobiPute, financial systems, blockchain effects, or deployment. Owner authority remains with Stackbleed — Governable Intelligence.
 
-## Stage 2: autonomous synthetic frontier (local candidate)
+## Stage 2: autonomous synthetic frontier
 
 Stage 2 adds an unattended, bounded multi-seed sweep over all **55/55**
 pairwise compositions of the existing 11 synthetic scenario families. Each seed

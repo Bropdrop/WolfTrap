@@ -14,10 +14,17 @@ class WorkflowPolicyTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.text = WORKFLOW.read_text(encoding="utf-8")
 
-    def test_only_manual_dispatch_is_configured(self) -> None:
-        self.assertRegex(self.text, r"(?m)^on:\s*$\n\s{2}workflow_dispatch:\s*$")
-        for trigger in ("schedule", "push", "pull_request", "pull_request_target"):
+    def test_only_approved_stage2_branch_push_and_manual_dispatch(self) -> None:
+        self.assertRegex(
+            self.text,
+            r"(?m)^on:\s*$\n  push:\s*$\n    branches:\s*$"
+            r"\n      - feat/wolftrap-autonomous-stage2-v0_2\s*$"
+            r"\n  workflow_dispatch:\s*$",
+        )
+        for trigger in ("schedule", "pull_request", "pull_request_target"):
             self.assertNotRegex(self.text, rf"(?m)^\s{{2}}{trigger}:\s*")
+        self.assertEqual(len(re.findall(r"(?m)^\s{2}push:\s*$", self.text)), 1)
+        self.assertNotIn("branches-ignore", self.text)
 
     def test_permissions_are_read_only_and_credentials_are_not_persisted(self) -> None:
         self.assertRegex(
@@ -38,7 +45,20 @@ class WorkflowPolicyTests(unittest.TestCase):
         inputs = set(
             re.findall(r"(?m)^\s{6}([a-z_]+):\s*$", self.text.split("permissions:", 1)[0])
         )
-        self.assertEqual(inputs, {"seed", "mutation_budget"})
+        self.assertEqual(inputs, {"seed"})
+
+    def test_stage2_has_fixed_full_pair_three_seed_gate(self) -> None:
+        self.assertIn("python -m wolftrap sweep", self.text)
+        self.assertIn("--seed-count 3", self.text)
+        self.assertIn("--mutation-budget 128", self.text)
+        self.assertIn("--sut correct-v1", self.text)
+        self.assertIn("--unit-test-summary reports/unit-tests.json", self.text)
+        self.assertIn("--output-dir reports/stage2", self.text)
+        self.assertIn('inputs.seed || \'20261113\'', self.text)
+        self.assertIn('manifest["state"] == "COMPLETE"', self.text)
+        self.assertIn('summary["qualification"]["all_55_pairs_per_seed"] is True', self.text)
+        self.assertIn('summary["summary"]["findings"] == 0', self.text)
+        self.assertNotIn("python -m wolftrap run\n", self.text)
 
     def test_actions_are_sha_pinned_and_artifacts_upload_even_on_failure(self) -> None:
         uses = re.findall(r"(?m)^\s+uses:\s*([^\s#]+)", self.text)
@@ -50,6 +70,8 @@ class WorkflowPolicyTests(unittest.TestCase):
         upload_block = self.text[preceding_step:]
         self.assertRegex(upload_block, r"(?m)^\s+if:\s*always\(\)\s*$")
         self.assertIn("path: reports/", upload_block)
+        self.assertIn("if-no-files-found: error", upload_block)
+        self.assertIn("retention-days: 14", upload_block)
 
 
 if __name__ == "__main__":

@@ -1,6 +1,9 @@
-name: WolfTrap bounded research
+name: WolfTrap Stage 2 bounded research
 
 on:
+  push:
+    branches:
+      - feat/wolftrap-autonomous-stage2-v0_2
   workflow_dispatch:
     inputs:
       seed:
@@ -8,28 +11,19 @@ on:
         required: true
         default: "20261113"
         type: string
-      mutation_budget:
-        description: "Maximum generated mutation cases"
-        required: true
-        default: "32"
-        type: choice
-        options:
-          - "32"
-          - "64"
 
 permissions:
   contents: read
 
 jobs:
   qualify:
-    name: Synthetic qualification
+    name: Three-seed synthetic qualification
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     env:
       PYTHONHASHSEED: "0"
       PYTHONPATH: src
-      WOLFTRAP_SEED: ${{ inputs.seed }}
-      WOLFTRAP_MUTATION_BUDGET: ${{ inputs.mutation_budget }}
+      WOLFTRAP_SEED: ${{ inputs.seed || '20261113' }}
     steps:
       - name: Check out source without persisted credentials
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -49,29 +43,50 @@ jobs:
             echo "seed must be a non-negative decimal integer" >&2
             exit 2
           fi
-          python -c 'import os; value = int(os.environ["WOLFTRAP_SEED"]); assert value <= 9223372036854775807, "seed exceeds the supported bound"'
-          case "$WOLFTRAP_MUTATION_BUDGET" in
-            32|64) ;;
-            *) echo "mutation budget is outside the fixed choices" >&2; exit 2 ;;
-          esac
+          python -c 'import os; value = int(os.environ["WOLFTRAP_SEED"]); assert value + 2 <= 9223372036854775807, "three-seed sweep exceeds the supported bound"'
 
       - name: Run standard-library tests
         run: python -m wolftrap.test_runner --output reports/unit-tests.json
 
-      - name: Run bounded synthetic qualification
+      - name: Run bounded Stage 2 synthetic sweep
         run: >-
-          python -m wolftrap run
+          python -m wolftrap sweep
           --seed "$WOLFTRAP_SEED"
-          --max-mutations "$WOLFTRAP_MUTATION_BUDGET"
-          --output-dir reports
-          --unit-test-summary reports/unit-tests.json
+          --seed-count 3
+          --mutation-budget 128
           --sut correct-v1
+          --unit-test-summary reports/unit-tests.json
+          --output-dir reports/stage2
+
+      - name: Verify complete Stage 2 evidence
+        shell: bash
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          root = Path("reports/stage2")
+          manifest = json.loads((root / "stage2-manifest.json").read_text())
+          summary_bytes = (root / "stage2-summary.json").read_bytes()
+          summary = json.loads(summary_bytes)
+          assert manifest["state"] == "COMPLETE"
+          assert manifest["qualification_status"] == "PASS"
+          assert manifest["report_sha256"] == hashlib.sha256(summary_bytes).hexdigest()
+          assert summary["qualification"]["all_seeds_executed"] is True
+          assert summary["qualification"]["all_55_pairs_per_seed"] is True
+          assert summary["pair_coverage"]["unique_pairs_reached"] == 55
+          assert summary["summary"]["campaigns_executed"] == 3
+          assert summary["summary"]["findings"] == 0
+          assert summary["summary"]["internal_errors"] == 0
+          assert len(manifest["campaign_manifest_hashes"]) == 3
+          PY
 
       - name: Upload research evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: wolftrap-research-${{ github.run_id }}
+          name: wolftrap-stage2-${{ github.run_id }}
           path: reports/
-          if-no-files-found: warn
+          if-no-files-found: error
           retention-days: 14
