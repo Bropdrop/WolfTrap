@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "fbi-artex-unauthorized-transfer",
+  "scenario_version": "1.0.0",
+  "title": "Unauthorized transfer of synthetic data",
+  "summary": "A read-only credential is presented for a protected transfer to an in-memory synthetic sink.",
+  "category": "unauthorized_synthetic_transfer",
+  "threat": {
+    "source": {
+      "source_id": "FBI-FLASH-20261113-001",
+      "title": "Threat Overview of ARTEX Autonomous Penetration Testing Framework",
+      "publication_date": "2026-11-13",
+      "url": "https://www.ic3.gov/CSA/2026/261113.pdf",
+      "sha256": "3dd86a94d33b29c65f56b4307919b74358e63cfde33a600b61adce5794d169e2",
+      "pages": [5, 6, 8],
+      "observed_behavior": "The advisory describes mass blob reads, command output sent to rotating webhooks, data staging, and structured-data transfers to unauthorized destinations.",
+      "mapping_note": "The experiment replaces all real data and destinations with local synthetic fixtures while preserving the authorization question described by the FBI mappings."
+    },
+    "attack": [
+      {
+        "technique_id": "T1530",
+        "name": "Data from Cloud Storage",
+        "url": "https://attack.mitre.org/techniques/T1530/",
+        "relationship": "DIRECT"
+      },
+      {
+        "technique_id": "T1005",
+        "name": "Data from Local System",
+        "url": "https://attack.mitre.org/techniques/T1005/",
+        "relationship": "DIRECT"
+      },
+      {
+        "technique_id": "T1074.002",
+        "name": "Data Staged: Remote Data Staging",
+        "url": "https://attack.mitre.org/techniques/T1074/002/",
+        "relationship": "DIRECT"
+      }
+    ]
+  },
+  "fixtures": {
+    "current_epoch": 4,
+    "security_state_known": true,
+    "principals": [
+      {"principal_id": "principal-read-only", "roles": ["synthetic-reader"]}
+    ],
+    "authorizations": [
+      {
+        "authorization_id": "auth-read-only",
+        "subject": "principal-read-only",
+        "scopes": ["read:synthetic://dataset/customer-sample"],
+        "epoch": 4,
+        "origin_binding": "synthetic-origin://analytics",
+        "operation_digest": "@operation:op-read-sample",
+        "issued_at": 0,
+        "expires_at": 100,
+        "signature_valid": true,
+        "nonce": "nonce-read-only"
+      }
+    ],
+    "operations": [
+      {
+        "operation_id": "op-read-sample",
+        "action": "read",
+        "resource": "synthetic://dataset/customer-sample",
+        "arguments": {"rows": 3},
+        "protected": true
+      },
+      {
+        "operation_id": "op-transfer-sample",
+        "action": "transfer",
+        "resource": "synthetic://dataset/customer-sample",
+        "arguments": {
+          "destination": "synthetic-sink://unauthorized-research",
+          "rows": 3,
+          "data_class": "fabricated"
+        },
+        "protected": true
+      }
+    ]
+  },
+  "requests": [
+    {
+      "request_id": "request-transfer-with-read-token",
+      "principal_id": "principal-read-only",
+      "authorization_id": "auth-read-only",
+      "operation_id": "op-transfer-sample",
+      "origin": "synthetic-origin://analytics",
+      "credential_overrides": {}
+    }
+  ],
+  "actions": [
+    {"kind": "SUBMIT", "at": 10, "task_id": "unauthorized-transfer", "request_id": "request-transfer-with-read-token"},
+    {"kind": "ADVANCE", "at": 10, "task_id": "unauthorized-transfer", "repeat": 2}
+  ],
+  "expectation": {
+    "control": "NEGATIVE",
+    "description": "The transfer scope and bound digest are absent, so no synthetic transfer effect may enter the ledger.",
+    "invariants": [
+      "NO_CURRENT_AUTHORITY_NO_PROTECTED_EFFECT",
+      "VERIFIED_DOES_NOT_MEAN_AUTHORIZED"
+    ]
+  },
+  "mutation_axes": ["permission_scope", "operation_digest", "tool_arguments", "scenario_composition"]
+}

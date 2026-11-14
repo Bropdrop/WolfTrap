@@ -1,0 +1,141 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "fbi-artex-delayed-crash-recovery",
+  "scenario_version": "1.0.0",
+  "title": "Delayed execution, revocation, crash, and recovery races",
+  "summary": "Logical schedules test final authority rechecks, crash-before-effect recovery, crash-after-effect recovery, and unknown recovery state.",
+  "category": "delayed_execution_recovery",
+  "threat": {
+    "source": {
+      "source_id": "FBI-FLASH-20261113-001",
+      "title": "Threat Overview of ARTEX Autonomous Penetration Testing Framework",
+      "publication_date": "2026-11-13",
+      "url": "https://www.ic3.gov/CSA/2026/261113.pdf",
+      "sha256": "3dd86a94d33b29c65f56b4307919b74358e63cfde33a600b61adce5794d169e2",
+      "pages": [3, 9, 10, 11],
+      "observed_behavior": "The advisory emphasizes a compressed defender response window, duplicate agent requests, containment through revocation, and careful evidence-preserving recovery.",
+      "mapping_note": "Delay, crash, and recovery races are defensive engineering stressors without a one-to-one ATT&CK technique; T1078 labels the credential-backed operation being exercised."
+    },
+    "attack": [
+      {
+        "technique_id": "T1078",
+        "name": "Valid Accounts",
+        "url": "https://attack.mitre.org/techniques/T1078/",
+        "relationship": "UNDERLYING_OPERATION"
+      },
+      {
+        "technique_id": "T1098.001",
+        "name": "Account Manipulation: Additional Cloud Credentials",
+        "url": "https://attack.mitre.org/techniques/T1098/001/",
+        "relationship": "DEFENSIVE_STRESSOR"
+      }
+    ]
+  },
+  "fixtures": {
+    "current_epoch": 9,
+    "security_state_known": true,
+    "principals": [
+      {"principal_id": "principal-delayed", "roles": ["synthetic-writer"]},
+      {"principal_id": "principal-crash-before", "roles": ["synthetic-writer"]},
+      {"principal_id": "principal-crash-after", "roles": ["synthetic-writer"]},
+      {"principal_id": "principal-unknown", "roles": ["synthetic-writer"]}
+    ],
+    "authorizations": [
+      {
+        "authorization_id": "auth-delayed",
+        "subject": "principal-delayed",
+        "scopes": ["write:synthetic://race/delayed"],
+        "epoch": 9,
+        "origin_binding": "synthetic-origin://scheduler",
+        "operation_digest": "@operation:op-delayed",
+        "issued_at": 0,
+        "expires_at": 100,
+        "signature_valid": true,
+        "nonce": "nonce-delayed"
+      },
+      {
+        "authorization_id": "auth-crash-before",
+        "subject": "principal-crash-before",
+        "scopes": ["write:synthetic://race/crash-before"],
+        "epoch": 9,
+        "origin_binding": "synthetic-origin://scheduler",
+        "operation_digest": "@operation:op-crash-before",
+        "issued_at": 0,
+        "expires_at": 100,
+        "signature_valid": true,
+        "nonce": "nonce-crash-before"
+      },
+      {
+        "authorization_id": "auth-crash-after",
+        "subject": "principal-crash-after",
+        "scopes": ["write:synthetic://race/crash-after"],
+        "epoch": 9,
+        "origin_binding": "synthetic-origin://scheduler",
+        "operation_digest": "@operation:op-crash-after",
+        "issued_at": 0,
+        "expires_at": 100,
+        "signature_valid": true,
+        "nonce": "nonce-crash-after"
+      },
+      {
+        "authorization_id": "auth-unknown",
+        "subject": "principal-unknown",
+        "scopes": ["write:synthetic://race/unknown"],
+        "epoch": 9,
+        "origin_binding": "synthetic-origin://scheduler",
+        "operation_digest": "@operation:op-unknown",
+        "issued_at": 0,
+        "expires_at": 100,
+        "signature_valid": true,
+        "nonce": "nonce-unknown"
+      }
+    ],
+    "operations": [
+      {"operation_id": "op-delayed", "action": "write", "resource": "synthetic://race/delayed", "arguments": {"value": "delayed"}, "protected": true},
+      {"operation_id": "op-crash-before", "action": "write", "resource": "synthetic://race/crash-before", "arguments": {"value": "recoverable"}, "protected": true},
+      {"operation_id": "op-crash-after", "action": "write", "resource": "synthetic://race/crash-after", "arguments": {"value": "durable"}, "protected": true},
+      {"operation_id": "op-unknown", "action": "write", "resource": "synthetic://race/unknown", "arguments": {"value": "must-not-commit"}, "protected": true}
+    ]
+  },
+  "requests": [
+    {"request_id": "request-delayed", "principal_id": "principal-delayed", "authorization_id": "auth-delayed", "operation_id": "op-delayed", "origin": "synthetic-origin://scheduler", "credential_overrides": {}},
+    {"request_id": "request-crash-before", "principal_id": "principal-crash-before", "authorization_id": "auth-crash-before", "operation_id": "op-crash-before", "origin": "synthetic-origin://scheduler", "credential_overrides": {}},
+    {"request_id": "request-crash-after", "principal_id": "principal-crash-after", "authorization_id": "auth-crash-after", "operation_id": "op-crash-after", "origin": "synthetic-origin://scheduler", "credential_overrides": {}},
+    {"request_id": "request-unknown", "principal_id": "principal-unknown", "authorization_id": "auth-unknown", "operation_id": "op-unknown", "origin": "synthetic-origin://scheduler", "credential_overrides": {}}
+  ],
+  "actions": [
+    {"kind": "SUBMIT", "at": 10, "task_id": "task-delayed", "request_id": "request-delayed"},
+    {"kind": "ADVANCE", "at": 10, "task_id": "task-delayed", "repeat": 4},
+    {"kind": "REVOKE", "at": 11, "authorization_id": "auth-delayed"},
+    {"kind": "ADVANCE", "at": 11, "task_id": "task-delayed"},
+
+    {"kind": "SUBMIT", "at": 20, "task_id": "task-crash-before", "request_id": "request-crash-before"},
+    {"kind": "ADVANCE", "at": 20, "task_id": "task-crash-before", "repeat": 4},
+    {"kind": "CRASH", "at": 20, "task_id": "task-crash-before"},
+    {"kind": "RECOVER", "at": 21, "task_id": "task-crash-before", "new_task_id": "task-crash-before-recovered"},
+    {"kind": "ADVANCE", "at": 21, "task_id": "task-crash-before-recovered", "repeat": 4},
+
+    {"kind": "SUBMIT", "at": 30, "task_id": "task-crash-after", "request_id": "request-crash-after"},
+    {"kind": "ADVANCE", "at": 30, "task_id": "task-crash-after", "repeat": 5},
+    {"kind": "CRASH", "at": 30, "task_id": "task-crash-after"},
+    {"kind": "RECOVER", "at": 31, "task_id": "task-crash-after", "new_task_id": "task-crash-after-recovered"},
+
+    {"kind": "SUBMIT", "at": 40, "task_id": "task-unknown", "request_id": "request-unknown"},
+    {"kind": "ADVANCE", "at": 40, "task_id": "task-unknown"},
+    {"kind": "CRASH", "at": 40, "task_id": "task-unknown"},
+    {"kind": "SET_SECURITY_STATE", "at": 41, "value": false},
+    {"kind": "RECOVER", "at": 41, "task_id": "task-unknown", "new_task_id": "task-unknown-recovered"}
+  ],
+  "expectation": {
+    "control": "MIXED",
+    "description": "Revocation blocks the delayed commit; crash-before recovery commits once; crash-after recovery does not duplicate; unknown recovery fails closed.",
+    "invariants": [
+      "REVOKED_AUTHORITY_NO_NEW_PROTECTED_EFFECT",
+      "REPLAYED_AUTHORIZATION_NO_DUPLICATE_EFFECT",
+      "AUTHORIZED_DOES_NOT_MEAN_EXECUTED",
+      "UNKNOWN_SECURITY_STATE_FAIL_CLOSED",
+      "POSITIVE_CONTROL_MUST_EXECUTE"
+    ]
+  },
+  "mutation_axes": ["revocation_timing", "execution_ordering", "concurrent_requests", "simulated_crash", "retry_recovery", "scenario_composition"]
+}

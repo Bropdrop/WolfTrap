@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "fbi-artex-privilege-escalation",
+  "scenario_version": "1.0.0",
+  "title": "Privilege escalation outside the granted scope",
+  "summary": "A read-only synthetic authorization attempts an administrative role assignment protected effect.",
+  "category": "privilege-escalation",
+  "threat": {
+    "source": {
+      "source_id": "FBI-FLASH-20261113-001",
+      "title": "Threat Overview of ARTEX Autonomous Penetration Testing Framework",
+      "publication_date": "2026-11-13",
+      "url": "https://www.ic3.gov/CSA/2026/261113.pdf",
+      "sha256": "3dd86a94d33b29c65f56b4307919b74358e63cfde33a600b61adce5794d169e2",
+      "pages": [4, 5],
+      "observed_behavior": "Observed privilege escalation included high-value IAM roles, accounts created with an is_admin flag, and forged administrator tokens.",
+      "mapping_note": "The experiment is an in-memory scope check for a synthetic role record; it performs no cloud or directory operation."
+    },
+    "attack": [
+      {
+        "technique_id": "T1098.003",
+        "name": "Account Manipulation: Additional Cloud Roles",
+        "url": "https://attack.mitre.org/techniques/T1098/003/",
+        "relationship": "DIRECT"
+      },
+      {
+        "technique_id": "T1134.001",
+        "name": "Access Token Manipulation: Token Impersonation/Theft",
+        "url": "https://attack.mitre.org/techniques/T1134/001/",
+        "relationship": "DIRECT"
+      }
+    ]
+  },
+  "fixtures": {
+    "current_epoch": 2,
+    "security_state_known": true,
+    "principals": [
+      {"principal_id": "principal-privilege-reader", "roles": ["reader"]}
+    ],
+    "authorizations": [
+      {
+        "authorization_id": "auth-privilege-read-only",
+        "subject": "principal-privilege-reader",
+        "scopes": ["read:synthetic://roles/catalog"],
+        "epoch": 2,
+        "origin_binding": "synthetic-origin://workstation/privilege",
+        "operation_digest": "@operation:op-privilege-read",
+        "issued_at": 0,
+        "expires_at": 100,
+        "signature_valid": true,
+        "nonce": "nonce-privilege-read"
+      }
+    ],
+    "operations": [
+      {
+        "operation_id": "op-privilege-read",
+        "action": "read",
+        "resource": "synthetic://roles/catalog",
+        "arguments": {"role": "viewer"},
+        "protected": true
+      },
+      {
+        "operation_id": "op-privilege-admin",
+        "action": "assign_role",
+        "resource": "synthetic://roles/administrators",
+        "arguments": {"role": "synthetic-admin", "subject": "principal-privilege-reader"},
+        "protected": true
+      }
+    ]
+  },
+  "requests": [
+    {
+      "request_id": "req-privilege-admin",
+      "principal_id": "principal-privilege-reader",
+      "authorization_id": "auth-privilege-read-only",
+      "operation_id": "op-privilege-admin",
+      "origin": "synthetic-origin://workstation/privilege",
+      "credential_overrides": {}
+    }
+  ],
+  "actions": [
+    {"kind": "SUBMIT", "at": 10, "task_id": "task-privilege-admin", "request_id": "req-privilege-admin"},
+    {"kind": "ADVANCE", "at": 10, "task_id": "task-privilege-admin", "repeat": 2}
+  ],
+  "expectation": {
+    "control": "NEGATIVE",
+    "description": "A valid read credential is not current authority for role assignment and must produce no protected effect.",
+    "invariants": ["NO_CURRENT_AUTHORITY_NO_PROTECTED_EFFECT", "VERIFIED_DOES_NOT_MEAN_AUTHORIZED"]
+  },
+  "mutation_axes": ["permission_scope", "authorization_epoch", "operation_digest", "tool_arguments", "scenario_composition"]
+}

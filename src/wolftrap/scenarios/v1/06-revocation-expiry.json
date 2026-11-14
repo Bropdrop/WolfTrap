@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "fbi-artex-revocation-expiry",
+  "scenario_version": "1.0.0",
+  "title": "Revoked and expired synthetic authority",
+  "summary": "Verified credentials are presented after their current authority has been revoked or expired.",
+  "category": "revocation_expiry",
+  "threat": {
+    "source": {
+      "source_id": "FBI-FLASH-20261113-001",
+      "title": "Threat Overview of ARTEX Autonomous Penetration Testing Framework",
+      "publication_date": "2026-11-13",
+      "url": "https://www.ic3.gov/CSA/2026/261113.pdf",
+      "sha256": "3dd86a94d33b29c65f56b4307919b74358e63cfde33a600b61adce5794d169e2",
+      "pages": [10, 11],
+      "observed_behavior": "The advisory recommends revoking unnecessary permissions, rotating credentials, and removing confirmed unauthorized credentials and grants.",
+      "mapping_note": "Expiry and revocation correctness are defensive lifecycle stressors; T1098.001 and T1078 identify the underlying credential-abuse context, not a replay claim."
+    },
+    "attack": [
+      {
+        "technique_id": "T1098.001",
+        "name": "Account Manipulation: Additional Cloud Credentials",
+        "url": "https://attack.mitre.org/techniques/T1098/001/",
+        "relationship": "UNDERLYING_OPERATION"
+      },
+      {
+        "technique_id": "T1078",
+        "name": "Valid Accounts",
+        "url": "https://attack.mitre.org/techniques/T1078/",
+        "relationship": "DEFENSIVE_STRESSOR"
+      }
+    ]
+  },
+  "fixtures": {
+    "current_epoch": 7,
+    "security_state_known": true,
+    "principals": [
+      {"principal_id": "principal-revoked", "roles": ["synthetic-reader"]},
+      {"principal_id": "principal-expired", "roles": ["synthetic-reader"]}
+    ],
+    "authorizations": [
+      {
+        "authorization_id": "auth-revoked",
+        "subject": "principal-revoked",
+        "scopes": ["read:synthetic://records/revoked"],
+        "epoch": 7,
+        "origin_binding": "synthetic-origin://employee",
+        "operation_digest": "@operation:op-revoked-read",
+        "issued_at": 0,
+        "expires_at": 100,
+        "signature_valid": true,
+        "nonce": "nonce-revoked"
+      },
+      {
+        "authorization_id": "auth-expired",
+        "subject": "principal-expired",
+        "scopes": ["read:synthetic://records/expired"],
+        "epoch": 7,
+        "origin_binding": "synthetic-origin://employee",
+        "operation_digest": "@operation:op-expired-read",
+        "issued_at": 0,
+        "expires_at": 5,
+        "signature_valid": true,
+        "nonce": "nonce-expired"
+      }
+    ],
+    "operations": [
+      {
+        "operation_id": "op-revoked-read",
+        "action": "read",
+        "resource": "synthetic://records/revoked",
+        "arguments": {"record_id": "R-REVOKED"},
+        "protected": true
+      },
+      {
+        "operation_id": "op-expired-read",
+        "action": "read",
+        "resource": "synthetic://records/expired",
+        "arguments": {"record_id": "R-EXPIRED"},
+        "protected": true
+      }
+    ]
+  },
+  "requests": [
+    {
+      "request_id": "request-revoked",
+      "principal_id": "principal-revoked",
+      "authorization_id": "auth-revoked",
+      "operation_id": "op-revoked-read",
+      "origin": "synthetic-origin://employee",
+      "credential_overrides": {}
+    },
+    {
+      "request_id": "request-expired",
+      "principal_id": "principal-expired",
+      "authorization_id": "auth-expired",
+      "operation_id": "op-expired-read",
+      "origin": "synthetic-origin://employee",
+      "credential_overrides": {}
+    }
+  ],
+  "actions": [
+    {"kind": "REVOKE", "at": 10, "authorization_id": "auth-revoked"},
+    {"kind": "SUBMIT", "at": 10, "task_id": "task-revoked", "request_id": "request-revoked"},
+    {"kind": "ADVANCE", "at": 10, "task_id": "task-revoked", "repeat": 2},
+    {"kind": "SUBMIT", "at": 10, "task_id": "task-expired", "request_id": "request-expired"},
+    {"kind": "ADVANCE", "at": 10, "task_id": "task-expired", "repeat": 2}
+  ],
+  "expectation": {
+    "control": "NEGATIVE",
+    "description": "Both credentials verify synthetically, but neither has current authority and the protected ledger must remain empty.",
+    "invariants": [
+      "NO_CURRENT_AUTHORITY_NO_PROTECTED_EFFECT",
+      "REVOKED_AUTHORITY_NO_NEW_PROTECTED_EFFECT",
+      "VERIFIED_DOES_NOT_MEAN_AUTHORIZED"
+    ]
+  },
+  "mutation_axes": ["authorization_epoch", "revocation_timing", "execution_ordering", "retry_recovery"]
+}

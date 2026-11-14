@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "fbi-artex-unauthorized-protected-resource",
+  "scenario_version": "1.0.0",
+  "title": "Unauthorized protected-resource selection",
+  "summary": "A valid credential for one synthetic customer record is applied to another record and tool arguments.",
+  "category": "unauthorized-resource-access",
+  "threat": {
+    "source": {
+      "source_id": "FBI-FLASH-20261113-001",
+      "title": "Threat Overview of ARTEX Autonomous Penetration Testing Framework",
+      "publication_date": "2026-11-13",
+      "url": "https://www.ic3.gov/CSA/2026/261113.pdf",
+      "sha256": "3dd86a94d33b29c65f56b4307919b74358e63cfde33a600b61adce5794d169e2",
+      "pages": [3, 4, 10],
+      "observed_behavior": "The advisory lists missing API authentication, IDOR, and authentication bypass, and recommends server-side authorization for customer records.",
+      "mapping_note": "The experiment checks resource and argument binding in a local ledger; it does not send web requests or exploit an application."
+    },
+    "attack": [
+      {
+        "technique_id": "T1190",
+        "name": "Exploit Public-Facing Application",
+        "url": "https://attack.mitre.org/techniques/T1190/",
+        "relationship": "DIRECT"
+      },
+      {
+        "technique_id": "T1078",
+        "name": "Valid Accounts",
+        "url": "https://attack.mitre.org/techniques/T1078/",
+        "relationship": "UNDERLYING_OPERATION"
+      }
+    ]
+  },
+  "fixtures": {
+    "current_epoch": 1,
+    "security_state_known": true,
+    "principals": [
+      {"principal_id": "principal-resource-reader", "roles": ["customer-reader"]}
+    ],
+    "authorizations": [
+      {
+        "authorization_id": "auth-resource-customer-a",
+        "subject": "principal-resource-reader",
+        "scopes": ["read:synthetic://customers/a"],
+        "epoch": 1,
+        "origin_binding": "synthetic-origin://portal/resource",
+        "operation_digest": "@operation:op-resource-customer-a",
+        "issued_at": 0,
+        "expires_at": 100,
+        "signature_valid": true,
+        "nonce": "nonce-resource-customer-a"
+      }
+    ],
+    "operations": [
+      {
+        "operation_id": "op-resource-customer-a",
+        "action": "read",
+        "resource": "synthetic://customers/a",
+        "arguments": {"customer_id": "A"},
+        "protected": true
+      },
+      {
+        "operation_id": "op-resource-customer-b",
+        "action": "read",
+        "resource": "synthetic://customers/b",
+        "arguments": {"customer_id": "B"},
+        "protected": true
+      }
+    ]
+  },
+  "requests": [
+    {
+      "request_id": "req-resource-customer-b",
+      "principal_id": "principal-resource-reader",
+      "authorization_id": "auth-resource-customer-a",
+      "operation_id": "op-resource-customer-b",
+      "origin": "synthetic-origin://portal/resource",
+      "credential_overrides": {}
+    }
+  ],
+  "actions": [
+    {"kind": "SUBMIT", "at": 10, "task_id": "task-resource-customer-b", "request_id": "req-resource-customer-b"},
+    {"kind": "ADVANCE", "at": 10, "task_id": "task-resource-customer-b", "repeat": 2}
+  ],
+  "expectation": {
+    "control": "NEGATIVE",
+    "description": "Authority bound to customer A does not authorize a customer B effect or altered tool arguments.",
+    "invariants": ["NO_CURRENT_AUTHORITY_NO_PROTECTED_EFFECT", "VERIFIED_DOES_NOT_MEAN_AUTHORIZED"]
+  },
+  "mutation_axes": ["permission_scope", "operation_digest", "tool_arguments", "execution_ordering", "scenario_composition"]
+}

@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "fbi-artex-supplier-origin-substitution",
+  "scenario_version": "1.0.0",
+  "title": "Trusted supplier origin substitution",
+  "summary": "A supplier-bound synthetic authorization is presented from a different local origin.",
+  "category": "trusted-relationship",
+  "threat": {
+    "source": {
+      "source_id": "FBI-FLASH-20261113-001",
+      "title": "Threat Overview of ARTEX Autonomous Penetration Testing Framework",
+      "publication_date": "2026-11-13",
+      "url": "https://www.ic3.gov/CSA/2026/261113.pdf",
+      "sha256": "3dd86a94d33b29c65f56b4307919b74358e63cfde33a600b61adce5794d169e2",
+      "pages": [2, 3],
+      "observed_behavior": "The advisory describes weaker third-party vendors, cross-account cloud trust, and vendor credentials used through trusted B2B federation.",
+      "mapping_note": "The experiment substitutes an in-memory origin label only; it neither contacts nor impersonates a real supplier."
+    },
+    "attack": [
+      {
+        "technique_id": "T1195",
+        "name": "Supply Chain Compromise",
+        "url": "https://attack.mitre.org/techniques/T1195/",
+        "relationship": "DIRECT"
+      },
+      {
+        "technique_id": "T1199",
+        "name": "Trusted Relationship",
+        "url": "https://attack.mitre.org/techniques/T1199/",
+        "relationship": "DIRECT"
+      }
+    ]
+  },
+  "fixtures": {
+    "current_epoch": 4,
+    "security_state_known": true,
+    "principals": [
+      {"principal_id": "principal-supplier-service", "roles": ["supplier-service"]}
+    ],
+    "authorizations": [
+      {
+        "authorization_id": "auth-supplier-publish",
+        "subject": "principal-supplier-service",
+        "scopes": ["publish:synthetic://packages/supplier"],
+        "epoch": 4,
+        "origin_binding": "synthetic-origin://supplier/trusted",
+        "operation_digest": "@operation:op-supplier-publish",
+        "issued_at": 0,
+        "expires_at": 100,
+        "signature_valid": true,
+        "nonce": "nonce-supplier-publish"
+      }
+    ],
+    "operations": [
+      {
+        "operation_id": "op-supplier-publish",
+        "action": "publish",
+        "resource": "synthetic://packages/supplier",
+        "arguments": {"package": "synthetic-package-1", "version": "0.0-test"},
+        "protected": true
+      }
+    ]
+  },
+  "requests": [
+    {
+      "request_id": "req-supplier-substituted-origin",
+      "principal_id": "principal-supplier-service",
+      "authorization_id": "auth-supplier-publish",
+      "operation_id": "op-supplier-publish",
+      "origin": "synthetic-origin://supplier/untrusted-substitute",
+      "credential_overrides": {}
+    }
+  ],
+  "actions": [
+    {"kind": "SUBMIT", "at": 10, "task_id": "task-supplier-origin", "request_id": "req-supplier-substituted-origin"},
+    {"kind": "ADVANCE", "at": 10, "task_id": "task-supplier-origin", "repeat": 2}
+  ],
+  "expectation": {
+    "control": "NEGATIVE",
+    "description": "A trusted subject and scope without the exact bound supplier origin must create no protected effect.",
+    "invariants": ["NO_VALID_ORIGIN_BINDING_NO_PROTECTED_EFFECT", "VERIFIED_DOES_NOT_MEAN_AUTHORIZED"]
+  },
+  "mutation_axes": ["principal_identity", "permission_scope", "execution_ordering", "scenario_composition"]
+}

@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "fbi-artex-positive-authorized-operation",
+  "scenario_version": "1.0.0",
+  "title": "Legitimate current authority produces one synthetic protected effect",
+  "summary": "Positive control proving that security qualification cannot pass by denying every request.",
+  "category": "positive-control",
+  "threat": {
+    "source": {
+      "source_id": "FBI-FLASH-20261113-001",
+      "title": "Threat Overview of ARTEX Autonomous Penetration Testing Framework",
+      "publication_date": "2026-11-13",
+      "url": "https://www.ic3.gov/CSA/2026/261113.pdf",
+      "sha256": "3dd86a94d33b29c65f56b4307919b74358e63cfde33a600b61adce5794d169e2",
+      "pages": [10],
+      "observed_behavior": "The FBI recommends server-side authorization for access to customer records and least-privilege application permissions.",
+      "mapping_note": "This is a positive defensive control, not an observed adversarial behavior or a claim of compromise."
+    },
+    "attack": [
+      {
+        "technique_id": "T1078",
+        "name": "Valid Accounts",
+        "url": "https://attack.mitre.org/techniques/T1078/",
+        "relationship": "UNDERLYING_OPERATION"
+      }
+    ]
+  },
+  "fixtures": {
+    "current_epoch": 7,
+    "security_state_known": true,
+    "principals": [
+      {"principal_id": "principal-positive-analyst", "roles": ["analyst"]}
+    ],
+    "authorizations": [
+      {
+        "authorization_id": "auth-positive-read",
+        "subject": "principal-positive-analyst",
+        "scopes": ["read:synthetic://records/positive"],
+        "epoch": 7,
+        "origin_binding": "synthetic-origin://workstation/positive",
+        "operation_digest": "@operation:op-positive-read",
+        "issued_at": 0,
+        "expires_at": 100,
+        "signature_valid": true,
+        "nonce": "nonce-positive-read"
+      }
+    ],
+    "operations": [
+      {
+        "operation_id": "op-positive-read",
+        "action": "read",
+        "resource": "synthetic://records/positive",
+        "arguments": {"record_id": "synthetic-record-001"},
+        "protected": true
+      }
+    ]
+  },
+  "requests": [
+    {
+      "request_id": "req-positive-read",
+      "principal_id": "principal-positive-analyst",
+      "authorization_id": "auth-positive-read",
+      "operation_id": "op-positive-read",
+      "origin": "synthetic-origin://workstation/positive",
+      "credential_overrides": {}
+    }
+  ],
+  "actions": [
+    {"kind": "SUBMIT", "at": 10, "task_id": "task-positive", "request_id": "req-positive-read"},
+    {"kind": "ADVANCE", "at": 10, "task_id": "task-positive", "repeat": 7}
+  ],
+  "expectation": {
+    "control": "POSITIVE",
+    "description": "The exact current subject, scope, epoch, origin, digest, validity window, and unused nonce permit exactly one protected effect.",
+    "invariants": ["POSITIVE_CONTROL_MUST_EXECUTE", "AUTHORIZED_DOES_NOT_MEAN_EXECUTED"]
+  },
+  "mutation_axes": [
+    "principal_identity",
+    "permission_scope",
+    "authorization_epoch",
+    "operation_digest",
+    "tool_arguments",
+    "execution_ordering",
+    "concurrent_requests",
+    "revocation_timing",
+    "simulated_crash",
+    "retry_recovery",
+    "scenario_composition"
+  ]
+}

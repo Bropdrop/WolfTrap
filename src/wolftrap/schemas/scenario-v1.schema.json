@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://governableintelligence.example/wolftrap/scenario-v1.schema.json",
+  "title": "WolfTrap synthetic threat scenario v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "scenario_id",
+    "scenario_version",
+    "title",
+    "summary",
+    "category",
+    "threat",
+    "fixtures",
+    "requests",
+    "actions",
+    "expectation",
+    "mutation_axes"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "scenario_id": {"type": "string", "minLength": 1},
+    "scenario_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "title": {"type": "string", "minLength": 1},
+    "summary": {"type": "string", "minLength": 1},
+    "category": {"type": "string", "minLength": 1},
+    "threat": {"type": "object"},
+    "fixtures": {"type": "object"},
+    "requests": {"type": "array", "minItems": 1},
+    "actions": {"type": "array", "minItems": 1},
+    "expectation": {"type": "object"},
+    "mutation_axes": {"type": "array", "uniqueItems": true}
+  },
+  "$comment": "The standard-library loader performs the complete fail-closed validation used at runtime."
+}

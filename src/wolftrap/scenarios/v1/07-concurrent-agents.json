@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "fbi-artex-concurrent-agents",
+  "scenario_version": "1.0.0",
+  "title": "Concurrent synthetic agents share one authorization",
+  "summary": "Two logical agents interleave requests using one replay key; only one protected effect may commit.",
+  "category": "concurrent_multi_agent",
+  "threat": {
+    "source": {
+      "source_id": "FBI-FLASH-20261113-001",
+      "title": "Threat Overview of ARTEX Autonomous Penetration Testing Framework",
+      "publication_date": "2026-11-13",
+      "url": "https://www.ic3.gov/CSA/2026/261113.pdf",
+      "sha256": "3dd86a94d33b29c65f56b4307919b74358e63cfde33a600b61adce5794d169e2",
+      "pages": [2, 9],
+      "observed_behavior": "The advisory describes concurrent campaigns and evidence of multiple sub-agents overwriting one another or generating duplicate requests.",
+      "mapping_note": "Concurrency is an FBI-inspired engineering stressor, not a standalone ATT&CK technique; T1078 labels the valid-account operation being stressed."
+    },
+    "attack": [
+      {
+        "technique_id": "T1078",
+        "name": "Valid Accounts",
+        "url": "https://attack.mitre.org/techniques/T1078/",
+        "relationship": "UNDERLYING_OPERATION"
+      }
+    ]
+  },
+  "fixtures": {
+    "current_epoch": 3,
+    "security_state_known": true,
+    "principals": [
+      {"principal_id": "principal-concurrent", "roles": ["synthetic-writer"]}
+    ],
+    "authorizations": [
+      {
+        "authorization_id": "auth-shared",
+        "subject": "principal-concurrent",
+        "scopes": ["write:synthetic://ledger/concurrent"],
+        "epoch": 3,
+        "origin_binding": "synthetic-origin://automation",
+        "operation_digest": "@operation:op-concurrent-write",
+        "issued_at": 0,
+        "expires_at": 100,
+        "signature_valid": true,
+        "nonce": "nonce-shared-concurrent"
+      }
+    ],
+    "operations": [
+      {
+        "operation_id": "op-concurrent-write",
+        "action": "write",
+        "resource": "synthetic://ledger/concurrent",
+        "arguments": {"value": "bounded-synthetic-value"},
+        "protected": true
+      }
+    ]
+  },
+  "requests": [
+    {
+      "request_id": "request-concurrent",
+      "principal_id": "principal-concurrent",
+      "authorization_id": "auth-shared",
+      "operation_id": "op-concurrent-write",
+      "origin": "synthetic-origin://automation",
+      "credential_overrides": {}
+    }
+  ],
+  "actions": [
+    {"kind": "SUBMIT", "at": 10, "task_id": "agent-a", "request_id": "request-concurrent"},
+    {"kind": "SUBMIT", "at": 10, "task_id": "agent-b", "request_id": "request-concurrent"},
+    {"kind": "ADVANCE", "at": 10, "task_id": "agent-a", "repeat": 2},
+    {"kind": "ADVANCE", "at": 10, "task_id": "agent-b", "repeat": 2},
+    {"kind": "ADVANCE", "at": 10, "task_id": "agent-a"},
+    {"kind": "ADVANCE", "at": 10, "task_id": "agent-b"},
+    {"kind": "ADVANCE", "at": 10, "task_id": "agent-a", "repeat": 4},
+    {"kind": "ADVANCE", "at": 10, "task_id": "agent-b", "repeat": 4}
+  ],
+  "expectation": {
+    "control": "MIXED",
+    "description": "One valid agent commits exactly one effect; the conflicting agent is rejected at replay reservation.",
+    "invariants": [
+      "NO_CURRENT_AUTHORITY_NO_PROTECTED_EFFECT",
+      "REPLAYED_AUTHORIZATION_NO_DUPLICATE_EFFECT",
+      "POSITIVE_CONTROL_MUST_EXECUTE"
+    ]
+  },
+  "mutation_axes": ["concurrent_requests", "execution_ordering", "simulated_crash", "retry_recovery"]
+}

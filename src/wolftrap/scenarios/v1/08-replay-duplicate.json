@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0",
+  "scenario_id": "fbi-artex-replay-duplicate",
+  "scenario_version": "1.0.0",
+  "title": "Authorization replay and duplicate operation",
+  "summary": "A completed one-shot authorization is presented again for the same protected operation.",
+  "category": "replay_duplicate",
+  "threat": {
+    "source": {
+      "source_id": "FBI-FLASH-20261113-001",
+      "title": "Threat Overview of ARTEX Autonomous Penetration Testing Framework",
+      "publication_date": "2026-11-13",
+      "url": "https://www.ic3.gov/CSA/2026/261113.pdf",
+      "sha256": "3dd86a94d33b29c65f56b4307919b74358e63cfde33a600b61adce5794d169e2",
+      "pages": [5, 9],
+      "observed_behavior": "The advisory notes Pass-the-Ticket activity and attack evidence involving duplicate requests from multiple sub-agents.",
+      "mapping_note": "This generic idempotency experiment is a defensive stressor. T1550.003 is included as the advisory's closest explicit alternate-authentication replay context, not as a claim that the synthetic token is Kerberos."
+    },
+    "attack": [
+      {
+        "technique_id": "T1550.003",
+        "name": "Use Alternate Authentication Material: Pass the Ticket",
+        "url": "https://attack.mitre.org/techniques/T1550/003/",
+        "relationship": "DEFENSIVE_STRESSOR"
+      },
+      {
+        "technique_id": "T1078",
+        "name": "Valid Accounts",
+        "url": "https://attack.mitre.org/techniques/T1078/",
+        "relationship": "UNDERLYING_OPERATION"
+      }
+    ]
+  },
+  "fixtures": {
+    "current_epoch": 2,
+    "security_state_known": true,
+    "principals": [
+      {"principal_id": "principal-replay", "roles": ["synthetic-publisher"]}
+    ],
+    "authorizations": [
+      {
+        "authorization_id": "auth-replay-once",
+        "subject": "principal-replay",
+        "scopes": ["publish:synthetic://notices/replay"],
+        "epoch": 2,
+        "origin_binding": "synthetic-origin://publisher",
+        "operation_digest": "@operation:op-publish-once",
+        "issued_at": 0,
+        "expires_at": 100,
+        "signature_valid": true,
+        "nonce": "nonce-publish-once"
+      }
+    ],
+    "operations": [
+      {
+        "operation_id": "op-publish-once",
+        "action": "publish",
+        "resource": "synthetic://notices/replay",
+        "arguments": {"notice_id": "NOTICE-001"},
+        "protected": true
+      }
+    ]
+  },
+  "requests": [
+    {
+      "request_id": "request-publish-once",
+      "principal_id": "principal-replay",
+      "authorization_id": "auth-replay-once",
+      "operation_id": "op-publish-once",
+      "origin": "synthetic-origin://publisher",
+      "credential_overrides": {}
+    }
+  ],
+  "actions": [
+    {"kind": "SUBMIT", "at": 10, "task_id": "first-attempt", "request_id": "request-publish-once"},
+    {"kind": "ADVANCE", "at": 10, "task_id": "first-attempt", "repeat": 7},
+    {"kind": "SUBMIT", "at": 11, "task_id": "replayed-attempt", "request_id": "request-publish-once"},
+    {"kind": "ADVANCE", "at": 11, "task_id": "replayed-attempt", "repeat": 7}
+  ],
+  "expectation": {
+    "control": "MIXED",
+    "description": "The first legitimate operation commits; replay is denied and cannot create a second ledger effect.",
+    "invariants": [
+      "REPLAYED_AUTHORIZATION_NO_DUPLICATE_EFFECT",
+      "POSITIVE_CONTROL_MUST_EXECUTE"
+    ]
+  },
+  "mutation_axes": ["concurrent_requests", "execution_ordering", "simulated_crash", "retry_recovery"]
+}
