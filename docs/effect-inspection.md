@@ -26,19 +26,19 @@ has other sandbox safeguards not modeled by this lexical scanner.
 
 | Rule | Review condition, not a proved vulnerability |
 | --- | --- |
-| `WT-EFFECT-001` | Recognized unrestricted flag (`--yolo`, `--dangerously-skip-permissions`, etc.) near command construction |
-| `WT-EFFECT-002` | Host agent credential directory/file name together with worker/temporary filesystem copy |
-| `WT-EFFECT-003` | Explicit environment-controlled sandbox bypass |
+| `WT-EFFECT-001` | Recognized unrestricted flag (`--yolo`, `--dangerously-skip-permissions`, etc.) in bounded JS/TS, Python or shell command construction |
+| `WT-EFFECT-002` | Host agent credential directory/file name correlated with a filesystem copy source in JS/TS, Python or shell |
+| `WT-EFFECT-003` | Explicit environment-controlled sandbox bypass in JS/TS, Python or shell |
 | `WT-EFFECT-004` | `--dev-bind / /`-style whole-root bind with no local network namespace marker; network isolation elsewhere is unknown |
-| `WT-EFFECT-005` | API credential identifier combined with browser `localStorage` read/write |
-| `WT-EFFECT-006` | API key identifier combined with browser fetch and authorization header |
-| `WT-EFFECT-007` | URL host safety checker, literal private-host filtering, and HTTP fetch without recognized DNS resolution in the file |
+| `WT-EFFECT-005` | API credential key or `KEYS.apiKey` correlated with browser `localStorage` read/write, not just appearing elsewhere in the file |
+| `WT-EFFECT-006` | Browser fetch plus API key in a named auth header value (including quoted keys or `Headers.set`) |
+| `WT-EFFECT-007` | URL host safety checker, literal private-host filtering, and HTTP fetch without a recognized hostname-linked DNS lookup marker |
 | `WT-EFFECT-008` | Response chunk aggregation without a recognized byte ceiling |
 | `WT-EFFECT-009` | `SKILL.md` instructs MCP config key extraction and upload; evidence notes recognized user confirmation |
-| `WT-EFFECT-010` | `SKILL.md` tool frontmatter declares both wildcard MCP scope and Bash |
+| `WT-EFFECT-010` | `SKILL.md` tool frontmatter declares wildcard scope and Bash |
 | `WT-EFFECT-011` | `SKILL.md` imperatively claims to override trusted instructions or suppress approval |
 | `WT-EFFECT-012` | Python outbound uploader combines CLI `--api-key`, selectable `--api-url` and auth header without a recognized host allowlist |
-| `WT-EFFECT-013` | Shell `curl -L ... -o` for variable URL without a recognized maximum filesize/time/protocol control |
+| `WT-EFFECT-013` | Shell `curl -L` / `--location` with output to a variable destination and no recognized `--max-filesize` byte bound. A timeout or redirect-protocol rule alone is not a byte cap |
 
 Every rule is a conservative lexical correlation. Naming or syntax variants,
 split-file effects, permission handling in another module, DNS resolution
@@ -95,3 +95,13 @@ existing Stage 3–5 and Stage 5.1 semantics remain separate.
 
 No live target was exploited, and neither the new lexical rules nor unit tests
 replace an independently authored hostile holdout corpus or live qualification.
+
+### Local hostile regression, 2026-11-15
+
+A separately stored, **author-created** synthetic corpus challenged exact
+Stage 5.2 checkpoint `451230128a615e501457910453dfa6e4a697aee4`.
+The original 50 cases exposed 18 pattern misses; an additional 12 cases exposed
+eight false positives. This local repair addresses the demonstrated cases;
+both frozen corpora later matched **62/62** labels (37 positive signals,
+25 benign negatives). This is a finite self-review, **not independent hostile
+qualification** and not an empirical real-world exploit-detection rate.

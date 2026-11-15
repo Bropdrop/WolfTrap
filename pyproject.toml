@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wolftrap"
-version = "0.5.2"
+version = "0.5.2.post1"
 description = "Offline CI/build, agent trust-boundary, and protected-effect inspection with synthetic challenge labs"
 readme = "README.md"
 license = "Apache-2.0"
