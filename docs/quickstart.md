@@ -1,7 +1,8 @@
 # WolfTrap — quick start for repository maintainers
 
 WolfTrap helps you review local GitHub Actions, root container-build trust
-boundaries, and selected JavaScript/TypeScript agent trust boundaries. It does
+boundaries, selected JavaScript/TypeScript agent trust boundaries, and Stage 5.2
+protected-effect and skill instruction patterns. It does
 **not** execute your application, run a pentest against a host, validate
 deployment credentials, or guarantee that a repository is secure.
 
@@ -98,6 +99,26 @@ wolftrap verify-agent-challenge --evidence-dir /tmp/wt-agent-replay
 The 108-case corpus and replay demonstrate finite, local detection behavior;
 they cannot certify another agent's runtime identity, authority, or safety.
 Read [supported syntax, evidence, and limits](agent-inspection.md).
+
+### 5. Offline protected-effect and skill scan (Stage 5.2)
+
+This independent command reviews bounded JS/TS, Python, shell, and `SKILL.md`
+inputs, looking for conditional unrestricted agent launch, host credentials,
+explicit bypass, broad root mounts, browser API keys, upload instructions,
+external destinations, and resource bounds.
+
+```bash
+wolftrap scan-effects --root /path/to/your-agent-source \
+  --output-dir /tmp/wt-effects
+wolftrap verify-effects --evidence-dir /tmp/wt-effects
+```
+
+Use repeated `--file relative/path.ts` and `--file skills/SKILL.md` for exact
+selection. The command never executes inspected code. Rules require manual
+review; a skill's claimed permission or approval cannot grant host authority.
+All outputs are anonymous path aliases with JSON/Markdown/SARIF and SHA-256
+evidence manifest. This is **not** part of the published CI/build Action's
+automatic checks. See [the 13 conditional rule scopes](effect-inspection.md).
 
 ## Interpret the results
 

@@ -158,7 +158,7 @@ def _finding(
     return result
 
 
-def _yaml_document(text: str) -> dict[str, Any]:
+def _yaml_document(text: str, *, with_nodes: bool = False) -> Any:
     try:
         import yaml
     except ImportError as exc:
@@ -185,13 +185,56 @@ def _yaml_document(text: str) -> dict[str, Any]:
                 raise yaml.YAMLError("duplicate, merge, or non-string workflow keys")
             return super().construct_mapping(node, deep=deep)
 
+    loader = BoundedLoader(text)
     try:
-        document = yaml.load(text, Loader=BoundedLoader)
+        root_node = loader.get_single_node()
+        document = loader.construct_document(root_node) if root_node is not None else None
     except yaml.YAMLError as exc:
         raise UnscannableInput("malformed or unsupported workflow YAML") from exc
+    finally:
+        loader.dispose()
     if not isinstance(document, dict) or "<<" in document:
         raise UnscannableInput("workflow mapping missing or merge keys unsupported")
-    return document
+    return (document, root_node) if with_nodes else document
+
+
+def _workflow_locations(root_node: Any) -> tuple[dict[str, int], dict[tuple[str, int], int]]:
+    """Use YAML scalar source marks, never first-occurrence text search.
+
+    Distinguishes identical action references in separate jobs and ignores
+    comments or similar values in unrelated YAML fields.
+    """
+    from yaml.nodes import MappingNode, ScalarNode, SequenceNode
+
+    def child(node: Any, key: str) -> Any:
+        if not isinstance(node, MappingNode):
+            return None
+        for name, value in node.value:
+            if isinstance(name, ScalarNode) and name.value == key:
+                return value
+        return None
+
+    jobs_node = child(root_node, "jobs")
+    if not isinstance(jobs_node, MappingNode):
+        raise UnscannableInput("workflow YAML source positions unavailable")
+    job_lines: dict[str, int] = {}
+    uses_lines: dict[tuple[str, int], int] = {}
+    for name, job in jobs_node.value:
+        if not isinstance(name, ScalarNode):
+            raise UnscannableInput("workflow YAML job position unavailable")
+        job_lines[name.value] = name.start_mark.line + 1
+        steps = child(job, "steps")
+        if steps is None:
+            continue
+        if not isinstance(steps, SequenceNode):
+            raise UnscannableInput("workflow YAML steps position unavailable")
+        for index, step in enumerate(steps.value):
+            uses = child(step, "uses")
+            if uses is not None:
+                if not isinstance(uses, ScalarNode):
+                    raise UnscannableInput("workflow YAML action position unavailable")
+                uses_lines[name.value, index] = uses.start_mark.line + 1
+    return job_lines, uses_lines
 
 
 def _triggers(value: Any) -> set[str]:
@@ -272,7 +315,8 @@ def _risky_expressions(run: str, free_form: set[str]) -> list[str]:
 
 
 def _scan_workflow(path: str, text: str) -> list[dict[str, Any]]:
-    document = _yaml_document(text)
+    document, root_node = _yaml_document(text, with_nodes=True)
+    job_lines, uses_lines = _workflow_locations(root_node)
     triggers = _triggers(document.get("on"))
     jobs = document.get("jobs")
     if not isinstance(jobs, dict) or not jobs:
@@ -309,7 +353,7 @@ def _scan_workflow(path: str, text: str) -> list[dict[str, Any]]:
         permissions = job.get("permissions", document.get("permissions"))
         writable = _writable(permissions) if permissions is not None else False
         if permissions is None:
-            line = _line(text, str(job_name) + ":")
+            line = job_lines[str(job_name)]
             findings.append(_finding(
                 "WT-GHA-004", path, line,
                 [_factor("unknown_token_permissions", path, line)],
@@ -336,7 +380,9 @@ def _scan_workflow(path: str, text: str) -> list[dict[str, Any]]:
                         uses,
                     ))
                 if not pinned:
-                    line = _line(text, uses)
+                    line = uses_lines.get((str(job_name), index))
+                    if line is None:
+                        raise UnscannableInput("workflow action source position unavailable")
                     findings.append(_finding(
                         "WT-GHA-003", path, line,
                         [_factor("mutable_action_ref", path, line)],

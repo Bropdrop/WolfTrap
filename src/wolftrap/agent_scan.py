@@ -107,13 +107,18 @@ def _read_file(directory: int, name: str, limit: int = MAX_FILE_BYTES) -> bytes:
         os.close(fd)
 
 
-def _selected_file(root: int, relative: str) -> bytes:
+def _source_supported(relative: str, suffixes: Sequence[str]) -> bool:
+    path = Path(relative)
+    return path.suffix.lower() in suffixes and (path.suffix.lower() != ".md" or path.name == "SKILL.md")
+
+
+def _selected_file(root: int, relative: str, *, suffixes: Sequence[str] = SUFFIXES) -> bytes:
     if not isinstance(relative, str) or not relative or "\x00" in relative:
         raise AgentInputError("invalid input selection")
     path = Path(relative)
     if path.is_absolute() or ".." in path.parts or len(path.parts) > MAX_DEPTH:
         raise AgentInputError("input selection escapes root or exceeds depth bound")
-    if path.suffix.lower() not in SUFFIXES:
+    if not _source_supported(relative, suffixes):
         raise AgentInputError("selected file extension is unsupported")
     descriptor = os.dup(root)
     try:
@@ -127,7 +132,7 @@ def _selected_file(root: int, relative: str) -> bytes:
         os.close(descriptor)
 
 
-def _discover(root: int) -> tuple[list[str], int, int]:
+def _discover(root: int, *, suffixes: Sequence[str] = SUFFIXES) -> tuple[list[str], int, int]:
     paths: list[str] = []
     entries_seen = 0
     ignored = 0
@@ -159,7 +164,7 @@ def _discover(root: int) -> tuple[list[str], int, int]:
                     walk(child, relative + "/", depth + 1)
                 finally:
                     os.close(child)
-            elif Path(name).suffix.lower() in SUFFIXES:
+            elif _source_supported(relative, suffixes):
                 if not stat.S_ISREG(metadata.st_mode):
                     raise AgentInputError("supported source is not a regular file")
                 paths.append(relative)

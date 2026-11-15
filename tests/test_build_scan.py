@@ -148,6 +148,34 @@ jobs:
             self.assertEqual(result.report["findings"][0]["rule_id"], "WT-GHA-003")
             self.assertEqual(result.report["qualification"]["confirmed_vulnerabilities"], 0)
 
+    def test_duplicate_action_references_are_reported_at_each_real_yaml_step(self) -> None:
+        workflow = """\
+name: fixture
+on: push
+jobs:
+  alpha:
+    runs-on: ubuntu-latest
+    steps:
+      # actions/checkout@v4 is mentioned here but is not a step
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+  beta:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+"""
+        with fixture(workflow) as (root, output):
+            result = scan_build(root, output)
+            self.assertEqual(result.exit_code, 1)
+            mutable = [item for item in result.report["findings"]
+                       if item["rule_id"] == "WT-GHA-003"]
+            self.assertEqual([item["line"] for item in mutable], [8, 9, 13, 14])
+            self.assertEqual(len({item["id"] for item in mutable}), 4)
+            missing_perms = [item for item in result.report["findings"]
+                             if item["rule_id"] == "WT-GHA-004"]
+            self.assertEqual([item["line"] for item in missing_perms], [4, 10])
+
     def test_container_action_requires_immutable_digest(self) -> None:
         workflow = """\
 on: push
