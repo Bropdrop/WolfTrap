@@ -1,4 +1,82 @@
-# WolfTrap
+# 🐺 WolfTrap
+
+**Find risky CI trust paths before they become somebody else's incident report.**
+
+WolfTrap is a **read-only, offline GitHub Actions and Dockerfile trust-boundary
+inspector** with an independently labelled synthetic adversarial challenge lab.
+It identifies *review signals* such as untrusted pull-request artifacts moving
+into privileged jobs or pull-request jobs selecting self-hosted runners,
+explains the contributing conditions, and produces
+portable JSON, Markdown, SARIF and integrity manifests. No inspected project
+code is executed.
+
+Licensed under the [Apache License, Version 2.0](LICENSE).
+
+**9 explainable static review rules** currently cover privileged PR execution,
+untrusted shell interpolation, mutable actions, unknown token authority,
+cross-workflow artifact handling, self-hosted PR runners and risky container
+build instructions. Each rule has a bounded scope and an explicit limitation.
+
+> **Public beta / release candidate:** stages 3–5 have qualified on their
+> published feature branches. This community Action onramp is a **new
+> candidate** pending hosted qualification and an owner-authorized release.
+> An empty scan is **not a security certification**. Findings are conditional
+> and require human review; there are no confirmed external exploits here.
+
+## Start here — two ways to use the wolf
+
+### Option A: Scan your repository locally
+
+Requires Python 3.11+ and a local authorized checkout:
+
+```bash
+git clone -b feat/wolftrap-community-onramp-v0_6 https://github.com/GovernableIntelligence/WolfTrap.git
+cd WolfTrap
+python3 -m pip install -e '.[build-scan]'
+wolftrap scan-build --root /path/to/YOUR-repository --output-dir /tmp/wolftrap-review
+```
+
+The named feature branch is a **preview reference**, not a released version;
+it will only work after its publication. For the currently published Stage 5
+candidate, use `feat/wolftrap-stage5-evasion-challenge-v0_5` instead.
+Use a new/empty output directory **outside** the target repository.
+
+### Option B: Add the GitHub Action (release candidate)
+
+Copy [`examples/wolftrap-scan.yml`](examples/wolftrap-scan.yml) to
+`.github/workflows/wolftrap.yml` in **your** repository. It uses a read-only
+token, checks out the requested revision without persisting credentials, runs
+only WolfTrap's scanner, and retains a report artifact. The sample points at
+the preview branch; pin a reviewed full commit SHA for production use.
+
+Or run the 128-case offline detector challenge yourself:
+
+```bash
+wolftrap challenge-build --seed 20261115 --cases 128 --output-dir /tmp/wolftrap-challenge
+wolftrap verify-challenge --evidence-dir /tmp/wolftrap-challenge
+```
+
+Want to see a wolf bite immediately? This bundled **synthetic** repository
+fixture has a PR artifact → privileged consumer path:
+
+```bash
+wolftrap scan-build --root tests/fixtures/stage4_demo --output-dir /tmp/wolftrap-demo
+# REVIEW_REQUIRED: 2 files, 2 review-required signals, 0 unknown inputs
+```
+
+**Results:** `NO_PATTERN_MATCH` (0, no *supported* pattern matched),
+`REVIEW_REQUIRED` (1, manual triage), or `INCONCLUSIVE` (2, incomplete/unsupported;
+never a clean pass). With the GitHub Action's default advisory setting, review
+signals leave CI green but **unknown always fails**. Set `fail-on-findings:
+'true'` to make known review signals fail CI as well.
+
+See the [60-second quick start](docs/quickstart.md),
+[supported rules and limitations](docs/build-inspection.md),
+[responsible disclosure](SECURITY.md) and [contributing guide](CONTRIBUTING.md).
+
+---
+
+## Research engine and detailed qualification
 
 **Adversarial authorization experiments + an offline CI attack-path inspector.**
 Run it against your *own* checked-out repository to review risky GitHub Actions

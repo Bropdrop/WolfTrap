@@ -29,6 +29,7 @@ testing, malware generation, or an authorization oracle over the target.
 | WT-GHA-004 | Workflow token permissions unspecified | Effective org defaults not inferred |
 | WT-GHA-005 | `workflow_run` + artifact download + write-capable token | Potential untrusted artifact path; actual use must be reviewed |
 | WT-GHA-006 | Matched PR workflow upload → triggering run download in an explicitly write-capable downstream workflow | Cross-file trace, artifact-name digest, and higher severity if the downloaded directory is directly executed |
+| WT-GHA-007 | Pull-request-triggered job explicitly selects `self-hosted` runner label | HIGH conditional review signal; effective runner isolation, approvals and repository visibility are not inferable |
 | WT-DOCKER-001 | Base image lacking digest pin | Does not imply image compromise |
 | WT-DOCKER-002 | Fetch-and-execute shell pipeline in Docker build | Conditional risk; no remote content fetched by WolfTrap |
 
@@ -37,6 +38,20 @@ deterministic finding IDs, and per-condition counterfactuals. A counterfactual
 describes a **detector cut**, not proof that the application would become safe.
 Neither absence nor presence of a static pattern alone establishes an
 exploitable vulnerability.
+
+### Self-hosted runner exposure (community candidate)
+
+`WT-GHA-007` recognizes a `pull_request` or `pull_request_target` job with an
+**explicit** `self-hosted` label, including `runs-on` lists and label mappings.
+It reports a HIGH-priority *review*, even with a read-only token, because
+local YAML cannot prove that the runner is freshly provisioned, isolated or
+protected by contributor approval. The rule is supported by 21 synthetic
+positive, negative and ambiguous selector cases. Unresolved expression-based
+runner labels return `INCONCLUSIVE` rather than a security pass. Custom runner
+labels and group-only selectors are outside exact attribution; a no-match does
+**not** prove that a runner is hosted by GitHub. It never contacts a runner.
+
+- [GitHub: hardening for self-hosted runners](https://docs.github.com/en/actions/reference/security/secure-use#hardening-for-self-hosted-runners)
 
 ## Stage 4 additive model: cross-workflow artifact paths
 

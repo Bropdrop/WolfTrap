@@ -1,0 +1,43 @@
+# Copy to YOUR repository as .github/workflows/wolftrap.yml.
+# The branch below is an unmerged release candidate. Once published and
+# qualified, pin a reviewed full 40-character commit SHA instead of a branch.
+name: WolfTrap — CI Trust Review
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+      - 'Dockerfile'
+      - 'Containerfile'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  wolftrap:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout local source without persisted credentials
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Inspect build trust paths (advisory by default)
+        id: wolftrap
+        uses: GovernableIntelligence/WolfTrap@feat/wolftrap-community-onramp-v0_6
+        with:
+          root: '.'
+          fail-on-findings: 'false'
+          artifact-name: 'wolftrap-ci-evidence'
+
+      - name: Report bounded static result
+        if: always()
+        shell: bash
+        env:
+          WOLFTRAP_STATUS: ${{ steps.wolftrap.outputs.status }}
+          WOLFTRAP_FINDINGS: ${{ steps.wolftrap.outputs.findings }}
+        run: |
+          echo "WolfTrap: ${WOLFTRAP_STATUS:-INCONCLUSIVE}; ${WOLFTRAP_FINDINGS:-0} review signal(s)"
+          echo 'Download the WolfTrap evidence artifact from this run.'

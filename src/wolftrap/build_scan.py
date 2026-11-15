@@ -57,6 +57,11 @@ RULES = {
         "A pull-request workflow can upload an artifact later downloaded from that run by a write-capable workflow.",
         "Validate the artifact's provenance and content before any privileged use; isolate PR build data from credentials and write tokens.",
     ),
+    "WT-GHA-007": (
+        "Pull-request execution on an explicitly self-hosted runner",
+        "A pull-request-triggered job selects a self-hosted runner whose isolation and lifetime cannot be established from the workflow.",
+        "Avoid PR-controlled jobs on persistent self-hosted runners; use isolated ephemeral runners and restrictive approval policies.",
+    ),
     "WT-DOCKER-001": (
         "Base image not pinned by digest",
         "A tag-only base image can resolve to different bytes in a future build.",
@@ -209,6 +214,25 @@ def _writable(permissions: Any) -> bool:
     raise UnscannableInput("token permission semantics are unsupported")
 
 
+def _self_hosted_runner(runs_on: Any) -> bool:
+    """Recognize explicit self-hosted labels; reject dynamic PR job selectors.
+
+    Custom runner names and runner groups cannot be attributed from local YAML.
+    Their absence from findings must not be treated as proof of hosted isolation.
+    """
+    labels = runs_on.get("labels") if isinstance(runs_on, dict) else runs_on
+    if labels is None:
+        return False
+    values = [labels] if isinstance(labels, str) else labels
+    if not isinstance(values, list) or not all(isinstance(value, str) for value in values):
+        raise UnscannableInput("pull-request runner label selector is unsupported")
+    if any(value.strip().lower() == "self-hosted" for value in values):
+        return True
+    if any("${{" in value for value in values):
+        raise UnscannableInput("pull-request runner label expression is unresolved")
+    return False
+
+
 def _untrusted_checkout(value: str) -> bool:
     return any(term in value.lower() for term in (
         "pull_request.head.sha",
@@ -268,6 +292,17 @@ def _scan_workflow(path: str, text: str) -> list[dict[str, Any]]:
     for job_name, job in sorted(jobs.items()):
         if not isinstance(job, dict):
             raise UnscannableInput("unsupported workflow job shape")
+        if triggers.intersection({"pull_request", "pull_request_target"}) and _self_hosted_runner(job.get("runs-on")):
+            trigger = "pull_request_target" if "pull_request_target" in triggers else "pull_request"
+            runner_line = _line(text, "self-hosted")
+            findings.append(_finding(
+                "WT-GHA-007", path, runner_line,
+                [
+                    _factor("pull_request_trigger", path, _line(text, trigger)),
+                    _factor("explicit_self_hosted_runner", path, runner_line),
+                ],
+                severity="HIGH",
+            ))
         steps = job.get("steps")
         if not isinstance(steps, list):
             raise UnscannableInput("reusable-workflow jobs require separate analysis")

@@ -1,0 +1,76 @@
+name: 'WolfTrap — Offline CI Trust Review'
+description: 'Read-only GitHub Actions and Dockerfile trust-path inspection with explainable evidence'
+author: 'Governable Intelligence'
+
+branding:
+  icon: 'shield'
+  color: 'red'
+
+inputs:
+  root:
+    description: 'Local checked-out repository directory to inspect; no URL or live target'
+    required: false
+    default: '.'
+  fail-on-findings:
+    description: 'Set to true to fail CI on a conditional review signal; unknown always fails'
+    required: false
+    default: 'false'
+  artifact-name:
+    description: 'Name of the retained evidence artifact'
+    required: false
+    default: 'wolftrap-scan-evidence'
+
+outputs:
+  status:
+    description: 'NO_PATTERN_MATCH, REVIEW_REQUIRED, or INCONCLUSIVE'
+    value: ${{ steps.scan.outputs.status }}
+  findings:
+    description: 'Number of conditional security review signals'
+    value: ${{ steps.scan.outputs.findings }}
+  unknown-inputs:
+    description: 'Number of incomplete/unsupported scan inputs'
+    value: ${{ steps.scan.outputs.unknown_inputs }}
+  evidence-dir:
+    description: 'Temporary runner path for JSON, Markdown, SARIF and manifests'
+    value: ${{ steps.scan.outputs.evidence_dir }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Use supported Python version
+      uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+      with:
+        python-version: '3.12'
+
+    - name: Install bounded YAML parser
+      shell: bash
+      run: |
+        set -euo pipefail
+        python -I -m pip install --no-cache-dir --disable-pip-version-check --only-binary=:all: --no-deps PyYAML==6.0.3
+
+    - name: Inspect local build configuration without running target code
+      id: scan
+      shell: bash
+      env:
+        WOLFTRAP_SOURCE_ROOT: ${{ inputs.root }}
+        WOLFTRAP_FAIL_ON_FINDINGS: ${{ inputs.fail-on-findings }}
+      run: |
+        set -euo pipefail
+        evidence_dir="$(mktemp -d "${RUNNER_TEMP}/wolftrap-XXXXXX")"
+        # -I excludes caller checkout, PYTHONPATH and user site from imports.
+        # The ONLY explicitly inserted module root is this immutable Action.
+        python -I -c 'import sys; sys.path.insert(0, sys.argv.pop(1)); from wolftrap.action_entry import main; raise SystemExit(main())' \
+          "${GITHUB_ACTION_PATH}/src" \
+          --root "${WOLFTRAP_SOURCE_ROOT}" \
+          --output-dir "${evidence_dir}" \
+          --fail-on-findings "${WOLFTRAP_FAIL_ON_FINDINGS}" \
+          --github-output "${GITHUB_OUTPUT}"
+
+    - name: Retain review evidence even when a security gate fails
+      if: ${{ always() && steps.scan.outputs.evidence_dir != '' }}
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: ${{ steps.scan.outputs.evidence_dir }}
+        retention-days: 14
+        if-no-files-found: error

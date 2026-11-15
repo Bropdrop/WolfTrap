@@ -1,0 +1,9 @@
+name: Safe fixture
+on: push
+permissions:
+  contents: read
+jobs:
+  sample:
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo fixture-only

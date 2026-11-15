@@ -1,0 +1,117 @@
+name: WolfTrap community Action qualification
+
+on:
+  push:
+    branches:
+      - feat/wolftrap-community-onramp-v0_6
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qualify:
+    name: Dogfood read-only composite Action and fail-closed gates
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out exact source without persisted credentials
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Run unit tests on exact source
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m pip install --no-cache-dir PyYAML==6.0.3
+          PYTHONPATH=src python3 -m wolftrap.test_runner --output "$RUNNER_TEMP/wolftrap-community-tests.json"
+
+      - name: Safe static fixture must not match a supported pattern
+        id: safe
+        uses: ./
+        with:
+          root: tests/fixtures/action_safe
+          fail-on-findings: 'true'
+          artifact-name: wolftrap-action-safe-${{ github.run_id }}
+
+      - name: Assert safe detector outcome and completed evidence
+        shell: bash
+        env:
+          WT_STATUS: ${{ steps.safe.outputs.status }}
+          WT_COUNT: ${{ steps.safe.outputs.findings }}
+          WT_EVIDENCE: ${{ steps.safe.outputs['evidence-dir'] }}
+        run: |
+          set -euo pipefail
+          test "$WT_STATUS" = NO_PATTERN_MATCH
+          test "$WT_COUNT" = 0
+          python3 - "$WT_EVIDENCE" <<'PY'
+          import json, pathlib, sys
+          root = pathlib.Path(sys.argv[1])
+          assert json.loads((root / 'build-scan.manifest.json').read_text())['state'] == 'COMPLETE'
+          PY
+
+      - name: Advisory mode must retain two conditional findings
+        id: advisory
+        uses: ./
+        with:
+          root: tests/fixtures/stage4_demo
+          fail-on-findings: 'false'
+          artifact-name: wolftrap-action-advisory-${{ github.run_id }}
+
+      - name: Verify advisory mode has one high-priority cross-workflow path
+        shell: bash
+        env:
+          WT_STATUS: ${{ steps.advisory.outputs.status }}
+          WT_COUNT: ${{ steps.advisory.outputs.findings }}
+          WT_EVIDENCE: ${{ steps.advisory.outputs['evidence-dir'] }}
+        run: |
+          set -euo pipefail
+          test "$WT_STATUS" = REVIEW_REQUIRED
+          test "$WT_COUNT" = 2
+          python3 - "$WT_EVIDENCE" <<'PY'
+          import json, pathlib, sys
+          root = pathlib.Path(sys.argv[1])
+          report = json.loads((root / 'build-scan.json').read_text())
+          assert {f['rule_id']: f['severity'] for f in report['findings']} == {
+              'WT-GHA-005': 'MEDIUM', 'WT-GHA-006': 'HIGH'
+          }
+          assert report['target_code_executed'] is False
+          assert report['external_systems_contacted'] is False
+          PY
+
+      - name: Strict mode must fail on the same synthetic findings
+        id: strict
+        continue-on-error: true
+        uses: ./
+        with:
+          root: tests/fixtures/stage4_demo
+          fail-on-findings: 'true'
+          artifact-name: wolftrap-action-strict-${{ github.run_id }}
+
+      - name: Assert strict finding gate failed as designed
+        shell: bash
+        env:
+          WT_OUTCOME: ${{ steps.strict.outcome }}
+          WT_STATUS: ${{ steps.strict.outputs.status }}
+        run: |
+          test "$WT_OUTCOME" = failure
+          test "$WT_STATUS" = REVIEW_REQUIRED
+
+      - name: Unknown source must always fail, even in advisory mode
+        id: unknown
+        continue-on-error: true
+        uses: ./
+        with:
+          root: tests/fixtures/does-not-exist
+          fail-on-findings: 'false'
+          artifact-name: wolftrap-action-unknown-${{ github.run_id }}
+
+      - name: Assert unknown did not become a false safety PASS
+        shell: bash
+        env:
+          WT_OUTCOME: ${{ steps.unknown.outcome }}
+          WT_STATUS: ${{ steps.unknown.outputs.status }}
+        run: |
+          test "$WT_OUTCOME" = failure
+          test "$WT_STATUS" = INCONCLUSIVE
