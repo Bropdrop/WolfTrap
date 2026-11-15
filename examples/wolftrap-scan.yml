@@ -1,6 +1,6 @@
 # Copy to YOUR repository as .github/workflows/wolftrap.yml.
-# The branch below is an unmerged release candidate. Once published and
-# qualified, pin a reviewed full 40-character commit SHA instead of a branch.
+# Pin the hosted-qualified public beta Action by full commit SHA.
+# Review and update this immutable reference deliberately for later versions.
 name: WolfTrap — CI Trust Review
 
 on:
@@ -26,7 +26,7 @@ jobs:
 
       - name: Inspect build trust paths (advisory by default)
         id: wolftrap
-        uses: GovernableIntelligence/WolfTrap@feat/wolftrap-community-onramp-v0_6
+        uses: GovernableIntelligence/WolfTrap@4d1f075dadf257375a0ea59d39dea9151d07e3f5
         with:
           root: '.'
           fail-on-findings: 'false'

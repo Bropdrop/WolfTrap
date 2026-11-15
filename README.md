@@ -17,11 +17,13 @@ untrusted shell interpolation, mutable actions, unknown token authority,
 cross-workflow artifact handling, self-hosted PR runners and risky container
 build instructions. Each rule has a bounded scope and an explicit limitation.
 
-> **Public beta / release candidate:** stages 3–5 have qualified on their
-> published feature branches. This community Action onramp is a **new
-> candidate** pending hosted qualification and an owner-authorized release.
-> An empty scan is **not a security certification**. Findings are conditional
-> and require human review; there are no confirmed external exploits here.
+> **Public beta:** The read-only inspector, synthetic challenge lab, and
+> community Action are available on `main`. The candidate's
+> [hosted qualification passed](https://github.com/GovernableIntelligence/WolfTrap/actions/runs/43663128275)
+> at commit `4d1f075dadf257375a0ea59d39dea9151d07e3f5` before this
+> documentation update. An empty scan is **not a security certification**.
+> Findings are conditional and require human review; there are no confirmed
+> external exploits here.
 
 ## Start here — two ways to use the wolf
 
@@ -30,24 +32,25 @@ build instructions. Each rule has a bounded scope and an explicit limitation.
 Requires Python 3.11+ and a local authorized checkout:
 
 ```bash
-git clone -b feat/wolftrap-community-onramp-v0_6 https://github.com/GovernableIntelligence/WolfTrap.git
+git clone https://github.com/GovernableIntelligence/WolfTrap.git
 cd WolfTrap
 python3 -m pip install -e '.[build-scan]'
 wolftrap scan-build --root /path/to/YOUR-repository --output-dir /tmp/wolftrap-review
 ```
 
-The named feature branch is a **preview reference**, not a released version;
-it will only work after its publication. For the currently published Stage 5
-candidate, use `feat/wolftrap-stage5-evasion-challenge-v0_5` instead.
-Use a new/empty output directory **outside** the target repository.
+The command installs the public beta from the default branch. For repeatable
+security reviews, check out a reviewed exact commit rather than following a
+moving branch. Use a new/empty output directory **outside** the target
+repository.
 
-### Option B: Add the GitHub Action (release candidate)
+### Option B: Add the GitHub Action (public beta)
 
 Copy [`examples/wolftrap-scan.yml`](examples/wolftrap-scan.yml) to
 `.github/workflows/wolftrap.yml` in **your** repository. It uses a read-only
 token, checks out the requested revision without persisting credentials, runs
-only WolfTrap's scanner, and retains a report artifact. The sample points at
-the preview branch; pin a reviewed full commit SHA for production use.
+only WolfTrap's scanner, and retains a report artifact. The example pins a
+hosted-qualified Action implementation to an immutable 40-character commit
+SHA; review that exact revision before adopting or updating the pin.
 
 Or run the 128-case offline detector challenge yourself:
 
@@ -82,14 +85,14 @@ See the [60-second quick start](docs/quickstart.md),
 Run it against your *own* checked-out repository to review risky GitHub Actions
 and container-build trust boundaries; get explainable JSON, Markdown, SARIF and
 tamper-evident report hashes without executing the scanned project. The Stage 4
-candidate adds cross-workflow artifact-path correlation and a 39-case
-differential mutation corpus. [Quick start](#stage-4-candidate-cross-workflow-attack-path-correlation).
+detection adds cross-workflow artifact-path correlation and a 39-case
+differential mutation corpus. [Quick start](#stage-4-cross-workflow-attack-path-correlation).
 
-**New Stage 5 candidate:** the offline *evasion challenge* generates 128
+**Stage 5:** the offline *evasion challenge* generates 128
 independently labelled synthetic workflow pairs, probes the detector for
 missed or downgraded trust paths, and saves every YAML case plus SHA-256
 evidence. It never attacks a real repository or runs target code.
-[Try the challenge](#stage-5-candidate-the-offline-evasion-tournament).
+[Try the challenge](#stage-5-the-offline-evasion-tournament).
 
 The original WolfTrap v0.1 is a bounded, standard-library Python research harness for testing authorization controls against synthetic systems. It translates defensive lessons from FBI `FLASH-20261113-001` into deterministic experiments. The synthetic authorization harness does not contact, exploit, or deploy to external systems; the optional local build inspector is a separate, later capability.
 
@@ -212,7 +215,7 @@ key, sends no network request, spends no credits, and exposes no external
 target. A future model suggestion will have to become a schema-valid,
 bounded deterministic case before the independent oracle can classify it.
 
-## Stage 3 candidate: scan your own build, offline
+## Stage 3: scan your own build, offline
 
 WolfTrap Stage 3 adds a read-only local configuration inspector. It identifies
 *conditional* GitHub Actions trust-boundary chains and Dockerfile supply-chain
@@ -250,7 +253,7 @@ report hashes and expected findings, and retains evidence for 14 days. It
 does **not** scan outside repositories, execute inspected target code, or
 prove that a real-world build is exploitable.
 
-## Stage 4 candidate: cross-workflow attack-path correlation
+## Stage 4: cross-workflow attack-path correlation
 
 Stage 4 follows a *possible* supply-chain path across multiple GitHub Actions
 files: an untrusted pull-request build produces an artifact, and a
@@ -284,7 +287,7 @@ from a scanned external repository. CodeQL, OpenSSF Scorecard, OSV-Scanner and
 other mature tools remain complementary; WolfTrap does not claim to replace
 them or to perform live penetration testing.
 
-## Stage 5 candidate: the offline evasion tournament
+## Stage 5: the offline evasion tournament
 
 Challenge WolfTrap's **own static detector** before asking it to review a
 project. The tournament generates 128 synthetic workflow pairs divided equally

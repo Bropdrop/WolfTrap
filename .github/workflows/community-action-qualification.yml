@@ -3,6 +3,7 @@ name: WolfTrap community Action qualification
 on:
   push:
     branches:
+      - main
       - feat/wolftrap-community-onramp-v0_6
   workflow_dispatch:
 

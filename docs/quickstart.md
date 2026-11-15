@@ -6,14 +6,13 @@ host, read secrets, or guarantee that a repository is secure.
 
 ## Choose your path
 
-### 1. Local command line (available in published Stage 5)
+### 1. Local command line (public beta)
 
 Requirements: Python 3.11+, Git, a checked-out repository you are authorized
 to inspect, and the optional YAML parser.
 
 ```bash
-git clone -b feat/wolftrap-stage5-evasion-challenge-v0_5 \
-  https://github.com/GovernableIntelligence/WolfTrap.git
+git clone https://github.com/GovernableIntelligence/WolfTrap.git
 cd WolfTrap
 python3 -m pip install -e '.[build-scan]'
 wolftrap scan-build --root /path/to/my-repo --output-dir /tmp/wolftrap-my-repo
@@ -23,15 +22,14 @@ The target must be a local path. Use an initially empty output directory
 outside the target. WolfTrap only inspects supported GitHub Actions workflow
 files and root `Dockerfile`/`Containerfile`, subject to strict limits.
 
-### 2. GitHub Action (release candidate, not yet on `main`)
+### 2. GitHub Action (public beta)
 
 Copy [the reference workflow](../examples/wolftrap-scan.yml) into your own
-repository at `.github/workflows/wolftrap.yml`. The example references the
-`feat/wolftrap-community-onramp-v0_6` **preview branch**; it will become
-usable after publication. For long-term use, replace that moving reference
-with a reviewed immutable 40-character commit SHA or a vetted release tag.
-Until then, the preview branch reference itself is a mutable-action review
-signal (`WT-GHA-003`) when scanned. That is intentional, not a hidden exception.
+repository at `.github/workflows/wolftrap.yml`. The example pins the Action
+to the complete, hosted-qualified commit SHA
+`4d1f075dadf257375a0ea59d39dea9151d07e3f5`. That immutable reference
+does not automatically follow `main`; review and update it deliberately when
+adopting future versions.
 
 The Action defaults to **advisory** mode:
 

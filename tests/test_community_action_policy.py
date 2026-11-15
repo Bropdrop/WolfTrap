@@ -11,11 +11,12 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 BRANCH = "feat/wolftrap-community-onramp-v0_6"
+PUBLISHED_ACTION_SHA = "4d1f075dadf257375a0ea59d39dea9151d07e3f5"
 PINNED = re.compile(r"^[^@]+@[0-9a-f]{40}$")
 
 
 class CommunityPolicyTests(unittest.TestCase):
-    def test_starter_is_pull_request_scoped_read_only_and_preview_labelled(self) -> None:
+    def test_starter_is_pull_request_scoped_read_only_and_immutable_pinned(self) -> None:
         source = (ROOT / "examples/wolftrap-scan.yml").read_text()
         workflow = yaml.load(source, Loader=yaml.BaseLoader)
         self.assertEqual(set(workflow["on"]), {"pull_request", "workflow_dispatch"})
@@ -24,16 +25,17 @@ class CommunityPolicyTests(unittest.TestCase):
         steps = workflow["jobs"]["wolftrap"]["steps"]
         self.assertEqual(steps[0]["with"]["persist-credentials"], "false")
         self.assertTrue(PINNED.fullmatch(steps[0]["uses"]))
-        self.assertEqual(steps[1]["uses"], f"GovernableIntelligence/WolfTrap@{BRANCH}")
+        self.assertTrue(PINNED.fullmatch(steps[1]["uses"]))
+        self.assertEqual(steps[1]["uses"], f"GovernableIntelligence/WolfTrap@{PUBLISHED_ACTION_SHA}")
         self.assertEqual(steps[1]["with"]["fail-on-findings"], "false")
         self.assertNotIn("secrets.", source)
         self.assertNotIn("pull_request_target", source)
-        self.assertIn("pin a reviewed full 40-character commit SHA", source)
+        self.assertIn("full commit SHA", source)
 
     def test_dogfood_runs_four_modes_with_expected_read_only_boundaries(self) -> None:
         source = (ROOT / ".github/workflows/community-action-qualification.yml").read_text()
         workflow = yaml.load(source, Loader=yaml.BaseLoader)
-        self.assertEqual(workflow["on"]["push"]["branches"], [BRANCH])
+        self.assertEqual(workflow["on"]["push"]["branches"], ["main", BRANCH])
         self.assertEqual(workflow["permissions"], {"contents": "read"})
         steps = workflow["jobs"]["qualify"]["steps"]
         self.assertEqual(steps[0]["with"]["persist-credentials"], "false")
