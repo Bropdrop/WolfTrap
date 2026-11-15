@@ -1,0 +1,67 @@
+name: WolfTrap Stage 5.1 offline agent qualification
+
+on:
+  push:
+    branches:
+      - feat/wolftrap-stage51-public-20261115
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qualify:
+    name: Verify agent rules, replay, and existing Stage 5
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      PYTHONHASHSEED: "0"
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONPATH: src
+    steps:
+      - name: Check out exact source without persisted credentials
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+          cache: ""
+
+      - name: Install pinned optional YAML parser for existing CI/build checks
+        run: python -m pip install --no-cache-dir PyYAML==6.0.3
+
+      - name: Run complete source regression suite
+        run: python -m wolftrap.test_runner --output "$RUNNER_TEMP/wolftrap-stage51-unit.json"
+
+      - name: Run independently labelled 108-case agent challenge and saved-input replay
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m wolftrap challenge-agent --seed 20261115 --output-dir "$RUNNER_TEMP/wolftrap-stage51-agent"
+          python -m wolftrap verify-agent-challenge --evidence-dir "$RUNNER_TEMP/wolftrap-stage51-agent"
+          python -m wolftrap replay-agent-challenge --evidence-dir "$RUNNER_TEMP/wolftrap-stage51-agent" --output-dir "$RUNNER_TEMP/wolftrap-stage51-replay"
+          python -m wolftrap verify-agent-challenge --evidence-dir "$RUNNER_TEMP/wolftrap-stage51-replay"
+
+      - name: Preserve Stage 5 detector qualification
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m wolftrap challenge-build --seed 20261115 --cases 128 --output-dir "$RUNNER_TEMP/wolftrap-stage51-stage5"
+          python -m wolftrap verify-challenge --evidence-dir "$RUNNER_TEMP/wolftrap-stage51-stage5"
+
+      - name: Retain finite synthetic evidence even if a gate fails
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: wolftrap-stage51-offline-evidence
+          path: |
+            ${{ runner.temp }}/wolftrap-stage51-unit.json
+            ${{ runner.temp }}/wolftrap-stage51-agent/
+            ${{ runner.temp }}/wolftrap-stage51-replay/
+            ${{ runner.temp }}/wolftrap-stage51-stage5/
+          if-no-files-found: warn
+          retention-days: 14

@@ -18,8 +18,11 @@ If you believe you found a vulnerability **in WolfTrap itself**:
 For an issue in somebody else's repository, follow **their** disclosure
 policy. WolfTrap's synthetic findings alone do not demonstrate compromise.
 
-The scanner does not execute target files, use provider keys, deploy agents,
+Neither the CI/build nor the JavaScript/TypeScript agent scanner executes
+target files, uses provider keys, deploys agents,
 scan network services or authorize effects in HERCULES, Ground Truth, MobiPute
 or TruthPute. No on-chain or financial operation is part of WolfTrap.
 
-Unknown input, ambiguous provenance or invalid evidence must fail closed.
+Unknown input, unsupported syntax, ambiguous provenance or invalid evidence
+must fail closed. A mock/demo callback name is only a static context cue; it
+does not waive manual review of an unconditional authentication result.

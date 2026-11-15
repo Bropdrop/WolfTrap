@@ -2,30 +2,33 @@
 
 **Find risky CI trust paths before they become somebody else's incident report.**
 
-WolfTrap is a **read-only, offline GitHub Actions and Dockerfile trust-boundary
-inspector** with an independently labelled synthetic adversarial challenge lab.
-It identifies *review signals* such as untrusted pull-request artifacts moving
-into privileged jobs or pull-request jobs selecting self-hosted runners,
-explains the contributing conditions, and produces
-portable JSON, Markdown, SARIF and integrity manifests. No inspected project
-code is executed.
+WolfTrap is a **read-only, offline trust-boundary inspector** for GitHub
+Actions, Dockerfiles, and bounded JavaScript/TypeScript agent code. Its
+independently labelled synthetic challenge labs test the detectors without
+contacting external systems. WolfTrap identifies *conditional review signals*,
+explains the contributing conditions, and produces portable JSON, Markdown,
+SARIF and integrity manifests. No inspected project code is executed.
 
 Licensed under the [Apache License, Version 2.0](LICENSE).
 
-**9 explainable static review rules** currently cover privileged PR execution,
+**9 explainable CI/build review rules** currently cover privileged PR execution,
 untrusted shell interpolation, mutable actions, unknown token authority,
 cross-workflow artifact handling, self-hosted PR runners and risky container
 build instructions. Each rule has a bounded scope and an explicit limitation.
+**3 separate Stage 5.1 agent signals** cover recognizable fail-open moderation,
+unconditional authentication/approval callbacks, and supported session-credential
+logging patterns. Neither scanner establishes real-world exploitability.
 
-> **Public beta:** The read-only inspector, synthetic challenge lab, and
-> community Action are available on `main`. The candidate's
+> **Public beta:** The read-only CI/build inspector, Stage 5.1 agent inspector,
+> synthetic challenge labs, and community CI/build Action are available on
+> `main`. The earlier community Action's
 > [hosted qualification passed](https://github.com/GovernableIntelligence/WolfTrap/actions/runs/43663128275)
 > at commit `4d1f075dadf257375a0ea59d39dea9151d07e3f5` before this
 > documentation update. An empty scan is **not a security certification**.
 > Findings are conditional and require human review; there are no confirmed
 > external exploits here.
 
-## Start here — two ways to use the wolf
+## Start here — three ways to use the wolf
 
 ### Option A: Scan your repository locally
 
@@ -58,6 +61,27 @@ Or run the 128-case offline detector challenge yourself:
 wolftrap challenge-build --seed 20261115 --cases 128 --output-dir /tmp/wolftrap-challenge
 wolftrap verify-challenge --evidence-dir /tmp/wolftrap-challenge
 ```
+
+### Option C: Review local JavaScript/TypeScript agent boundaries
+
+Point the separate `scan-agent` command at a local source checkout you own
+or have permission to inspect. It accepts selected `.js`, `.ts`, `.jsx`,
+`.tsx`, `.mjs`, and `.cjs` files; it does **not** launch the agent,
+authenticate users, or call a model or API.
+
+```bash
+wolftrap scan-agent --root /path/to/YOUR-agent-source \
+  --output-dir /tmp/wolftrap-agent-review
+```
+
+The output directory must be new or empty and outside the inspected source.
+`WT-AGENT-001`, `WT-AGENT-002`, and `WT-AGENT-003` are conditional static
+review signals, **not confirmed vulnerabilities**. An unconditional
+authentication callback remains `REVIEW_REQUIRED` even when its name
+explicitly indicates a demo/mock; unrelated comments cannot confer mock
+context. Unsupported syntax or coverage limits produce `INCONCLUSIVE`.
+See [agent rule scope and limitations](docs/agent-inspection.md) and the
+[Stage 5.1 quick start](docs/quickstart.md#4-offline-agent-source-review-stage-51).
 
 Want to see a wolf bite immediately? This bundled **synthetic** repository
 fixture has a PR artifact → privileged consumer path:
@@ -93,6 +117,12 @@ independently labelled synthetic workflow pairs, probes the detector for
 missed or downgraded trust paths, and saves every YAML case plus SHA-256
 evidence. It never attacks a real repository or runs target code.
 [Try the challenge](#stage-5-the-offline-evasion-tournament).
+
+**Stage 5.1:** a separate offline, bounded agent-code recognizer emits three
+conditional JavaScript/TypeScript review signals. Its independently labelled
+108-case corpus supports saved-input replay and evidence verification.
+The scanner does not interpret arbitrary agent framework semantics or establish
+effective deployment and authority. [Agent inspection details](docs/agent-inspection.md).
 
 The original WolfTrap v0.1 is a bounded, standard-library Python research harness for testing authorization controls against synthetic systems. It translates defensive lessons from FBI `FLASH-20261113-001` into deterministic experiments. The synthetic authorization harness does not contact, exploit, or deploy to external systems; the optional local build inspector is a separate, later capability.
 
