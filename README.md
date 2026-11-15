@@ -150,3 +150,11 @@ Reports use `REVIEW_REQUIRED`, **not CONFIRMED EXPLOIT**. SARIF can be ingested
 by compatible code-scanning tools under a separately authorized workflow.
 See [Stage 3 build inspection](docs/build-inspection.md) for threat scope,
 counterfactuals, usage, and interpretation.
+
+The separate Stage 3 GitHub Actions qualification is limited to the
+`feat/wolftrap-stage3-build-inspector-v0_3` branch and manual dispatch. It
+installs a pinned YAML parser, runs the tests, scans only this repository's
+build configuration and a deliberately flawed synthetic fixture, verifies
+report hashes and expected findings, and retains evidence for 14 days. It
+does **not** scan outside repositories, execute inspected target code, or
+prove that a real-world build is exploitable.

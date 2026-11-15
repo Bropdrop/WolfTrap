@@ -1,0 +1,16 @@
+# Synthetic negative control, never used as an active GitHub workflow.
+name: intentionally flawed PR authorization chain
+on:
+  pull_request_target:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - run: npm test
+      - run: echo "${{ github.event.pull_request.title }}"
+      - uses: example/nonexistent-action@v1
