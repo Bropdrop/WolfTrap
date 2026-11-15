@@ -176,6 +176,26 @@ def _scan_agent(arguments: argparse.Namespace) -> int:
     return outcome.exit_code
 
 
+def _scan_effects(arguments: argparse.Namespace) -> int:
+    from .effect_scan import scan_effects
+
+    outcome = scan_effects(arguments.root, arguments.output_dir, files=arguments.file)
+    summary = outcome.report["summary"]
+    print(f"{outcome.report['qualification']['status']}: "
+          f"{summary['files_inspected']} files; {summary['findings']} conditional boundary signal(s); "
+          f"{summary['errors']} unknown input(s).")
+    return outcome.exit_code
+
+
+def _verify_effects(arguments: argparse.Namespace) -> int:
+    from .effect_scan import verify_effect_evidence
+
+    report = verify_effect_evidence(arguments.evidence_dir)
+    print(f"VERIFIED_EVIDENCE: {report['qualification']['status']}; "
+          f"{report['summary']['findings']} conditional boundary signal(s).")
+    return 0
+
+
 def _challenge_agent(arguments: argparse.Namespace) -> int:
     from .agent_challenge import run_agent_challenge
 
@@ -302,7 +322,7 @@ def build_parser() -> argparse.ArgumentParser:
         prog="wolftrap",
         description=(
             "WolfTrap: no external targets. Bounded synthetic research and offline "
-            "local build inspection."
+            "local build, agent, and protected-effect inspection."
         ),
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -345,6 +365,17 @@ def build_parser() -> argparse.ArgumentParser:
     agent.add_argument("--output-dir", required=True)
     agent.add_argument("--file", action="append", help="explicit root-relative source file (repeatable)")
     agent.set_defaults(handler=_scan_agent)
+
+    effects = subparsers.add_parser(
+        "scan-effects", help="Stage 5.2 offline agent execution, credential, skill and network triage")
+    effects.add_argument("--root", required=True)
+    effects.add_argument("--output-dir", required=True)
+    effects.add_argument("--file", action="append", help="explicit root-relative source path (repeatable)")
+    effects.set_defaults(handler=_scan_effects)
+
+    effect_verify = subparsers.add_parser("verify-effects", help="verify saved Stage 5.2 evidence")
+    effect_verify.add_argument("--evidence-dir", required=True)
+    effect_verify.set_defaults(handler=_verify_effects)
 
     agent_challenge = subparsers.add_parser("challenge-agent", help="run independently labelled synthetic agent cases")
     agent_challenge.add_argument("--seed", type=int, default=20261115)
