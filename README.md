@@ -7,6 +7,12 @@ tamper-evident report hashes without executing the scanned project. The Stage 4
 candidate adds cross-workflow artifact-path correlation and a 39-case
 differential mutation corpus. [Quick start](#stage-4-candidate-cross-workflow-attack-path-correlation).
 
+**New Stage 5 candidate:** the offline *evasion challenge* generates 128
+independently labelled synthetic workflow pairs, probes the detector for
+missed or downgraded trust paths, and saves every YAML case plus SHA-256
+evidence. It never attacks a real repository or runs target code.
+[Try the challenge](#stage-5-candidate-the-offline-evasion-tournament).
+
 The original WolfTrap v0.1 is a bounded, standard-library Python research harness for testing authorization controls against synthetic systems. It translates defensive lessons from FBI `FLASH-20261113-001` into deterministic experiments. The synthetic authorization harness does not contact, exploit, or deploy to external systems; the optional local build inspector is a separate, later capability.
 
 This repository is a security-engineering instrument, not an intrusion platform. Its deliberately defective systems are local test sentinels; a finding against one is not evidence of a real-world vulnerability. FBI and MITRE references provide threat provenance and taxonomy, not endorsement.
@@ -199,3 +205,34 @@ permissions and uploads its local qualification evidence. It never runs code
 from a scanned external repository. CodeQL, OpenSSF Scorecard, OSV-Scanner and
 other mature tools remain complementary; WolfTrap does not claim to replace
 them or to perform live penetration testing.
+
+## Stage 5 candidate: the offline evasion tournament
+
+Challenge WolfTrap's **own static detector** before asking it to review a
+project. The tournament generates 128 synthetic workflow pairs divided equally
+among direct script execution (`HIGH`), artifact-only handoff (`MEDIUM`),
+broken trust links (`NONE`) and ambiguous linkage (`INCONCLUSIVE`).
+
+The additional variants cover common execution wrappers such as
+`bash -e`, `python3 -B`, `node --trace-warnings` and `env bash`, plus
+noise steps, paths, artifact names and token/trigger changes. An independent
+generator labels each case; those labels do **not** come from scanner output.
+A deliberately crippled detector must fail the challenge's positive controls.
+
+```bash
+python -m pip install -e '.[build-scan]'
+wolftrap challenge-build --seed 20261115 --cases 128 \
+  --output-dir /path/to/new-challenge-evidence
+wolftrap verify-challenge --evidence-dir /path/to/new-challenge-evidence
+```
+
+The report, Markdown scoreboard, and complete generated YAML cases have a
+completion manifest with SHA-256 and byte counts. `PASSED_BOUNDED` (exit 0)
+means only that this finite challenge matched all its synthetic expectations.
+`DETECTOR_GAPS` (exit 1) means at least one mismatch. Invalid, incomplete, or
+corrupt evidence fails closed (exit 2). Count must be a multiple of four from
+64 to 256; seed is an unsigned 32-bit integer. Inputs and output are local.
+
+Running `scan-build` on somebody else's checkout remains **read-only triage**;
+it is never an authorization to execute that code, scan live hosts, or claim
+a confirmed exploit. See [Stage 5 scope and replay](docs/evasion-challenge.md).

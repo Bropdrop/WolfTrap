@@ -404,10 +404,16 @@ def _downloaded_code_executed(run: str, destination: str) -> bool:
     if not folder or ".." in folder.split("/") or "${{" in folder:
         return False
     prefix = re.escape(folder) + r"/[A-Za-z0-9_./-]+"
-    shell_invocation = rf"(?:bash|sh|python3?|node|source|\.)\s+(?:\./)?{prefix}"
+    # Common interpreter flags and the `env` launcher should not hide a direct
+    # invocation. Deliberately bounded: no shell expansion, pipelines or `-c`
+    # evaluation. An unsupported invocation retains the MEDIUM review signal.
+    interpreter = r"(?:bash|sh|python3?|node)"
+    flags = r"(?:\s+(?:-[A-Za-z]{1,8}|--[a-z][a-z0-9-]{0,40})){0,3}"
+    shell_invocation = rf"(?:env\s+)?{interpreter}{flags}\s+(?:\./)?{prefix}"
+    source_invocation = rf"(?:source|\.)\s+(?:\./)?{prefix}"
     direct_invocation = rf"\./{prefix}"
     return bool(re.search(
-        rf"(?m)(?:^|[;&|]\s*)(?:{shell_invocation}|{direct_invocation})(?=\s|$|[;&|])",
+        rf"(?m)(?:^|[;&|]\s*)(?:{shell_invocation}|{source_invocation}|{direct_invocation})(?=\s|$|[;&|])",
         run,
     ))
 

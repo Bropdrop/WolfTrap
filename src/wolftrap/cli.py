@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from .build_scan import MANIFEST_NAME as BUILD_SCAN_MANIFEST, scan_build
+from .challenge import CHALLENGE_MANIFEST, run_challenge, verify_challenge_evidence
 from .execution import execute_case
 from .model import ExperimentCase
 from .report import (
@@ -165,6 +166,30 @@ def _scan_build(arguments: argparse.Namespace) -> int:
     return outcome.exit_code
 
 
+def _challenge_build(arguments: argparse.Namespace) -> int:
+    """Stress the static detector with synthetic, independently labelled cases."""
+    report, code = run_challenge(
+        seed=arguments.seed, count=arguments.cases, output_dir=arguments.output_dir
+    )
+    print(
+        f"{report['qualification']['status']}: "
+        f"{report['summary']['cases']} synthetic cases, "
+        f"{report['summary']['mismatches']} differential gap(s)."
+    )
+    print(f"Evidence: {Path(arguments.output_dir)}")
+    print(f"Manifest: {Path(arguments.output_dir) / CHALLENGE_MANIFEST}")
+    return code
+
+
+def _verify_challenge(arguments: argparse.Namespace) -> int:
+    report = verify_challenge_evidence(arguments.evidence_dir)
+    print(
+        f"VERIFIED_EVIDENCE: {report['summary']['cases']} saved synthetic cases; "
+        f"{report['summary']['mismatches']} differential gap(s)."
+    )
+    return 0 if report["qualification"]["status"] == "PASSED_BOUNDED" else 1
+
+
 def _reproduce(arguments: argparse.Namespace) -> int:
     if re.fullmatch(r"WOLFTRAP-F-[A-F0-9]{20}", arguments.finding_id) is None:
         raise ValueError("finding id has an invalid format")
@@ -280,6 +305,21 @@ def build_parser() -> argparse.ArgumentParser:
     scanner.add_argument("--root", required=True, help="local source directory to inspect read-only")
     scanner.add_argument("--output-dir", required=True, help="fresh evidence directory outside source")
     scanner.set_defaults(handler=_scan_build)
+
+    challenge = subparsers.add_parser(
+        "challenge-build",
+        help="run a bounded offline evasion tournament against WolfTrap's own detector",
+    )
+    challenge.add_argument("--seed", type=int, default=20261115)
+    challenge.add_argument("--cases", type=int, default=128)
+    challenge.add_argument("--output-dir", required=True, help="fresh directory for replayable synthetic evidence")
+    challenge.set_defaults(handler=_challenge_build)
+
+    verification = subparsers.add_parser(
+        "verify-challenge", help="verify saved offline challenge hashes and replay inputs"
+    )
+    verification.add_argument("--evidence-dir", required=True)
+    verification.set_defaults(handler=_verify_challenge)
 
     listing = subparsers.add_parser("list-scenarios", help="list local corpus entries")
     listing.add_argument("--scenario-directory")
