@@ -1,6 +1,13 @@
 # WolfTrap
 
-WolfTrap v0.1 is a bounded, standard-library Python research harness for testing authorization controls against synthetic systems. It translates defensive lessons from FBI `FLASH-20261113-001` into deterministic experiments. It does not scan, contact, exploit, or deploy to external systems.
+**Adversarial authorization experiments + an offline CI attack-path inspector.**
+Run it against your *own* checked-out repository to review risky GitHub Actions
+and container-build trust boundaries; get explainable JSON, Markdown, SARIF and
+tamper-evident report hashes without executing the scanned project. The Stage 4
+candidate adds cross-workflow artifact-path correlation and a 39-case
+differential mutation corpus. [Quick start](#stage-4-candidate-cross-workflow-attack-path-correlation).
+
+The original WolfTrap v0.1 is a bounded, standard-library Python research harness for testing authorization controls against synthetic systems. It translates defensive lessons from FBI `FLASH-20261113-001` into deterministic experiments. The synthetic authorization harness does not contact, exploit, or deploy to external systems; the optional local build inspector is a separate, later capability.
 
 This repository is a security-engineering instrument, not an intrusion platform. Its deliberately defective systems are local test sentinels; a finding against one is not evidence of a real-world vulnerability. FBI and MITRE references provide threat provenance and taxonomy, not endorsement.
 
@@ -158,3 +165,37 @@ build configuration and a deliberately flawed synthetic fixture, verifies
 report hashes and expected findings, and retains evidence for 14 days. It
 does **not** scan outside repositories, execute inspected target code, or
 prove that a real-world build is exploitable.
+
+## Stage 4 candidate: cross-workflow attack-path correlation
+
+Stage 4 follows a *possible* supply-chain path across multiple GitHub Actions
+files: an untrusted pull-request build produces an artifact, and a
+`workflow_run` consumer with a write-capable token retrieves that **same
+artifact from the triggering run**. Rule `WT-GHA-006` traces both workflow
+files, links an artifact name by its SHA-256 digest, and increases the review
+priority if it sees direct script execution from the downloaded directory.
+
+This is more specific than a broad warning about privileged artifact use;
+it does not infer missing permissions or claim a proven exploit. The packaged
+39-case synthetic mutation corpus includes safe, concerning, and ambiguous
+handoffs; ambiguous inputs fail **INCONCLUSIVE**. All targets remain local,
+bounded, read-only and unexecuted.
+
+**Try it on your own checked-out project:**
+
+```bash
+python -m pip install -e '.[build-scan]'
+wolftrap scan-build --root /path/to/project --output-dir /path/to/new-evidence
+```
+
+The same command reports both existing Stage 3 rules and new Stage 4 traces
+in JSON, Markdown and SARIF with a hash manifest. For a guaranteed positive
+demo, scan `tests/fixtures/stage4_demo`; its workflows are deliberately
+flawed **test data** and are not active GitHub Actions. See
+[the Stage 4 path model and limitations](docs/build-inspection.md#stage-4-additive-model-cross-workflow-artifact-paths).
+
+The independent Stage 4 workflow is branch-only/manual, uses read-only GitHub
+permissions and uploads its local qualification evidence. It never runs code
+from a scanned external repository. CodeQL, OpenSSF Scorecard, OSV-Scanner and
+other mature tools remain complementary; WolfTrap does not claim to replace
+them or to perform live penetration testing.

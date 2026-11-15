@@ -1,0 +1,48 @@
+{
+  "schema": "wolftrap.stage4.artifact-path-corpus/v1",
+  "description": "Synthetic, local-only GitHub Actions privilege-boundary mutations. No exploit payloads or external targets.",
+  "cases": [
+    {"id": "pr-script-handoff", "expected": "HIGH"},
+    {"id": "python-script-handoff", "expected": "HIGH", "changes": {"run": "python drop/setup.py"}},
+    {"id": "node-script-handoff", "expected": "HIGH", "changes": {"run": "node drop/setup.js"}},
+    {"id": "sourced-script-handoff", "expected": "HIGH", "changes": {"run": "source drop/vars.sh"}},
+    {"id": "direct-exec-handoff", "expected": "HIGH", "changes": {"run": "./drop/entrypoint"}},
+    {"id": "nested-download-dir", "expected": "HIGH", "changes": {"download_path": "build/out", "run": "bash build/out/install.sh"}},
+    {"id": "extra-push-trigger", "expected": "HIGH", "changes": {"producer_event": "push_and_pr"}},
+    {"id": "workflow-write-all", "expected": "HIGH", "changes": {"permission": "write-all"}},
+    {"id": "default-named-artifact", "expected": "HIGH", "changes": {"upload_name": "", "download_name": "artifact"}},
+    {"id": "download-all-artifacts", "expected": "HIGH", "changes": {"download_name": ""}},
+    {"id": "unpinned-download-action", "expected": "HIGH", "changes": {"download_action": "actions/download-artifact@v4"}},
+    {"id": "extra-unrelated-job", "expected": "HIGH", "changes": {"producer_extra_job": true}},
+    {"id": "script-second-command", "expected": "HIGH", "changes": {"run": "echo preparing; bash drop/install.sh"}},
+
+    {"id": "data-only-handoff", "expected": "MEDIUM", "changes": {"run": "cat drop/coverage.json"}},
+    {"id": "no-consumer-run", "expected": "MEDIUM", "changes": {"run": ""}},
+    {"id": "unrelated-script", "expected": "MEDIUM", "changes": {"run": "bash local/setup.sh"}},
+    {"id": "script-before-download", "expected": "MEDIUM", "changes": {"run_before_download": true}},
+    {"id": "download-default-dir", "expected": "MEDIUM", "changes": {"download_path": "", "run": "bash drop/install.sh"}},
+
+    {"id": "push-only-source", "expected": "NONE", "changes": {"producer_event": "push"}},
+    {"id": "no-matching-producer-name", "expected": "NONE", "changes": {"consumer_producer_name": "Other Build"}},
+    {"id": "artifact-name-does-not-match", "expected": "NONE", "changes": {"download_name": "different"}},
+    {"id": "read-only-consumer", "expected": "NONE", "changes": {"permission": "read"}},
+    {"id": "unknown-token-permissions", "expected": "NONE", "changes": {"permission": "unknown"}},
+    {"id": "missing-producer-upload", "expected": "NONE", "changes": {"upload": false}},
+    {"id": "missing-upload-path", "expected": "NONE", "changes": {"upload_path": ""}},
+    {"id": "missing-consumer-download", "expected": "NONE", "changes": {"download": false}},
+    {"id": "no-cross-run-id", "expected": "NONE", "changes": {"run_id": ""}},
+    {"id": "current-run-only", "expected": "NONE", "changes": {"run_id": "current"}},
+    {"id": "constant-run-id", "expected": "NONE", "changes": {"run_id": "123456"}},
+    {"id": "no-artifact-access-token", "expected": "NONE", "changes": {"download_token": false}},
+    {"id": "guarded-push-only", "expected": "NONE", "changes": {"job_guard": "github.event.workflow_run.event == 'push'"}},
+    {"id": "guarded-non-pull-request", "expected": "NONE", "changes": {"job_guard": "github.event.workflow_run.event != 'pull_request'"}},
+    {"id": "step-level-pr-exclusion", "expected": "NONE", "changes": {"step_guard": "github.event.workflow_run.event != 'pull_request'"}},
+    {"id": "non-pr-reusable-origin", "expected": "NONE", "changes": {"producer_event": "workflow_dispatch"}},
+
+    {"id": "duplicate-upstream-names", "expected": "INCONCLUSIVE", "changes": {"duplicate_producer": true}},
+    {"id": "dynamic-upstream-artifact-name", "expected": "INCONCLUSIVE", "changes": {"upload_name": "${{ github.run_id }}"}},
+    {"id": "dynamic-download-artifact-name", "expected": "INCONCLUSIVE", "changes": {"download_name": "${{ inputs.name }}"}},
+    {"id": "unresolved-external-repository", "expected": "INCONCLUSIVE", "changes": {"download_repository": "other/example"}},
+    {"id": "unknown-workflow-run-source", "expected": "INCONCLUSIVE", "changes": {"consumer_producer_name": ""}}
+  ]
+}

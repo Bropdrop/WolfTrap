@@ -28,6 +28,7 @@ testing, malware generation, or an authorization oracle over the target.
 | WT-GHA-003 | Non-SHA-pinned external action | A supply-chain reproducibility consideration |
 | WT-GHA-004 | Workflow token permissions unspecified | Effective org defaults not inferred |
 | WT-GHA-005 | `workflow_run` + artifact download + write-capable token | Potential untrusted artifact path; actual use must be reviewed |
+| WT-GHA-006 | Matched PR workflow upload → triggering run download in an explicitly write-capable downstream workflow | Cross-file trace, artifact-name digest, and higher severity if the downloaded directory is directly executed |
 | WT-DOCKER-001 | Base image lacking digest pin | Does not imply image compromise |
 | WT-DOCKER-002 | Fetch-and-execute shell pipeline in Docker build | Conditional risk; no remote content fetched by WolfTrap |
 
@@ -36,6 +37,60 @@ deterministic finding IDs, and per-condition counterfactuals. A counterfactual
 describes a **detector cut**, not proof that the application would become safe.
 Neither absence nor presence of a static pattern alone establishes an
 exploitable vulnerability.
+
+## Stage 4 additive model: cross-workflow artifact paths
+
+Stage 4 correlates **multiple local workflow files** rather than looking only
+at one file's configuration. WT-GHA-006 requires all of these concrete links:
+
+1. A local upstream workflow with an explicit, exact name and a
+   `pull_request` event uploads a named artifact via `actions/upload-artifact`.
+2. A local downstream workflow subscribes to that name through
+   `on.workflow_run.workflows` and has **explicit** write-capable permissions.
+3. A downstream job downloads the same artifact (or all artifacts) using
+   `actions/download-artifact` with a token and `run-id` set to the triggering
+   `${{ github.event.workflow_run.id }}`.
+4. If the same downstream job later directly invokes a script under the
+   download directory, the review signal is **HIGH**; an otherwise matched
+   artifact handoff is **MEDIUM**. Neither signal is a confirmed exploit.
+
+The report includes `trace.producer_workflow`, `trace.consumer_workflow`, a
+SHA-256 digest of the matched artifact name, and whether direct script use was
+seen. Each factor also points to its source file and approximate line. Raw
+scripts, artifact content, source text, tokens and secret values are not saved.
+The counterfactuals show *detector* conditions, not proof of a fix.
+
+Precision controls: a mismatched upstream workflow name or artifact name,
+a default/current-run download, a job with explicit read-only permissions, or
+an unambiguous `workflow_run.event` guard excluding PRs does not create a
+WT-GHA-006 signal. Dynamic artifact names, duplicate matching upstream names,
+or cross-repository artifact references are **INCONCLUSIVE** within the bounded
+path model. WT-GHA-005 remains a separate per-file, conditional signal.
+
+Known limitations: this is not a full data-flow engine. It does not resolve
+reusable workflows, API/`gh` artifact retrieval, shell aliases, scripts in
+different jobs, indirect taint through files, nested builds, or arbitrary
+security guards. The absence of WT-GHA-006 can mean *outside its model*.
+Repository/org token defaults are never inferred from static YAML. A finding
+requires an owner/maintainer to verify actual conditions before disclosure.
+
+### Differential mutation corpus
+
+`tests/fixtures/stage4_artifact_path_corpus.json` records **39 deterministic
+synthetic cases** with distinct positive, medium-risk, negative, and
+inconclusive controls. The test harness renders complete upstream/downstream
+YAML files in isolated temporary directories, checks the exact new rule and
+severity, asserts that input bytes do not change, and independently checks
+JSON/SARIF/report-manifest consistency and hashes. This corpus is synthetic,
+not evidence of exploitation or a detection-rate benchmark against real
+incidents.
+
+Authoritative background:
+
+- [GitHub Security Lab: preventing pwn requests](https://securitylab.github.com/resources/github-actions-preventing-pwn-requests/)
+- [GitHub Docs: securely using pull_request_target](https://docs.github.com/en/actions/reference/security/securely-using-pull_request_target)
+- [GitHub Docs: secure use reference](https://docs.github.com/en/actions/reference/security/secure-use)
+- [Official download-artifact run-id semantics](https://github.com/actions/download-artifact)
 
 Useful primary references:
 

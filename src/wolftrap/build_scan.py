@@ -52,6 +52,11 @@ RULES = {
         "A workflow-run job downloads untrusted artifacts with write-capable authority.",
         "Treat cross-workflow artifacts as untrusted and avoid privileged consumption.",
     ),
+    "WT-GHA-006": (
+        "Pull-request artifact crosses a privileged workflow boundary",
+        "A pull-request workflow can upload an artifact later downloaded from that run by a write-capable workflow.",
+        "Validate the artifact's provenance and content before any privileged use; isolate PR build data from credentials and write tokens.",
+    ),
     "WT-DOCKER-001": (
         "Base image not pinned by digest",
         "A tag-only base image can resolve to different bytes in a future build.",
@@ -111,9 +116,13 @@ def _finding(
     factors: list[dict[str, Any]],
     *,
     severity: str,
+    trace: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     title, explanation, mitigation = RULES[rule_id]
-    stable = _sha(_json_bytes({"rule": rule_id, "path": path, "factors": factors}, pretty=False))
+    identity = {"rule": rule_id, "path": path, "factors": factors}
+    if trace is not None:
+        identity["trace"] = trace
+    stable = _sha(_json_bytes(identity, pretty=False))
     optional_write = rule_id in {"WT-GHA-001", "WT-GHA-002"}
     counterfactuals = []
     if len(factors) > 1:
@@ -125,7 +134,7 @@ def _finding(
                 "risk_after_removal": "MEDIUM_REVIEW" if still_matches else "NOT_DETECTED_IN_CURRENT_MODEL",
                 "limitation": "Removing a detector factor is not proof that the build is secure.",
             })
-    return {
+    result = {
         "id": "WT-BUILD-" + stable[:20].upper(),
         "rule_id": rule_id,
         "title": title,
@@ -139,6 +148,9 @@ def _finding(
         "factors": factors,
         "counterfactuals": counterfactuals,
     }
+    if trace is not None:
+        result["trace"] = trace
+    return result
 
 
 def _yaml_document(text: str) -> dict[str, Any]:
@@ -344,6 +356,168 @@ def _scan_workflow(path: str, text: str) -> list[dict[str, Any]]:
     return findings
 
 
+def _workflow_names(value: Any) -> tuple[str, ...]:
+    """Extract exact workflow_run names, without guessing expression semantics."""
+    if not isinstance(value, dict):
+        raise UnscannableInput("workflow_run dependency names are unavailable")
+    names = value.get("workflows")
+    if isinstance(names, str):
+        names = [names]
+    if (
+        not isinstance(names, list) or not names
+        or any(not isinstance(name, str) or not name or "${{" in name for name in names)
+    ):
+        raise UnscannableInput("workflow_run dependency names are ambiguous")
+    return tuple(names)
+
+
+def _artifact_name(value: Any, *, default: str) -> str:
+    if value is None:
+        return default
+    if not isinstance(value, str) or not value or "${{" in value:
+        raise UnscannableInput("dynamic artifact name prevents deterministic path correlation")
+    return value
+
+
+def _pr_event_excluded(guard: Any) -> bool:
+    """Only recognize two unambiguous whole-expression upstream event guards."""
+    if not isinstance(guard, str):
+        return False
+    value = guard.strip()
+    if value.startswith("${{") and value.endswith("}}"):
+        value = value[3:-2].strip()
+    return bool(re.fullmatch(
+        r"github\.event\.workflow_run\.event\s*(?:!=\s*['\"]pull_request['\"]|==\s*['\"]push['\"])",
+        value,
+    ))
+
+
+def _downloaded_code_executed(run: str, destination: str) -> bool:
+    """Look for a direct script invocation *inside* a bounded downloaded directory.
+
+    No shell is evaluated. An indirect execution or data-only consumer may be
+    missed: a MEDIUM artifact-boundary signal is retained for such paths.
+    """
+    if not destination or destination in {".", "./"}:
+        return False
+    folder = destination.removeprefix("./").strip("/")
+    if not folder or ".." in folder.split("/") or "${{" in folder:
+        return False
+    prefix = re.escape(folder) + r"/[A-Za-z0-9_./-]+"
+    shell_invocation = rf"(?:bash|sh|python3?|node|source|\.)\s+(?:\./)?{prefix}"
+    direct_invocation = rf"\./{prefix}"
+    return bool(re.search(
+        rf"(?m)(?:^|[;&|]\s*)(?:{shell_invocation}|{direct_invocation})(?=\s|$|[;&|])",
+        run,
+    ))
+
+
+def _cross_workflow_artifact_paths(workflows: list[tuple[str, str]]) -> list[dict[str, Any]]:
+    """Join exact named PR producers to write-capable artifact consumers.
+
+    Correlation is deliberately finite: local workflows, explicit workflow
+    names, GitHub's download-artifact run-id, and same-job use. Missing or
+    unsupported linkage is never presented as an exploit or a complete audit.
+    """
+    parsed = [(path, text, _yaml_document(text)) for path, text in workflows]
+    producers: dict[str, list[tuple[str, str, dict[str, Any]]]] = {}
+    for path, text, document in parsed:
+        name = document.get("name")
+        if not isinstance(name, str) or not name or "${{" in name:
+            continue
+        if "pull_request" in _triggers(document.get("on")):
+            producers.setdefault(name, []).append((path, text, document))
+
+    findings: list[dict[str, Any]] = []
+    for consumer_path, consumer_text, document in parsed:
+        on = document.get("on")
+        if "workflow_run" not in _triggers(on):
+            continue
+        jobs = document["jobs"]  # already schema-validated by _scan_workflow
+        for job in jobs.values():
+            if _pr_event_excluded(job.get("if")):
+                continue
+            permissions = job.get("permissions", document.get("permissions"))
+            if permissions is None or not _writable(permissions):
+                continue  # existing WT-GHA-004 handles unknown permission defaults
+            steps = job["steps"]
+            for index, step in enumerate(steps):
+                uses = step.get("uses", "")
+                if not uses.lower().startswith("actions/download-artifact@") or _pr_event_excluded(step.get("if")):
+                    continue
+                options = step.get("with", {})
+                if not isinstance(options, dict):
+                    raise UnscannableInput("artifact download inputs are unsupported")
+                run_id = options.get("run-id")
+                if not isinstance(run_id, str) or not re.fullmatch(
+                    r"\$\{\{\s*github\.event\.workflow_run\.id\s*\}\}", run_id,
+                ):
+                    continue  # default run-id is *this* run, not the producer
+                if not isinstance(options.get("github-token"), str) or not options["github-token"].strip():
+                    continue
+                repository = options.get("repository")
+                if repository not in (None, "${{ github.repository }}"):
+                    raise UnscannableInput("cross-repository artifact origin is outside scope")
+
+                wanted = _artifact_name(options.get("name"), default="*")
+                destination = options.get("path", ".")
+                if not isinstance(destination, str):
+                    raise UnscannableInput("artifact download path is unsupported")
+                upstream_names = _workflow_names(on["workflow_run"])
+                for upstream in upstream_names:
+                    candidates = producers.get(upstream, [])
+                    if len(candidates) > 1:
+                        raise UnscannableInput("duplicate pull-request workflow names prevent unambiguous attribution")
+                    if not candidates:
+                        continue
+                    producer_path, producer_text, producer = candidates[0]
+                    for source_job in producer["jobs"].values():
+                        for upload_step in source_job["steps"]:
+                            upload_use = upload_step.get("uses", "")
+                            if not upload_use.lower().startswith("actions/upload-artifact@"):
+                                continue
+                            upload_options = upload_step.get("with", {})
+                            if not isinstance(upload_options, dict):
+                                raise UnscannableInput("artifact upload inputs are unsupported")
+                            upload_name = _artifact_name(upload_options.get("name"), default="artifact")
+                            if wanted != "*" and wanted != upload_name:
+                                continue
+                            if not isinstance(upload_options.get("path"), str) or not upload_options["path"]:
+                                continue  # no evidence that the upload would contain files
+
+                            direct_run = next((
+                                candidate["run"] for candidate in steps[index + 1:]
+                                if isinstance(candidate.get("run"), str)
+                                and _downloaded_code_executed(candidate["run"], destination)
+                            ), None)
+                            consumer_line = _line(consumer_text, uses)
+                            producer_line = _line(producer_text, upload_use)
+                            factors = [
+                                _factor("pull_request_origin", producer_path, _line(producer_text, "pull_request")),
+                                _factor("named_artifact_upload", producer_path, producer_line),
+                                _factor("workflow_run_name_link", consumer_path, _line(consumer_text, "workflow_run")),
+                                _factor("triggering_run_artifact_download", consumer_path, consumer_line),
+                                _factor("write_capable_token", consumer_path, _line(consumer_text, "permissions:")),
+                            ]
+                            if direct_run is not None:
+                                factors.append(_factor(
+                                    "subsequent_downloaded_script_execution",
+                                    consumer_path, _line(consumer_text, direct_run.splitlines()[0].strip()),
+                                ))
+                            trace = {
+                                "producer_workflow": producer_path,
+                                "consumer_workflow": consumer_path,
+                                "artifact_name_sha256": _sha(upload_name.encode("utf-8")),
+                                "direct_script_execution_detected": direct_run is not None,
+                            }
+                            findings.append(_finding(
+                                "WT-GHA-006", consumer_path, consumer_line, factors,
+                                severity="HIGH" if direct_run is not None else "MEDIUM",
+                                trace=trace,
+                            ))
+    return findings
+
+
 def _scan_container(path: str, text: str) -> list[dict[str, Any]]:
     findings: list[dict[str, Any]] = []
     instructions: list[tuple[int, str]] = []
@@ -533,6 +707,7 @@ def scan_build(root: str | Path, output_dir: str | Path) -> BuildScanOutcome:
     input_files: list[dict[str, Any]] = []
     findings: list[dict[str, Any]] = []
     errors: list[str] = []
+    workflow_inputs: list[tuple[str, str]] = []
     total_bytes = 0
     try:
         for file in _source_files(source_root):
@@ -550,8 +725,10 @@ def scan_build(root: str | Path, output_dir: str | Path) -> BuildScanOutcome:
             input_files.append({"path": relative, "bytes": len(raw), "sha256": _sha(raw)})
             if file.suffix.lower() in (".yml", ".yaml"):
                 findings.extend(_scan_workflow(relative, text))
+                workflow_inputs.append((relative, text))
             else:
                 findings.extend(_scan_container(relative, text))
+        findings.extend(_cross_workflow_artifact_paths(workflow_inputs))
         if not input_files:
             errors.append("No supported CI workflows or container build definitions found.")
     except UnscannableInput as exc:

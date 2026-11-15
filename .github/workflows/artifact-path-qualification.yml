@@ -1,0 +1,132 @@
+name: WolfTrap Stage 4 offline artifact-path qualification
+
+on:
+  push:
+    branches:
+      - feat/wolftrap-stage4-artifact-bridge-v0_4
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qualify:
+    name: Differential corpus and cross-workflow trace qualification
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      PYTHONHASHSEED: "0"
+      PYTHONPATH: src
+    steps:
+      - name: Check out exact revision without persisted credentials
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Select Python 3.12
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+          cache: ""
+
+      - name: Install pinned bounded parser
+        run: python -m pip install --no-cache-dir PyYAML==6.0.3
+
+      - name: Run unit tests and 39-case differential corpus
+        run: python -m wolftrap.test_runner --output reports/stage4/unit-tests.json
+
+      - name: Inspect only local self and synthetic targets
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m wolftrap scan-build \
+            --root . \
+            --output-dir "$RUNNER_TEMP/wolftrap-stage4-self"
+          mkdir -p reports/stage4
+          cp -R "$RUNNER_TEMP/wolftrap-stage4-self" reports/stage4/self
+
+          set +e
+          python -m wolftrap scan-build \
+            --root tests/fixtures/stage4_demo \
+            --output-dir "$RUNNER_TEMP/wolftrap-stage4-hostile"
+          hostile_exit=$?
+          python -m wolftrap scan-build \
+            --root tests/fixtures/build_scan/adversarial \
+            --output-dir "$RUNNER_TEMP/wolftrap-stage4-legacy"
+          legacy_exit=$?
+          set -e
+          if [ "$hostile_exit" -ne 1 ] || [ "$legacy_exit" -ne 1 ]; then
+            echo "Expected both synthetic targets to require review" >&2
+            exit 2
+          fi
+          cp -R "$RUNNER_TEMP/wolftrap-stage4-hostile" reports/stage4/hostile
+          cp -R "$RUNNER_TEMP/wolftrap-stage4-legacy" reports/stage4/legacy
+
+      - name: Independently verify source and evidence digests
+        shell: bash
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          import subprocess
+          from pathlib import Path
+
+          source = {
+              "commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+              "tree": subprocess.check_output(["git", "rev-parse", "HEAD^{tree}"], text=True).strip(),
+          }
+          cases = json.loads(Path("tests/fixtures/stage4_artifact_path_corpus.json").read_text())["cases"]
+          assert len(cases) == 39
+          assert len({x["id"] for x in cases}) == 39
+          expected = {
+              "self": ("NO_PATTERN_MATCH", 3, {}),
+              "hostile": ("REVIEW_REQUIRED", 2, {"WT-GHA-005": "MEDIUM", "WT-GHA-006": "HIGH"}),
+              "legacy": (
+                  "REVIEW_REQUIRED", 3,
+                  {"WT-GHA-001": "HIGH", "WT-GHA-002": "HIGH", "WT-GHA-003": "MEDIUM",
+                   "WT-GHA-005": "MEDIUM", "WT-DOCKER-001": "LOW", "WT-DOCKER-002": "HIGH"},
+              ),
+          }
+          results = {}
+          for name, (status, count, rules) in expected.items():
+              root = Path("reports/stage4") / name
+              manifest = json.loads((root / "build-scan.manifest.json").read_text())
+              report = json.loads((root / "build-scan.json").read_text())
+              sarif = json.loads((root / "build-scan.sarif").read_text())
+              assert manifest["state"] == "COMPLETE" and manifest["qualification_status"] == status
+              assert set(manifest["files"]) == {"build-scan.json", "build-scan.md", "build-scan.sarif"}
+              for filename, metadata in manifest["files"].items():
+                  raw = (root / filename).read_bytes()
+                  assert metadata["bytes"] == len(raw)
+                  assert metadata["sha256"] == hashlib.sha256(raw).hexdigest()
+              assert report["qualification"]["status"] == status
+              assert report["summary"]["files_inspected"] == count
+              assert report["summary"]["errors"] == 0
+              assert {f["rule_id"]: f["severity"] for f in report["findings"]} == rules
+              assert len(sarif["runs"][0]["results"]) == len(rules)
+              assert report["target_code_executed"] is False
+              assert report["external_systems_contacted"] is False
+              assert report["model_used"] is False
+              assert report["coverage"]["input_digest"] == manifest["input_digest"]
+              results[name] = {"status": status, "files": count, "rules": rules,
+                               "input_digest": manifest["input_digest"]}
+          hostile = json.loads(Path("reports/stage4/hostile/build-scan.json").read_text())
+          path = next(f for f in hostile["findings"] if f["rule_id"] == "WT-GHA-006")
+          assert path["trace"]["direct_script_execution_detected"] is True
+          assert path["trace"]["producer_workflow"] == ".github/workflows/pr.yml"
+          assert path["trace"]["consumer_workflow"] == ".github/workflows/privileged.yml"
+          source["corpus_cases"] = len(cases)
+          source["results"] = results
+          Path("reports/stage4/qualification.json").write_text(
+              json.dumps(source, sort_keys=True, indent=2) + "\n", encoding="utf-8"
+          )
+          PY
+
+      - name: Upload retained evidence even on failed gates
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: wolftrap-stage4-${{ github.run_id }}
+          path: reports/stage4/
+          if-no-files-found: warn
+          retention-days: 14
