@@ -196,6 +196,27 @@ def _verify_effects(arguments: argparse.Namespace) -> int:
     return 0
 
 
+def _scan_prompts(arguments: argparse.Namespace) -> int:
+    from .prompt_scan import scan_prompts
+
+    outcome = scan_prompts(arguments.root, arguments.output_dir, files=arguments.file)
+    summary = outcome.report["summary"]
+    print(f"{outcome.report['qualification']['status']}: "
+          f"{summary['files_inspected']} documents; "
+          f"{summary['findings']} conditional instruction signal(s); "
+          f"{summary['errors']} unknown input(s).")
+    return outcome.exit_code
+
+
+def _verify_prompts(arguments: argparse.Namespace) -> int:
+    from .prompt_scan import verify_prompt_evidence
+
+    report = verify_prompt_evidence(arguments.evidence_dir)
+    print(f"VERIFIED_EVIDENCE: {report['qualification']['status']}; "
+          f"{report['summary']['findings']} conditional instruction signal(s).")
+    return 0
+
+
 def _challenge_agent(arguments: argparse.Namespace) -> int:
     from .agent_challenge import run_agent_challenge
 
@@ -322,7 +343,7 @@ def build_parser() -> argparse.ArgumentParser:
         prog="wolftrap",
         description=(
             "WolfTrap: no external targets. Bounded synthetic research and offline "
-            "local build, agent, and protected-effect inspection."
+            "local build, agent, protected-effect and prompt-document inspection."
         ),
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -376,6 +397,17 @@ def build_parser() -> argparse.ArgumentParser:
     effect_verify = subparsers.add_parser("verify-effects", help="verify saved Stage 5.2 evidence")
     effect_verify.add_argument("--evidence-dir", required=True)
     effect_verify.set_defaults(handler=_verify_effects)
+
+    prompts = subparsers.add_parser(
+        "scan-prompts", help="Stage 5.3 offline untrusted prompt-document triage")
+    prompts.add_argument("--root", required=True)
+    prompts.add_argument("--output-dir", required=True)
+    prompts.add_argument("--file", action="append", help="explicit root-relative document (repeatable)")
+    prompts.set_defaults(handler=_scan_prompts)
+
+    prompt_verify = subparsers.add_parser("verify-prompts", help="verify saved Stage 5.3 evidence")
+    prompt_verify.add_argument("--evidence-dir", required=True)
+    prompt_verify.set_defaults(handler=_verify_prompts)
 
     agent_challenge = subparsers.add_parser("challenge-agent", help="run independently labelled synthetic agent cases")
     agent_challenge.add_argument("--seed", type=int, default=20261115)

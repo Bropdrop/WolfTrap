@@ -4,7 +4,8 @@
 
 WolfTrap is a **read-only, offline trust-boundary inspector** for GitHub
 Actions, Dockerfiles, bounded JavaScript/TypeScript agent code, and Stage 5.2
-protected-effect boundary patterns across agent skills and scripts. Its
+protected-effect boundary patterns across agent skills and scripts. Stage 5.3
+adds a separate prompt-document mode for untrusted README and prompt files. Its
 independently labelled synthetic challenge labs test the detectors without
 contacting external systems. WolfTrap identifies *conditional review signals*,
 explains the contributing conditions, and produces portable JSON, Markdown,
@@ -21,7 +22,10 @@ unconditional authentication/approval callbacks, and supported session-credentia
 logging patterns. **13 Stage 5.2 conditional patterns** add agent launch,
 host-secret copying, sandbox and network isolation review, browser-managed
 keys, skill instructions, API upload controls, and remote fetch bounds. None
-establish real-world exploitability.
+establish real-world exploitability. **4 Stage 5.3 prompt-document signals**
+triage attempted instruction overrides, governing-prompt disclosure, priority
+claims and credential transfers. Ordinary prompt templates are not themselves
+verified attacks.
 
 > **Public beta:** The read-only CI/build inspector, Stage 5.1 agent inspector,
 > synthetic challenge labs, and community CI/build Action are available on
@@ -124,6 +128,26 @@ Every finding is `REVIEW_REQUIRED`, never proof of an attack; incomplete
 inspection is `INCONCLUSIVE`. The existing community Action continues to run
 **only** the CI/build scanner. [Stage 5.2 rule scope and limits](docs/effect-inspection.md).
 
+### Option E: Stage 5.3 untrusted prompt-document review
+
+Use this **separate, offline** command for alleged model prompts, READMEs,
+agent-instruction documents, and text tool descriptions:
+
+```bash
+wolftrap scan-prompts --root /path/to/YOUR-document-repo \
+  --output-dir /tmp/wolftrap-prompt-review
+wolftrap verify-prompts --evidence-dir /tmp/wolftrap-prompt-review
+```
+
+It inspects bounded `.md`, `.txt`, `.mkd`, `.json` and extensionless UTF-8 text,
+including material outside Stage 5.2's strictly named `SKILL.md` scope.
+`REVIEW_REQUIRED` (exit 1) means conditional text-level signals, not a
+successful injection. `INCONCLUSIVE` (exit 2) means incomplete input; no matches
+(exit 0) is not a safety certificate. Source is never executed or sent to a
+model. Use `--file README.md` for a focused review; evidence omits original
+source text and hashes its paths. This does **not** authenticate alleged vendor
+prompt leaks. [Stage 5.3 usage and limits](docs/prompt-inspection.md).
+
 See the [60-second quick start](docs/quickstart.md),
 [supported rules and limitations](docs/build-inspection.md),
 [responsible disclosure](SECURITY.md) and [contributing guide](CONTRIBUTING.md).
@@ -157,6 +181,12 @@ agent harness, a browser BYOK demo, and an agent skill library. It also fixes
 the CI scanner's repeated mutable `uses:` action attribution by locating the
 actual YAML step in each job. Neither feature expands Stage 5.1's syntax
 contract or silently enables an automated block. [Details](docs/effect-inspection.md).
+
+**Stage 5.3:** a separately invoked document scanner preserves the earlier
+scanner grammars, supports long UTF-8 prompt collections within fixed caps,
+and tests obfuscated instruction-disclosure attempts alongside benign excerpts.
+The controls are author-created synthetic cases, not an independent hostile
+review or real-world detection-rate measurement.
 
 The original WolfTrap v0.1 is a bounded, standard-library Python research harness for testing authorization controls against synthetic systems. It translates defensive lessons from FBI `FLASH-20261113-001` into deterministic experiments. The synthetic authorization harness does not contact, exploit, or deploy to external systems; the optional local build inspector is a separate, later capability.
 
