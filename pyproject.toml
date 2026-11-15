@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "wolftrap"
 version = "0.1.0"
-description = "Offline GitHub Actions and Dockerfile trust-path review with a synthetic adversarial challenge lab"
+description = "Offline CI/build and JavaScript/TypeScript agent trust-boundary review with synthetic challenge labs"
 readme = "README.md"
 license = "Apache-2.0"
 requires-python = ">=3.11"

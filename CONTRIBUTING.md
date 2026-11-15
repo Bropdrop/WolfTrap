@@ -8,11 +8,14 @@ Thanks for helping make CI trust-boundary analysis easier to understand.
 python3 -m pip install -e '.[build-scan]'
 python3 -m unittest discover -s tests -v
 wolftrap challenge-build --seed 20261115 --cases 128 --output-dir /tmp/wolftrap-contrib
+wolftrap challenge-agent --seed 20261115 --output-dir /tmp/wolftrap-contrib-agent
+wolftrap verify-agent-challenge --evidence-dir /tmp/wolftrap-contrib-agent
 ```
 
 Every new detection rule should include at least one positive, one negative,
 one ambiguous/fail-closed case, an honest limitation, and deterministic
-evidence. Avoid turning regex matches into `CONFIRMED_EXPLOIT` claims.
+evidence. Agent rules also need a saved-input replay control. Avoid turning
+lexical matches into `CONFIRMED_EXPLOIT` claims.
 
 ## Scope
 

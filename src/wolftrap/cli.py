@@ -166,6 +166,40 @@ def _scan_build(arguments: argparse.Namespace) -> int:
     return outcome.exit_code
 
 
+def _scan_agent(arguments: argparse.Namespace) -> int:
+    from .agent_scan import scan_agent
+
+    outcome = scan_agent(arguments.root, arguments.output_dir, files=arguments.file)
+    print(f"{outcome.report['qualification']['status']}: "
+          f"{outcome.report['summary']['files_inspected']} files; "
+          f"{outcome.report['summary']['findings']} conditional review signal(s).")
+    return outcome.exit_code
+
+
+def _challenge_agent(arguments: argparse.Namespace) -> int:
+    from .agent_challenge import run_agent_challenge
+
+    report, code = run_agent_challenge(seed=arguments.seed, output_dir=arguments.output_dir)
+    print(json.dumps(report['summary'], sort_keys=True))
+    return code
+
+
+def _verify_agent_challenge(arguments: argparse.Namespace) -> int:
+    from .agent_challenge import verify_agent_challenge_evidence
+
+    report = verify_agent_challenge_evidence(arguments.evidence_dir)
+    print(json.dumps(report['summary'], sort_keys=True))
+    return 0 if report['qualification']['status'] == 'PASSED_BOUNDED' else 1
+
+
+def _replay_agent_challenge(arguments: argparse.Namespace) -> int:
+    from .agent_challenge import replay_agent_challenge
+
+    report, code = replay_agent_challenge(arguments.evidence_dir, arguments.output_dir)
+    print(json.dumps(report['summary'], sort_keys=True))
+    return code
+
+
 def _challenge_build(arguments: argparse.Namespace) -> int:
     """Stress the static detector with synthetic, independently labelled cases."""
     report, code = run_challenge(
@@ -305,6 +339,26 @@ def build_parser() -> argparse.ArgumentParser:
     scanner.add_argument("--root", required=True, help="local source directory to inspect read-only")
     scanner.add_argument("--output-dir", required=True, help="fresh evidence directory outside source")
     scanner.set_defaults(handler=_scan_build)
+
+    agent = subparsers.add_parser("scan-agent", help="offline conditional JS/TS agent trust-boundary review")
+    agent.add_argument("--root", required=True)
+    agent.add_argument("--output-dir", required=True)
+    agent.add_argument("--file", action="append", help="explicit root-relative source file (repeatable)")
+    agent.set_defaults(handler=_scan_agent)
+
+    agent_challenge = subparsers.add_parser("challenge-agent", help="run independently labelled synthetic agent cases")
+    agent_challenge.add_argument("--seed", type=int, default=20261115)
+    agent_challenge.add_argument("--output-dir", required=True)
+    agent_challenge.set_defaults(handler=_challenge_agent)
+
+    agent_verify = subparsers.add_parser("verify-agent-challenge", help="verify saved agent challenge evidence")
+    agent_verify.add_argument("--evidence-dir", required=True)
+    agent_verify.set_defaults(handler=_verify_agent_challenge)
+
+    agent_replay = subparsers.add_parser("replay-agent-challenge", help="re-execute verified saved synthetic agent cases")
+    agent_replay.add_argument("--evidence-dir", required=True)
+    agent_replay.add_argument("--output-dir", required=True)
+    agent_replay.set_defaults(handler=_replay_agent_challenge)
 
     challenge = subparsers.add_parser(
         "challenge-build",

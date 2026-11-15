@@ -1,8 +1,9 @@
 # WolfTrap — quick start for repository maintainers
 
-WolfTrap helps you review local GitHub Actions and root container-build trust
-boundaries. It does **not** execute your application, run a pentest against a
-host, read secrets, or guarantee that a repository is secure.
+WolfTrap helps you review local GitHub Actions, root container-build trust
+boundaries, and selected JavaScript/TypeScript agent trust boundaries. It does
+**not** execute your application, run a pentest against a host, validate
+deployment credentials, or guarantee that a repository is secure.
 
 ## Choose your path
 
@@ -63,6 +64,41 @@ The 128 saved synthetics cover 32 high-priority script paths, 32 artifact-only
 handoffs, 32 broken links and 32 ambiguous paths. Matching all 128 is a finite
 synthetic regression result; it is **not** an external exploit detection rate.
 
+### 4. Offline agent source review (Stage 5.1)
+
+This is a separate local inspection command, not an extension of the
+community Action's CI/build checks. It uses the Python standard library and
+does not need a model, API key, Node.js runtime, or network connection.
+
+```bash
+wolftrap scan-agent --root /path/to/your-agent-source \
+  --output-dir /tmp/wolftrap-agent-review
+```
+
+Use a fresh, empty output directory outside the target. For explicit
+selection, repeat `--file relative/path.ts` as needed. The scanner supports
+bounded JavaScript/TypeScript lexical patterns for fail-open moderation
+(`WT-AGENT-001`), unconditional authentication/approval
+(`WT-AGENT-002`), and recognizable browser-visible credential logging
+(`WT-AGENT-003`). All matches require manual review, including named mock
+callbacks. Unrelated demo/mock comments cannot downgrade an authentication
+finding. Unknown syntax, path ambiguity, or incomplete inspection is
+`INCONCLUSIVE`, never an all-clear.
+
+To challenge the detector using only saved, synthetic fixtures:
+
+```bash
+wolftrap challenge-agent --seed 20261115 --output-dir /tmp/wt-agent-cases
+wolftrap verify-agent-challenge --evidence-dir /tmp/wt-agent-cases
+wolftrap replay-agent-challenge --evidence-dir /tmp/wt-agent-cases \
+  --output-dir /tmp/wt-agent-replay
+wolftrap verify-agent-challenge --evidence-dir /tmp/wt-agent-replay
+```
+
+The 108-case corpus and replay demonstrate finite, local detection behavior;
+they cannot certify another agent's runtime identity, authority, or safety.
+Read [supported syntax, evidence, and limits](agent-inspection.md).
+
 ## Interpret the results
 
 - Open `build-scan.md` for recommendations and cited conditions.
@@ -76,10 +112,14 @@ synthetic regression result; it is **not** an external exploit detection rate.
   Custom labels or runner groups without that label cannot be reliably
   attributed from workflow text; `NO_PATTERN_MATCH` does not establish
   runner isolation or guarantee repo safety.
+- Agent results are stored separately as `agent-scan.json`,
+  `agent-scan.md`, `agent-scan.sarif`, and
+  `agent-scan.manifest.json`; they do not change the CI/build rule count.
 
 ## What it does not do
 
-It is not a generic SAST engine, dependency CVE scanner, SBOM generator,
+It is not a general-purpose JavaScript parser, generic SAST engine, dependency
+CVE scanner, SBOM generator,
 container image scanner, live penetration-testing platform, fuzzing engine
 for arbitrary services, or replacement for CodeQL/OSV-Scanner/OpenSSF.
 Unknown workflow constructs or missing permission semantics may be outside
