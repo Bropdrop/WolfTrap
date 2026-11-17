@@ -1,0 +1,293 @@
+{
+  "schema": "wolftrap.private-runtime-contract-fixtures/v1",
+  "qualification": "NOT TESTED",
+  "initial_state": {
+    "tick": 1,
+    "epoch": 1,
+    "authority_available": true,
+    "effects": []
+  },
+  "grant_defaults": {
+    "principal": "synthetic-principal://review-owner",
+    "delegate": "synthetic-agent://worker-a",
+    "tenant": "synthetic-tenant://a",
+    "origin": "synthetic-origin://host-a",
+    "resource": "synthetic://contract/effect-ledger",
+    "action": "write-marker",
+    "operation_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "valid_from_tick": 1,
+    "expires_at_tick": 10,
+    "epoch": 1,
+    "replay_key": "synthetic-replay://one",
+    "admission_slot": "synthetic-slot://one"
+  },
+  "request_defaults": {
+    "attempt_id": "synthetic-attempt://one",
+    "principal": "synthetic-principal://review-owner",
+    "delegate": "synthetic-agent://worker-a",
+    "tenant": "synthetic-tenant://a",
+    "origin": "synthetic-origin://host-a",
+    "resource": "synthetic://contract/effect-ledger",
+    "action": "write-marker",
+    "operation_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "cases": [
+    {
+      "case_id": "legitimate-positive",
+      "steps": [
+        {
+          "step": "issue_grant",
+          "grant_ref": "grant-one"
+        },
+        {
+          "step": "submit",
+          "grant_ref": "grant-one"
+        }
+      ],
+      "expected_effect_delta": [
+        {
+          "attempt_id": "synthetic-attempt://one",
+          "tenant": "synthetic-tenant://a",
+          "operation_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "admission_slot": "synthetic-slot://one"
+        }
+      ]
+    },
+    {
+      "case_id": "missing-grant",
+      "steps": [
+        {
+          "step": "submit",
+          "grant_ref": null
+        }
+      ],
+      "expected_effect_delta": []
+    },
+    {
+      "case_id": "tenant-binding",
+      "steps": [
+        {
+          "step": "issue_grant",
+          "grant_ref": "grant-one"
+        },
+        {
+          "step": "submit",
+          "grant_ref": "grant-one",
+          "request_overrides": {
+            "tenant": "synthetic-tenant://b"
+          }
+        }
+      ],
+      "expected_effect_delta": []
+    },
+    {
+      "case_id": "delegate-binding",
+      "steps": [
+        {
+          "step": "issue_grant",
+          "grant_ref": "grant-one"
+        },
+        {
+          "step": "submit",
+          "grant_ref": "grant-one",
+          "request_overrides": {
+            "delegate": "synthetic-agent://worker-b"
+          }
+        }
+      ],
+      "expected_effect_delta": []
+    },
+    {
+      "case_id": "origin-binding",
+      "steps": [
+        {
+          "step": "issue_grant",
+          "grant_ref": "grant-one"
+        },
+        {
+          "step": "submit",
+          "grant_ref": "grant-one",
+          "request_overrides": {
+            "origin": "synthetic-origin://host-b"
+          }
+        }
+      ],
+      "expected_effect_delta": []
+    },
+    {
+      "case_id": "operation-binding",
+      "steps": [
+        {
+          "step": "issue_grant",
+          "grant_ref": "grant-one"
+        },
+        {
+          "step": "submit",
+          "grant_ref": "grant-one",
+          "request_overrides": {
+            "operation_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        }
+      ],
+      "expected_effect_delta": []
+    },
+    {
+      "case_id": "stale-epoch",
+      "steps": [
+        {
+          "step": "issue_grant",
+          "grant_ref": "grant-one"
+        },
+        {
+          "step": "advance_authority",
+          "transition": "ADVANCE_EPOCH",
+          "epoch": 2
+        },
+        {
+          "step": "submit",
+          "grant_ref": "grant-one"
+        }
+      ],
+      "expected_effect_delta": []
+    },
+    {
+      "case_id": "expired-grant",
+      "steps": [
+        {
+          "step": "issue_grant",
+          "grant_ref": "grant-one"
+        },
+        {
+          "step": "advance_authority",
+          "transition": "SET_TICK",
+          "tick": 10
+        },
+        {
+          "step": "submit",
+          "grant_ref": "grant-one"
+        }
+      ],
+      "expected_effect_delta": []
+    },
+    {
+      "case_id": "revoked-after-preparation",
+      "steps": [
+        {
+          "step": "issue_grant",
+          "grant_ref": "grant-one"
+        },
+        {
+          "step": "submit",
+          "grant_ref": "grant-one",
+          "pause_after": "PREPARED"
+        },
+        {
+          "step": "advance_authority",
+          "transition": "REVOKE",
+          "grant_ref": "grant-one"
+        },
+        {
+          "step": "resume",
+          "attempt_id": "synthetic-attempt://one"
+        }
+      ],
+      "expected_effect_delta": []
+    },
+    {
+      "case_id": "authority-unavailable",
+      "steps": [
+        {
+          "step": "issue_grant",
+          "grant_ref": "grant-one"
+        },
+        {
+          "step": "advance_authority",
+          "transition": "AUTHORITY_UNAVAILABLE"
+        },
+        {
+          "step": "submit",
+          "grant_ref": "grant-one"
+        }
+      ],
+      "expected_effect_delta": []
+    },
+    {
+      "case_id": "two-grants-one-admission-slot",
+      "steps": [
+        {
+          "step": "issue_grant",
+          "grant_ref": "grant-one"
+        },
+        {
+          "step": "submit",
+          "grant_ref": "grant-one"
+        },
+        {
+          "step": "issue_grant",
+          "grant_ref": "grant-two",
+          "grant_overrides": {
+            "replay_key": "synthetic-replay://two"
+          }
+        },
+        {
+          "step": "submit",
+          "grant_ref": "grant-two",
+          "request_overrides": {
+            "attempt_id": "synthetic-attempt://two"
+          }
+        }
+      ],
+      "expected_effect_delta": [
+        {
+          "attempt_id": "synthetic-attempt://one",
+          "tenant": "synthetic-tenant://a",
+          "operation_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "admission_slot": "synthetic-slot://one"
+        }
+      ]
+    },
+    {
+      "case_id": "untrusted-execution-claim",
+      "steps": [
+        {
+          "step": "submit",
+          "grant_ref": null,
+          "untrusted_claim": "EFFECT_COMMITTED"
+        }
+      ],
+      "expected_effect_delta": []
+    },
+    {
+      "case_id": "recovery-after-lost-acknowledgement",
+      "steps": [
+        {
+          "step": "issue_grant",
+          "grant_ref": "grant-one"
+        },
+        {
+          "step": "submit",
+          "grant_ref": "grant-one",
+          "pause_after": "EFFECT_COMMITTED_BEFORE_ACK"
+        },
+        {
+          "step": "recover"
+        },
+        {
+          "step": "submit",
+          "grant_ref": "grant-one",
+          "request_overrides": {
+            "attempt_id": "synthetic-attempt://two"
+          }
+        }
+      ],
+      "expected_effect_delta": [
+        {
+          "attempt_id": "synthetic-attempt://one",
+          "tenant": "synthetic-tenant://a",
+          "operation_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "admission_slot": "synthetic-slot://one"
+        }
+      ]
+    }
+  ]
+}
