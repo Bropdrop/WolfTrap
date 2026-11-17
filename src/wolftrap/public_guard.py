@@ -39,6 +39,18 @@ _APPROVED_ACTIONS = frozenset({
 _APPROVED_PIP_FLAGS = frozenset({
     "--disable-pip-version-check", "--no-cache-dir", "--no-deps", "--only-binary=:all:",
 })
+_APPROVED_PIP_PREFIXES = (
+    ("python", "-m"), ("python3", "-m"), ("python", "-I", "-m"),
+)
+_APPROVED_LOCK_PATH = (".github", "qualification-requirements.txt")
+_APPROVED_LOCK_LINE = (
+    "PyYAML==6.0.3 --hash=sha256:ba1cc08a7ccde2d2ec775841541641e4548226580ab850948cbfda66a1befcdc"
+)
+_APPROVED_LOCK_INSTALL = (
+    "python", "-I", "-m", "pip", "--isolated", "install", "--no-cache-dir", "--no-deps",
+    "--only-binary=:all:", "--require-hashes", "--index-url", "https://pypi.org/simple",
+    "-r", "/".join(_APPROVED_LOCK_PATH),
+)
 _SOURCE_IMAGE_SIGNATURES = {
     ".png": (b"\x89PNG\r\n\x1a\n",), ".jpg": (b"\xff\xd8\xff",),
     ".jpeg": (b"\xff\xd8\xff",), ".webp": (b"RIFF",),
@@ -61,7 +73,9 @@ _PUBLIC_EMAIL_DOMAINS = frozenset({
 })
 _PUBLIC_EMAIL_ADDRESSES = frozenset({"noreply@github.com"})
 _PERSONAL_PATH = re.compile(r"(?i)(?:/(?:home|Users)/[^/\s]+/|[A-Z]:[\\/]Users[\\/][^\\/\s]+)")
-_INSTALL_COMMAND = re.compile(r"\b(?:pip\d*\s+install|(?:npm|pnpm|yarn|uv)\s+(?:add|install|sync|ci))\b")
+_INSTALL_COMMAND = re.compile(
+    r"\b(?:pip\d*(?:\s+--isolated)?\s+install|(?:npm|pnpm|yarn|uv)\s+(?:add|install|sync|ci))\b"
+)
 _JS_IMPORT = re.compile(
     r"""\b(?:from\s+|import\s+|(?:import|require)\s*\(\s*)['"]([^'"]+)['"]"""
 )
@@ -195,10 +209,9 @@ def _python_import_signals(source: str) -> set[str]:
         if isinstance(node, ast.Import):
             modules = [alias.name for alias in node.names]
         elif isinstance(node, ast.ImportFrom):
+            modules = [alias.name for alias in node.names]
             if node.module is not None:
-                modules = [node.module]
-            else:
-                modules = [alias.name for alias in node.names]
+                modules.append(node.module)
         elif isinstance(node, ast.Call) and node.args:
             function = node.func
             name = function.id if isinstance(function, ast.Name) else (
@@ -237,7 +250,7 @@ def _project_dependency_signals(source: str) -> set[str]:
     return set()
 
 
-def _workflow_dependency_signals(source: str) -> set[str]:
+def _workflow_dependency_signals(source: str, lock_present: bool) -> set[str]:
     from .build_scan import UnscannableInput, _yaml_document
 
     try:
@@ -263,9 +276,14 @@ def _workflow_dependency_signals(source: str) -> set[str]:
                 match = _INSTALL_COMMAND.search(line)
                 if match is None or line.lstrip().startswith("#"):
                     continue
+                if lock_present and tuple(shlex.split(line, comments=True)) == _APPROVED_LOCK_INSTALL:
+                    continue
+                prefix = tuple(shlex.split(line[:match.start()], comments=True))
                 arguments = shlex.split(line[match.end():], comments=True)
                 if (
                     not match[0].startswith("pip")
+                    or "--isolated" in match[0]
+                    or prefix not in _APPROVED_PIP_PREFIXES
                     or arguments.count("PyYAML==6.0.3") != 1
                     or any(arg != "PyYAML==6.0.3" and arg not in _APPROVED_PIP_FLAGS for arg in arguments)
                 ):
@@ -283,7 +301,7 @@ def _is_workflow(parts: tuple[str, ...]) -> bool:
 
 
 def _source_signals(
-    parts: tuple[str, ...], raw: bytes, workflow_dependencies: bool,
+    parts: tuple[str, ...], raw: bytes, workflow_dependencies: bool, lock_present: bool,
 ) -> set[str]:
     suffix = PurePosixPath(parts[-1]).suffix.lower()
     if suffix in _SOURCE_IMAGE_SIGNATURES:
@@ -302,13 +320,17 @@ def _source_signals(
         signals.add("private-import")
     if parts == ("pyproject.toml",):
         signals.update(_project_dependency_signals(source))
+    if parts == _APPROVED_LOCK_PATH:
+        requirements = [line for line in source.splitlines() if line.strip() and not line.lstrip().startswith("#")]
+        if requirements != [_APPROVED_LOCK_LINE]:
+            signals.add("unreviewed-dependency-manifest")
     if parts[:2] != ("tests", "fixtures") and (
         parts[-1].lower() in _DEPENDENCY_FILES
         or re.fullmatch(r"requirements[^/]*\.(?:txt|in)", parts[-1], re.IGNORECASE)
     ):
         signals.add("unreviewed-dependency-manifest")
     if workflow_dependencies and _is_workflow(parts):
-        signals.update(_workflow_dependency_signals(source))
+        signals.update(_workflow_dependency_signals(source, lock_present))
     return signals
 
 
@@ -325,6 +347,8 @@ def scan_source(root: Path, ref: str, scan: GuardScan, *, workflow_dependencies:
         scan.unknown["git-input"] += 1
         return
 
+    lock_path = b"\t" + "/".join(_APPROVED_LOCK_PATH).encode("ascii")
+    lock_present = any(entry.endswith(lock_path) for entry in entries)
     path_spellings: dict[str, str] = {}
     total_bytes = 0
     for entry in entries:
@@ -362,7 +386,7 @@ def scan_source(root: Path, ref: str, scan: GuardScan, *, workflow_dependencies:
             raw = _git(root, "cat-file", "blob", object_id)
             if len(raw) != expected_size:
                 raise GuardInputError
-            signals.update(_source_signals(parts, raw, workflow_dependencies))
+            signals.update(_source_signals(parts, raw, workflow_dependencies, lock_present))
         except (GuardInputError, UnicodeError, ValueError, SyntaxError, RecursionError):
             scan.unknown["unsupported-source-content"] += 1
         scan.signals.update(signals)

@@ -94,6 +94,13 @@ class PublicSourceGuardTests(unittest.TestCase):
             "unreviewed-package-dependency": 1,
         })
 
+    def test_from_import_checks_the_imported_module_name(self) -> None:
+        self.write("fixture.py", "from vendor import ground_truth as synthetic_runtime\n")
+        self.commit()
+        scan = GuardScan()
+        scan_source(self.root, "HEAD", scan)
+        self.assertEqual(scan.signals, {"private-import": 1})
+
     @unittest.skipUnless(importlib.util.find_spec("yaml"), "requires optional YAML parser")
     def test_workflow_checks_flow_mapping_uses_and_unapproved_install(self) -> None:
         self.write(
@@ -121,6 +128,48 @@ class PublicSourceGuardTests(unittest.TestCase):
         scan = GuardScan()
         scan_source(self.root, "HEAD", scan, workflow_dependencies=True)
         self.assertEqual(scan.unknown, {"unsupported-source-content": 1})
+
+    @unittest.skipUnless(importlib.util.find_spec("yaml"), "requires optional YAML parser")
+    def test_hash_locked_qualification_dependency_is_bound_to_path_and_digest(self) -> None:
+        workflow = self.write(
+            ".github/workflows/qualification.yml",
+            "jobs:\n"
+            "  test:\n"
+            "    steps:\n"
+            "      - run: |\n"
+            "          python -I -m pip --isolated install --no-cache-dir --no-deps --only-binary=:all: "
+            "--require-hashes --index-url https://pypi.org/simple -r .github/qualification-requirements.txt\n",
+        )
+        lock = self.write(
+            ".github/qualification-requirements.txt",
+            "# Reviewed wheel\n"
+            "PyYAML==6.0.3 --hash=sha256:ba1cc08a7ccde2d2ec775841541641e4548226580ab850948cbfda66a1befcdc\n",
+        )
+        self.commit()
+        scan = GuardScan()
+        scan_source(self.root, "HEAD", scan, workflow_dependencies=True)
+        self.assertEqual(scan.result(True)["status"], "NO_PATTERN_MATCH")
+
+        lock.write_text(lock.read_text(encoding="utf-8").replace("ba1cc", "aa1cc"), encoding="utf-8")
+        self.commit()
+        scan = GuardScan()
+        scan_source(self.root, "HEAD", scan)
+        self.assertEqual(scan.signals, {"unreviewed-dependency-manifest": 1})
+
+        lock.unlink()
+        self.commit()
+        scan = GuardScan()
+        scan_source(self.root, "HEAD", scan, workflow_dependencies=True)
+        self.assertEqual(scan.signals, {"unreviewed-workflow-install": 1})
+
+        workflow.write_text(
+            workflow.read_text(encoding="utf-8").replace("qualification-requirements.txt", "other.txt"),
+            encoding="utf-8",
+        )
+        self.commit()
+        scan = GuardScan()
+        scan_source(self.root, "HEAD", scan, workflow_dependencies=True)
+        self.assertEqual(scan.signals, {"unreviewed-workflow-install": 1})
 
     def test_invalid_git_revision_is_redacted(self) -> None:
         scan = GuardScan()
