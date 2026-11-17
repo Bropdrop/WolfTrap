@@ -144,7 +144,7 @@ def _fixture(cloud_case: dict[str, Any], axis: str) -> ExperimentCase:
 
 
 def evaluate_cloud_authority() -> dict[str, Any]:
-    """Cross the 160 authored cloud traces with eleven separate authority axes."""
+    """Cross the 160 authored cloud traces with twelve authority axes."""
     mismatch_count = oracle_failures = flagged = unflagged = 0
     records: list[dict[str, Any]] = []
     by_axis: dict[str, dict[str, int]] = {
@@ -256,9 +256,15 @@ def verify_cloud_authority(evidence_dir: str | Path) -> dict[str, Any]:
     fd = _open_directory(Path(evidence_dir))
     try:
         try:
+            if set(os.listdir(fd)) != {REPORT_NAME, MARKDOWN_NAME, MANIFEST_NAME}:
+                raise ValueError
             manifest = json.loads(_read_file(fd, MANIFEST_NAME, 16384))
-            if (manifest.get("schema") != MANIFEST_SCHEMA or manifest.get("state") != "COMPLETE"
-                    or set(manifest.get("files", {})) != {REPORT_NAME, MARKDOWN_NAME}):
+            if (type(manifest) is not dict
+                    or set(manifest) != {"schema", "state", "files"}
+                    or manifest["schema"] != MANIFEST_SCHEMA
+                    or manifest["state"] != "COMPLETE"
+                    or type(manifest["files"]) is not dict
+                    or set(manifest["files"]) != {REPORT_NAME, MARKDOWN_NAME}):
                 raise ValueError
             report = evaluate_cloud_authority()
             for name, expected in _render(report).items():

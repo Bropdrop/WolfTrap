@@ -122,6 +122,24 @@ class CloudAuthorityHostileTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 verify_cloud_authority(evidence)
 
+    def test_unexpected_file_or_symlink_invalidates_completion(self) -> None:
+        with tempfile.TemporaryDirectory(prefix="wolftrap-cloud-auth-") as temp:
+            evidence = Path(temp) / "evidence"
+            run_cloud_authority(evidence)
+            (evidence / "surprise").write_text("unexpected")
+            with self.assertRaises(ValueError):
+                verify_cloud_authority(evidence)
+        with tempfile.TemporaryDirectory(prefix="wolftrap-cloud-auth-") as temp:
+            evidence = Path(temp) / "evidence"
+            run_cloud_authority(evidence)
+            original = evidence / REPORT_NAME
+            outside_copy = Path(temp) / "copy"
+            outside_copy.write_bytes(original.read_bytes())
+            original.unlink()
+            original.symlink_to(outside_copy)
+            with self.assertRaises(ValueError):
+                verify_cloud_authority(evidence)
+
 
 if __name__ == "__main__":
     unittest.main()
