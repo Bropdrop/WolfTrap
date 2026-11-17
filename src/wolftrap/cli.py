@@ -237,6 +237,28 @@ def _verify_cloud_c2(arguments: argparse.Namespace) -> int:
     return 0 if report["qualification"]["status"] == "PASSED_BOUNDED" else 1
 
 
+def _challenge_authority(arguments: argparse.Namespace) -> int:
+    from .authority_funnel import run_authority_challenge
+
+    report, code = run_authority_challenge(arguments.output_dir)
+    summary = report["summary"]
+    print(f"{report['qualification']['status']}: "
+          f"{summary['cases']} synthetic authority controls; "
+          f"{summary['proposals']} inert agent proposals; "
+          f"{summary['mismatches']} mismatch(es).")
+    print(f"Evidence: {Path(arguments.output_dir)}")
+    return code
+
+
+def _verify_authority(arguments: argparse.Namespace) -> int:
+    from .authority_funnel import verify_authority_evidence
+
+    report = verify_authority_evidence(arguments.evidence_dir)
+    print(f"VERIFIED_EVIDENCE: {report['summary']['cases']} authority controls; "
+          f"{report['summary']['mismatches']} mismatch(es).")
+    return 0 if report["qualification"]["status"] == "PASSED_BOUNDED" else 1
+
+
 def _challenge_cloud_camouflage(arguments: argparse.Namespace) -> int:
     from .cloud_camouflage import run_camouflage_challenge
 
@@ -482,6 +504,20 @@ def build_parser() -> argparse.ArgumentParser:
         "verify-cloud-c2", help="verify saved cloud-C2 challenge evidence")
     cloud_c2_verify.add_argument("--evidence-dir", required=True)
     cloud_c2_verify.set_defaults(handler=_verify_cloud_c2)
+
+    authority = subparsers.add_parser(
+        "challenge-authority-funnel",
+        help="run inert ARTEX-informed tool-claim and agent-swarm authority controls",
+    )
+    authority.add_argument("--output-dir", required=True, help="fresh evidence directory")
+    authority.set_defaults(handler=_challenge_authority)
+
+    authority_verify = subparsers.add_parser(
+        "verify-authority-funnel",
+        help="verify synthetic authority-funnel challenge evidence",
+    )
+    authority_verify.add_argument("--evidence-dir", required=True)
+    authority_verify.set_defaults(handler=_verify_authority)
 
     camouflage = subparsers.add_parser(
         "challenge-cloud-camouflage", help="measure offline cloud-C2 blind spots and lookalikes")
