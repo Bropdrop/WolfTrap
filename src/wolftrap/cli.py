@@ -259,6 +259,28 @@ def _verify_cloud_camouflage(arguments: argparse.Namespace) -> int:
     return 0 if report["qualification"]["status"] == "PASSED_BOUNDED" else 1
 
 
+def _challenge_cloud_authority(arguments: argparse.Namespace) -> int:
+    from .cloud_authority import run_cloud_authority
+
+    report, code = run_cloud_authority(arguments.output_dir)
+    stats = report["summary"]
+    print(f"{report['qualification']['status']}: "
+          f"{stats['cloud_traces']} synthetic cloud traces; "
+          f"{stats['authority_checks']} independent synthetic authority checks; "
+          f"{stats['mismatches']} mismatch(es).")
+    print(f"Evidence: {Path(arguments.output_dir)}")
+    return code
+
+
+def _verify_cloud_authority(arguments: argparse.Namespace) -> int:
+    from .cloud_authority import verify_cloud_authority
+
+    report = verify_cloud_authority(arguments.evidence_dir)
+    print(f"VERIFIED_EVIDENCE: {report['summary']['authority_checks']} "
+          f"synthetic authority checks; {report['summary']['mismatches']} mismatch(es).")
+    return 0 if report["qualification"]["status"] == "PASSED_BOUNDED" else 1
+
+
 def _scan_cloud_trace(arguments: argparse.Namespace) -> int:
     from .cloud_trace import scan_cloud_trace
 
@@ -492,6 +514,16 @@ def build_parser() -> argparse.ArgumentParser:
         "verify-cloud-camouflage", help="independently verify camouflage challenge artifacts")
     camouflage_verify.add_argument("--evidence-dir", required=True)
     camouflage_verify.set_defaults(handler=_verify_cloud_camouflage)
+
+    authority = subparsers.add_parser(
+        "challenge-cloud-authority", help="test synthetic independent authority after cloud advisories")
+    authority.add_argument("--output-dir", required=True, help="fresh local evidence directory")
+    authority.set_defaults(handler=_challenge_cloud_authority)
+
+    authority_verify = subparsers.add_parser(
+        "verify-cloud-authority", help="replay synthetic cloud authority and verify saved evidence")
+    authority_verify.add_argument("--evidence-dir", required=True)
+    authority_verify.set_defaults(handler=_verify_cloud_authority)
 
     cloud_trace = subparsers.add_parser(
         "scan-cloud-trace", help="inspect local pre-sanitized GitHub event metadata offline")

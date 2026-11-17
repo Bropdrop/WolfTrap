@@ -16,6 +16,12 @@ behavioral correlations inspired by publicly documented GitDoor activity. It
 does not scan live GitHub repositories, diagnose infections, or interact with
 command-and-control services.
 
+**Evidence boundary:** WolfTrap has demonstrated detection of certain
+**ARTEX-relevant security failure patterns** in synthetic scenarios and static
+review. It has **not** demonstrated detection of a real ARTEX intrusion or
+identified an ARTEX implant in live telemetry. GitDoor-inspired research has
+the same bounded, non-operational status.
+
 Licensed under the [Apache License, Version 2.0](LICENSE).
 
 **9 explainable CI/build review rules** currently cover privileged PR execution,
@@ -208,6 +214,26 @@ coverage or measured production false-positive rates. The input contains
 only sanitized event categories and fictional aliases: no real repositories,
 executables, payloads, attacker infrastructure or network traffic. See
 [what the challenge can and cannot establish](docs/cloud-c2-challenge.md).
+
+### Option I: independent synthetic authority after cloud advisories
+
+```bash
+wolftrap challenge-cloud-authority --output-dir /tmp/wolftrap-cloud-authority
+wolftrap verify-cloud-authority --evidence-dir /tmp/wolftrap-cloud-authority
+```
+
+Each of the 160 authored cloud traces is crossed with **12 authority conditions**
+in WolfTrap's existing synthetic protected-effect system (1,920 checks total).
+They include current grants, invalid credentials, foreign origins, scope and
+operation-digest mismatches, stale epochs, revocation before and after
+authorization/preparation, unknown security state, credential substitution,
+and replay. An independently captured effect ledger and a separate reference
+oracle establish whether the synthetic protected effect was allowed.
+
+**A cloud alert is advisory, never a grant or revocation.** Likewise a clean
+scan cannot create authority. This is **not** a deployed Ground Truth broker,
+HERCULES integration, GitHub endpoint protection or real malware detection.
+See the [authority separation experiment](docs/cloud-c2-challenge.md).
 
 ---
 

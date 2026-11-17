@@ -162,3 +162,36 @@ The source never contains malware, credentials, URLs, actual GitHub accounts,
 attacker instructions or live cloud telemetry. The saved JSON and Markdown
 reports are independently regenerated and checked against SHA-256 manifest
 entries by `verify-cloud-camouflage`.
+
+## Synthetic independent-authority boundary (not live Ground Truth)
+
+`challenge-cloud-authority` takes the authored 160 cloud-event examples and
+crosses each with 12 independently provisioned **synthetic** authority cases:
+
+```bash
+wolftrap challenge-cloud-authority --output-dir /new/empty/evidence
+wolftrap verify-cloud-authority --evidence-dir /new/empty/evidence
+```
+
+The cases exercise valid owner authority (positive control), invalid signature,
+foreign cloud origin, scope mismatch, operation-digest substitution, stale
+epoch, prior revocation, revocation after authorization, revocation after the
+prepare phase, unavailable security state, credential substitution, and replay.
+They use the existing WolfTrap synthetic executor and **independently captured
+protected-effect ledger** checked by its separate reference oracle.
+
+The cloud detector's output is deliberately **advisory only**: it does not
+modify authority, issue a credential, revoke a grant or authorize a protected
+effect. A valid independent grant is a positive control even for a flagged
+benign lookalike; missing current authority denies effects even for an
+unflagged trace. Defective deny-all, final-recheck and replay systems are
+hostile controls that must fail independent qualification.
+
+This does **not** connect to, verify or harden a live Ground Truth authority
+broker. Trusted grants, origin bindings and signature-verification flags are
+authored synthetic fixtures, not real cryptographic proofs. A compromised
+agent that *does* possess valid current authority remains a separate threat.
+There is no live GitHub traffic, actual ARTEX intrusion evidence, deployed
+protected-effect enforcement, or measured production accuracy. The verifier
+replays the entire fixed experiment and checks saved report hashes. A passing
+result applies **only** to the exact synthetic harness.
