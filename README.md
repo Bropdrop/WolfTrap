@@ -192,6 +192,23 @@ cross-repository pattern; `NO_PATTERN_MATCH` (exit 0) is not proof of safety;
 `INCONCLUSIVE` (exit 2) means unusable evidence. The verifier replays against
 the unchanged source file. See [input schema and hostile-test limits](docs/cloud-c2-challenge.md).
 
+### Option H: adversarial cloud camouflage challenge (research preview)
+
+```bash
+wolftrap challenge-cloud-camouflage --output-dir /tmp/wolftrap-cloud-camouflage
+wolftrap verify-cloud-camouflage --evidence-dir /tmp/wolftrap-cloud-camouflage
+```
+
+This **160-case deterministic synthetic corpus** separately measures 40 narrow
+positive controls, 40 routine benign negatives, 40 benign automation
+lookalikes that nevertheless trigger a rule, and 40 threat-inspired variants
+that evade the narrow rules. A passing run means the detector reproduced
+these authored expectations. It explicitly **does not** mean 100% threat
+coverage or measured production false-positive rates. The input contains
+only sanitized event categories and fictional aliases: no real repositories,
+executables, payloads, attacker infrastructure or network traffic. See
+[what the challenge can and cannot establish](docs/cloud-c2-challenge.md).
+
 ---
 
 ## Research engine and detailed qualification

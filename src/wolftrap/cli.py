@@ -237,6 +237,28 @@ def _verify_cloud_c2(arguments: argparse.Namespace) -> int:
     return 0 if report["qualification"]["status"] == "PASSED_BOUNDED" else 1
 
 
+def _challenge_cloud_camouflage(arguments: argparse.Namespace) -> int:
+    from .cloud_camouflage import run_camouflage_challenge
+
+    report, code = run_camouflage_challenge(arguments.output_dir)
+    stats = report["summary"]
+    print(f"{report['qualification']['status']}: {stats['cases']} authored cloud cases; "
+          f"{stats['mismatches']} expectation mismatch(es); "
+          f"{stats['benign_lookalikes_flagged']} benign lookalikes flagged; "
+          f"{stats['evasion_variants_unflagged']} blind-spot cases unflagged.")
+    print(f"Evidence: {Path(arguments.output_dir)}")
+    return code
+
+
+def _verify_cloud_camouflage(arguments: argparse.Namespace) -> int:
+    from .cloud_camouflage import verify_camouflage_evidence
+
+    report = verify_camouflage_evidence(arguments.evidence_dir)
+    print(f"VERIFIED_EVIDENCE: {report['summary']['cases']} camouflage cases; "
+          f"{report['summary']['mismatches']} expectation mismatch(es).")
+    return 0 if report["qualification"]["status"] == "PASSED_BOUNDED" else 1
+
+
 def _scan_cloud_trace(arguments: argparse.Namespace) -> int:
     from .cloud_trace import scan_cloud_trace
 
@@ -460,6 +482,16 @@ def build_parser() -> argparse.ArgumentParser:
         "verify-cloud-c2", help="verify saved cloud-C2 challenge evidence")
     cloud_c2_verify.add_argument("--evidence-dir", required=True)
     cloud_c2_verify.set_defaults(handler=_verify_cloud_c2)
+
+    camouflage = subparsers.add_parser(
+        "challenge-cloud-camouflage", help="measure offline cloud-C2 blind spots and lookalikes")
+    camouflage.add_argument("--output-dir", required=True, help="fresh local evidence directory")
+    camouflage.set_defaults(handler=_challenge_cloud_camouflage)
+
+    camouflage_verify = subparsers.add_parser(
+        "verify-cloud-camouflage", help="independently verify camouflage challenge artifacts")
+    camouflage_verify.add_argument("--evidence-dir", required=True)
+    camouflage_verify.set_defaults(handler=_verify_cloud_camouflage)
 
     cloud_trace = subparsers.add_parser(
         "scan-cloud-trace", help="inspect local pre-sanitized GitHub event metadata offline")

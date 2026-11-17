@@ -128,3 +128,37 @@ authenticate upstream session provenance, measure production false-positive
 rates, establish attribution, or demonstrate a real-world infection. A benign
 build or automation can produce similar events; an attacker may avoid the
 specific sequences entirely. A clean scan is **not** clearance.
+
+## Adversarial camouflage experiment
+
+The next stage tests the **limits** of these correlations, using the same
+strictly sanitized, metadata-only schema. Everything is generated locally and
+the expected labels are authored independently of the detector under test.
+
+```bash
+wolftrap challenge-cloud-camouflage --output-dir /new/empty/evidence
+wolftrap verify-cloud-camouflage --evidence-dir /new/empty/evidence
+```
+
+There are 20 distinct event-sequence templates exercised under eight identity,
+logical-time and timing-scale variations, for 160 deterministic cases:
+
+| Synthetic group | Cases | What is measured |
+| --- | ---: | --- |
+| Pattern-positive controls | 40 | Whether the two narrow rules still match their authored signatures |
+| Benign negatives | 40 | Whether incomplete or unrelated ordinary activity stays unflagged |
+| Benign automation lookalikes | 40 | How a *benign-by-construction* sequence can still trigger a suspicious pattern |
+| Threat-inspired evasion variants | 40 | Known blind spots such as command-repository rotation, issue mismatch, session separation, unclassified uploads and activity beyond the window |
+
+The last two groups are **not errors in the test harness**: they expose the
+limits of metadata-only correlation. A `PASSED_BOUNDED` result means the
+observed rule IDs equal the **author-assigned expectations** across the corpus,
+including the intentionally flagged lookalikes and unflagged evasions. An
+all-denying or all-flagging detector is caught by separate hostile tests.
+
+Do not interpret these authored proportions as a measured false-positive rate,
+true-positive rate, detection probability or representative attack sample.
+The source never contains malware, credentials, URLs, actual GitHub accounts,
+attacker instructions or live cloud telemetry. The saved JSON and Markdown
+reports are independently regenerated and checked against SHA-256 manifest
+entries by `verify-cloud-camouflage`.
