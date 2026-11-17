@@ -1,0 +1,429 @@
+{
+  "schema": "wolftrap.identity-telemetry-controls/v1",
+  "cases": [
+    {
+      "id": "new-source",
+      "group": "pattern_positive",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"sign_in","mode":"app_only","outcome":"success","source_class":"new","credential_tenant":1,"tenant_relationship":"same"}
+        ]
+      },
+      "expected": {
+        "status": "REVIEW_REQUIRED",
+        "findings": [{"rule_id":"WT-IDENTITY-001","event_indices":[0]}],
+        "inconclusive": []
+      }
+    },
+    {
+      "id": "unexpected-tenant",
+      "group": "pattern_positive",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"sign_in","mode":"app_only","outcome":"success","source_class":"known","credential_tenant":2,"tenant_relationship":"unexpected"}
+        ]
+      },
+      "expected": {
+        "status": "REVIEW_REQUIRED",
+        "findings": [{"rule_id":"WT-IDENTITY-002","event_indices":[0]}],
+        "inconclusive": []
+      }
+    },
+    {
+      "id": "new-source-with-unresolved-relationship",
+      "group": "incomplete",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"sign_in","mode":"app_only","outcome":"success","source_class":"new","credential_tenant":null,"tenant_relationship":"unknown"}
+        ]
+      },
+      "expected": {
+        "status": "INCONCLUSIVE",
+        "findings": [{"rule_id":"WT-IDENTITY-001","event_indices":[0]}],
+        "inconclusive": [{"event_index":0,"reason":"TENANT_RELATIONSHIP_UNKNOWN"}]
+      }
+    },
+    {
+      "id": "ordinary-app-session",
+      "group": "routine_negative",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"sign_in","mode":"app_only","outcome":"success","source_class":"known","credential_tenant":1,"tenant_relationship":"same"}
+        ]
+      },
+      "expected": {
+        "status": "NO_PATTERN_MATCH",
+        "findings": [],
+        "inconclusive": []
+      }
+    },
+    {
+      "id": "expected-partner",
+      "group": "routine_negative",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"sign_in","mode":"app_only","outcome":"success","source_class":"known","credential_tenant":2,"tenant_relationship":"expected_partner"}
+        ]
+      },
+      "expected": {
+        "status": "NO_PATTERN_MATCH",
+        "findings": [],
+        "inconclusive": []
+      }
+    },
+    {
+      "id": "failed-app-sign-in",
+      "group": "routine_negative",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"sign_in","mode":"app_only","outcome":"failure","source_class":"new","credential_tenant":2,"tenant_relationship":"unexpected"}
+        ]
+      },
+      "expected": {
+        "status": "NO_PATTERN_MATCH",
+        "findings": [],
+        "inconclusive": []
+      }
+    },
+    {
+      "id": "delegated-session",
+      "group": "routine_negative",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"sign_in","mode":"delegated","outcome":"success","source_class":"new","credential_tenant":null,"tenant_relationship":"unknown"}
+        ]
+      },
+      "expected": {
+        "status": "NO_PATTERN_MATCH",
+        "findings": [],
+        "inconclusive": []
+      }
+    },
+    {
+      "id": "missing-sign-in-context",
+      "group": "incomplete",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"sign_in","mode":"app_only","outcome":"success","source_class":"unknown","credential_tenant":null,"tenant_relationship":"unknown"}
+        ]
+      },
+      "expected": {
+        "status": "INCONCLUSIVE",
+        "findings": [],
+        "inconclusive": [{"event_index":0,"reason":"SOURCE_CLASS_UNKNOWN"},{"event_index":0,"reason":"TENANT_RELATIONSHIP_UNKNOWN"}]
+      }
+    },
+    {
+      "id": "unplanned-credential",
+      "group": "pattern_positive",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"credential_added","change_context":"unplanned"},
+          {"tick":1,"tenant":1,"app":1,"kind":"consent_granted","change_context":"unplanned","privilege":"limited"}
+        ]
+      },
+      "expected": {
+        "status": "REVIEW_REQUIRED",
+        "findings": [{"rule_id":"WT-IDENTITY-003","event_indices":[0]}],
+        "inconclusive": []
+      }
+    },
+    {
+      "id": "approved-automation",
+      "group": "routine_negative",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"credential_added","change_context":"approved_window"},
+          {"tick":1,"tenant":1,"app":1,"kind":"role_assigned","change_context":"approved_window","privilege":"elevated"},
+          {"tick":2,"tenant":1,"app":1,"kind":"protected_operation","change_context":"approved_window"}
+        ]
+      },
+      "expected": {
+        "status": "NO_PATTERN_MATCH",
+        "findings": [],
+        "inconclusive": []
+      }
+    },
+    {
+      "id": "unrecorded-maintenance",
+      "group": "benign_lookalike",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"credential_added","change_context":"unplanned"},
+          {"tick":1,"tenant":1,"app":1,"kind":"role_assigned","change_context":"unplanned","privilege":"elevated"},
+          {"tick":2,"tenant":1,"app":1,"kind":"protected_operation","change_context":"unplanned"}
+        ]
+      },
+      "expected": {
+        "status": "REVIEW_REQUIRED",
+        "findings": [{"rule_id":"WT-IDENTITY-003","event_indices":[0]},{"rule_id":"WT-IDENTITY-004","event_indices":[1]},{"rule_id":"WT-IDENTITY-006","event_indices":[0,1,2]}],
+        "inconclusive": []
+      }
+    },
+    {
+      "id": "elevated-consent",
+      "group": "pattern_positive",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"consent_granted","change_context":"unplanned","privilege":"elevated"}
+        ]
+      },
+      "expected": {
+        "status": "REVIEW_REQUIRED",
+        "findings": [{"rule_id":"WT-IDENTITY-004","event_indices":[0]}],
+        "inconclusive": []
+      }
+    },
+    {
+      "id": "ordered-chain-window-edge",
+      "group": "pattern_positive",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"credential_added","change_context":"unplanned"},
+          {"tick":2,"tenant":1,"app":1,"kind":"consent_granted","change_context":"unplanned","privilege":"elevated"},
+          {"tick":5,"tenant":1,"app":1,"kind":"protected_operation","change_context":"unplanned"}
+        ]
+      },
+      "expected": {
+        "status": "REVIEW_REQUIRED",
+        "findings": [{"rule_id":"WT-IDENTITY-003","event_indices":[0]},{"rule_id":"WT-IDENTITY-004","event_indices":[1]},{"rule_id":"WT-IDENTITY-006","event_indices":[0,1,2]}],
+        "inconclusive": []
+      }
+    },
+    {
+      "id": "chain-different-tenant",
+      "group": "correlation_negative",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"credential_added","change_context":"unplanned"},
+          {"tick":1,"tenant":1,"app":1,"kind":"role_assigned","change_context":"unplanned","privilege":"elevated"},
+          {"tick":2,"tenant":2,"app":1,"kind":"protected_operation","change_context":"unplanned"}
+        ]
+      },
+      "expected": {
+        "status": "REVIEW_REQUIRED",
+        "findings": [{"rule_id":"WT-IDENTITY-003","event_indices":[0]},{"rule_id":"WT-IDENTITY-004","event_indices":[1]}],
+        "inconclusive": []
+      }
+    },
+    {
+      "id": "chain-different-application",
+      "group": "correlation_negative",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"credential_added","change_context":"unplanned"},
+          {"tick":1,"tenant":1,"app":1,"kind":"role_assigned","change_context":"unplanned","privilege":"elevated"},
+          {"tick":2,"tenant":1,"app":2,"kind":"protected_operation","change_context":"unplanned"}
+        ]
+      },
+      "expected": {
+        "status": "REVIEW_REQUIRED",
+        "findings": [{"rule_id":"WT-IDENTITY-003","event_indices":[0]},{"rule_id":"WT-IDENTITY-004","event_indices":[1]}],
+        "inconclusive": []
+      }
+    },
+    {
+      "id": "chain-late-operation",
+      "group": "known_miss",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"credential_added","change_context":"unplanned"},
+          {"tick":1,"tenant":1,"app":1,"kind":"role_assigned","change_context":"unplanned","privilege":"elevated"},
+          {"tick":6,"tenant":1,"app":1,"kind":"protected_operation","change_context":"unplanned"}
+        ]
+      },
+      "expected": {
+        "status": "REVIEW_REQUIRED",
+        "findings": [{"rule_id":"WT-IDENTITY-003","event_indices":[0]},{"rule_id":"WT-IDENTITY-004","event_indices":[1]}],
+        "inconclusive": []
+      }
+    },
+    {
+      "id": "chain-timestamp-tie",
+      "group": "known_miss",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"credential_added","change_context":"unplanned"},
+          {"tick":0,"tenant":1,"app":1,"kind":"role_assigned","change_context":"unplanned","privilege":"elevated"},
+          {"tick":0,"tenant":1,"app":1,"kind":"protected_operation","change_context":"unplanned"}
+        ]
+      },
+      "expected": {
+        "status": "REVIEW_REQUIRED",
+        "findings": [{"rule_id":"WT-IDENTITY-003","event_indices":[0]},{"rule_id":"WT-IDENTITY-004","event_indices":[1]}],
+        "inconclusive": []
+      }
+    },
+    {
+      "id": "multiple-changes-pick-latest",
+      "group": "pattern_positive",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"credential_added","change_context":"unplanned"},
+          {"tick":1,"tenant":1,"app":1,"kind":"credential_added","change_context":"unplanned"},
+          {"tick":2,"tenant":1,"app":1,"kind":"role_assigned","change_context":"unplanned","privilege":"elevated"},
+          {"tick":3,"tenant":1,"app":1,"kind":"role_assigned","change_context":"unplanned","privilege":"elevated"},
+          {"tick":4,"tenant":1,"app":1,"kind":"protected_operation","change_context":"unplanned"}
+        ]
+      },
+      "expected": {
+        "status": "REVIEW_REQUIRED",
+        "findings": [{"rule_id":"WT-IDENTITY-003","event_indices":[0]},{"rule_id":"WT-IDENTITY-003","event_indices":[1]},{"rule_id":"WT-IDENTITY-004","event_indices":[2]},{"rule_id":"WT-IDENTITY-004","event_indices":[3]},{"rule_id":"WT-IDENTITY-006","event_indices":[1,3,4]}],
+        "inconclusive": []
+      }
+    },
+    {
+      "id": "unresolved-change",
+      "group": "incomplete",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"credential_added","change_context":"unknown"}
+        ]
+      },
+      "expected": {
+        "status": "INCONCLUSIVE",
+        "findings": [],
+        "inconclusive": [{"event_index":0,"reason":"CHANGE_CONTEXT_UNKNOWN"}]
+      }
+    },
+    {
+      "id": "authentication-spike",
+      "group": "pattern_positive",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"auth_volume","mode":"app_only","attempts":24,"usual_attempts":8,"baseline_windows":12}
+        ]
+      },
+      "expected": {
+        "status": "REVIEW_REQUIRED",
+        "findings": [{"rule_id":"WT-IDENTITY-005","event_indices":[0]}],
+        "inconclusive": []
+      }
+    },
+    {
+      "id": "legitimate-scaling",
+      "group": "benign_lookalike",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"auth_volume","mode":"app_only","attempts":30,"usual_attempts":8,"baseline_windows":12}
+        ]
+      },
+      "expected": {
+        "status": "REVIEW_REQUIRED",
+        "findings": [{"rule_id":"WT-IDENTITY-005","event_indices":[0]}],
+        "inconclusive": []
+      }
+    },
+    {
+      "id": "ordinary-busy-app",
+      "group": "routine_negative",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"auth_volume","mode":"app_only","attempts":100,"usual_attempts":50,"baseline_windows":20}
+        ]
+      },
+      "expected": {
+        "status": "NO_PATTERN_MATCH",
+        "findings": [],
+        "inconclusive": []
+      }
+    },
+    {
+      "id": "small-volume",
+      "group": "routine_negative",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"auth_volume","mode":"app_only","attempts":19,"usual_attempts":3,"baseline_windows":30}
+        ]
+      },
+      "expected": {
+        "status": "NO_PATTERN_MATCH",
+        "findings": [],
+        "inconclusive": []
+      }
+    },
+    {
+      "id": "immature-baseline",
+      "group": "incomplete",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"auth_volume","mode":"app_only","attempts":24,"usual_attempts":8,"baseline_windows":11}
+        ]
+      },
+      "expected": {
+        "status": "INCONCLUSIVE",
+        "findings": [],
+        "inconclusive": [{"event_index":0,"reason":"INSUFFICIENT_AUTH_BASELINE"}]
+      }
+    },
+    {
+      "id": "no-baseline",
+      "group": "incomplete",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"auth_volume","mode":"app_only","attempts":24,"usual_attempts":null,"baseline_windows":0}
+        ]
+      },
+      "expected": {
+        "status": "INCONCLUSIVE",
+        "findings": [],
+        "inconclusive": [{"event_index":0,"reason":"INSUFFICIENT_AUTH_BASELINE"}]
+      }
+    },
+    {
+      "id": "source-and-relationship-uninformative",
+      "group": "known_miss",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"sign_in","mode":"app_only","outcome":"success","source_class":"known","credential_tenant":1,"tenant_relationship":"same"}
+        ]
+      },
+      "expected": {
+        "status": "NO_PATTERN_MATCH",
+        "findings": [],
+        "inconclusive": []
+      }
+    },
+    {
+      "id": "contradictory-tenant-context",
+      "group": "incomplete",
+      "input": {
+        "schema": "wolftrap.synthetic-identity-telemetry/v1",
+        "events": [
+          {"tick":0,"tenant":1,"app":1,"kind":"sign_in","mode":"app_only","outcome":"success","source_class":"known","credential_tenant":2,"tenant_relationship":"same"}
+        ]
+      },
+      "expected": {
+        "status": "INCONCLUSIVE",
+        "findings": [],
+        "inconclusive": [{"event_index":null,"reason":"UNSUPPORTED_INPUT"}]
+      }
+    }
+  ]
+}
