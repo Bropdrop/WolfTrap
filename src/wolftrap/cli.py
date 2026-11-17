@@ -340,6 +340,24 @@ def _verify_agent_challenge(arguments: argparse.Namespace) -> int:
     return 0 if report['qualification']['status'] == 'PASSED_BOUNDED' else 1
 
 
+def _challenge_gt_vsa(arguments: argparse.Namespace) -> int:
+    from .gt_vsa_challenge import write_evidence
+
+    manifest = write_evidence(arguments.output_dir, seed=arguments.seed, vehicles=arguments.vehicles)
+    status = manifest["status"]
+    print(f"{status} synthetic vehicle qualification. Evidence at {arguments.output_dir}")
+    return {"PASS": 0, "FAIL": 1}.get(status, 2)
+
+
+def _verify_gt_vsa(arguments: argparse.Namespace) -> int:
+    from .gt_vsa_challenge import verify_evidence
+
+    manifest = verify_evidence(arguments.evidence_dir)
+    status = manifest["status"]
+    print(f"Reproduced synthetic vehicle evidence with qualification status {status}.")
+    return {"PASS": 0, "FAIL": 1}.get(status, 2)
+
+
 def _replay_agent_challenge(arguments: argparse.Namespace) -> int:
     from .agent_challenge import replay_agent_challenge
 
@@ -588,6 +606,16 @@ def build_parser() -> argparse.ArgumentParser:
     agent_replay.add_argument("--evidence-dir", required=True)
     agent_replay.add_argument("--output-dir", required=True)
     agent_replay.set_defaults(handler=_replay_agent_challenge)
+
+    gt_vsa = subparsers.add_parser("challenge-gt-vsa", help="qualify a synthetic vehicle fleet offline")
+    gt_vsa.add_argument("--seed", type=int, default=20261117)
+    gt_vsa.add_argument("--vehicles", type=int, default=1024)
+    gt_vsa.add_argument("--output-dir", type=Path, required=True, help="fresh local evidence directory")
+    gt_vsa.set_defaults(handler=_challenge_gt_vsa)
+
+    gt_vsa_verify = subparsers.add_parser("verify-gt-vsa", help="reproduce saved synthetic vehicle evidence")
+    gt_vsa_verify.add_argument("--evidence-dir", type=Path, required=True)
+    gt_vsa_verify.set_defaults(handler=_verify_gt_vsa)
 
     challenge = subparsers.add_parser(
         "challenge-build",

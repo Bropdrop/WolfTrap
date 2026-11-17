@@ -50,7 +50,7 @@ def file_index(root: Path) -> dict[str, dict[str, int | str]]:
     return index
 
 
-def suite_summaries(root: Path) -> dict[str, object]:
+def suite_summaries(root: Path, source: dict[str, object]) -> dict[str, object]:
     def read(name: str) -> dict:
         return json.loads((root / name).read_text(encoding="utf-8"))
 
@@ -59,18 +59,25 @@ def suite_summaries(root: Path) -> dict[str, object]:
     authority = read("authority-qualification/authority-qualification.json")["summary"]
     identity = read("identity-telemetry-challenge/identity-telemetry-challenge.json")["summary"]
     prompt = read("prompt-trust/prompt-trust-challenge.json")["summary"]
+    vehicle_manifest = read("gt-vsa/gt-vsa.manifest.json")
+    vehicle = vehicle_manifest["summary"]
     if (cloud["authority_checks"] < 1920 or cloud["mismatches"] or cloud["oracle_failures"]
             or funnel["proposals"] < 3019 or funnel["mismatches"]):
         raise ValueError("the cloud and authority challenge baselines did not qualify")
     if (authority["sentinels_total"] < 5
             or authority["sentinels_caught"] != authority["sentinels_total"]):
         raise ValueError("authority sentinel qualification regressed")
+    if (vehicle_manifest["status"] != "PASS" or vehicle_manifest["source"] != source
+            or vehicle["vehicles"] != 1024 or vehicle["failed_runs"]
+            or vehicle["defects"] < 1 or vehicle["defects_detected"] != vehicle["defects"]):
+        raise ValueError("the exact source vehicle fleet and defect controls did not qualify")
     return {
         "cloud_authority": cloud,
         "authority_funnel": funnel,
         "authority_qualification": authority,
         "identity_telemetry": identity,
         "prompt_trust": prompt,
+        "gt_vsa": vehicle,
     }
 
 
@@ -130,6 +137,9 @@ def main() -> int:
         run_python(f"wolftrap.{suite}", "verify", "--evidence-dir", target)
     run_python("wolftrap.authority_qualification", "--output-dir", output / "authority-qualification")
     run_python("wolftrap.authority_qualification", "--evidence-dir", output / "authority-qualification")
+    run_python("wolftrap", "challenge-gt-vsa", "--seed", "20261117", "--vehicles", "1024",
+               "--output-dir", output / "gt-vsa")
+    run_python("wolftrap", "verify-gt-vsa", "--evidence-dir", output / "gt-vsa")
 
     if capture_source_revision(repo) != source:
         raise ValueError("qualification source changed during replay")
@@ -150,7 +160,7 @@ def main() -> int:
             "Hashes bind local files and do not establish authenticity or production security.",
         ],
         "unit_tests": tests["tests_run"],
-        "suites": suite_summaries(output),
+        "suites": suite_summaries(output, source.to_dict()),
         "files": file_index(output),
     }, output / "qualification.json")
     return 0

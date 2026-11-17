@@ -280,6 +280,10 @@ See the [authority separation experiment](docs/cloud-c2-challenge.md).
 - Compare independently recorded effects with authored expectations across
   phased authority schedules, a 1,000-proposal pressure bound and defective
   sentinels. [Authority qualification](docs/authority-funnel-challenge.md#qualify-independently-recorded-effects).
+- Qualify the Ground Truth Vehicle Safety Shield against a fleet of 1,024
+  simulated vehicles. The offline campaign checks ledger mutations, local
+  emergency braking during outages and oracle detection of deliberately defective
+  controls. [GT-VSA architecture and reproduction](docs/gt-vsa.md).
 
 ---
 
