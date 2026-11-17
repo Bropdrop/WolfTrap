@@ -11,6 +11,7 @@ from __future__ import annotations
 import os
 import re
 from collections import Counter
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
@@ -167,6 +168,21 @@ def enforce_funnel(
     A tool claim is deliberately ignored when making authorization decisions.
     One protected effect per host slot and one per grant nonce are permitted.
     """
+    return _enforce_funnel(
+        grants, proposals, current_epoch=current_epoch,
+        security_state_known=security_state_known,
+    )
+
+
+def _enforce_funnel(
+    grants: Sequence[dict[str, Any]],
+    proposals: Sequence[dict[str, Any]],
+    *,
+    current_epoch: int,
+    security_state_known: bool,
+    record_effect: Callable[[dict[str, Any]], None] | None = None,
+) -> dict[str, Any]:
+    """Execute the bounded gate and optionally write to the observer's sink."""
     validate_input(grants, proposals, current_epoch=current_epoch,
                    security_state_known=security_state_known)
     registry = {item["grant_id"]: item for item in grants}
@@ -210,13 +226,16 @@ def enforce_funnel(
         else:
             used_nonces.add(grant["nonce"])
             used_slots.add(proposal["slot"])
-            effects.append({
+            effect = {
                 "at": proposal["at"],
                 "agent_id": proposal["agent_id"],
                 "grant_id": grant["grant_id"],
                 "slot": proposal["slot"],
                 "operation_digest": _operation_digest(proposal),
-            })
+            }
+            if record_effect is not None:
+                record_effect(dict(effect))
+            effects.append(effect)
         decisions.append({"agent_id": proposal["agent_id"], "reason": reason})
     return {"effects": effects, "decisions": decisions}
 

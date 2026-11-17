@@ -3,6 +3,8 @@ from __future__ import annotations
 import ast
 import os
 import socket
+import subprocess
+import tempfile
 import unittest
 import urllib.request
 from pathlib import Path
@@ -97,6 +99,26 @@ class SafetyBoundaryTests(unittest.TestCase):
         self.assertTrue(revision.commit_sha == "UNCOMMITTED" or len(revision.commit_sha) == 40)
         self.assertTrue(revision.tree_sha == "UNCOMMITTED" or len(revision.tree_sha) == 40)
         self.assertTrue(revision.diff_digest.startswith("sha256:"))
+
+    def test_source_revision_hashes_an_untracked_symlink_without_reading_its_target(self) -> None:
+        with tempfile.TemporaryDirectory() as scratch:
+            root = Path(scratch) / "repo"
+            root.mkdir()
+            subprocess.run(["git", "init", "-q", root], check=True)
+            target = Path(scratch) / "outside.txt"
+            target.write_text("first synthetic value", encoding="utf-8")
+            link = root / "link.txt"
+            try:
+                link.symlink_to(target)
+            except (NotImplementedError, OSError):
+                self.skipTest("symlink creation unavailable")
+            original = capture_source_revision(root)
+            target.write_text("second synthetic value", encoding="utf-8")
+            self.assertEqual(capture_source_revision(root), original)
+            replacement = Path(scratch) / "replacement.txt"
+            link.unlink()
+            link.symlink_to(replacement)
+            self.assertNotEqual(capture_source_revision(root), original)
 
 
 if __name__ == "__main__":

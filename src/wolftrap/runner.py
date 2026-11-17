@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections import Counter
 from dataclasses import asdict, dataclass
 from pathlib import Path
+from platform import machine, python_implementation, python_version, system
 from typing import Any, Mapping, Sequence
 
 from .evidence import base_report_fields, build_finding, generated_at, stable_hash
@@ -18,7 +19,11 @@ from .model import ExperimentCase, FindingClassification, Scenario, scenario_to_
 from .revision import SourceRevision, capture_source_revision
 from .scenario import load_corpus
 from .system import SYSTEMS, CorrectSyntheticSystem
-from .threat import EXPECTED_FBI_TECHNIQUE_IDS, load_technique_inventory
+from .threat import (
+    EXPECTED_FBI_TECHNIQUE_IDS,
+    build_technique_evidence_matrix,
+    load_technique_inventory,
+)
 
 
 @dataclass(frozen=True)
@@ -561,6 +566,12 @@ def run_research(
             "run_id": "WOLFTRAP-R-" + stable_hash(run_identity)[:20].upper(),
             "generated_at": generated_at(),
             "source_revision": revision.to_dict(),
+            "environment": {
+                "python_implementation": python_implementation(),
+                "python_version": python_version(),
+                "operating_system": system(),
+                "architecture": machine(),
+            },
             "corpus": {
                 "scenario_count": len(scenarios),
                 "scenario_definition_digests": {
@@ -574,6 +585,13 @@ def run_research(
                     ]
                 ),
                 "advisory_technique_inventory": technique_inventory,
+                "advisory_technique_evidence": build_technique_evidence_matrix(
+                    technique_inventory,
+                    loaded_corpus,
+                    baselines,
+                    executions,
+                    qualified=qualification_status == "PASS",
+                ),
             },
             "configuration": configuration.to_dict(),
             "qualification": {

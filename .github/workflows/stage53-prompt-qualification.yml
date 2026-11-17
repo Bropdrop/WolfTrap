@@ -57,16 +57,37 @@ jobs:
           python -m wolftrap challenge-build --seed 20261115 --cases 128 --output-dir "$RUNNER_TEMP/wolftrap-stage53-stage5"
           python -m wolftrap verify-challenge --evidence-dir "$RUNNER_TEMP/wolftrap-stage53-stage5"
 
-      - name: Retain finite offline evidence even after a failed gate
-        if: always()
+      - name: Screen the declared Stage 5.3 evidence files
+        id: publication
+        shell: bash
+        run: |
+          set -euo pipefail
+          files=(wolftrap-stage53-unit.json)
+          for name in prompt-scan.json prompt-scan.md prompt-scan.sarif prompt-scan.manifest.json; do
+            files+=("wolftrap-stage53-prompt/$name")
+          done
+          for suite in agent replay; do
+            for name in agent-challenge-report.json agent-challenge-report.md agent-challenge-cases.json agent-challenge.manifest.json; do
+              files+=("wolftrap-stage53-$suite/$name")
+            done
+          done
+          for name in challenge-report.json challenge-report.md challenge-cases.json challenge.manifest.json; do
+            files+=("wolftrap-stage53-stage5/$name")
+          done
+          args=()
+          for file in "${files[@]}"; do args+=(--report "$file"); done
+          python -m wolftrap.public_guard HEAD --report-root "$RUNNER_TEMP" "${args[@]}"
+          publication=$(mktemp --directory "$RUNNER_TEMP/wolftrap-stage53-publication.XXXXXXXX")
+          (
+            cd "$RUNNER_TEMP"
+            cp --parents -- "${files[@]}" "$publication"
+          )
+          echo "path=$publication" >> "$GITHUB_OUTPUT"
+
+      - name: Retain only the screened offline evidence files
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: wolftrap-stage53-offline-evidence
-          path: |
-            ${{ runner.temp }}/wolftrap-stage53-unit.json
-            ${{ runner.temp }}/wolftrap-stage53-prompt/
-            ${{ runner.temp }}/wolftrap-stage53-agent/
-            ${{ runner.temp }}/wolftrap-stage53-replay/
-            ${{ runner.temp }}/wolftrap-stage53-stage5/
-          if-no-files-found: warn
+          path: ${{ steps.publication.outputs.path }}
+          if-no-files-found: error
           retention-days: 14

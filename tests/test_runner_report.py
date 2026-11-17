@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import tempfile
 import unittest
+from dataclasses import replace
 from pathlib import Path
 from unittest.mock import patch
 
@@ -78,6 +79,53 @@ class CampaignAndEvidenceTests(unittest.TestCase):
         self.assertEqual(0, report["unit_tests"]["skipped"])
         self.assertEqual([], report["findings"])
 
+    def test_advisory_matrix_links_baseline_assertions_to_oracle_evidence(self) -> None:
+        report = self.correct.report
+        matrix = report["corpus"]["advisory_technique_evidence"]
+        inventory = report["corpus"]["advisory_technique_inventory"]
+        self.assertEqual(inventory["inventory_digest"], matrix["inventory_digest"])
+        rows = matrix["techniques"]
+        self.assertEqual(43, len(rows))
+        self.assertEqual(
+            29,
+            sum(row["authority_property_status"] == "SYNTHETICALLY VERIFIED" for row in rows),
+        )
+        self.assertEqual(
+            14, sum(row["authority_property_status"] == "NOT TESTED" for row in rows)
+        )
+        self.assertTrue(all(row["operational_technique_status"] == "NOT TESTED" for row in rows))
+        cases = {record["case"]["case_id"]: record for record in report["cases"]}
+        relationships = set()
+        for row in rows:
+            for test in row["tests"]:
+                executed = cases[test["evidence_case_id"]]
+                self.assertEqual(test["planned_case_id"], test["evidence_case_id"])
+                self.assertEqual(executed["case"]["invariants"], test["assertions"])
+                self.assertTrue(test["independent_oracle_passed"])
+                self.assertTrue(executed["execution"]["assessment"]["passed"])
+                relationships.add(test["relationship"])
+        self.assertEqual(
+            {"DIRECT", "UNDERLYING_OPERATION", "DEFENSIVE_STRESSOR"}, relationships
+        )
+
+    def test_targeted_advisory_matrix_keeps_unselected_behaviors_unqualified(self) -> None:
+        targeted = run_research(
+            replace(
+                configuration(),
+                scenario_ids=("fbi-artex-unauthorized-protected-resource",),
+            ),
+            source_revision=FIXED_REVISION,
+        )
+        rows = {
+            row["technique_id"]: row
+            for row in targeted.report["corpus"]["advisory_technique_evidence"]["techniques"]
+        }
+        self.assertEqual("INCONCLUSIVE", rows["T1190"]["authority_property_status"])
+        self.assertTrue(rows["T1190"]["tests"][0]["independent_oracle_passed"])
+        self.assertEqual("NOT TESTED", rows["T1098.003"]["authority_property_status"])
+        self.assertEqual("NOT TESTED", rows["T1595"]["authority_property_status"])
+        self.assertEqual([], rows["T1595"]["tests"])
+
     def test_deny_all_fails_positive_control(self) -> None:
         result = run_research(
             configuration("deny-all-v1"), source_revision=FIXED_REVISION
@@ -86,6 +134,12 @@ class CampaignAndEvidenceTests(unittest.TestCase):
         self.assertEqual("FAIL", result.report["qualification"]["status"])
         self.assertEqual(0, result.report["qualification"]["positive_controls_passed"])
         self.assertGreater(result.report["summary"]["findings"], 0)
+        self.assertTrue(
+            all(
+                row["authority_property_status"] != "SYNTHETICALLY VERIFIED"
+                for row in result.report["corpus"]["advisory_technique_evidence"]["techniques"]
+            )
+        )
 
     def test_defect_findings_have_complete_independently_reproduced_evidence(self) -> None:
         self.assertEqual(1, self.defective.exit_code)

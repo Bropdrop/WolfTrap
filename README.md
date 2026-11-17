@@ -1,6 +1,12 @@
-# 🐺 WolfTrap
+# WolfTrap
 
-**Find risky CI trust paths before they become somebody else's incident report.**
+**The wolf follows the evidence. Authority does not follow the herd.**
+
+<img src="docs/assets/wolftrap-canadian-wolf.jpg" alt="Original Canadian grey wolf illustration for WolfTrap" width="460">
+
+WolfTrap is public defensive security research from Governable Intelligence.
+The Canadian grey wolf is the project's unofficial mascot. WolfTrap has no FBI
+affiliation or endorsement.
 
 WolfTrap is a **read-only, offline trust-boundary inspector** for GitHub
 Actions, Dockerfiles, bounded JavaScript/TypeScript agent code, and Stage 5.2
@@ -16,11 +22,19 @@ behavioral correlations inspired by publicly documented GitDoor activity. It
 does not scan live GitHub repositories, diagnose infections, or interact with
 command-and-control services.
 
-**Evidence boundary:** WolfTrap has demonstrated detection of certain
-**ARTEX-relevant security failure patterns** in synthetic scenarios and static
-review. It has **not** demonstrated detection of a real ARTEX intrusion or
-identified an ARTEX implant in live telemetry. GitDoor-inspired research has
-the same bounded, non-operational status.
+**Evidence boundary.** Static matches are `STATIC REVIEW SIGNAL`. Passing
+deterministic lab results are `SYNTHETICALLY VERIFIED` for their exercised
+cases. Unsupported input or incomplete evidence is `INCONCLUSIVE`.
+Live ARTEX detection, production control effectiveness and Ground Truth
+runtime conformance are `NOT TESTED`. `LIVE VERIFIED` requires separate,
+independent evidence from a named, authorized genuine implementation.
+
+- Reproduce the [offline authority demo](docs/evaluation-demo.md).
+- Review the [security architecture](docs/security-architecture.md),
+  [evidence guide](docs/evidence-guide.md), and [agency technical brief](docs/agency-technical-brief.md).
+- Check the [verified public baseline and evaluation priorities](docs/qualification-baseline.md).
+- Read the [proposed private runtime conformance contract](docs/private-runtime-conformance.md)
+  or the [responsible-disclosure process](SECURITY.md).
 
 Licensed under the [Apache License, Version 2.0](LICENSE).
 
@@ -47,7 +61,7 @@ verified attacks.
 > Findings are conditional and require human review; there are no confirmed
 > external exploits here.
 
-## Start here — three ways to use the wolf
+## Run an inspection or synthetic challenge
 
 ### Option A: Scan your repository locally
 
@@ -102,8 +116,8 @@ context. Unsupported syntax or coverage limits produce `INCONCLUSIVE`.
 See [agent rule scope and limitations](docs/agent-inspection.md) and the
 [Stage 5.1 quick start](docs/quickstart.md#4-offline-agent-source-review-stage-51).
 
-Want to see a wolf bite immediately? This bundled **synthetic** repository
-fixture has a PR artifact → privileged consumer path:
+This bundled **synthetic** repository fixture exercises review of a PR artifact
+feeding a privileged consumer:
 
 ```bash
 wolftrap scan-build --root tests/fixtures/stage4_demo --output-dir /tmp/wolftrap-demo
@@ -255,6 +269,18 @@ scan cannot create authority. This is **not** a deployed Ground Truth broker,
 HERCULES integration, GitHub endpoint protection or real malware detection.
 See the [authority separation experiment](docs/cloud-c2-challenge.md).
 
+### Additional offline evaluation suites
+
+- Replay six defensive identity-telemetry rules on sanitized synthetic records.
+  The corpus includes routine and flagged benign controls, known misses and
+  incomplete telemetry. [Identity telemetry challenge](docs/identity-telemetry.md).
+- Cross inert prompt and tool-output claims with independently selected host
+  authority states. A static match has no bearing on permission.
+  [Prompt and tool trust challenge](docs/prompt-trust-challenge.md).
+- Compare independently recorded effects with authored expectations across
+  phased authority schedules, a 1,000-proposal pressure bound and defective
+  sentinels. [Authority qualification](docs/authority-funnel-challenge.md#qualify-independently-recorded-effects).
+
 ---
 
 ## Research engine and detailed qualification
@@ -364,7 +390,12 @@ The GitHub Actions workflow automatically runs a bounded Stage 2 qualification o
 
 ## Evidence and provenance
 
-Each security finding records the source and ATT&CK references, exact source commit and tree, dirty state, seed and full case, expected and observed behavior, independent pre/post ledger evidence, minimization and reproduction attempts, severity, confidence, and classification. Model-generated hypotheses cannot set a finding classification.
+Each finding in the core synthetic research report records source and ATT&CK
+references, exact commit and tree, dirty state, seed and full case, expected and
+observed behavior, pre/post ledger evidence, minimization and reproduction
+attempts, severity, confidence, and classification. Scanner and challenge
+schemas have their own fields and limits. Model-generated hypotheses cannot
+set a finding classification.
 
 The authoritative threat input is:
 

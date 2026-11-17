@@ -2,7 +2,11 @@
 
 This file records conservative repository-level claims. The generated qualification report is authoritative for the exact commit/tree, dirty state, test counts, experiment counts, bounds, coverage, findings, and control results. A later milestone may advance a status only with the evidence described below.
 
-## Current v0.1 construction status
+For current evaluation claims, apply the five evidence statuses in the
+[evidence guide](evidence-guide.md). The lifecycle terms below describe
+project activity and provide context for the original release.
+
+## Historical v0.1 construction status
 
 | Status | Current claim | Evidence required to advance |
 |---|---|---|

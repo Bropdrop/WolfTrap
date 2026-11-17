@@ -1,0 +1,169 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:wolftrap:synthetic-identity-telemetry:v1",
+  "title": "WolfTrap synthetic identity telemetry trace",
+  "description": "Only fictional numeric aliases, logical ticks and closed audit categories. The runtime additionally checks byte size, exact integer encodings, duplicate keys, time order and tenant-alias consistency.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "events"],
+  "properties": {
+    "schema": {"const": "wolftrap.synthetic-identity-telemetry/v1"},
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 256,
+      "items": {
+        "oneOf": [
+          {"$ref": "#/$defs/sign_in"},
+          {"$ref": "#/$defs/auth_volume"},
+          {"$ref": "#/$defs/credential_added"},
+          {"$ref": "#/$defs/consent_granted"},
+          {"$ref": "#/$defs/role_assigned"},
+          {"$ref": "#/$defs/protected_operation"}
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "common": {
+      "type": "object",
+      "properties": {
+        "tick": {"type": "integer", "minimum": 0, "maximum": 1000000},
+        "tenant": {"type": "integer", "minimum": 1, "maximum": 10000},
+        "app": {"type": "integer", "minimum": 1, "maximum": 10000}
+      },
+      "required": ["tick", "tenant", "app"]
+    },
+    "sign_in": {
+      "allOf": [
+        {"$ref": "#/$defs/common"},
+        {
+          "properties": {
+            "kind": {"const": "sign_in"},
+            "mode": {"enum": ["app_only", "delegated"]},
+            "outcome": {"enum": ["success", "failure"]},
+            "source_class": {"enum": ["known", "new", "unknown"]},
+            "credential_tenant": {
+              "anyOf": [
+                {"type": "integer", "minimum": 1, "maximum": 10000},
+                {"type": "null"}
+              ]
+            },
+            "tenant_relationship": {"enum": ["same", "expected_partner", "unexpected", "unknown"]}
+          },
+          "required": ["kind", "mode", "outcome", "source_class", "credential_tenant", "tenant_relationship"]
+        },
+        {
+          "if": {
+            "properties": {
+              "credential_tenant": {"type": "null"}
+            }
+          },
+          "then": {
+            "properties": {
+              "tenant_relationship": {"const": "unknown"}
+            }
+          },
+          "else": {
+            "properties": {
+              "mode": {"const": "app_only"}
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "auth_volume": {
+      "allOf": [
+        {"$ref": "#/$defs/common"},
+        {
+          "properties": {
+            "kind": {"const": "auth_volume"},
+            "mode": {"enum": ["app_only", "delegated"]},
+            "attempts": {"type": "integer", "minimum": 0, "maximum": 100000},
+            "usual_attempts": {
+              "anyOf": [
+                {"type": "integer", "minimum": 0, "maximum": 100000},
+                {"type": "null"}
+              ]
+            },
+            "baseline_windows": {"type": "integer", "minimum": 0, "maximum": 96}
+          },
+          "required": ["kind", "mode", "attempts", "usual_attempts", "baseline_windows"]
+        },
+        {
+          "if": {
+            "properties": {
+              "baseline_windows": {"const": 0}
+            }
+          },
+          "then": {
+            "properties": {
+              "usual_attempts": {"type": "null"}
+            }
+          },
+          "else": {
+            "properties": {
+              "usual_attempts": {"type": "integer", "minimum": 0, "maximum": 100000}
+            }
+          }
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "credential_added": {
+      "allOf": [
+        {"$ref": "#/$defs/common"},
+        {
+          "properties": {
+            "kind": {"const": "credential_added"},
+            "change_context": {"enum": ["approved_window", "unplanned", "unknown"]}
+          },
+          "required": ["kind", "change_context"]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "consent_granted": {
+      "allOf": [
+        {"$ref": "#/$defs/common"},
+        {
+          "properties": {
+            "kind": {"const": "consent_granted"},
+            "change_context": {"enum": ["approved_window", "unplanned", "unknown"]},
+            "privilege": {"enum": ["limited", "elevated"]}
+          },
+          "required": ["kind", "change_context", "privilege"]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "role_assigned": {
+      "allOf": [
+        {"$ref": "#/$defs/common"},
+        {
+          "properties": {
+            "kind": {"const": "role_assigned"},
+            "change_context": {"enum": ["approved_window", "unplanned", "unknown"]},
+            "privilege": {"enum": ["limited", "elevated"]}
+          },
+          "required": ["kind", "change_context", "privilege"]
+        }
+      ],
+      "unevaluatedProperties": false
+    },
+    "protected_operation": {
+      "allOf": [
+        {"$ref": "#/$defs/common"},
+        {
+          "properties": {
+            "kind": {"const": "protected_operation"},
+            "change_context": {"enum": ["approved_window", "unplanned", "unknown"]}
+          },
+          "required": ["kind", "change_context"]
+        }
+      ],
+      "unevaluatedProperties": false
+    }
+  }
+}
