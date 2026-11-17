@@ -12,14 +12,19 @@
     "delegate": "synthetic-agent://worker-a",
     "tenant": "synthetic-tenant://a",
     "origin": "synthetic-origin://host-a",
-    "resource": "synthetic://contract/effect-ledger",
-    "action": "write-marker",
-    "operation_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
     "valid_from_tick": 1,
     "expires_at_tick": 10,
     "epoch": 1,
     "replay_key": "synthetic-replay://one",
-    "admission_slot": "synthetic-slot://one"
+    "admission_slot": "synthetic-slot://one",
+    "operation": {
+      "action": "write-marker",
+      "resource": "synthetic://contract/effect-ledger",
+      "body": {
+        "marker": "baseline",
+        "count": 1
+      }
+    }
   },
   "request_defaults": {
     "attempt_id": "synthetic-attempt://one",
@@ -27,9 +32,20 @@
     "delegate": "synthetic-agent://worker-a",
     "tenant": "synthetic-tenant://a",
     "origin": "synthetic-origin://host-a",
-    "resource": "synthetic://contract/effect-ledger",
-    "action": "write-marker",
-    "operation_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    "operation": {
+      "action": "write-marker",
+      "resource": "synthetic://contract/effect-ledger",
+      "body": {
+        "marker": "baseline",
+        "count": 1
+      }
+    }
+  },
+  "default_canonical_operation_digest": "sha256:7bff235611baf5bf40367545bf20313abdecc0bfe95a98c0d623dd0bc60ade47",
+  "final_observation": {
+    "effect_scope": "CASE_DISPOSABLE_RESOURCE",
+    "max_completion_observation_steps": 32,
+    "unobserved_completion_status": "INCONCLUSIVE"
   },
   "cases": [
     {
@@ -48,8 +64,16 @@
         {
           "attempt_id": "synthetic-attempt://one",
           "tenant": "synthetic-tenant://a",
-          "operation_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-          "admission_slot": "synthetic-slot://one"
+          "operation_digest": "sha256:7bff235611baf5bf40367545bf20313abdecc0bfe95a98c0d623dd0bc60ade47",
+          "admission_slot": "synthetic-slot://one",
+          "operation": {
+            "action": "write-marker",
+            "resource": "synthetic://contract/effect-ledger",
+            "body": {
+              "marker": "baseline",
+              "count": 1
+            }
+          }
         }
       ]
     },
@@ -125,8 +149,17 @@
           "step": "submit",
           "grant_ref": "grant-one",
           "request_overrides": {
-            "operation_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
-          }
+            "operation": {
+              "action": "write-marker",
+              "resource": "synthetic://contract/effect-ledger",
+              "body": {
+                "marker": "alternate",
+                "count": 1
+              }
+            }
+          },
+          "untrusted_claimed_operation_digest": "sha256:7bff235611baf5bf40367545bf20313abdecc0bfe95a98c0d623dd0bc60ade47",
+          "expected_canonical_operation_digest": "sha256:3f6cecbe4b6c0e17773da1f0e42f18c0b996f3690201f95dead132f3b876e025"
         }
       ],
       "expected_effect_delta": []
@@ -241,8 +274,16 @@
         {
           "attempt_id": "synthetic-attempt://one",
           "tenant": "synthetic-tenant://a",
-          "operation_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-          "admission_slot": "synthetic-slot://one"
+          "operation_digest": "sha256:7bff235611baf5bf40367545bf20313abdecc0bfe95a98c0d623dd0bc60ade47",
+          "admission_slot": "synthetic-slot://one",
+          "operation": {
+            "action": "write-marker",
+            "resource": "synthetic://contract/effect-ledger",
+            "body": {
+              "marker": "baseline",
+              "count": 1
+            }
+          }
         }
       ]
     },
@@ -284,10 +325,33 @@
         {
           "attempt_id": "synthetic-attempt://one",
           "tenant": "synthetic-tenant://a",
-          "operation_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-          "admission_slot": "synthetic-slot://one"
+          "operation_digest": "sha256:7bff235611baf5bf40367545bf20313abdecc0bfe95a98c0d623dd0bc60ade47",
+          "admission_slot": "synthetic-slot://one",
+          "operation": {
+            "action": "write-marker",
+            "resource": "synthetic://contract/effect-ledger",
+            "body": {
+              "marker": "baseline",
+              "count": 1
+            }
+          }
         }
       ]
+    },
+    {
+      "case_id": "completion-unobservable",
+      "steps": [
+        {
+          "step": "issue_grant",
+          "grant_ref": "grant-one"
+        },
+        {
+          "step": "submit",
+          "grant_ref": "grant-one"
+        }
+      ],
+      "observer_condition": "COMPLETION_UNOBSERVABLE",
+      "expected_qualification": "INCONCLUSIVE"
     }
   ]
 }
