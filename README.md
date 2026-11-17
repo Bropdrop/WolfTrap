@@ -11,6 +11,11 @@ contacting external systems. WolfTrap identifies *conditional review signals*,
 explains the contributing conditions, and produces portable JSON, Markdown,
 SARIF and integrity manifests. No inspected project code is executed.
 
+An additional **experimental cloud-C2 synthetic challenge** models two bounded
+behavioral correlations inspired by publicly documented GitDoor activity. It
+does not scan live GitHub repositories, diagnose infections, or interact with
+command-and-control services.
+
 Licensed under the [Apache License, Version 2.0](LICENSE).
 
 **9 explainable CI/build review rules** currently cover privileged PR execution,
@@ -151,6 +156,58 @@ prompt leaks. [Stage 5.3 usage and limits](docs/prompt-inspection.md).
 See the [60-second quick start](docs/quickstart.md),
 [supported rules and limitations](docs/build-inspection.md),
 [responsible disclosure](SECURITY.md) and [contributing guide](CONTRIBUTING.md).
+
+### Option F: GitDoor-inspired synthetic cloud-C2 challenge (research preview)
+
+```bash
+wolftrap challenge-cloud-c2 --output-dir /tmp/wolftrap-cloud-c2
+wolftrap verify-cloud-c2 --evidence-dir /tmp/wolftrap-cloud-c2
+```
+
+The fixed eight-case, offline corpus includes positive and negative behavioral
+controls, cross-session isolation, correlation-window expiry, and a separate
+authorization-origin test in the unit suite. Its two `WT-CLOUD-C2` signals
+are conditional correlations in **pre-normalized synthetic GitHub events**,
+not general malware detections. A completed manifest binds JSON and Markdown
+evidence to the deterministic test corpus; the verifier independently reruns
+the controls. No actual endpoint, file, code sample or credential is contacted,
+downloaded or executed. See [scope, threat provenance and limitations](docs/cloud-c2-challenge.md).
+
+### Option G: inspect pre-sanitized GitHub API event summaries offline (research preview)
+
+```bash
+wolftrap scan-cloud-trace --root /path/to/sanitized --file events.json \
+  --output-dir /path/to/new/evidence
+wolftrap verify-cloud-trace --root /path/to/sanitized --file events.json \
+  --evidence-dir /path/to/new/evidence
+```
+
+**Input is not a GitHub audit-log export.** An authorized upstream analyst must
+first reduce trusted endpoint or API-gateway telemetry into a small, strictly
+typed JSON record containing only logical event order, opaque session/repo/issue
+aliases, and fixed action categories. The command rejects URLs, credentials,
+free text, payloads, extra fields and unsafe file paths. It does no collection,
+networking or attribution. `REVIEW_REQUIRED` (exit 1) indicates a **conditional**
+cross-repository pattern; `NO_PATTERN_MATCH` (exit 0) is not proof of safety;
+`INCONCLUSIVE` (exit 2) means unusable evidence. The verifier replays against
+the unchanged source file. See [input schema and hostile-test limits](docs/cloud-c2-challenge.md).
+
+### Option H: adversarial cloud camouflage challenge (research preview)
+
+```bash
+wolftrap challenge-cloud-camouflage --output-dir /tmp/wolftrap-cloud-camouflage
+wolftrap verify-cloud-camouflage --evidence-dir /tmp/wolftrap-cloud-camouflage
+```
+
+This **160-case deterministic synthetic corpus** separately measures 40 narrow
+positive controls, 40 routine benign negatives, 40 benign automation
+lookalikes that nevertheless trigger a rule, and 40 threat-inspired variants
+that evade the narrow rules. A passing run means the detector reproduced
+these authored expectations. It explicitly **does not** mean 100% threat
+coverage or measured production false-positive rates. The input contains
+only sanitized event categories and fictional aliases: no real repositories,
+executables, payloads, attacker infrastructure or network traffic. See
+[what the challenge can and cannot establish](docs/cloud-c2-challenge.md).
 
 ---
 

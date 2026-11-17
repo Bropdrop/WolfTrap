@@ -217,6 +217,69 @@ def _verify_prompts(arguments: argparse.Namespace) -> int:
     return 0
 
 
+def _challenge_cloud_c2(arguments: argparse.Namespace) -> int:
+    from .cloud_c2 import run_cloud_c2_challenge
+
+    report, code = run_cloud_c2_challenge(arguments.output_dir)
+    print(f"{report['qualification']['status']}: "
+          f"{report['summary']['cases']} synthetic cloud cases; "
+          f"{report['summary']['mismatches']} differential gap(s).")
+    print(f"Evidence: {Path(arguments.output_dir)}")
+    return code
+
+
+def _verify_cloud_c2(arguments: argparse.Namespace) -> int:
+    from .cloud_c2 import verify_cloud_c2_evidence
+
+    report = verify_cloud_c2_evidence(arguments.evidence_dir)
+    print(f"VERIFIED_EVIDENCE: {report['summary']['cases']} synthetic cloud cases; "
+          f"{report['summary']['mismatches']} gap(s).")
+    return 0 if report["qualification"]["status"] == "PASSED_BOUNDED" else 1
+
+
+def _challenge_cloud_camouflage(arguments: argparse.Namespace) -> int:
+    from .cloud_camouflage import run_camouflage_challenge
+
+    report, code = run_camouflage_challenge(arguments.output_dir)
+    stats = report["summary"]
+    print(f"{report['qualification']['status']}: {stats['cases']} authored cloud cases; "
+          f"{stats['mismatches']} expectation mismatch(es); "
+          f"{stats['benign_lookalikes_flagged']} benign lookalikes flagged; "
+          f"{stats['evasion_variants_unflagged']} blind-spot cases unflagged.")
+    print(f"Evidence: {Path(arguments.output_dir)}")
+    return code
+
+
+def _verify_cloud_camouflage(arguments: argparse.Namespace) -> int:
+    from .cloud_camouflage import verify_camouflage_evidence
+
+    report = verify_camouflage_evidence(arguments.evidence_dir)
+    print(f"VERIFIED_EVIDENCE: {report['summary']['cases']} camouflage cases; "
+          f"{report['summary']['mismatches']} expectation mismatch(es).")
+    return 0 if report["qualification"]["status"] == "PASSED_BOUNDED" else 1
+
+
+def _scan_cloud_trace(arguments: argparse.Namespace) -> int:
+    from .cloud_trace import scan_cloud_trace
+
+    report, code = scan_cloud_trace(arguments.root, arguments.file, arguments.output_dir)
+    print(f"{report['qualification']['status']}: "
+          f"{report['input']['event_count']} normalized events; "
+          f"{report['summary']['findings']} conditional correlation(s); "
+          f"{report['summary']['errors']} unknown input(s).")
+    print(f"Evidence: {Path(arguments.output_dir)}")
+    return code
+
+
+def _verify_cloud_trace(arguments: argparse.Namespace) -> int:
+    from .cloud_trace import verify_cloud_trace
+
+    report = verify_cloud_trace(arguments.root, arguments.file, arguments.evidence_dir)
+    print(f"VERIFIED_EVIDENCE: {report['qualification']['status']}; "
+          f"{report['summary']['findings']} conditional correlation(s).")
+    return 0
+
+
 def _challenge_agent(arguments: argparse.Namespace) -> int:
     from .agent_challenge import run_agent_challenge
 
@@ -408,6 +471,41 @@ def build_parser() -> argparse.ArgumentParser:
     prompt_verify = subparsers.add_parser("verify-prompts", help="verify saved Stage 5.3 evidence")
     prompt_verify.add_argument("--evidence-dir", required=True)
     prompt_verify.set_defaults(handler=_verify_prompts)
+
+    cloud_c2 = subparsers.add_parser(
+        "challenge-cloud-c2", help="run GitDoor-inspired synthetic cloud-C2 controls offline")
+    cloud_c2.add_argument("--output-dir", required=True,
+                          help="fresh directory for synthetic challenge evidence")
+    cloud_c2.set_defaults(handler=_challenge_cloud_c2)
+
+    cloud_c2_verify = subparsers.add_parser(
+        "verify-cloud-c2", help="verify saved cloud-C2 challenge evidence")
+    cloud_c2_verify.add_argument("--evidence-dir", required=True)
+    cloud_c2_verify.set_defaults(handler=_verify_cloud_c2)
+
+    camouflage = subparsers.add_parser(
+        "challenge-cloud-camouflage", help="measure offline cloud-C2 blind spots and lookalikes")
+    camouflage.add_argument("--output-dir", required=True, help="fresh local evidence directory")
+    camouflage.set_defaults(handler=_challenge_cloud_camouflage)
+
+    camouflage_verify = subparsers.add_parser(
+        "verify-cloud-camouflage", help="independently verify camouflage challenge artifacts")
+    camouflage_verify.add_argument("--evidence-dir", required=True)
+    camouflage_verify.set_defaults(handler=_verify_cloud_camouflage)
+
+    cloud_trace = subparsers.add_parser(
+        "scan-cloud-trace", help="inspect local pre-sanitized GitHub event metadata offline")
+    cloud_trace.add_argument("--root", required=True, help="authorized local input directory")
+    cloud_trace.add_argument("--file", required=True, help="simple .json input filename")
+    cloud_trace.add_argument("--output-dir", required=True, help="fresh evidence directory outside root")
+    cloud_trace.set_defaults(handler=_scan_cloud_trace)
+
+    cloud_trace_verify = subparsers.add_parser(
+        "verify-cloud-trace", help="recheck saved cloud trace evidence against its source")
+    cloud_trace_verify.add_argument("--root", required=True)
+    cloud_trace_verify.add_argument("--file", required=True)
+    cloud_trace_verify.add_argument("--evidence-dir", required=True)
+    cloud_trace_verify.set_defaults(handler=_verify_cloud_trace)
 
     agent_challenge = subparsers.add_parser("challenge-agent", help="run independently labelled synthetic agent cases")
     agent_challenge.add_argument("--seed", type=int, default=20261115)
