@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import hashlib
+import os
+import stat
 import subprocess
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -61,7 +63,17 @@ def capture_source_revision(root: str | Path | None = None) -> SourceRevision:
         digest.update(raw_name)
         candidate = path / raw_name.decode("utf-8", errors="surrogateescape")
         try:
-            digest.update(candidate.read_bytes())
+            mode = candidate.lstat().st_mode
+            if stat.S_ISLNK(mode):
+                digest.update(b"<symlink>")
+                digest.update(os.fsencode(os.readlink(candidate)))
+            elif stat.S_ISREG(mode):
+                flags = os.O_RDONLY | getattr(os, "O_BINARY", 0) | getattr(os, "O_NOFOLLOW", 0)
+                with os.fdopen(os.open(candidate, flags), "rb") as source:
+                    for chunk in iter(lambda: source.read(65536), b""):
+                        digest.update(chunk)
+            else:
+                digest.update(b"<non-regular>")
         except OSError:
             digest.update(b"<unreadable>")
     return SourceRevision(
