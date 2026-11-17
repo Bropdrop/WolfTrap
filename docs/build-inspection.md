@@ -30,6 +30,7 @@ testing, malware generation, or an authorization oracle over the target.
 | WT-GHA-005 | `workflow_run` + artifact download + write-capable token | Potential untrusted artifact path; actual use must be reviewed |
 | WT-GHA-006 | Matched PR workflow upload → triggering run download in an explicitly write-capable downstream workflow | Cross-file trace, artifact-name digest, and higher severity if the downloaded directory is directly executed |
 | WT-GHA-007 | Pull-request-triggered job explicitly selects `self-hosted` runner label | HIGH conditional review signal; effective runner isolation, approvals and repository visibility are not inferable |
+| WT-GHA-008 | Workflow `run` step directly executes downloaded shell content | Flags bounded `curl`/`wget` pipe, command substitution, or process substitution forms; not proof of malware |
 | WT-DOCKER-001 | Base image lacking digest pin | Does not imply image compromise |
 | WT-DOCKER-002 | Fetch-and-execute shell pipeline in Docker build | Conditional risk; no remote content fetched by WolfTrap |
 

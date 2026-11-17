@@ -62,6 +62,11 @@ RULES = {
         "A pull-request-triggered job selects a self-hosted runner whose isolation and lifetime cannot be established from the workflow.",
         "Avoid PR-controlled jobs on persistent self-hosted runners; use isolated ephemeral runners and restrictive approval policies.",
     ),
+    "WT-GHA-008": (
+        "Workflow immediately executes a remote shell download",
+        "A workflow run step pipes or substitutes fetched content directly into a shell.",
+        "Download reviewed immutable artifacts, verify a pinned digest, and separate fetching from controlled execution.",
+    ),
     "WT-DOCKER-001": (
         "Base image not pinned by digest",
         "A tag-only base image can resolve to different bytes in a future build.",
@@ -128,7 +133,7 @@ def _finding(
     if trace is not None:
         identity["trace"] = trace
     stable = _sha(_json_bytes(identity, pretty=False))
-    optional_write = rule_id in {"WT-GHA-001", "WT-GHA-002"}
+    optional_write = rule_id in {"WT-GHA-001", "WT-GHA-002", "WT-GHA-008"}
     counterfactuals = []
     if len(factors) > 1:
         for factor in factors:
@@ -314,6 +319,28 @@ def _risky_expressions(run: str, free_form: set[str]) -> list[str]:
     return sorted(set(results))
 
 
+def _immediate_remote_shell_lines(run: str) -> list[str]:
+    """Recognize bounded fetch-and-execute patterns without executing a step.
+
+    Only shell script values from parsed YAML steps are inspected. This is not
+    a comprehensive shell interpreter or a malware attribution rule.
+    """
+    patterns = (
+        r"\b(?:curl|wget)\b[^|;\n]{0,400}\|\s*(?:sh|bash)\b",
+        r"\b(?:sh|bash)\s+-c\s+['\"]?\$\(\s*(?:curl|wget)\b",
+        r"\b(?:sh|bash|source)\s+<\(\s*(?:curl|wget)\b",
+        r"\beval\s+['\"]?\$\(\s*(?:curl|wget)\b",
+    )
+    hits = []
+    for raw in run.splitlines():
+        candidate = raw.strip()
+        if candidate.startswith("#"):
+            continue
+        if any(re.search(pattern, candidate, flags=re.IGNORECASE) for pattern in patterns):
+            hits.append(candidate)
+    return hits
+
+
 def _scan_workflow(path: str, text: str) -> list[dict[str, Any]]:
     document, root_node = _yaml_document(text, with_nodes=True)
     job_lines, uses_lines = _workflow_locations(root_node)
@@ -400,6 +427,18 @@ def _scan_workflow(path: str, text: str) -> list[dict[str, Any]]:
             if "actions/download-artifact@" in uses.lower():
                 downloads_artifacts = True
             if run:
+                for matched in _immediate_remote_shell_lines(run):
+                    line = _line(text, matched)
+                    factors = [
+                        _factor("remote_fetch", path, line),
+                        _factor("immediate_shell_execution", path, line),
+                    ]
+                    if writable:
+                        factors.append(_factor("write_capable_token", path, _line(text, "permissions:")))
+                    findings.append(_finding(
+                        "WT-GHA-008", path, line, factors,
+                        severity="HIGH" if writable else "MEDIUM",
+                    ))
                 for expression in _risky_expressions(run, free_form):
                     line = _line(text, expression)
                     factors = [_factor("untrusted_expression_in_run_script", path, line)]

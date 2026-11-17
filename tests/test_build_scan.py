@@ -132,6 +132,78 @@ jobs:
             self.assertEqual([item["rule_id"] for item in result.report["findings"]], ["WT-GHA-002"])
             self.assertEqual(result.report["findings"][0]["severity"], "MEDIUM")
 
+    def test_remote_download_immediately_executed_in_workflow_is_review_required(self) -> None:
+        cases = (
+            'sh -c "$(curl -sSfL https://example.invalid/install)"',
+            'curl -sSfL https://example.invalid/install | bash',
+            'bash <(wget -qO- https://example.invalid/install)',
+            'eval "$(curl -fsSL https://example.invalid/install)"',
+        )
+        for command in cases:
+            with self.subTest(command=command):
+                workflow = f"""\
+on: push
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          {command}
+"""
+                with fixture(workflow) as (root, output):
+                    outcome = scan_build(root, output)
+                    findings = [f for f in outcome.report["findings"] if f["rule_id"] == "WT-GHA-008"]
+                    self.assertEqual(outcome.exit_code, 1)
+                    self.assertEqual(len(findings), 1)
+                    self.assertEqual(findings[0]["severity"], "MEDIUM")
+                    self.assertEqual(findings[0]["classification"], "REVIEW_REQUIRED")
+                    self.assertFalse(outcome.report["target_code_executed"])
+
+    def test_remote_shell_rule_survives_removal_of_write_capability(self) -> None:
+        workflow = """\
+on: push
+permissions:
+  contents: write
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          sh -c "$(curl -fsSL https://example.invalid/install)"
+"""
+        with fixture(workflow) as (root, output):
+            result = scan_build(root, output)
+            finding = next(f for f in result.report["findings"] if f["rule_id"] == "WT-GHA-008")
+            self.assertEqual(finding["severity"], "HIGH")
+            write_cut = next(
+                c for c in finding["counterfactuals"]
+                if c["remove_condition"] == "write_capable_token"
+            )
+            self.assertTrue(write_cut["rule_still_matches"])
+            self.assertEqual(write_cut["risk_after_removal"], "MEDIUM_REVIEW")
+
+    def test_verified_download_and_shell_comment_do_not_match_remote_shell_rule(self) -> None:
+        workflow = """\
+on: push
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          # curl https://example.invalid/install | sh
+          curl --fail --location --output "$RUNNER_TEMP/tool.tar.gz" https://example.invalid/tool.tar.gz
+          printf '%s  %s\\n' "$expected" "$RUNNER_TEMP/tool.tar.gz" | sha256sum --check
+          tar -xf "$RUNNER_TEMP/tool.tar.gz"
+"""
+        with fixture(workflow) as (root, output):
+            result = scan_build(root, output)
+            self.assertEqual(result.exit_code, 0)
+            self.assertEqual(result.report["findings"], [])
+
     def test_unpinned_action_is_review_not_confirmed_exploit(self) -> None:
         workflow = """\
 on: push
