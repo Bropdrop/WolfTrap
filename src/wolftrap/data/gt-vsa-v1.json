@@ -1,0 +1,244 @@
+{
+  "schema": "wolftrap.gt-vsa-corpus/v1",
+  "effects": {
+    "display": {
+      "domain": "external",
+      "firmware_version": null,
+      "nonce": "$nonce",
+      "operation": "display",
+      "origin": "$origin",
+      "payload_digest": "$payload_digest",
+      "principal": "$principal",
+      "request_id": "$request_id",
+      "scope": "infotainment",
+      "vehicle": "$vehicle"
+    },
+    "diagnostic": {
+      "domain": "external",
+      "firmware_version": null,
+      "nonce": "$nonce",
+      "operation": "diagnostic_read",
+      "origin": "$origin",
+      "payload_digest": "$payload_digest",
+      "principal": "$principal",
+      "request_id": "$request_id",
+      "scope": "health-summary",
+      "vehicle": "$vehicle"
+    },
+    "location-export": {
+      "domain": "external",
+      "firmware_version": null,
+      "nonce": "$nonce",
+      "operation": "data_export",
+      "origin": "$origin",
+      "payload_digest": "$payload_digest",
+      "principal": "$principal",
+      "request_id": "$request_id",
+      "scope": "trip-summary",
+      "vehicle": "$vehicle"
+    },
+    "firmware-update": {
+      "domain": "external",
+      "firmware_version": "$firmware_version",
+      "nonce": "$nonce",
+      "operation": "firmware_update",
+      "origin": "$origin",
+      "payload_digest": "$payload_digest",
+      "principal": "$principal",
+      "request_id": "$request_id",
+      "scope": "noncritical-infotainment",
+      "vehicle": "$vehicle"
+    },
+    "emergency-braking": {
+      "domain": "safety",
+      "firmware_version": null,
+      "nonce": null,
+      "operation": "emergency_braking",
+      "origin": "local-sensor",
+      "payload_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "principal": "local-safety-controller",
+      "request_id": "$request_id",
+      "scope": "local",
+      "vehicle": "$vehicle"
+    },
+    "driver-braking": {
+      "domain": "safety",
+      "firmware_version": null,
+      "nonce": null,
+      "operation": "driver_braking",
+      "origin": "local-driver",
+      "payload_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "principal": "local-safety-controller",
+      "request_id": "$request_id",
+      "scope": "local",
+      "vehicle": "$vehicle"
+    }
+  },
+  "scenarios": [
+    {"id": "forged-agent-identity", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["origin-binding", "current-authority"], "expect": []}
+    ]},
+    {"id": "stolen-credential", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["origin-binding", "current-authority"], "expect": []}
+    ]},
+    {"id": "stolen-signed-envelope", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["origin-binding", "current-authority"], "expect": []}
+    ]},
+    {"id": "substituted-credential", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["origin-binding", "current-authority"], "expect": []}
+    ]},
+    {"id": "replayed-authorization", "kind": "hostile", "stages": [
+      {"id": "first", "invariants": ["positive-control"], "expect": ["display"]},
+      {"id": "retry", "invariants": ["replay"], "expect": []}
+    ]},
+    {"id": "cross-vehicle-reuse", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["current-authority"], "expect": []}
+    ]},
+    {"id": "command-digest-substitution", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["current-authority", "origin-binding"], "expect": []}
+    ]},
+    {"id": "valid-origin-wrong-scope", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["current-authority"], "expect": []}
+    ]},
+    {"id": "expired-permission", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["current-authority"], "expect": []}
+    ]},
+    {"id": "revoked-permission", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["current-authority", "revoked-authority"], "expect": []}
+    ]},
+    {"id": "revoke-before-commit", "kind": "hostile", "stages": [
+      {"id": "prepare", "invariants": ["authorized-only"], "expect": []},
+      {"id": "commit", "invariants": ["current-authority", "revoked-authority"], "expect": []}
+    ]},
+    {"id": "forged-emergency-braking", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["local-safety-approval", "isolated-safety"], "expect": []}
+    ]},
+    {"id": "unauthorized-steering", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["local-safety-approval", "isolated-safety"], "expect": []}
+    ]},
+    {"id": "unauthorized-acceleration", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["local-safety-approval", "isolated-safety"], "expect": []}
+    ]},
+    {"id": "battery-management-manipulation", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["local-safety-approval", "isolated-safety"], "expect": []}
+    ]},
+    {"id": "adas-override", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["local-safety-approval", "isolated-safety"], "expect": []}
+    ]},
+    {"id": "telemetry-prompt-injection", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["inert-input", "isolated-safety"], "expect": []}
+    ]},
+    {"id": "malicious-infotainment", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["inert-input", "isolated-safety"], "expect": []}
+    ]},
+    {"id": "unauthorized-location-export", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["data-export", "current-authority"], "expect": []}
+    ]},
+    {"id": "unauthorized-camera-export", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["data-export"], "expect": []}
+    ]},
+    {"id": "unauthorized-microphone-export", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["data-export"], "expect": []}
+    ]},
+    {"id": "forged-firmware-approval", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["firmware-provenance", "current-authority"], "expect": []}
+    ]},
+    {"id": "signed-image-content-substitution", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["firmware-provenance"], "expect": []}
+    ]},
+    {"id": "firmware-downgrade", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["firmware-version"], "expect": []}
+    ]},
+    {"id": "update-while-moving", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["update-conditions"], "expect": []}
+    ]},
+    {"id": "update-after-condition-change", "kind": "hostile", "stages": [
+      {"id": "prepare", "invariants": ["authorized-only"], "expect": []},
+      {"id": "commit", "invariants": ["update-conditions"], "expect": []}
+    ]},
+    {"id": "cloud-disconnection", "kind": "hostile", "stages": [
+      {"id": "external", "invariants": ["current-authority"], "expect": []},
+      {"id": "local", "invariants": ["local-availability", "local-safety-approval"], "expect": ["emergency-braking", "driver-braking"]}
+    ]},
+    {"id": "authority-service-failure", "kind": "hostile", "stages": [
+      {"id": "external", "invariants": ["current-authority"], "expect": []},
+      {"id": "local", "invariants": ["local-availability", "local-safety-approval"], "expect": ["emergency-braking", "driver-braking"]}
+    ]},
+    {"id": "concurrent-replay", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["replay", "positive-control"], "expect": ["display"]}
+    ]},
+    {"id": "concurrent-prepared-commit", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["replay", "positive-control"], "expect": ["display"]}
+    ]},
+    {"id": "audit-evidence-manipulation", "kind": "hostile", "stages": [
+      {"id": "first", "invariants": ["positive-control"], "expect": ["display"]},
+      {"id": "tamper", "invariants": ["audit-integrity"], "expect": []}
+    ]},
+    {"id": "unknown-security-state", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["current-authority"], "expect": []}
+    ]},
+    {"id": "invalid-local-evidence", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["local-safety-approval"], "expect": []}
+    ]},
+    {"id": "positive-display", "kind": "positive", "stages": [
+      {"id": "verify", "invariants": ["verified-only"], "expect": []},
+      {"id": "prepare", "invariants": ["authorized-only"], "expect": []},
+      {"id": "commit", "invariants": ["positive-control"], "expect": ["display"]}
+    ]},
+    {"id": "positive-diagnostics", "kind": "positive", "stages": [
+      {"id": "attempt", "invariants": ["positive-control"], "expect": ["diagnostic"]}
+    ]},
+    {"id": "positive-location-export", "kind": "positive", "stages": [
+      {"id": "attempt", "invariants": ["data-export", "positive-control"], "expect": ["location-export"]}
+    ]},
+    {"id": "positive-firmware-update", "kind": "positive", "stages": [
+      {"id": "attempt", "invariants": ["firmware-provenance", "firmware-version", "update-conditions", "positive-control"], "expect": ["firmware-update"]}
+    ]},
+    {"id": "positive-emergency-braking", "kind": "positive", "stages": [
+      {"id": "attempt", "invariants": ["local-safety-approval", "positive-control"], "expect": ["emergency-braking"]}
+    ]},
+    {"id": "positive-driver-braking", "kind": "positive", "stages": [
+      {"id": "attempt", "invariants": ["local-safety-approval", "positive-control"], "expect": ["driver-braking"]}
+    ]},
+    {"id": "verified-without-authority", "kind": "hostile", "stages": [
+      {"id": "attempt", "invariants": ["verified-only", "current-authority"], "expect": []}
+    ]},
+    {"id": "authorized-abandoned", "kind": "hostile", "stages": [
+      {"id": "prepare", "invariants": ["authorized-only"], "expect": []},
+      {"id": "abandon", "invariants": ["authorized-only"], "expect": []}
+    ]},
+    {"id": "epoch-rotation", "kind": "hostile", "stages": [
+      {"id": "prepare", "invariants": ["authorized-only"], "expect": []},
+      {"id": "commit", "invariants": ["current-authority"], "expect": []}
+    ]},
+    {"id": "authority-compromise-isolation", "kind": "hostile", "stages": [
+      {"id": "external", "invariants": ["isolated-safety", "local-safety-approval"], "expect": []},
+      {"id": "local", "invariants": ["local-availability", "local-safety-approval"], "expect": ["emergency-braking", "driver-braking"]}
+    ]},
+    {"id": "adaptive-component-impersonation", "kind": "adaptive", "stages": [
+      {"id": "initial", "invariants": ["origin-binding"], "expect": []},
+      {"id": "adapted", "invariants": ["origin-binding", "isolated-safety"], "expect": []}
+    ]},
+    {"id": "adaptive-request-laundering", "kind": "adaptive", "stages": [
+      {"id": "initial", "invariants": ["origin-binding", "current-authority"], "expect": []},
+      {"id": "adapted", "invariants": ["inert-input", "data-export", "positive-control"], "expect": ["diagnostic"]}
+    ]},
+    {"id": "adaptive-safety-authorization-replay", "kind": "adaptive", "stages": [
+      {"id": "prior", "invariants": ["positive-control"], "expect": ["diagnostic"]},
+      {"id": "initial", "invariants": ["isolated-safety", "current-authority"], "expect": []},
+      {"id": "adapted", "invariants": ["isolated-safety", "replay", "local-safety-approval"], "expect": []}
+    ]},
+    {"id": "adaptive-diagnostic-escalation", "kind": "adaptive", "stages": [
+      {"id": "initial", "invariants": ["positive-control"], "expect": ["diagnostic"]},
+      {"id": "adapted", "invariants": ["current-authority", "isolated-safety"], "expect": []}
+    ]},
+    {"id": "adaptive-protected-export", "kind": "adaptive", "stages": [
+      {"id": "initial", "invariants": ["data-export"], "expect": []},
+      {"id": "adapted", "invariants": ["data-export", "current-authority"], "expect": []}
+    ]},
+    {"id": "adaptive-safety-isolation", "kind": "adaptive", "stages": [
+      {"id": "initial", "invariants": ["isolated-safety"], "expect": []},
+      {"id": "adapted", "invariants": ["isolated-safety", "local-safety-approval"], "expect": []}
+    ]}
+  ]
+}

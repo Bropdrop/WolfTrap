@@ -46,7 +46,7 @@ jobs:
           --only-binary=:all: --require-hashes --index-url https://pypi.org/simple
           -r .github/qualification-requirements.txt
 
-      - name: Screen source, replay and screen the declared index with networking isolated
+      - name: Screen source, replay and screen the declared evidence with networking isolated
         shell: bash
         run: |
           set -euo pipefail
@@ -57,13 +57,20 @@ jobs:
             bash -euc '
               python -m wolftrap.public_guard "$1" --workflow-dependencies
               python scripts/qualify-research.py --expected-head "$1" --parent-netns "$2" --output-dir "$3"
-              python -m wolftrap.public_guard "$1" --report-root "$3" --report qualification.json
+              python -m wolftrap.public_guard "$1" --report-root "$3" \
+                --report qualification.json --report unit-tests.json \
+                --report gt-vsa/gt-vsa.json --report gt-vsa/gt-vsa.md --report gt-vsa/gt-vsa.manifest.json
             ' qualification "$WOLFTRAP_EXPECTED_HEAD" "$parent_namespace" "$RUNNER_TEMP/wolftrap-independent-qualification"
 
-      - name: Retain the screened qualification index
+      - name: Retain the screened qualification index and vehicle evidence
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: wolftrap-independent-qualification
-          path: ${{ runner.temp }}/wolftrap-independent-qualification/qualification.json
+          path: |
+            ${{ runner.temp }}/wolftrap-independent-qualification/qualification.json
+            ${{ runner.temp }}/wolftrap-independent-qualification/unit-tests.json
+            ${{ runner.temp }}/wolftrap-independent-qualification/gt-vsa/gt-vsa.json
+            ${{ runner.temp }}/wolftrap-independent-qualification/gt-vsa/gt-vsa.md
+            ${{ runner.temp }}/wolftrap-independent-qualification/gt-vsa/gt-vsa.manifest.json
           if-no-files-found: error
           retention-days: 14
