@@ -20,16 +20,16 @@ that every use of GitHub, Microsoft Graph or SharePoint is suspicious.
 
 ## Scope
 
-`wolftrap challenge-cloud-c2 --output-dir /new/empty/directory` replays a
+`wolftrap challenge-cloud-c2 --output-dir /new/empty/directory` replays an
 eight-case synthetic corpus against two narrow conditional signatures:
 
 | Rule | Synthetic correlation | Conclusion |
 | --- | --- | --- |
-| `WT-CLOUD-C2-001` | One actor creates an issue, adds a label, polls repository content, removes a label, and polls again within 200 **logical** ticks | `REVIEW_REQUIRED` only |
-| `WT-CLOUD-C2-002` | One actor creates an issue, polls content and subsequently writes an artifact classified upstream as source-map-like within the same window | `REVIEW_REQUIRED` only |
+| `WT-CLOUD-C2-001` | One synthetic process session creates an issue, adds a label, polls repository content, removes a label, and polls again within 200 **logical** ticks | `REVIEW_REQUIRED` only |
+| `WT-CLOUD-C2-002` | One synthetic process session creates an issue, polls content and subsequently writes an artifact classified upstream as source-map-like within the same window | `REVIEW_REQUIRED` only |
 
 Inputs to the pure detector contain only `{at, actor, kind}` with a fixed set
-of action kinds and `synthetic-host://` actors. The detector is **not** a
+of action kinds and `synthetic-session://` actors. The detector is **not** a
 network sensor. It does not parse GitHub audit logs or identify real addresses,
 API credentials, command bodies or malware. That would require a separate
 trusted event-normalization and data-handling design before deployment.
@@ -63,3 +63,68 @@ protection on GitHub, Windows or a live HERCULES deployment.
 For real incident response, use the researchers' published indicators only
 with appropriate authorization, keep suspicious samples quarantined, and do
 not access or interact with suspected live attacker infrastructure.
+
+## Offline normalized event review (second, narrower stage)
+
+`wolftrap scan-cloud-trace` adds **conditional correlation** across a process or
+credential session, an issue in a result repository, and a distinct command
+repository. It is not a live GitHub client or an importer for raw HTTP/audit
+logs. The source must be *already sanitized* by an authorized analyst from
+trusted telemetry. No attack infrastructure or third-party source code is used.
+
+```bash
+wolftrap scan-cloud-trace --root /path/to/sanitized --file events.json \
+  --output-dir /path/to/new/evidence
+wolftrap verify-cloud-trace --root /path/to/sanitized --file events.json \
+  --evidence-dir /path/to/new/evidence
+```
+
+The file `events.json` uses schema `wolftrap.normalized-cloud-trace/v1`:
+
+```json
+{
+  "schema": "wolftrap.normalized-cloud-trace/v1",
+  "events": [
+    {"at": 1, "session": "session-a", "repository": "results-a", "issue": "issue-a", "kind": "issue_create"},
+    {"at": 2, "session": "session-a", "repository": "results-a", "issue": "issue-a", "kind": "bug_label_add"},
+    {"at": 3, "session": "session-a", "repository": "commands-b", "issue": null, "kind": "repo_poll"},
+    {"at": 4, "session": "session-a", "repository": "results-a", "issue": "issue-a", "kind": "bug_label_remove"},
+    {"at": 5, "session": "session-a", "repository": "commands-b", "issue": null, "kind": "repo_poll"},
+    {"at": 6, "session": "session-a", "repository": "results-a", "issue": null, "kind": "source_map_put"}
+  ]
+}
+```
+
+Only the **six** fixed kinds `issue_create`, `bug_label_add`, `bug_label_remove`,
+`repo_poll`, `source_map_put` and `other` are accepted. `at` is a monotonic
+logical integer in the range 0–10,000, not a timestamp; windows are 200
+logical ticks, **not** an inferred one-hour interval. The file is bounded to
+64 KiB and 128 events. The issue alias is required only for issue events and
+must otherwise be null. All aliases are opaque, 2–32 character lowercase
+letters/digits/underscore/hyphen beginning with a letter. Bare URLs, tokens,
+usernames, domains, raw source-map content and unknown properties are rejected.
+
+| Rule | Requires within one trusted session | Output |
+| --- | --- | --- |
+| `WT-CLOUD-C2-003` | One issue in the result repository has a bug-label add, poll of a different repository, bug-label removal and repeat poll of the **same** command repository | `REVIEW_REQUIRED` |
+| `WT-CLOUD-C2-004` | An issue is created in the result repository; a distinct command repository is polled, then the result repository receives a source-map-classified upload | `REVIEW_REQUIRED` |
+
+Reports contain SHA-256-derived session and repository-pair aliases, rule IDs,
+and an integrity manifest; no original event aliases or trace content are
+copied. Use a **fresh empty** evidence directory **outside** the source tree.
+The `verify-cloud-trace` command independently re-reads the local source and
+recomputes report artifacts. Replacing the source or editing artifacts fails
+verification. Its reported source identity is explicitly **unverified**.
+
+GitHub organization audit logs by themselves may not include each repository
+read or API request. GitHub says `api.request` events require **enterprise
+audit log streaming with API request event streaming enabled**. Thus a
+complete sequence should **not** be inferred from missing org audit-log
+entries alone. See [GitHub's enterprise audit log guidance](https://docs.github.com/en/enterprise-cloud@latest/admin/monitoring-activity-in-your-enterprise/reviewing-audit-logs-for-your-enterprise/accessing-the-audit-log-for-your-enterprise).
+
+The hostile regression cases prevent joining unrelated sessions, issues,
+command repositories or unordered/out-of-window activity. They do **not**
+authenticate upstream session provenance, measure production false-positive
+rates, establish attribution, or demonstrate a real-world infection. A benign
+build or automation can produce similar events; an attacker may avoid the
+specific sequences entirely. A clean scan is **not** clearance.

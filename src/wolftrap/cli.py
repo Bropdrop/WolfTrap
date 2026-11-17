@@ -237,6 +237,27 @@ def _verify_cloud_c2(arguments: argparse.Namespace) -> int:
     return 0 if report["qualification"]["status"] == "PASSED_BOUNDED" else 1
 
 
+def _scan_cloud_trace(arguments: argparse.Namespace) -> int:
+    from .cloud_trace import scan_cloud_trace
+
+    report, code = scan_cloud_trace(arguments.root, arguments.file, arguments.output_dir)
+    print(f"{report['qualification']['status']}: "
+          f"{report['input']['event_count']} normalized events; "
+          f"{report['summary']['findings']} conditional correlation(s); "
+          f"{report['summary']['errors']} unknown input(s).")
+    print(f"Evidence: {Path(arguments.output_dir)}")
+    return code
+
+
+def _verify_cloud_trace(arguments: argparse.Namespace) -> int:
+    from .cloud_trace import verify_cloud_trace
+
+    report = verify_cloud_trace(arguments.root, arguments.file, arguments.evidence_dir)
+    print(f"VERIFIED_EVIDENCE: {report['qualification']['status']}; "
+          f"{report['summary']['findings']} conditional correlation(s).")
+    return 0
+
+
 def _challenge_agent(arguments: argparse.Namespace) -> int:
     from .agent_challenge import run_agent_challenge
 
@@ -439,6 +460,20 @@ def build_parser() -> argparse.ArgumentParser:
         "verify-cloud-c2", help="verify saved cloud-C2 challenge evidence")
     cloud_c2_verify.add_argument("--evidence-dir", required=True)
     cloud_c2_verify.set_defaults(handler=_verify_cloud_c2)
+
+    cloud_trace = subparsers.add_parser(
+        "scan-cloud-trace", help="inspect local pre-sanitized GitHub event metadata offline")
+    cloud_trace.add_argument("--root", required=True, help="authorized local input directory")
+    cloud_trace.add_argument("--file", required=True, help="simple .json input filename")
+    cloud_trace.add_argument("--output-dir", required=True, help="fresh evidence directory outside root")
+    cloud_trace.set_defaults(handler=_scan_cloud_trace)
+
+    cloud_trace_verify = subparsers.add_parser(
+        "verify-cloud-trace", help="recheck saved cloud trace evidence against its source")
+    cloud_trace_verify.add_argument("--root", required=True)
+    cloud_trace_verify.add_argument("--file", required=True)
+    cloud_trace_verify.add_argument("--evidence-dir", required=True)
+    cloud_trace_verify.set_defaults(handler=_verify_cloud_trace)
 
     agent_challenge = subparsers.add_parser("challenge-agent", help="run independently labelled synthetic agent cases")
     agent_challenge.add_argument("--seed", type=int, default=20261115)

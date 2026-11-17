@@ -19,7 +19,7 @@ from wolftrap.execution import execute_case
 from wolftrap.system import CorrectSyntheticSystem
 
 
-A = "synthetic-host://vehicle-a"
+A = "synthetic-session://vehicle-a"
 
 
 def e(at: int, kind: str, actor: str = A) -> dict[str, object]:
@@ -49,11 +49,11 @@ class CloudC2ChallengeTests(unittest.TestCase):
 
     def test_unrelated_actors_and_benign_build_are_not_spliced(self) -> None:
         trace = [e(1, "issue_create"),
-                 e(2, "label_add", "synthetic-host://vehicle-b"),
-                 e(3, "repo_poll", "synthetic-host://vehicle-b"),
-                 e(4, "label_remove", "synthetic-host://vehicle-b"),
-                 e(5, "repo_poll", "synthetic-host://vehicle-b"),
-                 e(6, "source_map_write", "synthetic-host://vehicle-b")]
+                 e(2, "label_add", "synthetic-session://vehicle-b"),
+                 e(3, "repo_poll", "synthetic-session://vehicle-b"),
+                 e(4, "label_remove", "synthetic-session://vehicle-b"),
+                 e(5, "repo_poll", "synthetic-session://vehicle-b"),
+                 e(6, "source_map_write", "synthetic-session://vehicle-b")]
         self.assertEqual(detect_cloud_c2(trace)["findings"], [])
         self.assertEqual(detect_cloud_c2([e(1, "source_map_write")])["findings"], [])
 

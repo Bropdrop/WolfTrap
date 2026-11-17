@@ -50,7 +50,7 @@ def _validate(events: Sequence[dict[str, Any]]) -> None:
             raise ValueError("synthetic logical time is invalid or unordered")
         previous = at
         if (type(item["actor"]) is not str
-                or re.fullmatch(r"synthetic-host://[A-Za-z0-9_-]{1,32}", item["actor"]) is None
+                or re.fullmatch(r"synthetic-session://[A-Za-z0-9_-]{1,32}", item["actor"]) is None
                 or type(item["kind"]) is not str or item["kind"] not in KINDS):
             raise ValueError("real destinations, payloads, and unknown operations are prohibited")
 
@@ -112,7 +112,7 @@ def detect_cloud_c2(events: Sequence[dict[str, Any]]) -> dict[str, Any]:
 
 def _cases() -> tuple[dict[str, Any], ...]:
     """Independent expected labels; no detector call creates these fixtures."""
-    a, b = "synthetic-host://car-a", "synthetic-host://car-b"
+    a, b = "synthetic-session://car-a", "synthetic-session://car-b"
     cases = (
         ("gitdoor-inspired-complete", ("WT-CLOUD-C2-001", "WT-CLOUD-C2-002"), (
             _event(1, a, "issue_create"), _event(2, a, "label_add"),
