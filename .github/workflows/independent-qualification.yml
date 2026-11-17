@@ -20,7 +20,6 @@ jobs:
       PYTHONHASHSEED: "0"
       PYTHONDONTWRITEBYTECODE: "1"
       WOLFTRAP_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
-      WOLFTRAP_QUALIFICATION_DIR: ${{ runner.temp }}/wolftrap-independent-qualification
     steps:
       - name: Check out the exact public candidate without persisted credentials
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -59,12 +58,12 @@ jobs:
               python -m wolftrap.public_guard "$1" --workflow-dependencies
               python scripts/qualify-research.py --expected-head "$1" --parent-netns "$2" --output-dir "$3"
               python -m wolftrap.public_guard "$1" --report-root "$3" --report qualification.json
-            ' qualification "$WOLFTRAP_EXPECTED_HEAD" "$parent_namespace" "$WOLFTRAP_QUALIFICATION_DIR"
+            ' qualification "$WOLFTRAP_EXPECTED_HEAD" "$parent_namespace" "$RUNNER_TEMP/wolftrap-independent-qualification"
 
       - name: Retain the screened qualification index
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: wolftrap-independent-qualification
-          path: ${{ env.WOLFTRAP_QUALIFICATION_DIR }}/qualification.json
+          path: ${{ runner.temp }}/wolftrap-independent-qualification/qualification.json
           if-no-files-found: error
           retention-days: 14
