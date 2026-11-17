@@ -33,6 +33,49 @@ Exit codes: `0` means all authored synthetic controls matched the gate and an
 independently implemented reference; `1` means an authorization mismatch;
 `2` means malformed input, unknown execution state or evidence failure.
 
+## Qualify independently recorded effects
+
+Run the extended qualification at a clean source checkout. Choose a fresh
+evidence directory outside the checkout.
+
+```bash
+export PYTHONPATH=src
+python -m wolftrap.authority_qualification --output-dir /tmp/wolftrap-authority-qualification
+python -m wolftrap.authority_qualification --evidence-dir /tmp/wolftrap-authority-qualification
+```
+
+The qualification exercises the original 3,019 proposals and adds 1,000
+coordinated proposals with competing grants, substitutions, privilege claims and
+replays. The expected outcome is one effect in the new case's host admission
+slot. The test executor captures synthetic effect writes separately from the
+gate's returned decisions and effect claims. Unknown proposal fields such as
+votes, priority and confidence are rejected by the input schema.
+
+Eight separate phase schedules exercise the existing synthetic authority
+engine's positive control, revocation during execution, shared-nonce
+contention, crash recovery and the effect of expiry, epoch changes or unknown
+authority after preparation. The qualification requires the correct models
+to match their oracles and the authored controls. It also requires all five
+sentinels to produce their expected failures, covering omitted final checks,
+omitted replay controls, missing tenant binding, fabricated success and deny-all.
+An unexpected result or a sentinel that escapes fails qualification.
+
+The manifest checks the byte counts and hashes of
+`authority-qualification-inputs.json` and `authority-qualification.json`. These
+files retain the full authored cases, observed and expected effects, independent
+verdicts and exact Git commit and tree. The verifier regenerates and replays
+the cases at that source revision. It checks the original execution's recorded
+Python and platform metadata for format. Tampering that also rewrites artifact
+hashes still fails when the resulting evidence differs from replay. The
+manifest supplies integrity and replay checks without a signing identity.
+
+Passing this qualification supports **SYNTHETICALLY VERIFIED** for the finite
+controls. **NOT TESTED** applies to live conformance. Phase transitions and
+tenant/delegate/slot checks run in distinct synthetic models. The disposable
+ledger is process-local, and the crash schedules represent logical task
+transitions. The tests use only fictional fixtures and need no network, API
+credentials or model.
+
 ## Coverage and protected effect contract
 
 The fixed **20-case, 3,019-proposal** corpus covers:
