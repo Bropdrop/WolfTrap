@@ -217,6 +217,26 @@ def _verify_prompts(arguments: argparse.Namespace) -> int:
     return 0
 
 
+def _challenge_cloud_c2(arguments: argparse.Namespace) -> int:
+    from .cloud_c2 import run_cloud_c2_challenge
+
+    report, code = run_cloud_c2_challenge(arguments.output_dir)
+    print(f"{report['qualification']['status']}: "
+          f"{report['summary']['cases']} synthetic cloud cases; "
+          f"{report['summary']['mismatches']} differential gap(s).")
+    print(f"Evidence: {Path(arguments.output_dir)}")
+    return code
+
+
+def _verify_cloud_c2(arguments: argparse.Namespace) -> int:
+    from .cloud_c2 import verify_cloud_c2_evidence
+
+    report = verify_cloud_c2_evidence(arguments.evidence_dir)
+    print(f"VERIFIED_EVIDENCE: {report['summary']['cases']} synthetic cloud cases; "
+          f"{report['summary']['mismatches']} gap(s).")
+    return 0 if report["qualification"]["status"] == "PASSED_BOUNDED" else 1
+
+
 def _challenge_agent(arguments: argparse.Namespace) -> int:
     from .agent_challenge import run_agent_challenge
 
@@ -408,6 +428,17 @@ def build_parser() -> argparse.ArgumentParser:
     prompt_verify = subparsers.add_parser("verify-prompts", help="verify saved Stage 5.3 evidence")
     prompt_verify.add_argument("--evidence-dir", required=True)
     prompt_verify.set_defaults(handler=_verify_prompts)
+
+    cloud_c2 = subparsers.add_parser(
+        "challenge-cloud-c2", help="run GitDoor-inspired synthetic cloud-C2 controls offline")
+    cloud_c2.add_argument("--output-dir", required=True,
+                          help="fresh directory for synthetic challenge evidence")
+    cloud_c2.set_defaults(handler=_challenge_cloud_c2)
+
+    cloud_c2_verify = subparsers.add_parser(
+        "verify-cloud-c2", help="verify saved cloud-C2 challenge evidence")
+    cloud_c2_verify.add_argument("--evidence-dir", required=True)
+    cloud_c2_verify.set_defaults(handler=_verify_cloud_c2)
 
     agent_challenge = subparsers.add_parser("challenge-agent", help="run independently labelled synthetic agent cases")
     agent_challenge.add_argument("--seed", type=int, default=20261115)
