@@ -1,6 +1,6 @@
 # Private runtime conformance contract
 
-**Status `NOT TESTED`.** This is a proposed public interface, with fictional fixtures only. Its operation names define the contract for a future private adapter. The genuine Ground Truth runtime, its branch authority and its API mapping require confirmation by the runtime owner before conformance work can begin.
+**Status `NOT TESTED`.** This is a proposed public interface with fictional fixtures. The authoritative Ground Truth runtime revision and the technical owner of its broker and protected effects are `UNKNOWN/BLOCKED`. Private read-only comparison may inform a candidate assessment. Runtime conformance requires the technical owner to confirm which revision and APIs govern the tested effects.
 
 ## Public interface
 
