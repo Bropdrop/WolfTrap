@@ -6,7 +6,7 @@
     "url": "https://www.ic3.gov/CSA/2026/261113.pdf",
     "sha256": "3dd86a94d33b29c65f56b4307919b74358e63cfde33a600b61adce5794d169e2"
   },
-  "interpretation": "Technique labels are transcribed from the FBI table. Synthetic abstractions test authorization/effect invariants, not the offensive technique. NOT_MODELED_V0.1 entries are explicit containment decisions.",
+  "interpretation": "Technique identifiers and PDF page occurrences are taken from the FBI table, with the printed T11558.003 normalized to MITRE T1558.003. Display labels may expand or normalize the table's wording. Synthetic abstractions exercise authorization and effect invariants. NOT_MODELED_V0.1 entries are explicit containment decisions.",
   "techniques": [
     {"technique_id":"T1595","name":"Active Scanning","phase":"Initial Recon","pages":[3],"disposition":"NOT_MODELED_V0.1","experiment_ids":[],"rationale":"External scanning is outside the bounded local authorization laboratory."},
     {"technique_id":"T1580","name":"Cloud Infrastructure Discovery","phase":"Initial Recon","pages":[3],"disposition":"SYNTHETIC_ABSTRACTION","experiment_ids":["fbi-artex-unauthorized-protected-resource"],"rationale":"Models authorization on synthetic infrastructure metadata without cloud access."},
@@ -19,7 +19,7 @@
     {"technique_id":"T1133","name":"External Remote Services","phase":"Initial Access","pages":[3],"disposition":"NOT_MODELED_V0.1","experiment_ids":[],"rationale":"The harness exposes no remote service and contacts no network target."},
     {"technique_id":"T1195","name":"Supply Chain Compromise","phase":"Initial Access","pages":[3],"disposition":"SYNTHETIC_ABSTRACTION","experiment_ids":["fbi-artex-supplier-origin-substitution"],"rationale":"Tests a local supplier-origin trust binding without a supplier system."},
     {"technique_id":"T1199","name":"Trusted Relationship","phase":"Initial Access","pages":[3],"disposition":"SYNTHETIC_ABSTRACTION","experiment_ids":["fbi-artex-supplier-origin-substitution"],"rationale":"Tests synthetic trusted-origin substitution."},
-    {"technique_id":"T1606.002","name":"Forge Web Credentials: SAML Tokens","phase":"Initial Access / Privilege Escalation","pages":[3,5],"disposition":"SYNTHETIC_ABSTRACTION","experiment_ids":["fbi-artex-identity-credential-substitution","fbi-artex-privilege-escalation"],"rationale":"Models verified-versus-authorized credential claims; creates no SAML token."},
+    {"technique_id":"T1606.002","name":"Forge Web Credentials: SAML Tokens","phase":"Initial Access / Privilege Escalation","pages":[3,4],"disposition":"SYNTHETIC_ABSTRACTION","experiment_ids":["fbi-artex-identity-credential-substitution","fbi-artex-privilege-escalation"],"rationale":"Models verified-versus-authorized credential claims; creates no SAML token."},
     {"technique_id":"T1552.001","name":"Unsecured Credentials: Credentials In Files","phase":"Initial Access","pages":[3],"disposition":"SYNTHETIC_ABSTRACTION","experiment_ids":["fbi-artex-simulated-credential-persistence"],"rationale":"Uses an inert synthetic presented credential, not credential acquisition."},
 
     {"technique_id":"T1505.003","name":"Server Software Component: Web Shell","phase":"Establish Foothold / Persistence","pages":[4],"disposition":"NOT_MODELED_V0.1","experiment_ids":[],"rationale":"Payload deployment and command shells are prohibited."},

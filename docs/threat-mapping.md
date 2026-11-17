@@ -12,14 +12,72 @@ Page references below use PDF page numbers. Each versioned scenario also carries
 
 The experiments reproduce no exploit, web shell, credential theft, command execution, network traffic, external destination, or victim data. They model only authorization and effect-state properties inside local fixtures.
 
-The complete, machine-validated FBI table inventory is
-[`advisory-techniques-v1.json`](../src/wolftrap/data/advisory-techniques-v1.json).
-It accounts for all 43 normalized ATT&CK table entries (including correction of
-the advisory's printed `T11558.003` typo to MITRE's valid `T1558.003`):
-29 are mapped to a named synthetic authorization/effect abstraction and 14 are
-explicitly `NOT_MODELED_V0.1` with a containment rationale. A synthetic mapping
-does not claim to execute the ATT&CK technique. The runtime rejects a missing,
-duplicate, unexpected, or dangling inventory entry.
+The original PDF matches the pinned SHA-256. Its ATT&CK table on PDF pages 3–6
+has 46 printed identifier occurrences across 43 distinct normalized entries.
+`T1190`, `T1606.002`, and `T1059` each appear on two pages. The machine-validated
+inventory assigns 29 entries to synthetic authority or effect abstractions and
+records 14 containment decisions as `NOT_MODELED_V0.1`. The loader validates the
+normalized identifier set, exact PDF page references and links to scenario IDs.
+[FBI FLASH](https://www.ic3.gov/CSA/2026/261113.pdf)
+· [Versioned inventory](../src/wolftrap/data/advisory-techniques-v1.json)
+
+Microsoft describes app-only authentication across customer tenants and
+subsequent cloud application credential changes in its October 21
+investigation. It recommends correlating app sign-ins and audit records with
+authorized administration, including review of volume anomalies, consent and
+role assignments. The November 5 and November 6 investigations provide
+additional context for compromised application credentials and accelerated
+intrusion activity. These publications motivate defensive controls and provide
+no qualification of WolfTrap's scenarios or detectors.
+[October 21 Microsoft investigation](https://www.microsoft.com/en-us/security/blog/2026/10/21/storm-0940-uses-artex-agentic-ai-connectwise-supply-chain-compromise/)
+· [November 5 Microsoft investigation](https://www.microsoft.com/en-us/security/blog/2026/11/05/threat-actors-use-agentic-AI-tooling-to-find-and-abuse-exposed-secrets/)
+· [November 6 Microsoft investigation](https://www.microsoft.com/en-us/security/blog/2026/11/06/artex-abuse-expands-as-cybercriminals-target-financial-sector/)
+
+## Machine-readable evidence
+
+The `run` and `sweep` commands generate a manifest-bound `wolftrap-report.json`
+with the source commit and tree, report schema and runtime environment. The
+`corpus.advisory_technique_inventory` records the pinned table. The
+`corpus.advisory_technique_evidence` matrix links each technique to its
+authored baseline tests, scenario versions and definition digests, the
+relationship category, asserted invariants and independent
+oracle verdict. A link with no explicit ATT&CK pairing in the scenario uses
+`DEFENSIVE_STRESSOR`. `evidence_case_id` joins a completed baseline to
+`cases[].case.case_id`, where the full saved case, case digest, expected and
+observed effects, and oracle evidence are included.
+
+`authority_property_status` can be `SYNTHETICALLY VERIFIED` only after the
+complete campaign qualifies and every linked baseline passes its independent
+oracle. A planned baseline in an incomplete or failed campaign is
+`INCONCLUSIVE` for that qualification claim. The case-level oracle verdict
+still records a failure when the case ran and failed. Unselected and unmodeled
+authority properties are `NOT TESTED`. Every row's
+`operational_technique_status` is `NOT TESTED`. This matrix measures bounded
+authorization and protected-effect behavior in synthetic fixtures.
+
+To check a completed matrix entry, use the reported `evidence_case_id` and the
+exact source revision from the report. This example validates the saved report
+pair, reconstructs the named synthetic case, and compares independent oracle
+output from a fresh run.
+
+```bash
+PYTHONPATH=src python - /path/to/wolftrap-report.json WT-C-REPLACE-WITH-CASE-ID <<'PY'
+import sys
+from wolftrap.execution import execute_case
+from wolftrap.model import ExperimentCase
+from wolftrap.report import validate_report_pair
+from wolftrap.system import SYSTEMS
+
+report = validate_report_pair(sys.argv[1])
+record = next(entry for entry in report["cases"] if entry["case"]["case_id"] == sys.argv[2])
+case = ExperimentCase.from_dict(record["case"])
+evidence = record["execution"]
+replayed = execute_case(case, SYSTEMS[evidence["system_id"]])
+if case.digest != evidence["case_digest"] or replayed.assessment.to_dict() != evidence["assessment"]:
+    raise SystemExit("Case or oracle output differs")
+print("Saved case digest and oracle output match")
+PY
+```
 
 ## Traceability matrix
 
@@ -39,7 +97,12 @@ duplicate, unexpected, or dangling inventory entry.
 
 ## Advisory identifier correction
 
-The advisory’s privilege-escalation table prints `T11558.003` for Kerberoasting on PDF page 5. MITRE ATT&CK’s valid identifier is `T1558.003`. WolfTrap preserves the literal advisory typo in provenance notes where relevant but uses `T1558.003` in executable mappings. Likewise, the precise MITRE sub-technique title for `T1134.001` is “Token Impersonation/Theft” under Access Token Manipulation.
+The advisory’s privilege-escalation table prints `T11558.003` for Kerberoasting
+on PDF page 5. WolfTrap normalizes the identifier to MITRE ATT&CK's
+`T1558.003`. The inventory expands the display label for `T1134.001` to its
+MITRE ATT&CK sub-technique title, Token Impersonation/Theft.
+[MITRE ATT&CK T1558.003](https://attack.mitre.org/techniques/T1558/003/)
+· [MITRE ATT&CK T1134.001](https://attack.mitre.org/techniques/T1134/001/)
 
 ## What this mapping does not establish
 

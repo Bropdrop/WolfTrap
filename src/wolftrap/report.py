@@ -104,7 +104,7 @@ def render_markdown_report(report: Mapping[str, Any]) -> str:
         "## Bounded behavioral coverage",
         "",
         f"- Scenarios exercised: {len(coverage.get('scenario_ids', []))}",
-        f"- ATT&CK techniques exercised: {len(coverage.get('attack_techniques', []))}",
+        f"- ATT&CK references attached to exercised scenarios: {len(coverage.get('attack_techniques', []))}",
         f"- Mutation axes exercised: {len(coverage.get('mutation_axes', []))}",
         f"- Interaction depths: `{_md(coverage.get('interaction_depths', {}))}`",
         f"- Commands evaluated: {coverage.get('commands_evaluated', 0)}",

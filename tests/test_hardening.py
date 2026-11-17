@@ -94,6 +94,13 @@ class HardeningRegressionTests(unittest.TestCase):
             EXPECTED_FBI_TECHNIQUE_IDS,
             {item["technique_id"] for item in inventory["techniques"]},
         )
+        self.assertEqual(29, inventory["synthetic_abstraction_count"])
+        self.assertEqual(14, inventory["not_modeled_v0_1_count"])
+        pages = {
+            item["technique_id"]: item["pages"] for item in inventory["techniques"]
+        }
+        self.assertEqual(46, sum(map(len, pages.values())))
+        self.assertEqual([3, 4], pages["T1606.002"])
         self.assertTrue(
             all(item["experiment_ids"] or item["disposition"] == "NOT_MODELED_V0.1"
                 for item in inventory["techniques"])
