@@ -209,6 +209,26 @@ only sanitized event categories and fictional aliases: no real repositories,
 executables, payloads, attacker infrastructure or network traffic. See
 [what the challenge can and cannot establish](docs/cloud-c2-challenge.md).
 
+### Option I: ARTEX-informed synthetic authority-funnel challenge (research preview)
+
+This separate, entirely offline experiment models a **host-owned grant
+registry** under inert untrusted-tool claims, wrong-delegate and cross-tenant
+credential reuse, privilege escalation, revocation, and three 1,000-proposal
+swarm scenarios. It uses an independently implemented reference model and
+positive as well as negative controls. No real accounts, credentials, tool
+outputs, model calls, tenants or networks are involved.
+
+```bash
+wolftrap challenge-authority-funnel --output-dir /tmp/wolftrap-authority-funnel
+wolftrap verify-authority-funnel --evidence-dir /tmp/wolftrap-authority-funnel
+```
+
+The 20 authored cases contain 3,019 synthetic proposals. A passing result
+means only that these finite model expectations agree; **it does not test or
+certify the Ground Truth runtime**, and it cannot identify stolen valid
+credentials when the adversary is indistinguishable from an authorized caller.
+See [authority-funnel scenario mapping and limitations](docs/authority-funnel-challenge.md).
+
 ---
 
 ## Research engine and detailed qualification
