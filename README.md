@@ -11,8 +11,10 @@ affiliation or endorsement.
 WolfTrap is a **read-only, offline trust-boundary inspector** for GitHub
 Actions, Dockerfiles, bounded JavaScript/TypeScript agent code, and Stage 5.2
 protected-effect boundary patterns across agent skills and scripts. Stage 5.3
-adds a separate prompt-document mode for untrusted README and prompt files. Its
-independently labelled synthetic challenge labs test the detectors without
+adds a separate prompt-document mode for untrusted README and prompt files.
+An opt-in Go source mode checks four conditional permission, subprocess, proxy,
+and optional-gate patterns. Separate independently labelled synthetic
+challenge labs test the detectors without
 contacting external systems. WolfTrap identifies *conditional review signals*,
 explains the contributing conditions, and produces portable JSON, Markdown,
 SARIF and integrity manifests. No inspected project code is executed.
@@ -25,8 +27,9 @@ command-and-control services.
 **Evidence boundary.** Static matches are `STATIC REVIEW SIGNAL`. Passing
 deterministic lab results are `SYNTHETICALLY VERIFIED` for their exercised
 cases. Unsupported input or incomplete evidence is `INCONCLUSIVE`.
-Live ARTEX detection, production control effectiveness and Ground Truth
-runtime conformance are `NOT TESTED`. `LIVE VERIFIED` requires separate,
+Live ARTEX threat detection, production control effectiveness and Ground Truth
+runtime conformance are `NOT TESTED`. The Go mode does not change that.
+`LIVE VERIFIED` requires separate,
 independent evidence from a named, authorized genuine implementation.
 
 - Reproduce the [offline authority demo](docs/evaluation-demo.md).
@@ -51,6 +54,9 @@ establish real-world exploitability. **4 Stage 5.3 prompt-document signals**
 triage attempted instruction overrides, governing-prompt disclosure, priority
 claims and credential transfers. Ordinary prompt templates are not themselves
 verified attacks.
+**4 separate Go authority signals** review unconditional permission callbacks,
+host-environment subprocess launches, proxy-before-pinned-dial transport ordering,
+and optional gate allow-through paths. They do not prove authorization bypasses.
 
 > **Public beta:** The read-only CI/build inspector, Stage 5.1 agent inspector,
 > synthetic challenge labs, and community CI/build Action are available on
@@ -268,6 +274,23 @@ oracle establish whether the synthetic protected effect was allowed.
 scan cannot create authority. This is **not** a deployed Ground Truth broker,
 HERCULES integration, GitHub endpoint protection or real malware detection.
 See the [authority separation experiment](docs/cloud-c2-challenge.md).
+
+### Option K: bounded Go authority and egress source inspection
+
+Inspect selected local `.go` files without compiling or running Go:
+
+```bash
+wolftrap scan-go-authority --root /path/to/authorized-repo \
+  --file server/tool.go --file guard/hooks.go \
+  --output-dir /tmp/wolftrap-go-review
+wolftrap verify-go-authority --evidence-dir /tmp/wolftrap-go-review
+```
+
+Four `WT-GO-*` patterns produce conditional `REVIEW_REQUIRED` signals,
+not a confirmed vulnerability. There is no whole-program call graph, runtime
+authorization check, Go compilation or automatic production gate. Bounded
+failures produce `INCONCLUSIVE`; evidence contains hashed paths, line numbers
+and rule metadata. See [Go rule coverage and limits](docs/go-authority-inspection.md).
 
 ### Additional offline evaluation suites
 

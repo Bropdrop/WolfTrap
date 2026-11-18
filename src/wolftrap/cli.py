@@ -196,6 +196,27 @@ def _verify_effects(arguments: argparse.Namespace) -> int:
     return 0
 
 
+def _scan_go_authority(arguments: argparse.Namespace) -> int:
+    from .go_scan import scan_go_authority
+
+    outcome = scan_go_authority(arguments.root, arguments.output_dir, files=arguments.file)
+    summary = outcome.report["summary"]
+    print(f"{outcome.report['qualification']['status']}: "
+          f"{summary['files_inspected']} Go files; "
+          f"{summary['findings']} conditional authority signal(s); "
+          f"{summary['errors']} unknown input(s).")
+    return outcome.exit_code
+
+
+def _verify_go_authority(arguments: argparse.Namespace) -> int:
+    from .go_scan import verify_go_evidence
+
+    report = verify_go_evidence(arguments.evidence_dir)
+    print(f"VERIFIED_EVIDENCE: {report['qualification']['status']}; "
+          f"{report['summary']['findings']} conditional Go authority signal(s).")
+    return 0
+
+
 def _scan_prompts(arguments: argparse.Namespace) -> int:
     from .prompt_scan import scan_prompts
 
@@ -522,6 +543,19 @@ def build_parser() -> argparse.ArgumentParser:
     effect_verify = subparsers.add_parser("verify-effects", help="verify saved Stage 5.2 evidence")
     effect_verify.add_argument("--evidence-dir", required=True)
     effect_verify.set_defaults(handler=_verify_effects)
+
+    go_scanner = subparsers.add_parser(
+        "scan-go-authority", help="offline conditional Go tool-permission and egress review")
+    go_scanner.add_argument("--root", required=True)
+    go_scanner.add_argument("--output-dir", required=True)
+    go_scanner.add_argument("--file", action="append",
+                            help="explicit root-relative .go source file (repeatable)")
+    go_scanner.set_defaults(handler=_scan_go_authority)
+
+    go_verify = subparsers.add_parser(
+        "verify-go-authority", help="verify saved Go authority scan evidence")
+    go_verify.add_argument("--evidence-dir", required=True)
+    go_verify.set_defaults(handler=_verify_go_authority)
 
     prompts = subparsers.add_parser(
         "scan-prompts", help="Stage 5.3 offline untrusted prompt-document triage")
