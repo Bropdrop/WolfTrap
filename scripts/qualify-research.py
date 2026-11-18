@@ -56,6 +56,7 @@ def suite_summaries(root: Path, source: dict[str, object]) -> dict[str, object]:
 
     cloud = read("cloud-authority/cloud-authority-challenge.json")["summary"]
     funnel = read("authority-funnel/authority-funnel-challenge.json")["summary"]
+    sandbox = read("sandbox-authority/sandbox-authority-challenge.json")["summary"]
     authority = read("authority-qualification/authority-qualification.json")["summary"]
     identity = read("identity-telemetry-challenge/identity-telemetry-challenge.json")["summary"]
     prompt = read("prompt-trust/prompt-trust-challenge.json")["summary"]
@@ -64,6 +65,8 @@ def suite_summaries(root: Path, source: dict[str, object]) -> dict[str, object]:
     if (cloud["authority_checks"] < 1920 or cloud["mismatches"] or cloud["oracle_failures"]
             or funnel["proposals"] < 3019 or funnel["mismatches"]):
         raise ValueError("the cloud and authority challenge baselines did not qualify")
+    if sandbox != {"stages": 3, "intents": 3000, "mismatches": 0}:
+        raise ValueError("the composed sandbox and authority controls did not qualify")
     if (authority["sentinels_total"] < 5
             or authority["sentinels_caught"] != authority["sentinels_total"]):
         raise ValueError("authority sentinel qualification regressed")
@@ -74,6 +77,7 @@ def suite_summaries(root: Path, source: dict[str, object]) -> dict[str, object]:
     return {
         "cloud_authority": cloud,
         "authority_funnel": funnel,
+        "sandbox_authority": sandbox,
         "authority_qualification": authority,
         "identity_telemetry": identity,
         "prompt_trust": prompt,
@@ -111,7 +115,8 @@ def main() -> int:
     campaign = validate_report_pair(output / "campaign" / "wolftrap-report.json")
     if campaign["source_revision"] != source.to_dict() or campaign["qualification"]["status"] != "PASS":
         raise ValueError("the source-bound synthetic campaign did not qualify")
-    for challenge in ("cloud-c2", "cloud-camouflage", "cloud-authority", "authority-funnel", "agent", "build"):
+    for challenge in ("cloud-c2", "cloud-camouflage", "cloud-authority",
+                      "authority-funnel", "sandbox-authority", "agent", "build"):
         target = output / challenge
         options: tuple[str, ...] = ()
         verifier = challenge

@@ -59,7 +59,10 @@ jobs:
               python scripts/qualify-research.py --expected-head "$1" --parent-netns "$2" --output-dir "$3"
               python -m wolftrap.public_guard "$1" --report-root "$3" \
                 --report qualification.json --report unit-tests.json \
-                --report gt-vsa/gt-vsa.json --report gt-vsa/gt-vsa.md --report gt-vsa/gt-vsa.manifest.json
+                --report gt-vsa/gt-vsa.json --report gt-vsa/gt-vsa.md --report gt-vsa/gt-vsa.manifest.json \
+                --report sandbox-authority/sandbox-authority-challenge.json \
+                --report sandbox-authority/sandbox-authority-challenge.md \
+                --report sandbox-authority/sandbox-authority-challenge.manifest.json
             ' qualification "$WOLFTRAP_EXPECTED_HEAD" "$parent_namespace" "$RUNNER_TEMP/wolftrap-independent-qualification"
 
       - name: Retain the screened qualification index and vehicle evidence
@@ -72,5 +75,8 @@ jobs:
             ${{ runner.temp }}/wolftrap-independent-qualification/gt-vsa/gt-vsa.json
             ${{ runner.temp }}/wolftrap-independent-qualification/gt-vsa/gt-vsa.md
             ${{ runner.temp }}/wolftrap-independent-qualification/gt-vsa/gt-vsa.manifest.json
+            ${{ runner.temp }}/wolftrap-independent-qualification/sandbox-authority/sandbox-authority-challenge.json
+            ${{ runner.temp }}/wolftrap-independent-qualification/sandbox-authority/sandbox-authority-challenge.md
+            ${{ runner.temp }}/wolftrap-independent-qualification/sandbox-authority/sandbox-authority-challenge.manifest.json
           if-no-files-found: error
           retention-days: 14

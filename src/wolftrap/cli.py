@@ -280,6 +280,27 @@ def _verify_authority(arguments: argparse.Namespace) -> int:
     return 0 if report["qualification"]["status"] == "PASSED_BOUNDED" else 1
 
 
+def _challenge_sandbox_authority(arguments: argparse.Namespace) -> int:
+    from .sandbox_funnel import run_challenge
+
+    report, code = run_challenge(arguments.output_dir)
+    print(f"{report['qualification']['status']}: "
+          f"{report['summary']['stages']} synthetic isolation/authority stages; "
+          f"{report['summary']['intents']} inert intents; "
+          f"{report['summary']['mismatches']} mismatch(es).")
+    print(f"Evidence: {Path(arguments.output_dir)}")
+    return code
+
+
+def _verify_sandbox_authority(arguments: argparse.Namespace) -> int:
+    from .sandbox_funnel import verify_evidence
+
+    report = verify_evidence(arguments.evidence_dir)
+    print(f"VERIFIED_EVIDENCE: {report['summary']['stages']} synthetic stages; "
+          f"{report['summary']['mismatches']} mismatch(es).")
+    return 0 if report["qualification"]["status"] == "PASSED_BOUNDED" else 1
+
+
 def _challenge_cloud_camouflage(arguments: argparse.Namespace) -> int:
     from .cloud_camouflage import run_camouflage_challenge
 
@@ -592,6 +613,20 @@ def build_parser() -> argparse.ArgumentParser:
     )
     authority_verify.add_argument("--evidence-dir", required=True)
     authority_verify.set_defaults(handler=_verify_authority)
+
+    sandbox = subparsers.add_parser(
+        "challenge-sandbox-authority",
+        help="run a three-stage 1,000-intent synthetic sandbox + authority composition test",
+    )
+    sandbox.add_argument("--output-dir", required=True, help="fresh evidence directory")
+    sandbox.set_defaults(handler=_challenge_sandbox_authority)
+
+    sandbox_verify = subparsers.add_parser(
+        "verify-sandbox-authority",
+        help="replay and verify synthetic sandbox + authority evidence",
+    )
+    sandbox_verify.add_argument("--evidence-dir", required=True)
+    sandbox_verify.set_defaults(handler=_verify_sandbox_authority)
 
     camouflage = subparsers.add_parser(
         "challenge-cloud-camouflage", help="measure offline cloud-C2 blind spots and lookalikes")

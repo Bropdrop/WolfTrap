@@ -255,6 +255,10 @@ certify the Ground Truth runtime**, and it cannot identify stolen valid
 credentials when the adversary is indistinguishable from an authorized caller.
 See [authority-funnel scenario mapping and limitations](docs/authority-funnel-challenge.md).
 
+A separate three-stage [sandbox + authority composition challenge](docs/sandbox-authority-challenge.md)
+models fictional host-owned isolation policies and 1,000 synthetic intents per
+stage. It **does not launch actual sandboxes, AI agents or protected effects**.
+
 ### Option J: independent synthetic authority after cloud advisories
 
 ```bash
@@ -291,6 +295,22 @@ not a confirmed vulnerability. There is no whole-program call graph, runtime
 authorization check, Go compilation or automatic production gate. Bounded
 failures produce `INCONCLUSIVE`; evidence contains hashed paths, line numbers
 and rule metadata. See [Go rule coverage and limits](docs/go-authority-inspection.md).
+
+### Option L: three-stage synthetic sandbox + authority funnel
+
+```bash
+wolftrap challenge-sandbox-authority --output-dir /tmp/wolftrap-sandbox-authority
+wolftrap verify-sandbox-authority --evidence-dir /tmp/wolftrap-sandbox-authority
+```
+
+The three deterministic stages each contain 1,000 typed fictional agent intents.
+They check missing/weak sandbox envelopes, out-of-scope filesystem requests,
+disallowed network access, missing host approval, invalid delegated authority,
+stale/revoked/expired grants and one-slot contention. The effect sink is
+captured separately from the gate's success claims, and the evidence verifier
+replays the exact bounded scenario. **No operating-system isolation, live
+1,000-agent execution or Ground Truth/HERCULES runtime has been qualified.**
+See [setup, controls and limits](docs/sandbox-authority-challenge.md).
 
 ### Additional offline evaluation suites
 

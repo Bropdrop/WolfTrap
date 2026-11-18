@@ -30,6 +30,20 @@ The scanner never runs inspected code or prompts. The inspection report, cloud a
 
 Agent messages, votes, confidence, tool outputs, and static or event-based alerts are untrusted inputs. The authority-funnel corpus uses inert authority claims to test that boundary. Its host grants and ledger are a model. The single-slot and replay tests demonstrate logical effects under the recorded schedules. Timing behavior, broker cryptography and genuine runtime durability require separate evidence.
 
+## Sandbox and authority composition (synthetic)
+
+The [three-stage sandbox-authority challenge](sandbox-authority-challenge.md)
+adds a **separate fictional host-owned sandbox envelope** to 1,000 independently
+identified proposals per stage. A sandbox-denied proposal never enters the
+synthetic authority gate; a sandbox-admitted proposal still needs a matching
+current host grant. The verifier checks a separate synthetic effect sink,
+authored negative/positive labels and the independent authority oracle. An
+agent's override or vendor approval claim cannot bypass either boundary.
+
+This is a contract test, **not evidence of actual OS-enforced sandboxing**.
+HERCULES and Ground Truth conformance, real tool isolation, independent
+retention and concurrent agents must be tested in a separate authorized runtime.
+
 ## Evidence boundary
 
 The inspectors begin with explicit local input. The public experiments use fictional aliases, synthetic credentials or grant state, and disposable effect records. The authority experiments have no dependency on Ground Truth, HERCULES, MobiPute or TruthPute. See [evidence qualification](evidence-guide.md) and the [proposed private conformance contract](private-runtime-conformance.md).
