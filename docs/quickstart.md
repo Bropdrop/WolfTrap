@@ -1,8 +1,9 @@
 # WolfTrap — quick start for repository maintainers
 
 WolfTrap helps you review local GitHub Actions, root container-build trust
-boundaries, selected JavaScript/TypeScript agent trust boundaries, and Stage 5.2
-protected-effect and skill instruction patterns. It does
+boundaries, selected JavaScript/TypeScript agent trust boundaries, Stage 5.2
+protected-effect and skill instruction patterns, and selected Go authority
+source patterns. It does
 **not** execute your application, run a pentest against a host, validate
 deployment credentials, or guarantee that a repository is secure.
 
@@ -119,6 +120,22 @@ review; a skill's claimed permission or approval cannot grant host authority.
 All outputs are anonymous path aliases with JSON/Markdown/SARIF and SHA-256
 evidence manifest. This is **not** part of the published CI/build Action's
 automatic checks. See [the 13 conditional rule scopes](effect-inspection.md).
+
+### 6. Offline Go authority-source review
+
+This local-only mode recognizes four bounded permission, inherited-environment
+process, proxy-transport and optional gate patterns in `.go` files:
+
+```bash
+wolftrap scan-go-authority --root /path/to/authorized-repo \
+  --file server/tool.go --file guard/hooks.go \
+  --output-dir /tmp/wt-go-review
+wolftrap verify-go-authority --evidence-dir /tmp/wt-go-review
+```
+
+No Go toolchain, target execution or network access is needed. A reported
+pattern requires independent authorization and effect-path analysis; no match
+is not a pass. Details: [Go source scope and rules](go-authority-inspection.md).
 
 ## Interpret the results
 

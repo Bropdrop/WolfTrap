@@ -7,6 +7,9 @@ Thanks for helping make CI trust-boundary analysis easier to understand.
 ```bash
 python3 -m pip install -e '.[build-scan]'
 python3 -m unittest discover -s tests -v
+wolftrap scan-go-authority --root /path/to/your-own-go-repo \
+  --file path/to/selected.go --output-dir /tmp/wolftrap-go-review
+wolftrap verify-go-authority --evidence-dir /tmp/wolftrap-go-review
 wolftrap challenge-build --seed 20261115 --cases 128 --output-dir /tmp/wolftrap-contrib
 wolftrap challenge-agent --seed 20261115 --output-dir /tmp/wolftrap-contrib-agent
 wolftrap verify-agent-challenge --evidence-dir /tmp/wolftrap-contrib-agent
