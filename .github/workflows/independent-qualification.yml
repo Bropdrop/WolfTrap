@@ -62,7 +62,10 @@ jobs:
                 --report gt-vsa/gt-vsa.json --report gt-vsa/gt-vsa.md --report gt-vsa/gt-vsa.manifest.json \
                 --report sandbox-authority/sandbox-authority-challenge.json \
                 --report sandbox-authority/sandbox-authority-challenge.md \
-                --report sandbox-authority/sandbox-authority-challenge.manifest.json
+                --report sandbox-authority/sandbox-authority-challenge.manifest.json \
+                --report artex-chain/artex-chain-challenge.json \
+                --report artex-chain/artex-chain-challenge.md \
+                --report artex-chain/artex-chain-challenge.manifest.json
             ' qualification "$WOLFTRAP_EXPECTED_HEAD" "$parent_namespace" "$RUNNER_TEMP/wolftrap-independent-qualification"
 
       - name: Retain the screened qualification index and vehicle evidence
@@ -78,5 +81,8 @@ jobs:
             ${{ runner.temp }}/wolftrap-independent-qualification/sandbox-authority/sandbox-authority-challenge.json
             ${{ runner.temp }}/wolftrap-independent-qualification/sandbox-authority/sandbox-authority-challenge.md
             ${{ runner.temp }}/wolftrap-independent-qualification/sandbox-authority/sandbox-authority-challenge.manifest.json
+            ${{ runner.temp }}/wolftrap-independent-qualification/artex-chain/artex-chain-challenge.json
+            ${{ runner.temp }}/wolftrap-independent-qualification/artex-chain/artex-chain-challenge.md
+            ${{ runner.temp }}/wolftrap-independent-qualification/artex-chain/artex-chain-challenge.manifest.json
           if-no-files-found: error
           retention-days: 14

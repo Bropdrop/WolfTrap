@@ -301,6 +301,27 @@ def _verify_sandbox_authority(arguments: argparse.Namespace) -> int:
     return 0 if report["qualification"]["status"] == "PASSED_BOUNDED" else 1
 
 
+def _challenge_artex_chain(arguments: argparse.Namespace) -> int:
+    from .artex_chain import run_challenge
+
+    report, code = run_challenge(arguments.output_dir)
+    summary = report["summary"]
+    print(f"{report['qualification']['status']}: {summary['cases']} inert multi-step chains; "
+          f"{summary['attempts']} simulated attempts; "
+          f"{summary['mismatches']} differential gap(s).")
+    print(f"Evidence: {Path(arguments.output_dir)}")
+    return code
+
+
+def _verify_artex_chain(arguments: argparse.Namespace) -> int:
+    from .artex_chain import verify_evidence
+
+    report = verify_evidence(arguments.evidence_dir)
+    print(f"VERIFIED_EVIDENCE: {report['summary']['cases']} inert chains; "
+          f"{report['summary']['mismatches']} differential gap(s).")
+    return 0 if report["qualification"]["status"] == "PASSED_BOUNDED" else 1
+
+
 def _challenge_cloud_camouflage(arguments: argparse.Namespace) -> int:
     from .cloud_camouflage import run_camouflage_challenge
 
@@ -627,6 +648,19 @@ def build_parser() -> argparse.ArgumentParser:
     )
     sandbox_verify.add_argument("--evidence-dir", required=True)
     sandbox_verify.set_defaults(handler=_verify_sandbox_authority)
+
+    artex_chain = subparsers.add_parser(
+        "challenge-artex-chain",
+        help="qualify inert ARTEX-inspired reconnaissance-to-effect attack chains",
+    )
+    artex_chain.add_argument("--output-dir", required=True, help="fresh local evidence directory")
+    artex_chain.set_defaults(handler=_challenge_artex_chain)
+
+    artex_verify = subparsers.add_parser(
+        "verify-artex-chain", help="independently replay synthetic ARTEX-chain evidence",
+    )
+    artex_verify.add_argument("--evidence-dir", required=True)
+    artex_verify.set_defaults(handler=_verify_artex_chain)
 
     camouflage = subparsers.add_parser(
         "challenge-cloud-camouflage", help="measure offline cloud-C2 blind spots and lookalikes")
