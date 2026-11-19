@@ -312,6 +312,25 @@ replays the exact bounded scenario. **No operating-system isolation, live
 1,000-agent execution or Ground Truth/HERCULES runtime has been qualified.**
 See [setup, controls and limits](docs/sandbox-authority-challenge.md).
 
+### Option M: ARTEX-inspired multi-step adversarial chain (synthetic)
+
+```bash
+wolftrap challenge-artex-chain --output-dir /tmp/wolftrap-artex-chain
+wolftrap verify-artex-chain --evidence-dir /tmp/wolftrap-artex-chain
+```
+
+Sixteen fixed offline cases exercise 65 fictional, sequential requests across
+reconnaissance, access, privilege and final-effect stages. They challenge
+out-of-scope scanning, forged approvals, unauthorized role escalation,
+cross-agent and cross-tenant splicing (even with a valid foreign grant),
+revocation *after* preparation, expiry,
+stale epochs, replay and missing authority. A legitimate four-step chain is
+the positive control. Fixed expectations, an independent decision oracle and
+an independently captured in-memory effect sink must agree; a denial stops
+the remaining chain. **No ARTEX process, network request, exploit, live agent,
+real sandbox or Ground Truth/HERCULES runtime runs.** See
+[scenarios, reproduction and limitations](docs/artex-chain-challenge.md).
+
 ### Additional offline evaluation suites
 
 - Replay six defensive identity-telemetry rules on sanitized synthetic records.

@@ -57,6 +57,7 @@ def suite_summaries(root: Path, source: dict[str, object]) -> dict[str, object]:
     cloud = read("cloud-authority/cloud-authority-challenge.json")["summary"]
     funnel = read("authority-funnel/authority-funnel-challenge.json")["summary"]
     sandbox = read("sandbox-authority/sandbox-authority-challenge.json")["summary"]
+    artex = read("artex-chain/artex-chain-challenge.json")["summary"]
     authority = read("authority-qualification/authority-qualification.json")["summary"]
     identity = read("identity-telemetry-challenge/identity-telemetry-challenge.json")["summary"]
     prompt = read("prompt-trust/prompt-trust-challenge.json")["summary"]
@@ -67,6 +68,9 @@ def suite_summaries(root: Path, source: dict[str, object]) -> dict[str, object]:
         raise ValueError("the cloud and authority challenge baselines did not qualify")
     if sandbox != {"stages": 3, "intents": 3000, "mismatches": 0}:
         raise ValueError("the composed sandbox and authority controls did not qualify")
+    if (artex["cases"] != 16 or artex["attempts"] != 65
+            or artex["effect_records"] != 1 or artex["mismatches"]):
+        raise ValueError("the ARTEX-inspired synthetic attack-chain controls did not qualify")
     if (authority["sentinels_total"] < 5
             or authority["sentinels_caught"] != authority["sentinels_total"]):
         raise ValueError("authority sentinel qualification regressed")
@@ -78,6 +82,7 @@ def suite_summaries(root: Path, source: dict[str, object]) -> dict[str, object]:
         "cloud_authority": cloud,
         "authority_funnel": funnel,
         "sandbox_authority": sandbox,
+        "artex_chain": artex,
         "authority_qualification": authority,
         "identity_telemetry": identity,
         "prompt_trust": prompt,
@@ -116,7 +121,7 @@ def main() -> int:
     if campaign["source_revision"] != source.to_dict() or campaign["qualification"]["status"] != "PASS":
         raise ValueError("the source-bound synthetic campaign did not qualify")
     for challenge in ("cloud-c2", "cloud-camouflage", "cloud-authority",
-                      "authority-funnel", "sandbox-authority", "agent", "build"):
+                      "authority-funnel", "sandbox-authority", "artex-chain", "agent", "build"):
         target = output / challenge
         options: tuple[str, ...] = ()
         verifier = challenge
