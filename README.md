@@ -73,6 +73,8 @@ The offline product candidate provides a local wheel, `wolftrap doctor`, `wolftr
 
 A separate pre-install verifier checks a signed evaluation capsule against a subscriber-selected trust policy before pip runs. [Release trust and production gates](docs/release-trust.md).
 
+**awooo is available for controlled evaluation.** Follow the pre-install verification steps to run your first local scan. Release operators can audit GitHub settings, check subscriber revocation policy and exercise custody and recovery before requesting production approval. [Installation and release governance](docs/governed-release.md).
+
 ### Option A: Scan your repository locally
 
 Requires Python 3.11+ and a local authorized checkout:

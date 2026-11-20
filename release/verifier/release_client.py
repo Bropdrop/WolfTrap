@@ -168,7 +168,14 @@ def run(args):
     def check():
         trust = {k: file_bytes(trust_dir / k, DOC_LIMIT) for k in ("policy.json", "root.pem", "signer.pem")}
         return verify(
-            raw, trust, args.policy_sha256, args.minimum_sequence, args.sequence, mode, int(time.time())
+            raw,
+            trust,
+            args.policy_sha256,
+            args.minimum_sequence,
+            args.sequence,
+            mode,
+            int(time.time()),
+            args.minimum_policy_generation,
         )
 
     result, wheel = check()
@@ -209,6 +216,11 @@ def main(argv=None):
         )
         cmd.add_argument(
             "--sequence", required=True, type=int, help="exact subscriber-selected release sequence"
+        )
+        cmd.add_argument(
+            "--minimum-policy-generation",
+            type=int,
+            help="independent incident-policy high-water mark (mandatory for subscriber policy v2)",
         )
         cmd.add_argument("--purpose", choices=("current", "historical", "rollback"), default="current")
         cmd.add_argument(

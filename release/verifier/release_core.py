@@ -186,10 +186,10 @@ def verify_wheel(raw, release, license_bytes):
         raise Verdict("REJECTED", "wheel-record") from None
 
 
-def verify(raw_bundle, trust, policy_pin, floor, sequence, mode, now):
+def verify(raw_bundle, trust, policy_pin, floor, sequence, mode, now, minimum_generation=None):
     require(hexval(policy_pin, 64) and sha(trust["policy.json"]) == policy_pin, "independent-policy-pin")
     policy = parse(trust["policy.json"])
-    approval = policy_record(policy, sequence, mode, floor, now)
+    approval = policy_record(policy, sequence, mode, floor, now, minimum_generation)
     authority = policy["authority"]
     root, signer = trust["root.pem"], trust["signer.pem"]
     require(
@@ -273,6 +273,14 @@ def verify(raw_bundle, trust, policy_pin, floor, sequence, mode, now):
         "version": approval["version"],
         "sequence": sequence,
         "policy_sha256": policy_pin,
+        **(
+            {
+                "policy_generation": policy["generation"],
+                "incident_status_valid_until": policy["incidents"]["next_update"],
+            }
+            if minimum_generation is not None
+            else {}
+        ),
         "manifest_sha256": sha(mraw),
         "wheel_sha256": subjects[wheel],
         "sbom_sha256": subjects["core.cdx.json"],

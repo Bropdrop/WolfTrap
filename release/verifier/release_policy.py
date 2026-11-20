@@ -36,17 +36,64 @@ def wheel_name(version):
     return "wolftrap-" + version + "-py3-none-any.whl"
 
 
-def policy_record(p, sequence, mode, floor, now):
-    shape(
-        p,
-        "schema profile repository repository_id workflow builder authority valid_from valid_until current_sequence releases rollback",
-        "policy-schema",
-    )
+INCIDENT_POLICY = "awooo.subscriber-policy/v2"
+MAX_BULLETIN_AGE = 24 * 3600
+
+
+def check_incidents(policy, selected, minimum_generation, now):
+    """Apply the current subscriber bulletin even to previously signed archives."""
+    require(minimum_generation is not None, "missing-policy-generation-floor", "INCONCLUSIVE")
     require(
-        p["schema"] == "awooo.subscriber-policy/v1" and p["profile"] == PROFILE,
-        "unsupported-policy",
-        "INCONCLUSIVE",
+        integer(minimum_generation)
+        and minimum_generation >= 1
+        and integer(policy["generation"])
+        and policy["generation"] >= minimum_generation,
+        "replayed-policy-generation",
     )
+    bulletin = policy["incidents"]
+    require(type(bulletin) is dict, "missing-incident-bulletin", "INCONCLUSIVE")
+    required = "observed_at next_update suspended publisher_status signer_status withdrawn_manifests"
+    require(set(required.split()) <= bulletin.keys(), "incomplete-incident-bulletin", "INCONCLUSIVE")
+    shape(bulletin, required, "incident-bulletin-schema")
+    start, end = bulletin["observed_at"], bulletin["next_update"]
+    require(
+        integer(start)
+        and integer(end)
+        and policy["valid_from"] <= start < end <= policy["valid_until"]
+        and end - start <= MAX_BULLETIN_AGE,
+        "invalid-incident-window",
+    )
+    require(start <= now, "incident-bulletin-not-yet-current", "INCONCLUSIVE")
+    require(now < end, "stale-incident-bulletin", "INCONCLUSIVE")
+    require(type(bulletin["suspended"]) is bool, "invalid-suspension")
+    require(not bulletin["suspended"], "emergency-release-suspension")
+    for role in ("publisher", "signer"):
+        status = bulletin[role + "_status"]
+        require(status in ("ACTIVE", "REVOKED", "LOST"), "unknown-" + role + "-status", "INCONCLUSIVE")
+        require(status == "ACTIVE", role + "-authority-unavailable")
+    withdrawn = bulletin["withdrawn_manifests"]
+    require(
+        type(withdrawn) is list
+        and len(withdrawn) <= 256
+        and all(hexval(d, 64) for d in withdrawn)
+        and len(set(withdrawn)) == len(withdrawn),
+        "invalid-withdrawal-register",
+    )
+    require(selected["manifest_sha256"] not in withdrawn, "manifest-withdrawn")
+
+
+def policy_record(p, sequence, mode, floor, now, minimum_generation=None):
+    schema = p.get("schema") if type(p) is dict else None
+    governed = schema == INCIDENT_POLICY
+    require(schema in ("awooo.subscriber-policy/v1", INCIDENT_POLICY), "unsupported-policy", "INCONCLUSIVE")
+    fields = "schema profile repository repository_id workflow builder authority valid_from valid_until current_sequence releases rollback"
+    if governed:
+        require("generation" in p and "incidents" in p, "missing-incident-policy", "INCONCLUSIVE")
+        fields += " generation incidents"
+    else:
+        require(minimum_generation is None, "incident-policy-downgrade")
+    shape(p, fields, "policy-schema")
+    require(p["profile"] == PROFILE, "unsupported-policy", "INCONCLUSIVE")
     require(
         (p["repository"], p["repository_id"], p["workflow"], p["builder"])
         == (REPO, REPO_ID, WORKFLOW, BUILDER),
@@ -62,6 +109,9 @@ def policy_record(p, sequence, mode, floor, now):
         and sequence >= 1,
         "stale-policy-or-invalid-sequence",
     )
+    if governed:
+        require(now < p["valid_until"], "stale-subscriber-policy", "INCONCLUSIVE")
+        require(p["valid_from"] <= now, "subscriber-policy-not-yet-current", "INCONCLUSIVE")
     require(p["valid_from"] <= now < p["valid_until"] <= p["valid_from"] + 31 * 86400, "policy-not-current")
     a = p["authority"]
     shape(a, "issuer signer root_sha256 signer_sha256 revoked", "authority-schema")
@@ -105,6 +155,8 @@ def policy_record(p, sequence, mode, floor, now):
         catalog[r["sequence"]] = r
     require(p["current_sequence"] in catalog and sequence in catalog, "unapproved-release")
     selected = catalog[sequence]
+    if governed:
+        check_incidents(p, selected, minimum_generation, now)
     require(not selected["withdrawn"], "release-withdrawn")
     require(mode in ("current", "historical", "rollback"), "invalid-purpose")
     rollback = p["rollback"]
@@ -118,6 +170,8 @@ def policy_record(p, sequence, mode, floor, now):
     if mode == "current":
         require(sequence == p["current_sequence"] and sequence >= floor, "rollback-or-replay")
     if mode == "rollback":
+        if governed:
+            require(floor == p["current_sequence"], "rollback-origin-unconfirmed")
         require(
             rollback is not None
             and rollback["from_sequence"] == p["current_sequence"]
