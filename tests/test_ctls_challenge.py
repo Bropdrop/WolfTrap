@@ -157,6 +157,24 @@ class CTLS001Qualification(unittest.TestCase):
         with self.assertRaises(ValueError):
             c.AuthorityModel.from_checkpoint(c.canonical(altered))
 
+    def test_audit_commit_failure_rolls_back_and_does_not_notify_sink(self) -> None:
+        observer = []
+        m = c.AuthorityModel(effect_sink=observer.append)
+        p = c.P()
+        m.step(p)
+        m.step(c.A(p))
+        before = m.checkpoint()
+        with patch.object(m, "_audit", side_effect=OSError("injected audit failure")):
+            with self.assertRaises(OSError):
+                m.step(c.C(p))
+        self.assertEqual(m.checkpoint(), before)
+        self.assertEqual(observer, [])
+        self.assertEqual(m.owners[c.ORG_A], c.OWNER_A)
+        self.assertEqual(m.effects, [])
+        self.assertEqual(m.step(c.C(p)).code, "COMMITTED")
+        self.assertEqual(observer, [c.T(p)])
+        m.verify_audit()
+
     def test_effect_ledger_divergence_is_detected(self) -> None:
         m = c.AuthorityModel()
         m.step(c.U(at=1, actor=c.OWNER_A))
