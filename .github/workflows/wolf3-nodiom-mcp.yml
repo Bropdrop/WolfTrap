@@ -4,6 +4,8 @@ on:
     paths:
       - '.github/workflows/wolf3-nodiom-mcp.yml'
       - 'research/nodiom-wolf3-*.mjs'
+      - 'research/nodiom-wolf6-*.mjs'
+      - 'docs/nodiom-wolf6-crash-consistency.md'
       - 'docs/nodiom-wolf3-qualification.md'
   workflow_dispatch:
 permissions:
@@ -155,6 +157,28 @@ jobs:
             -v "$WOLF3_ROOT:/work:rw" -v "$PWD/research:/wolftrap:ro" \
             node:22-bookworm-slim node /wolftrap/nodiom-wolf5-mcp.mjs \
             /work/mcp /work/evidence/wolf5-mcp-lockfix.json lockfix
+
+      - name: Wolf6 genuine core fault-injection and process-abort controls
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          docker run --rm --network none --cap-drop ALL --security-opt no-new-privileges \
+            --read-only --tmpfs /tmp:rw,nosuid,size=256m \
+            --user "$(id -u):$(id -g)" -e HOME=/tmp \
+            -v "$WOLF3_ROOT:/work:rw" -v "$PWD/research:/wolftrap:ro" \
+            node:22-bookworm-slim node /wolftrap/nodiom-wolf6-durability.mjs \
+            /work/core /work/evidence/wolf6-durability.json
+
+      - name: Wolf6 deterministic 512-document source-fidelity corpus
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          docker run --rm --network none --cap-drop ALL --security-opt no-new-privileges \
+            --read-only --tmpfs /tmp:rw,nosuid,size=256m \
+            --user "$(id -u):$(id -g)" -e HOME=/tmp \
+            -v "$WOLF3_ROOT:/work:rw" -v "$PWD/research:/wolftrap:ro" \
+            node:22-bookworm-slim node /wolftrap/nodiom-wolf6-fuzz.mjs \
+            /work/core /work/evidence/wolf6-metamorphic.json
 
       - name: Hash all available evidence files
         if: always()
