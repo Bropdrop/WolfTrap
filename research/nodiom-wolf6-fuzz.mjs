@@ -102,3 +102,4 @@ const report={schema:'wolftrap.nodiom.wolf6.metamorphic/v1',
 await mkdir(dirname(out),{recursive:true});
 await writeFile(out,JSON.stringify(report,null,2)+'\n');
 console.log('Wolf6 fuzz: '+JSON.stringify(stats));
+if(stats.errors>0)process.exitCode=2;
