@@ -17,7 +17,7 @@ from wolftrap.report import write_json_report
 from wolftrap.revision import capture_source_revision, repository_root
 from wolftrap.wolfprint_reference import EXPECT, architecture, frame, operation
 
-REGISTRY_PIN = "68b11960acff97009945ad82c58c8e2dbe799a00cd94dd1107dce60ffeaad977"
+REGISTRY_PIN = "5d7517fd9b15ad2ed73820b23d7907518ed7ac296f69b9697643b71c39668430"
 WOLFPRINT = ("wolfprint.json", "wolfprint.md", "wolfprint.sarif", "wolfprint.manifest.json")
 CURSORIAL = ("cursorial.json", "cursorial-chains.json", "cursorial.md", "cursorial.sarif", "cursorial.manifest.json")
 
@@ -96,7 +96,7 @@ def independent_check(out, root, source):
     need(all(row["matched"] and row["expected"] == row["observed"] for row in challenge["traces"] + challenge["invalid_inputs"]),
          "boundary or hostile control mismatch")
     summary = challenge["summary"]
-    need(summary["cases"] == 244 and summary["mismatches"] == 0 and summary["defects_caught"] == summary["defects"] == 11
+    need(summary["cases"] == 256 and summary["mismatches"] == 0 and summary["defects_caught"] == summary["defects"] == 11
          and all(d["mismatches"] > 0 for d in challenge["defective_controls"]), "mutation or coverage failure")
     for name, members in (("selected", WOLFPRINT), ("challenge", WOLFPRINT), ("cursorial", CURSORIAL)):
         data = read(out / name / members[-1])

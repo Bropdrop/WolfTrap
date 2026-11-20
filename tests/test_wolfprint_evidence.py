@@ -111,6 +111,8 @@ class Evidence(unittest.TestCase):
         self.assertFalse(self.out.exists())
 
     def test_stale_baseline_and_replay_of_earlier_source(self):
+        same = [*self.opts(), "--baseline", self.m, "--baseline-sha256", self.hash(self.m)]
+        self.assertEqual(self.cli(opts=same, out=self.root / "known-architecture")[0], 0)
         baseline = self.put("prior", json.loads(self.m.read_bytes()))
         opts = [*self.opts(), "--baseline", baseline, "--baseline-sha256", self.hash(baseline)]
         self.assertEqual(self.cli(opts=opts)[0], 0)
@@ -189,6 +191,20 @@ class Evidence(unittest.TestCase):
         with patch.object(ev, "_selected", side_effect=swap):
             self.assertEqual(self.cli()[0], 2)
         self.assertFalse(self.out.exists())
+
+    def test_output_directory_replacement_is_reported(self):
+        from wolftrap import cursorial_evidence as shared
+
+        original = shared._open_directory
+        def substitute(path, *, create=False):
+            fd = original(path, create=create)
+            if create and path == self.out:
+                self.out.rename(self.root / "moved")
+                self.out.mkdir()
+            return fd
+        with patch.object(shared, "_open_directory", side_effect=substitute):
+            self.assertEqual(self.cli()[0], 2)
+        self.assertFalse((self.out / ev.MEMBERS[-1]).exists())
 
     def test_only_local_revision_queries_and_no_network(self):
         original = subprocess.run

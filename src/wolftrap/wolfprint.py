@@ -84,6 +84,7 @@ def fingerprint(manifest: dict) -> dict:
         canonical["capabilities"] = sorted(caps)
     components = {k: UNKNOWN if v == UNKNOWN else "DECLARED" for k, v in sorted(canonical.items()) if k != "schema"}
     return {"architecture_sha256": domain_digest("architecture", canonical), "components": components,
+            "capabilities": canonical["capabilities"],
             "required_unknown": [k for k, v in components.items() if v == UNKNOWN and k != OPTIONAL]}
 
 

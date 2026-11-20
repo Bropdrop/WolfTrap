@@ -72,6 +72,8 @@ TRACE_EXPECT = {
     "changed-instance-and-build": ("INCONCLUSIVE", "identity-changed-within-prepared-operation", 1),
     "revoked-before-effect": ("INCONCLUSIVE", "observed-effect-without-current-wolfprint-authority", 1),
     "revocation-observed-denial": ("SYNTHETICALLY VERIFIED", "issuer-host-and-ledger-witnesses-agree", 0),
+    "detached-authority-epoch": ("INCONCLUSIVE", "issuer-and-host-authority-epoch-conflict", 1),
+    "identity-after-initiation": ("INCONCLUSIVE", "identity-not-current-at-proposal", 1),
 }
 
 
@@ -96,6 +98,15 @@ def trace_fixture(profile, family):
         trace["chain"]["sources"]["ledger"]["events"].clear()
     elif family == "missing-registry":
         registry = None
+    elif family == "detached-authority-epoch":
+        registry["epoch"] += 1
+        registry["grants"][0]["epoch"] = registry["epoch"]
+    elif family == "identity-after-initiation":
+        issued = trace["chain"]["sources"]["agent"]["events"][0]["at"] + 1
+        registry["sessions"][0]["statement"]["issued"] = issued
+        for anchor, phase in zip(registry["bindings"], trace["identity_witnesses"], strict=True):
+            phase["claim"]["issued"] = issued
+            anchor["statement_sha256"] = ref.frame("statement", phase["claim"])
     elif family == "changed-instance-and-build":
         _, req2, regs, _ = fixture(profile, "changed-build-authorized")
         claim = req2["claim"]

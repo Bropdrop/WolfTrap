@@ -47,7 +47,7 @@ def fixture(profile=1, family="authorized"):
     r = {"schema": "wolftrap.fixture-registry/v1", "issuer": 1, "trust_domain": 1, "tenant": principal,
          "audience": 2, "since": 0, "expires": 200, "epoch": 1, "policy_revision": 1, "baseline": baseline,
          "principals": [{"principal": p, "keys": [_key()]} for p in (principal, other)],
-         "sessions": [{"statement": deepcopy(issued), "components": components.copy()}],
+         "sessions": [{"statement": deepcopy(issued), "components": components.copy(), "capabilities": sorted(base["capabilities"])}],
          "used_nonces": [], "revocations": [], "grants": [], "restrictions": [], "bindings": []}
     if family in ("changed-build-authorized", "changed-without-new-grant", "forged-build"):
         candidate["build_sha256"] = artifact("build-upgrade")
@@ -56,7 +56,9 @@ def fixture(profile=1, family="authorized"):
     if family == "changed-policy-authorized":
         candidate["permission_policy_sha256"] = artifact("policy-upgrade")
     if family == "changed-capability-authorized":
-        candidate["capabilities"].remove("archive")
+        candidate["capabilities"].remove("read")
+    if family == "attested-capability-exclusion":
+        candidate["capabilities"].remove(op["verb"])
     if family == "unknown-model":
         candidate["model_revision"] = "UNKNOWN"
     if family == "reordered-manifest":
@@ -64,7 +66,9 @@ def fixture(profile=1, family="authorized"):
         candidate["mcp_tools"].reverse()
         candidate["capabilities"].reverse()
     claim = deepcopy(issued)
-    if family in ("restart", "concurrent", "rotation", "unknown-model") or family.startswith(("changed-", "other-principal-")) and family != "changed-statement":
+    renewed = family in ("restart", "concurrent", "rotation", "unknown-model", "attested-capability-exclusion")
+    upgrade = family.startswith(("changed-", "other-principal-")) and family != "changed-statement"
+    if renewed or upgrade:
         claim.update(instance=issued["instance"] + 10, nonce=issued["nonce"] + 10, issued=8,
                      architecture_sha256=ref.architecture(candidate))
         if family.startswith("other-principal-"):
@@ -72,7 +76,10 @@ def fixture(profile=1, family="authorized"):
         if family == "rotation":
             r["principals"][0]["keys"].append(_key(2, 1, 7))
             claim["key_revision"] = 2
+        if family == "restart":
+            r["revocations"].append({"principal": principal, "instance": issued["instance"], "at": claim["issued"]})
         r["sessions"].append({"statement": deepcopy(claim),
+                              "capabilities": sorted(candidate["capabilities"]),
                               "components": [k for k in components if candidate[k] != "UNKNOWN"]})
     if family == "legitimate-read":
         op["verb"] = "read"

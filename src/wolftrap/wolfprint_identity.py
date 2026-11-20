@@ -45,6 +45,10 @@ def registry_contract(registry: dict) -> None:
     _unique(sessions, lambda s: (s["statement"]["principal"], s["statement"]["nonce"]), "ambiguous-session-nonce")
     for entry in sessions:
         s = entry["statement"]
+        capabilities = entry["capabilities"]
+        need((capabilities != UNKNOWN) == ("capabilities" in entry["components"]) and
+             (capabilities == UNKNOWN or len(capabilities) == len(set(capabilities))),
+             "contradictory-capability-witness")
         need(all(s[k] == registry[k] for k in ("trust_domain", "issuer", "tenant", "audience"))
              and s["principal"] in principals and s["issued"] < s["expires"]
              and s["key_revision"] in {k["revision"] for k in principals[s["principal"]]["keys"]}
@@ -68,7 +72,8 @@ def registry_contract(registry: dict) -> None:
 
 def _unverified(status, reason):
     return {"status": status, "reason": reason, "principal_id": None, "instance_id": None,
-            "attested_components": [], "valid_until": None, "cryptographically_authenticated": False}
+            "attested_components": [], "attested_capabilities": UNKNOWN, "valid_until": None,
+            "cryptographically_authenticated": False}
 
 
 def authenticate(s: dict | None, architecture: str, r: dict | None, at: int | None) -> dict:
@@ -104,6 +109,7 @@ def authenticate(s: dict | None, architecture: str, r: dict | None, at: int | No
                 cutoffs.append(row["at"])
     return {"status": ATTESTED, "reason": "independently-pinned-fixture-issuer-record",
             "principal_id": subject(s), "instance_id": session_id(s), "attested_components": sorted(entry["components"]),
+            "attested_capabilities": sorted(entry["capabilities"]) if entry["capabilities"] != UNKNOWN else UNKNOWN,
             "valid_until": min(cutoffs), "cryptographically_authenticated": False}
 
 
@@ -157,6 +163,8 @@ def propose(identity: dict, claim, operation: dict, r, at, coverage: dict, label
             uncertain = any(v != "ATTESTED" for k, v in coverage.items() if k != OPTIONAL)
             if uncertain or "UNRESOLVED_KEY_TRANSITION" in labels:
                 action, reason = "REQUIRE_HUMAN_APPROVAL", "incomplete-component-or-key-lineage"
+            elif operation["verb"] not in identity["attested_capabilities"]:
+                action, reason = "REQUIRE_HUMAN_APPROVAL", "operation-outside-attested-capabilities"
             else:
                 action, reason = "ALLOW", "current-scoped-fixture-grant"
         for rule in r["restrictions"]:
@@ -189,6 +197,9 @@ def evaluate(architecture: dict, request: dict, registry, at, baseline_digest=No
     """Evaluate already schema-checked operator inputs. Public callers use inspect()."""
     s, digest = request["claim"], architecture["architecture_sha256"]
     identity = authenticate(s, digest, registry, at)
+    if identity["status"] == ATTESTED and identity["attested_capabilities"] != UNKNOWN:
+        if identity["attested_capabilities"] != architecture["capabilities"]:
+            identity = _unverified(GAP, "issuer-capabilities-conflict-with-selected-manifest")
     labels = classify(identity, s, digest, registry, baseline_digest)
     coverage = {k: ("ATTESTED" if v != UNKNOWN and k in identity["attested_components"] else v)
                 for k, v in architecture["components"].items()}

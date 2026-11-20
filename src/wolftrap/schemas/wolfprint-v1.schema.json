@@ -198,24 +198,7 @@
           ]
         },
         "capabilities": {
-          "anyOf": [
-            {
-              "const": "UNKNOWN"
-            },
-            {
-              "type": "array",
-              "items": {
-                "enum": [
-                  "read",
-                  "append",
-                  "label",
-                  "archive"
-                ]
-              },
-              "minItems": 0,
-              "maxItems": 4
-            }
-          ]
+          "$ref": "#/$defs/capabilitySet"
         },
         "protected_config_sha256": {
           "anyOf": [
@@ -480,11 +463,15 @@
           },
           "minItems": 0,
           "maxItems": 13
+        },
+        "capabilities": {
+          "$ref": "#/$defs/capabilitySet"
         }
       },
       "required": [
         "statement",
-        "components"
+        "components",
+        "capabilities"
       ],
       "additionalProperties": false
     },
@@ -856,6 +843,26 @@
         "identity_witnesses"
       ],
       "additionalProperties": false
+    },
+    "capabilitySet": {
+      "anyOf": [
+        {
+          "const": "UNKNOWN"
+        },
+        {
+          "type": "array",
+          "items": {
+            "enum": [
+              "read",
+              "append",
+              "label",
+              "archive"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 4
+        }
+      ]
     }
   }
 }

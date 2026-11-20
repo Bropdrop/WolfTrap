@@ -13,7 +13,7 @@ wolftrap verify-agent-fingerprint --manifest examples/wolfprint/architecture.jso
   --evidence-dir /tmp/wp-architecture
 
 # This independently published pin applies only to the checked-in fictional example.
-registry_pin=68b11960acff97009945ad82c58c8e2dbe799a00cd94dd1107dce60ffeaad977
+registry_pin=5d7517fd9b15ad2ed73820b23d7907518ed7ac296f69b9697643b71c39668430
 args=(--manifest examples/wolfprint/architecture.json --request examples/wolfprint/request.json
       --registry examples/wolfprint/fixture-registry.json --registry-sha256 "$registry_pin"
       --at 30 --chain examples/wolfprint/identity-chain.json)
@@ -51,6 +51,8 @@ The simulator checks principal, tenant, architecture, exact operation digest, re
 
 Each proposal carries a source-bound audit digest, logical assessment time, validity bound, authority epoch, policy revision, scoped subject/operation, reason and tenant review route. Expiring, withdrawing or revising the relevant fixture rule allows reassessment and appeal. An unverified presentation receives no attributed principal. Nothing is added to a shared restriction or tracking list. Future SPIFFE/SVID or equivalent adapters would need separately authorized issuer authentication, proof of possession, trust bundles, audience checks, freshness and secure host custody. Those properties are outside this fixture protocol.
 
+Each issuer session includes a separately recorded capability set or `UNKNOWN`. A grant for an operation outside the attested set goes to human review. A disagreement between that set and the selected manifest makes the identity evidence inconclusive.
+
 ## Identity-qualified Cursorial profile
 
 ```bash
@@ -63,6 +65,8 @@ wolftrap verify-cursorial "${cie[@]}" --evidence-dir /tmp/wp-cursorial
 The v2 envelope contains an unchanged v1 trace and one WolfPrint witness for each binding's preparation and commit. Each independently pinned host record binds the complete trace digest, chain, proposal, operation digest, binding, phase, logical time and statement digest. Both phases must join to the actual tenant, actor and delegation path reconstructed by Cursorial. The report exposes the issuer-bound principal, instance and architecture alongside the host grant, gate decision and separate ledger receipt. The optional behavioral result is only attached to a selected session when the trace and operation match.
 
 A missing, duplicate, contradictory or substituted witness yields `INCONCLUSIVE`. A changed instance during a prepared operation requires new evidence. An independently observed write following revocation remains visible as a discrepancy. A witnessed denial with an empty ledger delta is distinguishable from an absent ledger. The six counterfactual Cursorial variations have no inherited identity attestations. Existing v1 captures retain their original semantics. Use `--require-wolfprint` to reject a downgrade to v1.
+
+The initiating session must already be valid at the proposal's logical time. The authority epoch observed by the host must agree with the selected registry at both gates. A single v1 registry cannot establish continuity across an epoch transition.
 
 ## Evidence, bounds and known limits
 
@@ -78,6 +82,6 @@ Each selected input is limited to 96 KiB, 12 levels of JSON depth and 4,096 node
 
 A replayed finding retains its original exit code. Identity-qualified Cursorial reports use Cursorial's own exit contract.
 
-The 244-case corpus contains 196 identity and policy cases across four tenants/delegation depths, 36 joined Cursorial cases and 12 hostile input controls. Eleven deliberately defective implementations exercise false authorization, missed identity conflicts, cross-principal restrictions and false positives on verified rotation and upgrades. The suite includes a benign deployment with missing issuer coverage that prompts review, a benign lookalike that remains eligible, and a copied session presentation indistinguishable from its legitimate holder before any independent replay witness. Redacted behavior intentionally collides for different payloads with the same projected actions. These observations supply no production error rates.
+The 256-case corpus contains 200 identity and policy cases across four tenants/delegation depths, 44 joined Cursorial cases and 12 hostile input controls. Eleven deliberately defective implementations exercise false authorization, missed identity conflicts, cross-principal restrictions and false positives on verified rotation and upgrades. The suite includes a benign deployment with missing issuer coverage that prompts review, a benign lookalike that remains eligible, and a copied session presentation indistinguishable from its legitimate holder before any independent replay witness. Redacted behavior intentionally collides for different payloads with the same projected actions. These observations supply no production error rates.
 
 The dedicated workflow regenerates and replays three bundles twice, independently scores the saved classifications against authored expectations, and joins the example's issuer, host and ledger evidence from disk. Qualification runs in a verified loopback-only namespace. The independent research, MCP and Cursorial workflows qualify the same submitted Git head. Routine workflow setup and publication use GitHub's hosted infrastructure. [Qualification runner](../scripts/qualify-wolfprint.py) · [Workflow](../.github/workflows/wolfprint-qualification.yml)

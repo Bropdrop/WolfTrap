@@ -200,6 +200,12 @@ def _deliver(files: dict[str, bytes], target: Path, verify: bool) -> None:
                 os.close(selected)
         else:
             os.fsync(fd)
+            named = _open_directory(target)
+            try:
+                current = os.fstat(named)
+                need((current.st_dev, current.st_ino) == start[:2], "unstable-evidence-directory")
+            finally:
+                os.close(named)
     finally:
         os.close(fd)
 

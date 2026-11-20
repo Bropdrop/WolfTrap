@@ -82,6 +82,16 @@ class IdentityAndAuthority(unittest.TestCase):
         self.assertEqual(c["policy_proposal"]["action"], "QUARANTINE")
         self.assertEqual(len(c["policy_proposal"]["appeal"]["review_ids"]), 1)
 
+    def test_grant_conflicting_with_attested_capability_needs_review(self):
+        m, q, r, at = fixture(2, "attested-capability-exclusion")
+        result = inspect(m, q, r, at)
+        self.assertEqual(result["identity"]["status"], ATTESTED)
+        self.assertEqual(result["policy_proposal"]["reason"], "operation-outside-attested-capabilities")
+        r["sessions"][-1]["capabilities"].append(q["operation"]["verb"])
+        conflict = inspect(m, q, r, at)
+        self.assertEqual(conflict["identity"]["status"], GAP)
+        self.assertFalse(conflict["policy_proposal"]["current_scoped_grant"])
+
     def test_restart_concurrency_and_rotation(self):
         base = inspect(*fixture(1))
         for family in ("restart", "concurrent", "rotation"):
@@ -89,6 +99,10 @@ class IdentityAndAuthority(unittest.TestCase):
             self.assertEqual(base["identity"]["principal_id"], r["identity"]["principal_id"])
             self.assertNotEqual(base["identity"]["instance_id"], r["identity"]["instance_id"])
             self.assertEqual("VERIFIED_KEY_ROTATION" in r["classification"], family == "rotation")
+        _, prior_q, _, _ = fixture(1)
+        for family, expected in (("restart", INVALID), ("concurrent", ATTESTED)):
+            m, _, registry, at = fixture(1, family)
+            self.assertEqual(inspect(m, prior_q, registry, at)["identity"]["status"], expected)
 
     def test_scope_bound_identifiers(self):
         _, req, _, _ = fixture()
@@ -233,10 +247,32 @@ class IdentityQualifiedChains(unittest.TestCase):
         r["sessions"][0]["statement"]["nonce"] += 5
         self.assertEqual(inspect_chain(trace, r)["identity_profile"]["behavioral_sha256"], UNKNOWN)
 
+    def test_different_payloads_can_have_identical_behavior(self):
+        from wolftrap.cursorial_corpus import fixture as schedule
+        from wolftrap.cursorial_lab import execute
+        from wolftrap.wolfprint_fixtures import anchor_trace
+        from wolftrap.wolfprint_reference import operation
+
+        _, req, r, trace = trace_fixture(1, "complete")
+        original = inspect_chain(trace, r)["identity_profile"]
+        plan = schedule(1)
+        proposed = next(e["operation"] for e in plan if e["kind"] == "agent_proposal")
+        proposed["value"] += 1
+        digest = operation(proposed)
+        for event in plan:
+            if event["kind"] in ("grant_state", "request_bound"):
+                event["digest"] = digest
+        r["grants"][0]["operation_sha256"] = digest
+        r["bindings"].clear()
+        changed = inspect_chain(anchor_trace(execute(plan), req["claim"], r), r)["identity_profile"]
+        self.assertEqual(changed["status"], "SYNTHETICALLY VERIFIED")
+        self.assertNotEqual(original["trace_sha256"], changed["trace_sha256"])
+        self.assertEqual(original["behavioral_sha256"], changed["behavioral_sha256"])
+
     def test_independent_expectations_and_mutations(self):
         report = qualify()
         s = report["summary"]
-        self.assertEqual((s["cases"], s["mismatches"], s["defects_caught"], s["defects"]), (244, 0, 11, 11))
+        self.assertEqual((s["cases"], s["mismatches"], s["defects_caught"], s["defects"]), (256, 0, 11, 11))
         self.assertGreater(len({row["audit_sha256"] for row in report["cases"]}), 150)
         for defect in report["defective_controls"]:
             self.assertGreater(defect["mismatches"], 0)

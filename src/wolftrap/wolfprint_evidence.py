@@ -106,7 +106,8 @@ def run(directory, *, manifest=None, request=None, registry=None, registry_sha25
     revision = source_identity(expected_head, required_files=REQUIRED)
     inputs = {k: _path(v) for k, v in (("manifest", manifest), ("request", request), ("registry", registry),
                                           ("baseline", baseline), ("chain", chain)) if v is not None}
-    need(len(set(inputs.values())) == len(inputs), "aliased-input-roles")
+    independent = {k: p for k, p in inputs.items() if k != "baseline" or p != inputs.get("manifest")}
+    need(len(set(independent.values())) == len(independent), "aliased-input-roles")
     for path in inputs.values():
         need(not out.is_relative_to(path.parent) and not path.parent.is_relative_to(out), "evidence-overlaps-input-directory")
     need((registry is None) == (registry_sha256 is None) == (at is None), "registry-pin-and-logical-time-required")

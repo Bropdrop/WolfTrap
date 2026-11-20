@@ -80,6 +80,12 @@
   "schema": "wolftrap.fixture-registry/v1",
   "sessions": [
     {
+      "capabilities": [
+        "append",
+        "archive",
+        "label",
+        "read"
+      ],
       "components": [
         "build_sha256",
         "capabilities",

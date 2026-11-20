@@ -59,6 +59,10 @@ def inspect_chain(envelope: dict, registry: dict | None) -> dict:
                 phase_key = (binding["id"], phase)
                 claim = entries[phase_key]
                 event = host[row["host_witness"][phase + "_event"]]
+                epochs = [e for e in host.values() if e["kind"] in ("chain_opened", "epoch_observed")
+                          and e["at"] <= event["at"]]
+                current_epoch = max(epochs, key=lambda e: e["at"])["epoch"]
+                need(current_epoch == registry["epoch"], "issuer-and-host-authority-epoch-conflict")
                 expected = {"trace_sha256": trace_digest, "chain": binding["chain"], "proposal": proposal["id"],
                             "binding": binding["id"], "phase": phase, "at": event["at"],
                             "statement_sha256": domain_digest("statement", claim), "operation_sha256": binding["digest"]}

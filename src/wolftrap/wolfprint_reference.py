@@ -53,6 +53,7 @@ EXPECT = {
     "changed-schema-authorized": expectation(labels=CHANGED),
     "changed-policy-authorized": expectation(labels=CHANGED),
     "changed-capability-authorized": expectation(labels=CHANGED),
+    "attested-capability-exclusion": expectation(labels=CHANGED, decision="REQUIRE_HUMAN_APPROVAL"),
     "changed-without-new-grant": expectation(labels=CHANGED, decision="DENY", grant=False),
     "other-principal-same-build": expectation(labels=OTHER),
     "other-principal-quarantined": expectation(labels=OTHER, decision="QUARANTINE"),
