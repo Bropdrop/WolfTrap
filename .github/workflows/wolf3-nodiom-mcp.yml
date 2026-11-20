@@ -100,6 +100,23 @@ jobs:
             -v "$WOLF3_ROOT:/work:rw" -v "$PWD/research:/wolftrap:ro" \
             node:22-bookworm-slim node /wolftrap/nodiom-wolf3-mcp.mjs /work/mcp /work/evidence
 
+      - name: Wolf5 hostile-state core and original MCP characterization
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          docker run --rm --network none --cap-drop ALL --security-opt no-new-privileges \
+            --read-only --tmpfs /tmp:rw,nosuid,size=256m \
+            --user "$(id -u):$(id -g)" -e HOME=/tmp \
+            -v "$WOLF3_ROOT:/work:rw" -v "$PWD/research:/wolftrap:ro" \
+            node:22-bookworm-slim node /wolftrap/nodiom-wolf5-core.mjs \
+            /work/core /work/evidence/wolf5-core.json
+          docker run --rm --network none --cap-drop ALL --security-opt no-new-privileges \
+            --read-only --tmpfs /tmp:rw,nosuid,size=256m \
+            --user "$(id -u):$(id -g)" -e HOME=/tmp \
+            -v "$WOLF3_ROOT:/work:rw" -v "$PWD/research:/wolftrap:ro" \
+            node:22-bookworm-slim node /wolftrap/nodiom-wolf5-mcp.mjs \
+            /work/mcp /work/evidence/wolf5-mcp-baseline.json baseline
+
       - name: Apply test-only lock fix to cloned MCP source and qualify retention
         shell: bash
         run: |
@@ -127,6 +144,17 @@ jobs:
             -v "$WOLF3_ROOT:/work:rw" -v "$PWD/research:/wolftrap:ro" \
             node:22-bookworm-slim node /wolftrap/nodiom-wolf4-lockfix.mjs \
             verify /work/evidence/lockfix/mcp-runtime.json /work/evidence/lockfix-verdict.json
+
+      - name: Wolf5 verify patched runtime under mixed concurrency
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          docker run --rm --network none --cap-drop ALL --security-opt no-new-privileges \
+            --read-only --tmpfs /tmp:rw,nosuid,size=256m \
+            --user "$(id -u):$(id -g)" -e HOME=/tmp \
+            -v "$WOLF3_ROOT:/work:rw" -v "$PWD/research:/wolftrap:ro" \
+            node:22-bookworm-slim node /wolftrap/nodiom-wolf5-mcp.mjs \
+            /work/mcp /work/evidence/wolf5-mcp-lockfix.json lockfix
 
       - name: Hash all available evidence files
         if: always()
