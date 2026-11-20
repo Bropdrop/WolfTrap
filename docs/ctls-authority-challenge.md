@@ -21,7 +21,7 @@ The output directory **must not already exist**. For a second run, use a differe
 3. At commit, the current owner, active reviewer, intact binding, current epoch, live validity interval and known security state are checked. Commit changes the owner and increments the epoch once, records an effect, and creates an auditable outcome.
 4. Revocation, expiry, authority-state loss, epoch advancement and cancellation fail closed. Closed transaction IDs and reserved nonces cannot be recycled by retrying after a simulated restart.
 5. A lost acknowledgment returns `ACK_LOST` even though the synthetic effect committed; retrying the same transaction returns `ALREADY_COMMITTED` without a second effect. For profile-write idempotency, the caller is authorized **before** operation ID lookup.
-6. The independent observer's effect ledger, the model's claimed effects, the authored expected effects and the final authority owners must match. The append-only hash-chained audit must agree with every effect. A fictional checkpoint can be restored in-process; this is **not a test of durable production storage**.
+6. The independent observer's effect ledger, the model's claimed effects, the authored expected effects and the final authority owners must match. The append-only hash-chained audit must agree with every effect. An injected audit-write fault rolls back the in-memory transition and prevents publication to the independent observer; this is not a real database transaction. A fictional checkpoint can be restored in-process; this is **not a test of durable production storage**.
 
 ## Hostile scenario coverage
 
@@ -29,7 +29,7 @@ The fixed 37-case matrix covers: legitimate transfers; attempted original-owner 
 
 Six deliberately defective models prove that the controls can reject: blanket denial (`DENY_ALL`), skipped reviewer requirement (`NO_WITNESS`), stale-epoch acceptance (`ALLOW_STALE`), previous-owner access (`ALLOW_OLD_OWNER`), false success without an independent effect (`FAKE_SUCCESS`), and ignored request binding (`IGNORE_BINDING`). A result for a known-defective model that unexpectedly passes **fails** qualification.
 
-The 19 additional unittest methods check scenario witnesses, negative controls, unknown-field and non-synthetic-input rejection, replay, checkpoint and audit corruption, integrity-manifest rewriting, symlinks, missing and extra evidence, output overwrite refusal, deterministic replay and network-socket blocking.
+The 20 additional unittest methods check scenario witnesses, negative controls, unknown-field and non-synthetic-input rejection, replay, checkpoint and audit corruption, integrity-manifest rewriting, symlinks, missing and extra evidence, output overwrite refusal, audit-write failure rollback, deterministic replay and network-socket blocking.
 
 ## Evidence package
 
@@ -48,6 +48,6 @@ Each run produces precisely these four files:
 
 ## Non-goals and future work
 
-No CTLS endpoint probing, scanning, login, rate-limit testing, account manipulation, scraping, active vulnerability exploitation, personally identifiable records, or live operations. The simulator does not provide actor cryptographic identities, two-phase durable database commits, real time concurrency, restart persistence across processes, KMS/HSM evidence anchoring, hardware isolation or production implementation conformance.
+No CTLS endpoint probing, scanning, login, rate-limit testing, account manipulation, scraping, active vulnerability exploitation, personally identifiable records, or live operations. The simulator does not provide actor cryptographic identities, two-phase durable database commits, real time concurrency, restart persistence across processes, externally durable effect/ledger commits, KMS/HSM evidence anchoring, hardware isolation or production implementation conformance.
 
 A genuine conformance effort would require **written permission** from the asset owner, approved test assets and methods, a non-production environment, specified data handling, a trustworthy effect ledger and documented replay procedures. Keep these research cases detached from Health Canada systems unless that approval is secured.
