@@ -43,6 +43,7 @@ def inspect_file(name, detector, raw):
 def analyze(root, selected, build):
     files, findings, reasons, paths = [], [], [], {}
     counts = {"entries": 0, "excluded": 0, "unsupported": 0, "bytes_read": 0}
+    stable = False
     try:
         snapshot = capture(root, selected)
         rows, _, counts = snapshot
@@ -58,13 +59,16 @@ def analyze(root, selected, build):
                     reasons.append("finding-limit")
                     break
                 findings.append({"source_id": identifier, "line": signal["line"], "rule_id": signal["rule_id"],
-                                 "basis": signal["context"], "boundary": signal["boundary"]})
+                                 "basis": signal["context"], "boundary": signal["boundary"],
+                                 "classification": "STATIC REVIEW SIGNAL", "severity": "NOT_RATED",
+                                 "confidence": "CONDITIONAL_STATIC", "identity_assurance": "NOT_ASSESSED"})
         if not rows:
             reasons.append("no-supported-input")
         if counts["unsupported"]:
             reasons.append("unsupported-files-in-discovery")
         if capture(root, selected) != snapshot:
             raise ProductError("input-changed")
+        stable = True
     except (OSError, ValueError) as exc:
         files, findings, paths = [], [], {}
         reasons = [str(exc) if isinstance(exc, ProductError) else "input-unavailable-or-changed"]
@@ -78,7 +82,7 @@ def analyze(root, selected, build):
     selection = {"mode": "explicit" if selected is not None else "discovery",
                  "requested_ids": sorted(source_id(n) for n in selected or [])}
     return {"schema": "wolftrap.quickscan/v1", "status": status, "build": build,
-            "scope": SCOPE, "selection": selection, "bounds": LIMITS, "coverage": counts,
+            "scope": SCOPE, "selection": selection, "bounds": LIMITS, "coverage": {**counts, "stable_inventory": stable},
             "files": files, "rule_ids_run": sorted(rule_ids), "findings": findings, "incomplete": sorted(set(reasons)),
             "review_rules": {r: {"meaning": TITLES[r], "next_action": ACTIONS[r]} for r in sorted(rule_ids)},
             "finding_class": "STATIC REVIEW SIGNAL", "severity": "NOT_RATED", "confidence": "CONDITIONAL_STATIC",
@@ -90,8 +94,9 @@ def render(report):
     status = report["status"]
     counts = report["coverage"]
     lines = ["# WolfTrap local review", "", "**" + status + "**", "", report["scope"], "",
-             f"Read {counts['bytes_read']} bytes. Selected {len(report['files'])} files. "
-             f"Excluded {counts['excluded']} entries by policy and saw {counts['unsupported']} unsupported regular files.",
+             (f"Read {counts['bytes_read']} bytes in the selected pass. Selected {len(report['files'])} files. "
+              f"Excluded {counts['excluded']} entries by policy and saw {counts['unsupported']} unsupported regular files.")
+             if counts["stable_inventory"] else "A stable inventory was unavailable. Partial observations were discarded.",
              "", "Checks run: " + (", ".join(report["rule_ids_run"]) or "none"), "",
              "## Observations", ""]
     for f in report["findings"]:

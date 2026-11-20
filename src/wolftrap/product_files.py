@@ -61,18 +61,22 @@ def stamp(info):
 
 
 def read_member(directory, name, limit, mount=None):
-    before = os.stat(name, dir_fd=directory, follow_symlinks=False)
-    require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1, "unsafe-file")
-    require(before.st_size <= limit, "byte-limit")
-    fd = os.open(name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=directory)
-    with os.fdopen(fd, "rb") as stream:
-        require(stamp(os.fstat(fd)) == stamp(before), "input-changed")
+    # O_PATH pins an inode without opening a FIFO/device for I/O. A concurrent
+    # pathname replacement cannot redirect the actual read through this procfd.
+    fd = os.open(name, os.O_PATH | os.O_NOFOLLOW, dir_fd=directory)
+    try:
+        before = os.fstat(fd)
+        require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1, "unsafe-file")
+        require(before.st_size <= limit, "byte-limit")
         if mount is not None:
             require(mount_id(fd) == mount, "mount-boundary")
-        data = stream.read(limit + 1)
+        with open(f"/proc/self/fd/{fd}", "rb") as stream:
+            data = stream.read(limit + 1)
         require(len(data) == before.st_size and stamp(os.fstat(fd)) == stamp(before)
                 and stamp(os.stat(name, dir_fd=directory, follow_symlinks=False)) == stamp(before), "input-changed")
-    return data
+        return data
+    finally:
+        os.close(fd)
 
 
 def selection(values):
@@ -83,7 +87,7 @@ def selection(values):
         p = Path(value)
         require(not p.is_absolute() and p.parts and value == p.as_posix() and not any(
             s in (".", "..") or excluded(s) for s in p.parts) and len(p.parts) <= LIMITS["depth"]
-            and len(os.fsencode(value)) <= 1024 and "\\" not in value
+            and len(os.fsencode(value)) <= 1024 and "\\" not in value and not re.match(r"^[A-Za-z][A-Za-z0-9+.\-]*:", value)
             and not any(ord(c) < 32 for c in value), "invalid-selection")
     return sorted(values)
 
@@ -166,14 +170,14 @@ def capture(root, selected):
         os.close(base)
 
 
-def disjoint(root, dest):
+def disjoint(root, dest, parent_fd=None):
     require(dest.name and not dest.is_relative_to(root) and not root.is_relative_to(dest), "overlapping-evidence")
     # Check physical ancestry too, before the first mkdir. A renamed or bind-aliased
     # root must never turn an output request into a write inside the selected root.
     source = _open_directory(root)
     try:
         source_stat = os.fstat(source)
-        parent = _open_directory(dest.parent)
+        parent = _open_directory(dest.parent) if parent_fd is None else os.dup(parent_fd)
         try:
             parent_info = os.fstat(parent)
             require(source_stat.st_dev != parent_info.st_dev or mount_id(source) == mount_id(parent), "mount-boundary")
@@ -196,12 +200,14 @@ def disjoint(root, dest):
         os.close(source)
 
 
-def deliver(dest, files, *, replay, expected_pin=None):
+def deliver(dest, files, *, replay, expected_pin=None, source_root=None):
     require(tuple(files) == MEMBERS, "invalid-bundle")
     if expected_pin is not None:
         require(expected_pin == _sha(files[MEMBERS[-1]]), "manifest-pin-mismatch")
     parent = _open_directory(dest.parent)
     try:
+        if source_root is not None:
+            disjoint(source_root, dest, parent)
         if not replay:
             try:
                 os.mkdir(dest.name, mode=0o700, dir_fd=parent)

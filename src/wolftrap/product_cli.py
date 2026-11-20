@@ -81,8 +81,7 @@ def run(args):
         disjoint(root, dest)
         report, paths = analyze(root, selected, state["build"])
         files = render(report)
-        disjoint(root, dest)
-        deliver(dest, files, replay=replay, expected_pin=getattr(args, "manifest_sha256", None))
+        deliver(dest, files, replay=replay, expected_pin=getattr(args, "manifest_sha256", None), source_root=root)
         status = report["status"]
         print(("REPRODUCED " if replay else "") + status + f" · {len(report['files'])} selected files, "
               f"{len(report['findings'])} static review signals.")

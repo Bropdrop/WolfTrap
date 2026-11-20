@@ -18,7 +18,7 @@ PACKAGE = Path(__file__).absolute().parent
 def compatible():
     return (sys.platform == "linux" and platform.python_implementation() == "CPython"
             and sys.version_info[:2] == (3, 12) and platform.machine() in ("x86_64", "aarch64")
-            and hasattr(os, "O_NOFOLLOW") and hasattr(os, "O_DIRECTORY")
+            and hasattr(os, "O_NOFOLLOW") and hasattr(os, "O_DIRECTORY") and hasattr(os, "O_PATH")
             and os.open in os.supports_dir_fd and os.stat in os.supports_dir_fd and os.scandir in os.supports_fd)
 
 
