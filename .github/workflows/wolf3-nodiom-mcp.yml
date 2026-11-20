@@ -54,7 +54,7 @@ jobs:
           done
           # Override the floating npm semver dependency with the verified local core.
           rm -rf -- "$root/mcp/node_modules/@synexiom-labs/nodiom"
-          ln -s "$root/core" "$root/mcp/node_modules/@synexiom-labs/nodiom"
+          ln -s ../../../core "$root/mcp/node_modules/@synexiom-labs/nodiom"
 
       - name: Pull disposable Node runtime and record image identity
         shell: bash
