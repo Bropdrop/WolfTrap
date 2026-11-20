@@ -100,6 +100,10 @@ def _members(fd: int, maximum: int) -> set[str]:
     return names
 
 
+def _stamp(info: os.stat_result) -> tuple[int, ...]:
+    return (info.st_dev, info.st_ino, info.st_size, info.st_nlink, info.st_mtime_ns, info.st_ctime_ns)
+
+
 def _bundle(stem: str, report: dict) -> dict[str, bytes]:
     scan = stem == SCAN
     lines = ["# MCP Bloodhound " + ("inspection" if scan else "synthetic qualification"), "",
@@ -116,6 +120,11 @@ def _bundle(stem: str, report: dict) -> dict[str, bytes]:
             lines.extend([f"### {signal['rule_id']} · {signal['title']}", "",
                           f"{signal['basis']} ({signal['field']}, {signal['scope']}).",
                           "", signal["limitation"] + " " + signal["possible_benign_explanation"], ""])
+            for key, value in sorted(signal["observed"].items()):
+                display = ", ".join(value) if isinstance(value, list) else str(value)
+                lines.append(f"- {key.replace('_', ' ')} `{display if value is not None else 'absent'}`")
+            if signal["observed"]:
+                lines.append("")
             results.append({"ruleId": signal["rule_id"], "level": "warning",
                             "message": {"text": signal["basis"]}, "properties": signal})
         for gap in report["coverage_gaps"]:
@@ -168,15 +177,23 @@ def _deliver(stem: str, report: dict, directory: Path, verify: bool) -> None:
     fd = _open_directory(directory, create=not verify)
     try:
         if verify:
+            directory_stamp = _stamp(os.fstat(fd))
             require(_members(fd, len(files)) == files.keys(), "incomplete-evidence-members")
             # Never parse or trust caller-supplied manifest/report instructions or counts.
             # Expected bytes (including every manifest field) come from a fresh replay.
+            stamps = {}
             for name, expected in files.items():
                 info = os.stat(name, dir_fd=fd, follow_symlinks=False)
                 require(stat.S_ISREG(info.st_mode) and info.st_nlink == 1 and info.st_size == len(expected)
                         and _read_file(fd, name, len(expected)) == expected, "evidence-replay-mismatch")
+                stamps[name] = _stamp(info)
+            for name, stamp in stamps.items():
+                require(_stamp(os.stat(name, dir_fd=fd, follow_symlinks=False)) == stamp,
+                        "evidence-changed-during-replay")
+            require(_stamp(os.fstat(fd)) == directory_stamp, "evidence-changed-during-replay")
         else:
-            require(not _members(fd, 0), "output-directory-not-empty")
+            with os.scandir(fd) as entries:
+                require(next(entries, None) is None, "output-directory-not-empty")
             # Exclusive creation reserves the first fixed name for one writer. A
             # partial publication has no valid COMPLETE manifest and cannot verify.
             for name, raw in files.items():
@@ -218,12 +235,16 @@ def run_scan(baseline: str | Path, candidate: str | Path, directory: str | Path,
     report = inspect(**raw, baseline_sha256=baseline_sha256, config_selected=config is not None)
     report.update({"schema": "wolftrap.mcp-scan/v1", "source_revision": revision,
                    "configuration": {"protocol_version": VERSION, "limits": LIMITS,
+                                     "unicode_data_version": unicodedata.unidata_version,
                                      "baseline_pin_sha256": baseline_sha256,
                                      "config_profile": "local-stdio/v1" if config is not None else None},
                    "trust_boundary": "untrusted metadata to static review advisory",
+                   "target_code_executed": False, "network_contacted": False, "authorization_decisions": 0,
                    "confirmed_findings": 0, "limitations": LIMITATIONS})
     require(inputs() == raw, "inputs-changed-during-inspection")
     _deliver(SCAN, report, dest, verify)
+    if verify:
+        require(inputs() == raw, "inputs-changed-during-replay")
     return report
 
 

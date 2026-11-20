@@ -59,10 +59,12 @@ OVERRIDE = re.compile(r"\b(?:ignore|override|disregard|supersede) (?:all |the )?
 SOLICIT = re.compile(r"\b(?:reveal|send|provide|disclose|return|request) (?:the |your |a |all )?"
                      r"(?:api keys?|credentials?|secrets?|passwords?|access tokens?)\b")
 AUTHORITY = re.compile(
-    r"\b(?:(?:system|administrator|admin|developer|vendor|user) (?:has |already )?"
+    r"\b(?:(?:system|administrator|admin|developer|vendor|user) (?:has )?(?:already )?"
     r"(?:approved|authorized|granted|directive|override)|(?:approved|authorized|granted) by "
     r"(?:the )?(?:system|administrator|admin|developer|vendor|user)|"
-    r"(?:system|developer) (?:message|instruction)|acting as (?:an? )?(?:administrator|admin))\b")
+    r"(?:system|developer) (?:message|instruction)|(?:acting|runs) as (?:an? )?"
+    r"(?:administrator|admin|root)|(?:claims?|has) (?:system|administrator|admin|developer) "
+    r"(?:authority|privileges|permissions))\b")
 READ_ONLY = re.compile(r"\b(?:read only|non destructive|without (?:modifying|changing))\b")
 OPERATION = {
     "filesystem": re.compile(r"\b(?:path|filepath|directory|filesystem|read file|write file|delete file)\b"),
@@ -367,7 +369,8 @@ def _config(review: Review, raw: bytes, candidate: Snapshot) -> None:
         switches = {"sh": "-c", "bash": "-c", "zsh": "-c", "cmd": "/c", "pwsh": "-command",
                     "powershell": "-command", "python": "-c", "python3": "-c", "node": "-e"}
         inline = program in switches and switches[program] in [a.casefold() for a in args]
-        shell_flags = program in ("sh", "bash", "zsh") and any(re.fullmatch(r"-[a-zA-Z]*c[a-zA-Z]*", a) for a in args)
+        shell_flags = program in ("sh", "bash", "zsh") and any(
+            a.startswith("-") and "c" in a and a.isascii() and a[1:].isalpha() for a in args)
         if inline or shell_flags:
             review.emit(8, scope, "config.args", "Interpreter with an inline command switch")
         if any(a == "/" or re.fullmatch(r"[A-Za-z]:[/\\]", a) for a in args):

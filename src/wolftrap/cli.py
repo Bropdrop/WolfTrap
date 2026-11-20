@@ -526,9 +526,13 @@ def _reproduce(arguments: argparse.Namespace) -> int:
     return 1 if reproduced else 2
 
 
-def build_parser() -> argparse.ArgumentParser:
-    from .mcp_evidence import command as mcp_command
+def _mcp(arguments: argparse.Namespace) -> int:
+    from .mcp_evidence import command
 
+    return command(arguments)
+
+
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="wolftrap",
         description=(
@@ -554,7 +558,7 @@ def build_parser() -> argparse.ArgumentParser:
             mcp.add_argument("--evidence-dir", required=True)
         else:
             mcp.add_argument("--output-dir", required=True, help="fresh evidence directory outside input directories")
-        mcp.set_defaults(handler=mcp_command)
+        mcp.set_defaults(handler=_mcp)
 
     run = subparsers.add_parser("run", help="run a bounded synthetic campaign")
     run.add_argument("--seed", type=int, default=20261113)

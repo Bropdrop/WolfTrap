@@ -65,15 +65,18 @@ def _io_controls() -> list[dict]:
         (root / "link-dir").symlink_to(inputs, target_is_directory=True)
 
         def probe(name: str, expected: str, operation: Callable) -> None:
+            expected_code = 0 if expected == "NO_PATTERN_MATCH" else 2
             try:
                 report = operation()
+                code = report["exit_code"]
                 observed = ",".join(sorted({g["reason"] for g in report["coverage_gaps"]})) or report["status"]
             except Incomplete as error:
-                observed = str(error)
+                code, observed = 2, str(error)
             except OSError:
-                observed = "unavailable-path"
+                code, observed = 2, "unavailable-path"
             rows.append({"id": name, "expected": expected, "observed": observed,
-                         "matched": expected == observed})
+                         "expected_exit": expected_code, "observed_exit": code,
+                         "matched": expected == observed and expected_code == code})
 
         for name, path, reason in (
             ("leaf-symlink", inputs / "link.json", "unavailable-or-unsafe-input"),
@@ -136,7 +139,7 @@ def evaluate(detector: Callable[[Case], Observation] = observe) -> dict:
     qualified = len(rows) >= 100 and not mismatches and all(defect_mismatches.values())
     return {
         "schema": "wolftrap.mcp-challenge/v1", "status": "PASSED_BOUNDED" if qualified else "CONTROL_GAP",
-        "exit_code": 0 if qualified else 1,
+        "exit_code": 0 if qualified else 1, "synthetic_only": True, "live_server_tested": False,
         "configuration": {"protocol_version": VERSION, "limits": LIMITS, "corpus": "mcp-controls/v1"},
         "corpus_sha256": sha256_json([{k: v for k, v in row.items() if k not in ("observed", "matched")}
                                       for row in rows]),

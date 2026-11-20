@@ -74,7 +74,7 @@ Each signal includes its field, scope, basis, limitation and possible benign exp
 
 ## Bounds and evidence
 
-The parser rejects duplicate decoded keys, invalid UTF-8, lone surrogate code points, nonfinite numbers and values outside its bounded interoperable numeric profile. The byte limit applies before decoding. A string-aware pass bounds nesting and structural complexity before JSON object construction. Schema keywords and regular expressions found in source data are never evaluated.
+The parser rejects duplicate decoded keys, invalid UTF-8, lone surrogate code points and nonfinite numbers. Numeric tokens must round-trip through the decimal spelling of a binary64 value and have magnitude at most 2⁵³ − 1. The byte limit applies before decoding. A string-aware pass bounds nesting and structural complexity before JSON object construction. Source-supplied regular expressions and schema references remain inert.
 
 | Resource | Limit |
 | --- | ---: |
@@ -100,6 +100,6 @@ wolftrap challenge-mcp --output-dir /tmp/mcp-challenge
 wolftrap verify-mcp-challenge --evidence-dir /tmp/mcp-challenge
 ```
 
-The corpus has 68 positives, 44 negatives, 26 ambiguous changes, 33 incomplete inputs, three benign matches and four known misses. Labels specify the full expected rule set, exit code and any expected coverage reason. Twelve additional controls exercise real local filesystem and evidence behavior using disposable synthetic files. Seven deliberately defective classifiers include an always-alert and an always-clean classifier. Each must fail at least one authored control.
+The corpus has 68 positives, 44 negatives, 26 ambiguous changes, 33 incomplete inputs, three benign matches and four known misses. Labels specify the full expected rule set, exit code and any expected coverage reason. One known miss pairs ordinary metadata with an author-assigned hidden-behavior scenario. Twelve additional controls exercise real local filesystem and evidence behavior using disposable synthetic files. Seven deliberately defective classifiers include an always-alert and an always-clean classifier. Each must fail at least one authored control.
 
 The qualification workflow runs from the exact PR head in a loopback-only namespace with an empty inherited environment and dropped privileges. It replays the synthetic review fixture, a negative fixture and the challenge, generates all three bundles a second time, and compares all twelve files. Only the explicitly screened artifacts are selected for upload. The existing independent research workflow exercises the full regression and research suites. These observations describe the authored corpus and captured inputs. Live protection, private runtime conformance and server compromise require separate evidence. [Qualification script](../scripts/qualify-mcp.py) · [Workflow](../.github/workflows/mcp-qualification.yml)
