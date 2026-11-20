@@ -354,6 +354,11 @@ The challenge scores 178 authored snapshot/configuration cases and exercises
 
 ### Additional offline evaluation suites
 
+- Follow a fictional agent proposal through delegation, host authorization and
+  an independently captured effect ledger. `wolftrap challenge-cursorial`
+  exercises 156 authored chains and reproduces minimized counterexamples in
+  defective controls. `wolftrap verify-cursorial` replays the evidence.
+  [Cursorial input format, commands and limits](docs/cursorial-intelligence.md).
 - Replay six defensive identity-telemetry rules on sanitized synthetic records.
   The corpus includes routine and flagged benign controls, known misses and
   incomplete telemetry. [Identity telemetry challenge](docs/identity-telemetry.md).
