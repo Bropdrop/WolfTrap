@@ -29,15 +29,15 @@ try{
     const first=await Nodiom.fromFile(target,{lock:true,lockTimeout:3000});
     try {
       const second=await Nodiom.fromFile(target);
-      first.append('## Tasks','- [ ] locked-writer');
+      first.append('## Tasks','- [ ] LOCKED-ONLY-Q91');
       await first.save();
-      second.append('## Tasks','- [ ] unlocked-writer');
+      second.append('## Tasks','- [ ] UNLOCKED-ONLY-Q92');
       await second.save();
     }finally{await first.unlock();}
     const text=await readFile(target,'utf8');
-    return {lockedMarkerRetained:text.includes('locked-writer'),
-      unlockedMarkerRetained:text.includes('unlocked-writer'),
-      advisoryLockCannotFenceUnlockedWriter:!text.includes('locked-writer')&&text.includes('unlocked-writer'),
+    return {lockedMarkerRetained:text.includes('LOCKED-ONLY-Q91'),
+      unlockedMarkerRetained:text.includes('UNLOCKED-ONLY-Q92'),
+      advisoryLockCannotFenceUnlockedWriter:!text.includes('LOCKED-ONLY-Q91')&&text.includes('UNLOCKED-ONLY-Q92'),
       documentSha256:sha(text)};
   });
 
