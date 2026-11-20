@@ -96,6 +96,34 @@ jobs:
             -v "$WOLF3_ROOT:/work:rw" -v "$PWD/research:/wolftrap:ro" \
             node:22-bookworm-slim node /wolftrap/nodiom-wolf3-mcp.mjs /work/mcp /work/evidence
 
+      - name: Apply test-only lock fix to cloned MCP source and qualify retention
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          docker run --rm --network none --cap-drop ALL --security-opt no-new-privileges \
+            --read-only --tmpfs /tmp:rw,nosuid,size=256m \
+            --user "$(id -u):$(id -g)" -e HOME=/tmp \
+            -v "$WOLF3_ROOT:/work:rw" -v "$PWD/research:/wolftrap:ro" \
+            node:22-bookworm-slim node /wolftrap/nodiom-wolf4-lockfix.mjs \
+            patch /work/mcp/src/index.ts /work/evidence/lockfix-patch.json
+          docker run --rm --network none --cap-drop ALL --security-opt no-new-privileges \
+            --read-only --tmpfs /tmp:rw,nosuid,size=256m \
+            --user "$(id -u):$(id -g)" -e HOME=/tmp \
+            -v "$WOLF3_ROOT:/work:rw" -w /work/mcp node:22-bookworm-slim npm run build
+          mkdir -p "$WOLF3_ROOT/evidence/lockfix"
+          docker run --rm --network none --cap-drop ALL --security-opt no-new-privileges \
+            --read-only --tmpfs /tmp:rw,nosuid,size=256m \
+            --user "$(id -u):$(id -g)" -e HOME=/tmp \
+            -v "$WOLF3_ROOT:/work:rw" -v "$PWD/research:/wolftrap:ro" \
+            node:22-bookworm-slim node /wolftrap/nodiom-wolf3-mcp.mjs \
+            /work/mcp /work/evidence/lockfix
+          docker run --rm --network none --cap-drop ALL --security-opt no-new-privileges \
+            --read-only --tmpfs /tmp:rw,nosuid,size=256m \
+            --user "$(id -u):$(id -g)" -e HOME=/tmp \
+            -v "$WOLF3_ROOT:/work:rw" -v "$PWD/research:/wolftrap:ro" \
+            node:22-bookworm-slim node /wolftrap/nodiom-wolf4-lockfix.mjs \
+            verify /work/evidence/lockfix/mcp-runtime.json /work/evidence/lockfix-verdict.json
+
       - name: Hash all available evidence files
         if: always()
         shell: bash
