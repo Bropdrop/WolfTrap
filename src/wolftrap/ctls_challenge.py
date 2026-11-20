@@ -136,15 +136,35 @@ class AuthorityModel:
     def _emit(self, effect: dict[str, Any]) -> dict[str, Any]:
         copied = copy.deepcopy(effect)
         if self.fault != "FAKE_SUCCESS":
+            # Stage the effect internally. Do not notify the independent sink
+            # until the synthetic audit commit has succeeded.
             self.effects.append(copied)
-            if self.effect_sink is not None:
-                self.effect_sink(copy.deepcopy(copied))
         return copied
 
     def step(self, c: dict[str, Any]) -> Outcome:
         validate_command(c)
         if c["at"] < self.at:
             raise ValueError("out-of-order synthetic clock")
+        # Fictional in-memory atomic step. This protects *this simulator* from
+        # audit-write faults, not any real database or external service.
+        fields = ("owners", "reviewers", "epochs", "requests", "nonces",
+                  "operations", "effects", "audit", "known", "at")
+        before = {field: copy.deepcopy(getattr(self, field)) for field in fields}
+        try:
+            result = self._stage(c)
+            self._audit(c, result.code, result.claimed_effect)
+        except Exception:
+            for field, prior in before.items():
+                setattr(self, field, prior)
+            raise
+        # Publish only after the audit append, so an injected audit failure
+        # cannot leak a claimed effect to the independent effect witness.
+        if result.claimed_effect is not None and self.fault != "FAKE_SUCCESS":
+            if self.effect_sink is not None:
+                self.effect_sink(copy.deepcopy(result.claimed_effect))
+        return result
+
+    def _stage(self, c: dict[str, Any]) -> Outcome:
         self.at = c["at"]
         op = c["op"]
         result = Outcome("DENIED")
@@ -177,7 +197,6 @@ class AuthorityModel:
             result = self._advance_epoch(c)
         elif op == "USE":
             result = self._use(c)
-        self._audit(c, result.code, result.claimed_effect)
         return result
 
     def _prepare(self, c: dict[str, Any]) -> Outcome:
