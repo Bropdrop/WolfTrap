@@ -1,0 +1,172 @@
+{
+  "history": [
+    {
+      "body": {
+        "entries": [
+          {
+            "approvals": [
+              {
+                "alg": "Ed25519",
+                "key_revision": 1,
+                "signature": "703133c540a90767ea3d612ac013b4919618255e247876db59ed9b8a27a4594d4148b4f561076b4fdec97bdf86125aeed2fec9546f0fa320286f66da9ec7c708",
+                "signer": 3
+              },
+              {
+                "alg": "Ed25519",
+                "key_revision": 1,
+                "signature": "6002048e7c488c6f396e9728f2d8d9e93af403e3cdf845285b0fec4aae743f59e3bc3b0dda045ff2f3a57907802dfd009a190ee597acebe19e4a793482ab880d",
+                "signer": 4
+              }
+            ],
+            "author": {
+              "alg": "Ed25519",
+              "key_revision": 1,
+              "signature": "e92f55c4c2fbb80bdbf621375c18890905c5c4b1af78e4d02e0939b9f551a31914708e59d6304fcd4ee208c3745cecce41321c84bb64085978b426a5b23e9903",
+              "signer": 2
+            },
+            "record": {
+              "advisory_id": "WN-92f63a89931da90a3d0b605675ff4365ecb5b758c28cbb4bb8ebec4e93dd144d",
+              "appeal_ref": 11,
+              "category": "unauthorized-effect",
+              "confidence": "HIGH",
+              "created_at": "2030-01-01T00:00:30Z",
+              "distribution": "FICTIONAL_REDACTED",
+              "evidence_class": "SYNTHETICALLY VERIFIED",
+              "evidence_sha256": "2fdc5ceb51be250e21f99e65e297c13c52e0c426bf29e41f94f8a81a44ebdb50",
+              "expires_at": "2030-01-01T00:01:55Z",
+              "identity_assurance": "FIXTURE_ISSUER_BOUND",
+              "incident_ref": "947dd3b500252e29e1f6a27344e321a8ad9dab48a9095a7b7d55a1a161f74e00",
+              "operation_sha256": "db9c7c1e2e2e87e6a77dac08f02a3b27a9d9d223f5067f2a488c98963027496d",
+              "provenance_ref": "730572cb4849e90c29bd4f80980f2b8b0d1e24306a40b49b6221d9d6011ff739",
+              "publisher": 2,
+              "recommendation": "DENY",
+              "resource_scope": 2,
+              "review_ref": 7,
+              "revision": 1,
+              "schema": "wolftrap.wolfnet-advisory/v1",
+              "serial": 1,
+              "severity": 3,
+              "sharing_consent": true,
+              "status": "ACTIVE",
+              "subject": {
+                "architecture_sha256": "1eb831471e151d55469c3c49ed25cb699d2c6230fa093499b5935437032629ed",
+                "instance_id": "96dcd5fd6f96b3592135c9aa2a49b860ba5d48a94ea3912dca69450cf8f61cd0",
+                "issuer": 1,
+                "key_revision": 1,
+                "principal_id": "2c5f894119cc61db92e99020ecc5bdab23e621160edd439e8e8b1f36bddeeb84",
+                "tenant": 2,
+                "trust_domain": 1
+              },
+              "subscription": {
+                "issuer": 1,
+                "realm": 71,
+                "stream": 1,
+                "tenant": 2,
+                "trust_domain": 1
+              },
+              "supersedes": null,
+              "updated_at": "2030-01-01T00:00:30Z",
+              "withdraws": null
+            }
+          }
+        ],
+        "expires_at": "2030-01-01T00:02:11Z",
+        "previous": "3ff6f6338589921278a8ee0ae0645461fd163f77c5a8b90b81af60cfd15ddd11",
+        "published_at": "2030-01-01T00:00:31Z",
+        "schema": "wolftrap.wolfnet-snapshot/v1",
+        "sequence": 1,
+        "subscription": {
+          "issuer": 1,
+          "realm": 71,
+          "stream": 1,
+          "tenant": 2,
+          "trust_domain": 1
+        }
+      },
+      "seal": {
+        "alg": "Ed25519",
+        "key_revision": 1,
+        "signature": "94c5457af1c105ba575cf965bc48c21045f0d09fa3c59cd5cd4fbb54d025e058a4cff0de876b4d17e93cc10deba27e8e8d6b0e23f769782e18ccd40dc5feb30c",
+        "signer": 1
+      }
+    },
+    {
+      "body": {
+        "entries": [
+          {
+            "approvals": [],
+            "author": {
+              "alg": "Ed25519",
+              "key_revision": 1,
+              "signature": "d0f8e8e9dc6badaa33cbb4b5f47d45fc420bd6bd12f2ec2148a4560ab1efa20a4915d52e8c9f4d57ca56aeee10f5890ba19f14d61de9922f0ba3c409f2868600",
+              "signer": 2
+            },
+            "record": {
+              "advisory_id": "WN-92f63a89931da90a3d0b605675ff4365ecb5b758c28cbb4bb8ebec4e93dd144d",
+              "appeal_ref": 11,
+              "category": "unauthorized-effect",
+              "confidence": "HIGH",
+              "created_at": "2030-01-01T00:00:30Z",
+              "distribution": "FICTIONAL_REDACTED",
+              "evidence_class": "SYNTHETICALLY VERIFIED",
+              "evidence_sha256": "2fdc5ceb51be250e21f99e65e297c13c52e0c426bf29e41f94f8a81a44ebdb50",
+              "expires_at": "2030-01-01T00:01:55Z",
+              "identity_assurance": "FIXTURE_ISSUER_BOUND",
+              "incident_ref": "947dd3b500252e29e1f6a27344e321a8ad9dab48a9095a7b7d55a1a161f74e00",
+              "operation_sha256": "db9c7c1e2e2e87e6a77dac08f02a3b27a9d9d223f5067f2a488c98963027496d",
+              "provenance_ref": "730572cb4849e90c29bd4f80980f2b8b0d1e24306a40b49b6221d9d6011ff739",
+              "publisher": 2,
+              "recommendation": "DENY",
+              "resource_scope": 2,
+              "review_ref": 7,
+              "revision": 2,
+              "schema": "wolftrap.wolfnet-advisory/v1",
+              "serial": 1,
+              "severity": 3,
+              "sharing_consent": true,
+              "status": "WITHDRAWN",
+              "subject": {
+                "architecture_sha256": "1eb831471e151d55469c3c49ed25cb699d2c6230fa093499b5935437032629ed",
+                "instance_id": "96dcd5fd6f96b3592135c9aa2a49b860ba5d48a94ea3912dca69450cf8f61cd0",
+                "issuer": 1,
+                "key_revision": 1,
+                "principal_id": "2c5f894119cc61db92e99020ecc5bdab23e621160edd439e8e8b1f36bddeeb84",
+                "tenant": 2,
+                "trust_domain": 1
+              },
+              "subscription": {
+                "issuer": 1,
+                "realm": 71,
+                "stream": 1,
+                "tenant": 2,
+                "trust_domain": 1
+              },
+              "supersedes": null,
+              "updated_at": "2030-01-01T00:00:33Z",
+              "withdraws": "5e8054cae4bd2861719430d7d341c6b7e7700fcd84272f48d41f639e603d2a8d"
+            }
+          }
+        ],
+        "expires_at": "2030-01-01T00:02:14Z",
+        "previous": "f3ce5b2bf86fc5b7fc0e1a952b7a051f8b8069a31fc0f3727051024c02eb49a2",
+        "published_at": "2030-01-01T00:00:34Z",
+        "schema": "wolftrap.wolfnet-snapshot/v1",
+        "sequence": 2,
+        "subscription": {
+          "issuer": 1,
+          "realm": 71,
+          "stream": 1,
+          "tenant": 2,
+          "trust_domain": 1
+        }
+      },
+      "seal": {
+        "alg": "Ed25519",
+        "key_revision": 1,
+        "signature": "640c4e61a873cac0eeb481d8096ba2dbfc2764f738ff0aa82ed29c7c391c887d6fa0281037171215f1693e93fe8f7e88d6288965f9c87e6e17abe2913d68930e",
+        "signer": 1
+      }
+    }
+  ],
+  "schema": "wolftrap.wolfnet-feed/v1"
+}

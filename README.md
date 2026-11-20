@@ -354,6 +354,10 @@ The challenge scores 178 authored snapshot/configuration cases and exercises
 
 ### Additional offline evaluation suites
 
+- Verify a signed fictional advisory feed with `wolftrap verify-wolfnet-feed`.
+  Use `evaluate-wolfnet` to compare its evidence with a tenant's current WolfPrint
+  presentation, host authority and subscriber policy. The default proposal is
+  advisory only. [WolfNet trust, withdrawals, qualification and offline examples](docs/wolfnet.md).
 - Fingerprint an agent architecture with `wolftrap fingerprint-agent`. Compare fictional
   tenant-scoped issuer records with host decisions and independently observed effects using
   WolfPrint's opt-in Cursorial profile. Reproduce the evidence with

@@ -1,0 +1,30 @@
+{
+  "actions": [
+    "ALLOW",
+    "MONITOR",
+    "READ_ONLY",
+    "DENY",
+    "DENY"
+  ],
+  "appeal_holds": [],
+  "expires": "2030-01-01T00:02:05Z",
+  "min_confidence": "MEDIUM",
+  "min_reviewers": 2,
+  "min_severity": 2,
+  "mode": "fictional-simulation",
+  "permit_deny": true,
+  "publishers": [
+    2,
+    6
+  ],
+  "revision": 1,
+  "schema": "wolftrap.wolfnet-policy/v1",
+  "since": "2030-01-01T00:00:00Z",
+  "subscription": {
+    "issuer": 1,
+    "realm": 71,
+    "stream": 1,
+    "tenant": 2,
+    "trust_domain": 1
+  }
+}

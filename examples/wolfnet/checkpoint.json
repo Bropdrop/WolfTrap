@@ -1,0 +1,14 @@
+{
+  "accepted_at": "2030-01-01T00:00:00Z",
+  "head": "3ff6f6338589921278a8ee0ae0645461fd163f77c5a8b90b81af60cfd15ddd11",
+  "schema": "wolftrap.wolfnet-checkpoint/v1",
+  "sequence": 0,
+  "subscription": {
+    "issuer": 1,
+    "realm": 71,
+    "stream": 1,
+    "tenant": 2,
+    "trust_domain": 1
+  },
+  "trust_revision": 1
+}

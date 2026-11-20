@@ -1,0 +1,93 @@
+{
+  "clock_origin": "2030-01-01T00:00:00Z",
+  "expires": "2030-01-01T00:10:00Z",
+  "keys": [
+    {
+      "expires": "2030-01-01T00:10:00Z",
+      "org": 1,
+      "predecessor": 0,
+      "public_key": "db0033ea1c948368929deb1c4e35bbbe016f20c0efc2ddaa5f6367e3534d67ec",
+      "revision": 1,
+      "revoked_at": null,
+      "role": "distributor",
+      "signer": 1,
+      "since": "2030-01-01T00:00:00Z"
+    },
+    {
+      "expires": "2030-01-01T00:10:00Z",
+      "org": 2,
+      "predecessor": 0,
+      "public_key": "1c2a67fc368826d4adbf5e6344716d5399fc2b5e8378e6663fa9c51e6e3bd29f",
+      "revision": 1,
+      "revoked_at": null,
+      "role": "publisher",
+      "signer": 2,
+      "since": "2030-01-01T00:00:00Z"
+    },
+    {
+      "expires": "2030-01-01T00:10:00Z",
+      "org": 3,
+      "predecessor": 0,
+      "public_key": "01f035b533901ec0ddb15d3e0f02d1a49f0e31511ec2e36a95b64968ab88d063",
+      "revision": 1,
+      "revoked_at": null,
+      "role": "reviewer",
+      "signer": 3,
+      "since": "2030-01-01T00:00:00Z"
+    },
+    {
+      "expires": "2030-01-01T00:10:00Z",
+      "org": 4,
+      "predecessor": 0,
+      "public_key": "44c9305558fa80817e68007fd551ce52b394f59729d5f84ea62ab5ced27dafc4",
+      "revision": 1,
+      "revoked_at": null,
+      "role": "reviewer",
+      "signer": 4,
+      "since": "2030-01-01T00:00:00Z"
+    },
+    {
+      "expires": "2030-01-01T00:10:00Z",
+      "org": 5,
+      "predecessor": 0,
+      "public_key": "de7fe9b904e39b2fca9708402780ac6d3d176acaf112ba1276a5b722d63e2326",
+      "revision": 1,
+      "revoked_at": null,
+      "role": "observer",
+      "signer": 5,
+      "since": "2030-01-01T00:00:00Z"
+    },
+    {
+      "expires": "2030-01-01T00:10:00Z",
+      "org": 6,
+      "predecessor": 0,
+      "public_key": "dd8c27424e6d71a0f0c8aef9ff9196b6c1d0ba566cfeacebf03ee1be7866a13f",
+      "revision": 1,
+      "revoked_at": null,
+      "role": "publisher",
+      "signer": 6,
+      "since": "2030-01-01T00:00:00Z"
+    },
+    {
+      "expires": "2030-01-01T00:10:00Z",
+      "org": 7,
+      "predecessor": 0,
+      "public_key": "b6838fbe75e39e9f9114fccba8951a1f868b32943bdcd445107a389ca2b76d5f",
+      "revision": 1,
+      "revoked_at": null,
+      "role": "reviewer",
+      "signer": 7,
+      "since": "2030-01-01T00:00:00Z"
+    }
+  ],
+  "revision": 1,
+  "schema": "wolftrap.wolfnet-trust/v1",
+  "since": "2030-01-01T00:00:00Z",
+  "subscription": {
+    "issuer": 1,
+    "realm": 71,
+    "stream": 1,
+    "tenant": 2,
+    "trust_domain": 1
+  }
+}

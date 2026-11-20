@@ -1,0 +1,111 @@
+{
+  "audience": 2,
+  "baseline": {
+    "architecture_sha256": "1eb831471e151d55469c3c49ed25cb699d2c6230fa093499b5935437032629ed",
+    "instance": 12,
+    "key_revision": 1,
+    "principal": 2
+  },
+  "bindings": [
+    {
+      "at": 14,
+      "binding": 6,
+      "chain": 2,
+      "operation_sha256": "db9c7c1e2e2e87e6a77dac08f02a3b27a9d9d223f5067f2a488c98963027496d",
+      "phase": "prepare",
+      "proposal": 5,
+      "statement_sha256": "c1054cfd8dcf101c274440aeac4d57d0eec742d29b8ceaf9ce15f533c35a13e3",
+      "trace_sha256": "6f98628bce270375819f34765a3e00c72210cf3ee5b2d0e46a2d3a6913007b41"
+    },
+    {
+      "at": 16,
+      "binding": 6,
+      "chain": 2,
+      "operation_sha256": "db9c7c1e2e2e87e6a77dac08f02a3b27a9d9d223f5067f2a488c98963027496d",
+      "phase": "commit",
+      "proposal": 5,
+      "statement_sha256": "c1054cfd8dcf101c274440aeac4d57d0eec742d29b8ceaf9ce15f533c35a13e3",
+      "trace_sha256": "6f98628bce270375819f34765a3e00c72210cf3ee5b2d0e46a2d3a6913007b41"
+    }
+  ],
+  "epoch": 1,
+  "expires": 200,
+  "grants": [],
+  "issuer": 1,
+  "policy_revision": 1,
+  "principals": [
+    {
+      "keys": [
+        {
+          "expires": 180,
+          "previous": 0,
+          "revision": 1,
+          "revoked_at": null,
+          "since": 0
+        }
+      ],
+      "principal": 2
+    },
+    {
+      "keys": [
+        {
+          "expires": 180,
+          "previous": 0,
+          "revision": 1,
+          "revoked_at": null,
+          "since": 0
+        }
+      ],
+      "principal": 22
+    }
+  ],
+  "restrictions": [],
+  "revocations": [],
+  "schema": "wolftrap.fixture-registry/v1",
+  "sessions": [
+    {
+      "capabilities": [
+        "append",
+        "archive",
+        "label",
+        "read"
+      ],
+      "components": [
+        "build_sha256",
+        "capabilities",
+        "dependency_sha256",
+        "framework",
+        "framework_version",
+        "mcp_tools",
+        "model_family",
+        "model_provider",
+        "model_revision",
+        "permission_policy_sha256",
+        "sandbox_sha256",
+        "sbom_sha256"
+      ],
+      "statement": {
+        "architecture_sha256": "1eb831471e151d55469c3c49ed25cb699d2c6230fa093499b5935437032629ed",
+        "audience": 2,
+        "delegation": [
+          1,
+          2
+        ],
+        "expires": 145,
+        "instance": 12,
+        "issued": 2,
+        "issuer": 1,
+        "key_revision": 1,
+        "nonce": 22,
+        "policy_revision": 1,
+        "principal": 2,
+        "tenant": 2,
+        "trust_domain": 1
+      }
+    }
+  ],
+  "since": 0,
+  "tenant": 2,
+  "trust_domain": 1,
+  "used_nonces": []
+}
