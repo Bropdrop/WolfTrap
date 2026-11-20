@@ -12,7 +12,7 @@ from pathlib import Path
 from .agent_scan import _json, _open_directory, _read_file, _sha
 from .canonical import sha256_json
 from .cursorial import LIMITATIONS, UNKNOWN, inspect_capture, qualify
-from .cursorial_trace import LIMITS, Gap, decode, need
+from .cursorial_trace import LIMITS, Gap, decode_json, need, validate
 from .revision import repository_root
 
 MEMBERS = ("cursorial.json", "cursorial-chains.json", "cursorial.md", "cursorial.sarif",
@@ -49,7 +49,7 @@ def _input(path: Path) -> bytes:
         os.close(fd)
 
 
-def source_identity(expected: str | None) -> dict:
+def source_identity(expected: str | None, *, required_files: tuple[str, ...] = ()) -> dict:
     """Read only immutable Git objects and bounded tracked files in the engine package."""
     root = repository_root()
     need((root / ".git").exists(), "trusted-source-checkout-required")
@@ -90,6 +90,7 @@ def source_identity(expected: str | None) -> dict:
     required = {"src/wolftrap/cursorial" + suffix for suffix in
                 (".py", "_lab.py", "_oracle.py", "_trace.py", "_corpus.py", "_evidence.py")}
     required.update("src/wolftrap/schemas/cursorial-" + s + "-v1.schema.json" for s in ("chain", "graph"))
+    required.update(required_files)
     need(required <= checked, "source-package-incomplete")
     return {"commit_sha": commit, "tree_sha": tree, "tracked_package_verified": True}
 
@@ -140,9 +141,18 @@ def _render(report: dict, archive: dict) -> dict[str, bytes]:
                          f"{len(w['oracle']['records'])} / {len(w['ledger_witness']['records'])} |")
         for v in report["pursuit"]:
             lines += ["", f"- {v['variation']} · {v['classification']} · {v['reason']}"]
-    lines += ["", "## Limits", ""] + ["- " + item for item in LIMITATIONS] + [""]
     rules = {"WT-CIE-SCENT": "Static review signal", "WT-CIE-GAP": "Incomplete fictional evidence",
              "WT-CIE-CONTROL": "Synthetic qualification mismatch"}
+    profile = report.get("identity_profile")
+    if profile is not None:
+        rules["WT-WP-CHAIN"] = "Identity-qualified fictional chain"
+        lines += ["", "## WolfPrint identity witnesses", "", profile["status"], "", profile["reason"],
+                  "", "Behavioral digest `" + profile["behavioral_sha256"] + "`"]
+        for attempt in profile["attempts"]:
+            lines.append(f"- Binding {attempt['binding']}, independently observed effects {attempt['independently_observed_effects']}")
+        if profile["status"] == UNKNOWN:
+            signal("WT-WP-CHAIN", profile["reason"], "note")
+    lines += ["", "## Limits", ""] + ["- " + item for item in LIMITATIONS] + [""]
     sarif = {"version": "2.1.0", "runs": [{"tool": {"driver": {"name": "WolfTrap Cursorial",
              "rules": [{"id": k, "shortDescription": {"text": v}} for k, v in rules.items()]}},
              "invocations": [{"executionSuccessful": report["exit_code"] != 2}],
@@ -195,22 +205,42 @@ def _deliver(files: dict[str, bytes], target: Path, verify: bool) -> None:
 
 
 def run(directory: str | Path, *, chain: str | Path | None = None, expected_head: str | None = None,
-        verify: bool = False) -> dict:
+        verify: bool = False, registry=None, registry_sha256=None, require_wolfprint=False) -> dict:
     out = _path(directory)
     path = _path(chain) if chain is not None else None
-    if path is not None:
-        need(not out.is_relative_to(path.parent) and not path.parent.is_relative_to(out),
+    registry_path = _path(registry) if registry is not None else None
+    need((registry_path is None) == (registry_sha256 is None), "registry-pin-required")
+    need(path is not None or (registry_path is None and not require_wolfprint), "explicit-identity-chain-required")
+    need(registry_path is None or registry_path != path, "aliased-input-roles")
+    for source in (p for p in (path, registry_path) if p is not None):
+        need(not out.is_relative_to(source.parent) and not source.parent.is_relative_to(out),
              "evidence-overlaps-input-directory")
     revision = source_identity(expected_head)
+    registry_raw = None
+    registry_doc = None
+    if registry_path is not None:
+        from .wolfprint_evidence import pinned
+        registry_raw = _input(registry_path)
+        pinned(registry_raw, registry_sha256, "registry")
+        registry_doc = decode_json(registry_raw, canonical_numbers=True)
     if path is None:
         report, archive = qualify()
     else:
         raw = _input(path)
         archive = {"schema": "wolftrap.cursorial-selected-input/v1", "sha256": _sha(raw), "bytes": len(raw)}
         try:
-            doc = decode(raw)
-            archive["canonical_sha256"] = sha256_json(doc)
-            report = inspect_capture(doc)
+            doc = decode_json(raw)
+            if isinstance(doc, dict) and doc.get("schema") == "wolftrap.cursorial-identity-chain/v2":
+                from .wolfprint_evidence import REQUIRED
+                from .wolfprint_trace import inspect_chain
+                source_identity(revision["commit_sha"], required_files=REQUIRED)
+                report = inspect_chain(decode_json(raw, canonical_numbers=True), registry_doc)
+                archive["canonical_sha256"] = sha256_json(doc)
+            else:
+                need(not require_wolfprint and registry_path is None, "required-identity-profile-missing")
+                validate(doc, "chain")
+                archive["canonical_sha256"] = sha256_json(doc)
+                report = inspect_capture(doc)
         except Gap as gap:
             report = {"schema": "wolftrap.cursorial-evidence/v1", "mode": "selected-fictional-capture",
                       "status": UNKNOWN, "exit_code": 2, "capture": {"classification": UNKNOWN,
@@ -218,15 +248,22 @@ def run(directory: str | Path, *, chain: str | Path | None = None, expected_head
                       "pursuit": [], "pursuit_gaps": 0, "fresh_capture_sha256": [], "limits": LIMITS,
                       "limitations": LIMITATIONS}
         report["source_sha256"] = _sha(raw)
+        if registry_raw is not None or require_wolfprint:
+            report["registry_source_sha256"] = _sha(registry_raw) if registry_raw is not None else None
+            report["require_wolfprint"] = require_wolfprint
     report.update(source_revision=revision, synthetic_only=True, live_agents_tested=False,
                   production_effects=0, authorization_changes=0)
     files = _render(report, archive)
     need(source_identity(revision["commit_sha"]) == revision, "engine-changed-during-analysis")
     if path is not None:
         need(_input(path) == raw, "input-changed-during-analysis")
+    if registry_path is not None:
+        need(_input(registry_path) == registry_raw, "registry-changed-during-analysis")
     _deliver(files, out, verify)
     if verify and path is not None:
         need(_input(path) == raw, "input-changed-during-replay")
+    if verify and registry_path is not None:
+        need(_input(registry_path) == registry_raw, "registry-changed-during-replay")
     return report
 
 
@@ -234,7 +271,8 @@ def command(args) -> int:
     verify = args.command == "verify-cursorial"
     try:
         report = run(args.evidence_dir if verify else args.output_dir, chain=args.chain,
-                     expected_head=args.expected_head, verify=verify)
+                     expected_head=args.expected_head, verify=verify, registry=args.registry,
+                     registry_sha256=args.registry_sha256, require_wolfprint=args.require_wolfprint)
         print(("VERIFIED_EVIDENCE " if verify else "") + report["status"])
         return report["exit_code"]
     except Gap as gap:

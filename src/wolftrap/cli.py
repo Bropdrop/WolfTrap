@@ -319,6 +319,12 @@ def _cursorial(arguments: argparse.Namespace) -> int:
     return command(arguments)
 
 
+def _wolfprint(arguments: argparse.Namespace) -> int:
+    from .wolfprint_evidence import command
+
+    return command(arguments)
+
+
 def _verify_artex_chain(arguments: argparse.Namespace) -> int:
     from .artex_chain import verify_evidence
 
@@ -698,12 +704,35 @@ def build_parser() -> argparse.ArgumentParser:
     ):
         cursorial = subparsers.add_parser(name, help=help_text)
         cursorial.add_argument("--chain", help="explicit local fictional chain JSON, also required for its replay")
+        cursorial.add_argument("--registry", help="separately selected fictional WolfPrint issuer and host records")
+        cursorial.add_argument("--registry-sha256", help="independently supplied digest of that registry")
+        cursorial.add_argument("--require-wolfprint", action="store_true", help="require the identity-qualified chain profile")
         cursorial.add_argument("--expected-head", help="independently supplied exact WolfTrap Git commit")
         if name == "verify-cursorial":
             cursorial.add_argument("--evidence-dir", required=True)
         else:
             cursorial.add_argument("--output-dir", required=True, help="fresh local evidence directory")
         cursorial.set_defaults(handler=_cursorial)
+
+    for name, help_text in (
+        ("fingerprint-agent", "fingerprint a selected local architecture and optionally assess fictional identity"),
+        ("verify-agent-fingerprint", "regenerate selected architecture and identity evidence"),
+        ("challenge-wolfprint", "qualify the fictional identity verifier, classifier and policy simulator"),
+        ("verify-wolfprint", "replay and verify the WolfPrint qualification bundle"),
+    ):
+        wp = subparsers.add_parser(name, help=help_text)
+        wp.add_argument("--expected-head", help="independently supplied exact WolfTrap commit")
+        if name in ("fingerprint-agent", "verify-agent-fingerprint"):
+            wp.add_argument("--manifest", required=True, help="explicit local architecture manifest")
+            wp.add_argument("--request", help="fictional session presentation and exact operation")
+            wp.add_argument("--registry", help="separate local fictional issuer and policy witness")
+            wp.add_argument("--registry-sha256", help="pin from an independent trusted record")
+            wp.add_argument("--at", type=int, help="operator-selected logical time in the registry")
+            wp.add_argument("--baseline", help="explicit reference architecture for comparison")
+            wp.add_argument("--baseline-sha256", help="independently supplied reference file digest")
+            wp.add_argument("--chain", help="optional identity-qualified fictional trace for behavioral correlation")
+        wp.add_argument("--evidence-dir" if name.startswith("verify") else "--output-dir", required=True)
+        wp.set_defaults(handler=_wolfprint)
 
     camouflage = subparsers.add_parser(
         "challenge-cloud-camouflage", help="measure offline cloud-C2 blind spots and lookalikes")
