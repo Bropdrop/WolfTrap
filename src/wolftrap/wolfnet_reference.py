@@ -17,7 +17,8 @@ EXPECT = {
     "read-only": bounded(2, "READ_ONLY"), "extra-reviewer-required": bounded(3, "MONITOR"),
     "low-confidence": bounded(3, "MONITOR"), "higher-local-threshold": bounded(3, "MONITOR"),
     "static-lookalike": NOTICE, "healthy-accused": UNCERTAIN, "missing-evidence": UNCERTAIN,
-    "missing-trace": UNCERTAIN, "contradictory-host-binding": UNCERTAIN, "unsigned-custody": UNCERTAIN,
+    "missing-trace": UNCERTAIN, "contradictory-host-binding": UNCERTAIN, "historic-authority-conflict": UNCERTAIN,
+    "unsigned-custody": UNCERTAIN,
     "unrelated-behavior": CLEAR, "same-build-other-principal": CLEAR, "benign-upgrade": CLEAR,
     "different-instance": CLEAR, "principal-scope-restart": bounded(3, "MONITOR"),
     "wrong-operation": CLEAR, "wrong-resource": CLEAR, "foreign-presentation": UNCERTAIN,
@@ -59,3 +60,7 @@ REJECTIONS = {
     "stale-policy": "stale-or-foreign-local-policy", "invalid-subscriber-scope": "stale-or-foreign-local-policy",
     "replayed-witness": "ambiguous-observation", "advisory-id-clash": "advisory-id-namespace-mismatch",
 }
+
+FILE_EXPECT = {"regular-input": True, "traversal": False, "linked-input": False, "linked-parent": False,
+               "hardlinked-input": False, "fifo-input": False, "intact-bundle": True, "missing-member": False,
+               "extra-member": False, "changed-manifest": False, "rehashed-report": False}

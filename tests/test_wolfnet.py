@@ -160,6 +160,8 @@ class Feed(unittest.TestCase):
         obs = row["observation"]
         self.assertEqual((obs["effects"], obs["host_commit"], obs["reference_commit"]), (1, "deny", "deny"))
         self.assertTrue(obs["reproduction_sha256"])
+        self.assertGreaterEqual(obs["fresh_replays"], 4)
+        self.assertLessEqual(obs["reproduction"]["minimized_events"], obs["reproduction"]["original_events"])
         self.assertEqual(obs["subject"]["instance_id"], domain_digest("instance", x["request"]["claim"]))
         self.assertEqual(row["record"]["evidence_sha256"], digest("observation", x["witnesses"]["witnesses"][0]["body"]))
 
@@ -168,7 +170,7 @@ class Feed(unittest.TestCase):
         x["traces"][0]["chain"]["sources"]["ledger"]["events"][0]["records"] = []
         row, = examine(x)["advisories"]
         self.assertIsNone(row["effective_level"])
-        for family in ("healthy-accused", "missing-trace", "missing-evidence", "contradictory-host-binding"):
+        for family in ("healthy-accused", "missing-trace", "missing-evidence", "contradictory-host-binding", "historic-authority-conflict"):
             row, = examine(case(1, family))["advisories"]
             self.assertEqual(row["classification"], GAP)
 

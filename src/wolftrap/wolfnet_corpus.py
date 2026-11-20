@@ -11,7 +11,8 @@ def _bad(seal):
 
 
 def case(profile, name):
-    kind = {"read-only": "moderate", "static-lookalike": "static", "healthy-accused": "healthy"}.get(name, "high")
+    kind = {"read-only": "moderate", "unrelated-behavior": "moderate", "static-lookalike": "static",
+            "healthy-accused": "healthy"}.get(name, "high")
     x = basic(profile, kind)
     frame = x["feed"]["history"][0]
     body = frame["body"]
@@ -43,6 +44,8 @@ def case(profile, name):
         x.update(traces=[], witness_registry=None)
     elif name == "contradictory-host-binding":
         x["witness_registry"]["bindings"][0]["operation_sha256"] = "a" * 64
+    elif name == "historic-authority-conflict":
+        x["witness_registry"]["grants"] = deepcopy(x["registry"]["grants"])
     elif name == "unsigned-custody":
         x["witness_registry"]["revocations"] = [{"principal": profile + 1, "instance": x["request"]["claim"]["instance"], "at": 1}]
     elif name in ("same-build-other-principal", "unrelated-behavior", "benign-upgrade", "different-instance", "principal-scope-restart"):

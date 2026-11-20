@@ -2,16 +2,22 @@
 
 from __future__ import annotations
 
+import hashlib
+import json
+import os
+import tempfile
 from collections import Counter
 from copy import deepcopy
+from pathlib import Path
 
+from .cursorial_evidence import _deliver, _input, _path
 from .cursorial_trace import Gap, decode_json
 from .wolfnet_corpus import case
 from .wolfnet_crypto import sodium, verify
 from .wolfnet_fixtures import public_key, sign, wire
 from .wolfnet_format import GAP, SYNTHETIC, digest, validate
 from .wolfnet_policy import evaluate
-from .wolfnet_reference import EXPECT, REJECTIONS
+from .wolfnet_reference import EXPECT, FILE_EXPECT, REJECTIONS
 from .wolfnet_witness import inspect_feed
 
 POLICY_MUTANTS = ("always-allow", "always-deny", "severity-is-certainty", "shared-build-is-principal",
@@ -103,6 +109,63 @@ def _input_controls():
     return rows
 
 
+def _exercise_file(root, kind):
+    source_dir = root / "input"
+    source_dir.mkdir()
+    source = source_dir / "fixture.json"
+    raw = b'{"fixture":1}'
+    source.write_bytes(raw)
+    if kind in ("regular-input", "traversal", "linked-input", "linked-parent", "hardlinked-input", "fifo-input"):
+        path = source
+        if kind == "traversal":
+            path = source_dir / ".." / "input" / source.name
+        elif kind in ("linked-input", "hardlinked-input", "fifo-input"):
+            path = root / "selected"
+            if kind == "linked-input":
+                path.symlink_to(source)
+            elif kind == "hardlinked-input":
+                path.hardlink_to(source)
+            else:
+                os.mkfifo(path)
+        elif kind == "linked-parent":
+            parent = root / "linked"
+            parent.symlink_to(source_dir, target_is_directory=True)
+            path = parent / source.name
+        return _input(_path(path)) == raw
+    directory = root / "evidence"
+
+    def manifest(report):
+        return json.dumps({"files": {"wolfnet.json": {"bytes": len(report), "sha256": hashlib.sha256(report).hexdigest()}}},
+                          sort_keys=True).encode("ascii")
+
+    files = {"wolfnet.json": raw, "wolfnet.manifest.json": manifest(raw)}
+    _deliver(files, directory, False)
+    if kind == "missing-member":
+        (directory / "wolfnet.json").unlink()
+    elif kind == "extra-member":
+        (directory / "extra").write_bytes(b"{}")
+    elif kind == "changed-manifest":
+        (directory / "wolfnet.manifest.json").write_bytes(b"{}")
+    elif kind == "rehashed-report":
+        changed = b'{"fixture":2}'
+        (directory / "wolfnet.json").write_bytes(changed)
+        (directory / "wolfnet.manifest.json").write_bytes(manifest(changed))
+    _deliver(files, directory, True)
+    return True
+
+
+def _filesystem_controls():
+    rows = []
+    for kind, expected in FILE_EXPECT.items():
+        with tempfile.TemporaryDirectory() as temp:
+            try:
+                observed = _exercise_file(Path(temp), kind)
+            except (OSError, Gap):
+                observed = False
+        rows.append({"id": "IO-" + kind, "expected": expected, "observed": observed, "matched": expected == observed})
+    return rows
+
+
 def qualify():
     sodium()
     rows = []
@@ -129,14 +192,16 @@ def qualify():
     signatures, sig_scores = _signature_controls()
     scores.update(sig_scores)
     parser = _input_controls()
-    failures = sum(not r["matched"] for r in [*rows, *signatures, *parser])
+    filesystem = _filesystem_controls()
+    failures = sum(not r["matched"] for r in [*rows, *signatures, *parser, *filesystem])
     mutants = [{"control": name, "mismatches": len(ids), "first_counterexample": next(iter(ids), None)}
                for name, ids in scores.items()]
     caught = sum(bool(ids) for ids in scores.values())
     passed = not failures and caught == len(mutants)
     return {"status": "PASSED_BOUNDED" if passed else "CONTROL_GAP", "exit_code": 0 if passed else 1,
-            "summary": {"cases": len(rows) + len(signatures) + len(parser), "registry_policy_cases": len(rows),
-                        "signature_cases": len(signatures), "parser_cases": len(parser), "mismatches": failures,
+            "summary": {"cases": len(rows) + len(signatures) + len(parser) + len(filesystem), "registry_policy_cases": len(rows),
+                        "signature_cases": len(signatures), "parser_cases": len(parser), "filesystem_cases": len(filesystem), "mismatches": failures,
                         "defects": len(mutants), "defects_caught": caught, "runtime_incidents": 0,
                         "decision_counts": dict(Counter(str(r["observed"][2]) for r in rows if isinstance(r["observed"], list)))},
-            "cases": rows, "signature_controls": signatures, "input_controls": parser, "defective_controls": mutants}
+            "cases": rows, "signature_controls": signatures, "input_controls": parser, "filesystem_controls": filesystem,
+            "defective_controls": mutants}

@@ -92,7 +92,7 @@ class Evidence(unittest.TestCase):
         self.assertEqual(self.cli("verify-wolfnet-challenge", ["--expected-head", "0" * 40], replay=True)[0], 2)
         report = self.doc()
         self.assertEqual((report["summary"]["cases"], report["summary"]["mismatches"], report["summary"]["defects_caught"]),
-                         (412, 0, 11))
+                         (427, 0, 11))
         self.assertTrue(all(d["mismatches"] and d["first_counterexample"] for d in report["defective_controls"]))
         (self.out / "wolfnet.sarif").unlink()
         self.assertEqual(self.cli("verify-wolfnet-challenge", [], replay=True)[0], 2)

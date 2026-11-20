@@ -6,7 +6,7 @@ from .cursorial import assess, confirm
 from .cursorial_lab import execute, schedule
 from .cursorial_trace import Gap, need, track
 from .wolfprint import domain_digest, validate as wp_validate
-from .wolfprint_identity import ATTESTED, authenticate, registry_contract
+from .wolfprint_identity import ATTESTED, authenticate, classify, propose, registry_contract, witnessed_components
 from .wolfprint_trace import _lineage, inspect_chain
 from .wolfnet_feed import read_feed
 from .wolfnet_format import GAP, RUNTIME, STATIC, SYNTHETIC, advance, digest, interval, validate
@@ -61,11 +61,19 @@ def _reproduced_boundary(envelope, registry, measured):
         epochs = [e for e in host.values() if e["kind"] in ("chain_opened", "epoch_observed") and e["at"] <= gate["at"]]
         need(phases[phase]["binding"] == binding["id"] and anchor == expected and
              max(epochs, key=lambda e: e["at"])["epoch"] == registry["epoch"], "spliced-identity-or-authority-witness")
-        need(authenticate(s, s["architecture_sha256"], registry, gate["at"])["status"] == ATTESTED, "stale-bound-session")
+        bound = authenticate(s, s["architecture_sha256"], registry, gate["at"])
+        need(bound["status"] == ATTESTED, "stale-bound-session")
+        decision = propose(bound, s, proposal["operation"], registry, gate["at"], witnessed_components(bound),
+                           classify(bound, s, s["architecture_sha256"], registry))
+        need((gate["decision"] == "deny" and decision["action"] == "DENY") or
+             (gate["decision"] == "allow" and decision["write_eligible_in_model"]), "conflicting-historical-authority")
     commit = host[w["host_witness"]["commit_event"]]
     facts = _receipt(proposal, {**initial, "claim": s}, binding, commit)
     return [{**facts, "category": "unauthorized-effect", "effects": len(ledger), "host_commit": "deny",
-             "reference_commit": "deny", "reproduction_sha256": signature, "behavioral_sha256": None}]
+             "reference_commit": "deny", "reproduction_sha256": signature, "behavioral_sha256": None,
+             "reproduction": {k: run[k] for k in ("original_schedule_sha256", "minimized_schedule_sha256",
+                                                   "original_events", "minimized_events", "single_deletion_search_complete")},
+             "fresh_replays": len(run["initial_replays"]) + len(run["minimized_replays"])}]
 
 
 def trace_observations(envelopes, registry):
@@ -96,6 +104,8 @@ def trace_observations(envelopes, registry):
                     facts = _receipt(proposals[binding["proposal"]], {**phase, "claim": s}, binding, phase)
                     effects = attempt["independently_observed_effects"]
                     category = "rejected-request" if phase["host_gate"] == "deny" and not effects else "authorized-operation"
+                    if category == "rejected-request":
+                        need(phase["policy_proposal"]["action"] == "DENY", "conflicting-historical-authority")
                     rows.append({**facts, "category": category, "effects": effects, "host_commit": phase["host_gate"],
                                  "reference_commit": phase["host_gate"], "reproduction_sha256": None,
                                  "behavioral_sha256": profile["behavioral_sha256"]})

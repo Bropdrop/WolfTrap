@@ -13,7 +13,7 @@ from pathlib import Path
 
 from wolftrap.report import write_json_report
 from wolftrap.revision import capture_source_revision, repository_root
-from wolftrap.wolfnet_reference import EXPECT, REJECTIONS
+from wolftrap.wolfnet_reference import EXPECT, FILE_EXPECT, REJECTIONS
 from wolftrap.wolfprint_reference import architecture, frame, operation
 
 
@@ -221,10 +221,12 @@ def independent_check(out, root, source):
     challenge = read(out / "challenge/wolfnet.json")
     expected = {f"WN-{p}-{n}": v for p in range(1, 5) for n, v in {**{n: list(t) for n, t in EXPECT.items()}, **REJECTIONS}.items()}
     need(len(challenge["cases"]) == len(expected) and {r["id"]: r["observed"] for r in challenge["cases"]} == expected, "case oracle")
+    need({r["id"]: r["observed"] for r in challenge["filesystem_controls"]} == {"IO-" + k: v for k, v in FILE_EXPECT.items()},
+         "filesystem oracle")
     need(all(r["matched"] and r["expected"] == r["observed"] for r in challenge["input_controls"] + challenge["signature_controls"])
          and all(d["mismatches"] > 0 for d in challenge["defective_controls"]), "hostile inputs and defective controls")
     stats = challenge["summary"]
-    need(stats["cases"] == 412 and stats["mismatches"] == 0 and stats["defects_caught"] == stats["defects"] == 11, "coverage")
+    need(stats["cases"] == 427 and stats["mismatches"] == 0 and stats["defects_caught"] == stats["defects"] == 11, "coverage")
     return {"summary": stats, "openssl_verified_signatures": sigs, "openssl_tampered_messages_rejected": sigs,
             "independently_scored_registry_policy_cases": len(expected), "selected_fictional_effects": 1,
             "selected_host_decision": gate["decision"], "subscriber_proposals": ["MONITOR", "DENY", "ALLOW"]}
