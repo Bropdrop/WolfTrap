@@ -17,16 +17,19 @@ jobs:
     env:
       CORE_SHA: 335de4d79ed9b64e8f679fe13a088c7c503525f0
       MCP_SHA: 469aa971ea0d836d4428f977bd05790168a1fc5f
+      WOLFTRAP_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
     steps:
       - name: Checkout WolfTrap without persisting a token
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
+          ref: ${{ env.WOLFTRAP_HEAD }}
           persist-credentials: false
 
       - name: Fetch pinned public source and install dependencies without lifecycle scripts
         shell: bash
         run: |
           set -Eeuo pipefail
+          test "$(git rev-parse HEAD)" = "$WOLFTRAP_HEAD"
           root="$RUNNER_TEMP/wolf3-nodiom-$GITHUB_RUN_ID"
           mkdir -p "$root/cache" "$root/blank-home" "$root/evidence"
           echo "WOLF3_ROOT=$root" >> "$GITHUB_ENV"
@@ -45,7 +48,8 @@ jobs:
           {
             printf 'Upstream core commit: %s\n' "$CORE_SHA"
             printf 'Upstream MCP commit: %s\n' "$MCP_SHA"
-            printf 'WolfTrap qualification commit: %s\n' "$GITHUB_SHA"
+            printf 'WolfTrap qualification head: %s\n' "$WOLFTRAP_HEAD"
+            printf 'GitHub workflow event commit: %s\n' "$GITHUB_SHA"
           } > "$root/evidence/source-pins.txt"
           for repo in core mcp; do
             (cd "$root/$repo" && env -i HOME="$root/blank-home" PATH="$PATH" \
