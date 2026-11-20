@@ -10,6 +10,10 @@ Your subscriber administrator supplies a small trust directory containing `polic
 
 The downloadable, bounded ZIP capsule contains a wheel, SBOM, manifest, provenance, detached CMS signature, platform matrix, license, security policy, notes and these instructions. Keep the capsule intact. Store the independently selected verifier and trust material elsewhere. Generated public fixture certificates may be redistributed for experiments; trusting them only exercises the evaluation profile. The pre-install verifier has no production trust profile.
 
+## Current incident policy for governed evaluation
+
+A subscriber using `awooo.subscriber-policy/v2` also obtains the minimum policy generation from its independently authenticated authority. Add `--minimum-policy-generation "$generation"` to each verification, installation or retention command below. The verifier checks the current bulletin for release suspension, loss or compromise of the signing authority, publisher revocation and withdrawn manifests. An expired bulletin, missing generation floor or downgrade stops the governed workflow. Release and policy-generation floors protect different histories. A v1 catalog remains supported for earlier evaluation receipts. [Governed installation walkthrough](governed-release.md) · [Incident policy and recovery](subscriber-incidents.md)
+
 ## Verify, install, doctor, scan and replay
 
 Use Bash. Replace the paths and values with the ones selected by your subscriber. Run from a trusted directory with the verifier and Python environment outside the project to inspect.
