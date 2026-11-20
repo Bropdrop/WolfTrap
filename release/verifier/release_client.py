@@ -104,10 +104,11 @@ def install(dest, result, wheel, recheck):
         }
         with tempfile.TemporaryDirectory() as work:
             work = Path(work)
-            (work / wheel_name(result["version"])).write_bytes(wheel)
+            staged_wheel = work / wheel_name(result["version"])
+            staged_wheel.write_bytes(wheel)
             lock = work / "install.txt"
             lock.write_text(
-                "wolftrap==" + result["version"] + " --hash=sha256:" + result["wheel_sha256"] + "\n"
+                "wolftrap @ " + staged_wheel.as_uri() + " --hash=sha256:" + result["wheel_sha256"] + "\n"
             )
             subprocess.run(
                 [sys.executable, "-I", "-m", "venv", dest],
@@ -133,8 +134,6 @@ def install(dest, result, wheel, recheck):
                     "--no-deps",
                     "--only-binary=:all:",
                     "--require-hashes",
-                    "--find-links",
-                    work,
                     "-r",
                     lock,
                 ],

@@ -206,7 +206,7 @@ def verify(raw_bundle, trust, policy_pin, floor, sequence, mode, now):
     require(needed <= set(files), "missing-release-evidence", "INCONCLUSIVE")
     mraw = files["release.json"]
     require(sha(mraw) == approval["manifest_sha256"], "unapproved-manifest")
-    manifest = parse(mraw)
+    parse(mraw)
     inventory = {n: {"bytes": len(files[n]), "sha256": sha(files[n])} for n in sorted(payloads)}
     expected = {
         "schema": "awooo.release/v1",
@@ -236,25 +236,33 @@ def verify(raw_bundle, trust, policy_pin, floor, sequence, mode, now):
     )
     require(files["platforms.json"] == encode(PLATFORMS), "platform-matrix")
     bom = parse(files["core.cdx.json"])
-    component = (
-        bom.get("metadata", {}).get("component", {})
-        if type(bom) is dict and type(bom.get("metadata")) is dict
-        else {}
-    )
-    require(
-        type(component) is dict
-        and bom.get("bomFormat") == "CycloneDX"
-        and bom.get("specVersion") == "1.6"
-        and component.get("name") == "wolftrap"
-        and component.get("version") == approval["version"]
-        and component.get("hashes") == [{"alg": "SHA-256", "content": subjects[wheel]}]
-        and type(component.get("properties")) is list
-        and all(
-            {"name": "wolftrap:source:" + k, "value": approval[k]} in component["properties"]
-            for k in ("commit", "tree")
-        ),
-        "sbom-binding",
-    )
+    # The v1 builder emits a closed core-only CycloneDX profile. Equality of
+    # encoded bytes also distinguishes JSON booleans from integers.
+    expected_component = {
+        "type": "application",
+        "bom-ref": "wolftrap-core",
+        "name": "wolftrap",
+        "version": approval["version"],
+        "licenses": [{"license": {"id": "Apache-2.0"}}],
+        "hashes": [{"alg": "SHA-256", "content": subjects[wheel]}],
+        "properties": [
+            {"name": "wolftrap:source:commit", "value": approval["commit"]},
+            {"name": "wolftrap:source:tree", "value": approval["tree"]},
+            {
+                "name": "wolftrap:scope",
+                "value": "installed offline core; excludes interpreter, build tools and optional extras",
+            },
+        ],
+    }
+    expected_bom = {
+        "bomFormat": "CycloneDX",
+        "specVersion": "1.6",
+        "version": 1,
+        "metadata": {"component": expected_component},
+        "components": [],
+        "dependencies": [{"ref": "wolftrap-core", "dependsOn": []}],
+    }
+    require(encode(bom) == encode(expected_bom), "sbom-binding")
     verify_wheel(files[wheel], approval, files["LICENSE"])
     return {
         "status": "VERIFIED",

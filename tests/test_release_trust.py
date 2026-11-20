@@ -12,13 +12,13 @@ import unittest
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path[:0] = [str(ROOT / "release/verifier"), str(ROOT / "release/qualification")]
-import release_client as client
-import release_core as core
-from release_cases import Corpus, EXPECTED
-from release_io import Verdict, encode, file_bytes, pack, parse, sha, unzip
-
-del sys.path[:2]
+with patch.object(
+    sys, "path", [str(ROOT / "release/verifier"), str(ROOT / "release/qualification"), *sys.path]
+):
+    import release_client as client
+    import release_core as core
+    from release_cases import Corpus, EXPECTED
+    from release_io import Verdict, encode, file_bytes, pack, parse, sha, unzip
 
 
 class ReleaseTrustTests(unittest.TestCase):

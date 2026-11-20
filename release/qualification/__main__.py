@@ -14,13 +14,6 @@ import time
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "release/verifier"))
-from release_client import host_profile
-from release_io import encode, pack, parse, sha
-from release_policy import PLATFORMS, wheel_name
-from release_cases import Corpus
-from release_fixtures import inputs, seal, source_file
-from reference import check, independent_witness
-from history import recover_history
 
 
 def run(argv, *, cwd=ROOT, expected=0, source=False):
@@ -35,6 +28,14 @@ def run(argv, *, cwd=ROOT, expected=0, source=False):
 
 
 def qualify(args):
+    from release_client import host_profile
+    from release_io import encode, pack, parse, sha
+    from release_policy import PLATFORMS, wheel_name
+    from release_cases import Corpus
+    from release_fixtures import inputs, seal, source_file
+    from reference import check, independent_witness
+    from history import recover_history
+
     head = run(["git", "rev-parse", "HEAD"]).decode().strip()
     tree = run(["git", "rev-parse", "HEAD^{tree}"]).decode().strip()
     check(

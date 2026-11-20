@@ -16,6 +16,10 @@ def recover(source, kit, raw, pin):
     require(sha(raw) == pin, "wrong-recovery-record")
     rec = parse(raw)
     require(
+        type(rec) is dict and type(rec.get("manifest")) is dict and type(rec.get("statement")) is dict,
+        "recovery-schema",
+    )
+    require(
         rec["schema"] == "awooo.evaluation-recovery/v1"
         and all(hexval(rec[k], 40) for k in ("commit", "tree")),
         "recovery-schema",
@@ -73,7 +77,7 @@ if __name__ == "__main__":
 
         dest = path(a.output)
         publish_new(dest.parent, dest.name, data)
-    except (KeyError, OSError, ValueError, subprocess.SubprocessError):
+    except (KeyError, TypeError, OSError, ValueError, subprocess.SubprocessError):
         sys.exit("Recovery incomplete. Check the pinned receipt, exact checkout, kit and fresh destination.")
     except Verdict as exc:
         sys.exit("Recovery rejected: " + exc.reason)

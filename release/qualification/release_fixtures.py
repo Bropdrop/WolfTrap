@@ -244,7 +244,25 @@ def toy(issuer, version, seq, now):
         "hashes": [{"alg": "SHA-256", "content": sha(wheel)}],
         "properties": [{"name": "wolftrap:source:" + k, "value": material[k]} for k in ("commit", "tree")],
     }
-    sbom = encode({"bomFormat": "CycloneDX", "specVersion": "1.6", "metadata": {"component": component}})
+    component.update(
+        {"type": "application", "bom-ref": "wolftrap-core", "licenses": [{"license": {"id": "Apache-2.0"}}]}
+    )
+    component["properties"].append(
+        {
+            "name": "wolftrap:scope",
+            "value": "installed offline core; excludes interpreter, build tools and optional extras",
+        }
+    )
+    sbom = encode(
+        {
+            "bomFormat": "CycloneDX",
+            "specVersion": "1.6",
+            "version": 1,
+            "metadata": {"component": component},
+            "components": [],
+            "dependencies": [{"ref": "wolftrap-core", "dependsOn": []}],
+        }
+    )
     return seal(
         issuer,
         wheel,

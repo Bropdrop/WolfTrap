@@ -75,6 +75,8 @@ EXPECTED = {
     "extra-root-in-bundle": "REJECTED",
     "bad-inner-wheel-path": "REJECTED",
     "inconsistent-sbom": "REJECTED",
+    "signed-nonobject-sbom": "REJECTED",
+    "contradictory-sbom-source": "REJECTED",
     "unavailable-crypto": "INCONCLUSIVE",
 }
 
@@ -258,7 +260,12 @@ class Corpus:
             encoded = b"a" * (6 * 1024 * 1024 + 1)
         if name == "trailing-archive-bytes":
             encoded = pack(data) + b"extra"
-        if name in ("bad-inner-wheel-path", "inconsistent-sbom"):
+        if name in (
+            "bad-inner-wheel-path",
+            "inconsistent-sbom",
+            "signed-nonobject-sbom",
+            "contradictory-sbom-source",
+        ):
             # Even a validly signed, explicitly pinned artifact must be safe to parse.
             if name == "bad-inner-wheel-path":
                 data[wheel] = pack({"../outside": b"fictional"})
@@ -266,6 +273,12 @@ class Corpus:
             bom["metadata"]["component"]["hashes"][0]["content"] = (
                 sha(data[wheel]) if name == "bad-inner-wheel-path" else "0" * 64
             )
+            if name == "signed-nonobject-sbom":
+                bom = []
+            elif name == "contradictory-sbom-source":
+                component = bom["metadata"]["component"]
+                component["hashes"][0]["content"] = sha(data[wheel])
+                component["properties"].append({"name": "wolftrap:source:commit", "value": "f" * 40})
             data["core.cdx.json"] = encode(bom)
             m = parse(data["release.json"])
             for n in (wheel, "core.cdx.json"):
