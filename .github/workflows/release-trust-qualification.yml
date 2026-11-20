@@ -23,6 +23,7 @@ jobs:
         with:
           ref: ${{ env.SOURCE }}
           persist-credentials: false
+          fetch-depth: 0
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
           python-version: '3.12.14'
@@ -56,6 +57,13 @@ jobs:
             ${{ runner.temp }}/release-evidence/measurement.json
             ${{ runner.temp }}/release-evidence/receipt.json
             ${{ runner.temp }}/foundation/qualification.json
+      - name: Retain the reviewed verifier separately for independent comparison
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: reviewed-verifier-${{ matrix.runner }}
+          if-no-files-found: error
+          retention-days: 30
+          path: ${{ runner.temp }}/release-evidence/reviewed-verifier.pyz
 
   regression:
     name: Exact source screening and independent research replay

@@ -1,4 +1,5 @@
 """Bounded subscriber-side file and ZIP handling. The verifier never imports the wheel."""
+
 import hashlib
 import io
 import json
@@ -32,15 +33,19 @@ def sha(data):
 
 
 def encode(obj):
-    return (json.dumps(obj, indent=2, sort_keys=True, ensure_ascii=True, allow_nan=False) + "\n").encode("ascii")
+    return (json.dumps(obj, indent=2, sort_keys=True, ensure_ascii=True, allow_nan=False) + "\n").encode(
+        "ascii"
+    )
 
 
 def parse(data, limit=DOC_LIMIT):
     require(0 < len(data) <= limit, "document-size")
+
     def unique(pairs):
         obj = dict(pairs)
         require(len(obj) == len(pairs), "duplicate-json-key")
         return obj
+
     try:
         obj = json.loads(data.decode("ascii"), object_pairs_hook=unique)
         pending = [(obj, 0)]
@@ -64,8 +69,16 @@ def parse(data, limit=DOC_LIMIT):
 def path(value):
     raw = os.fspath(value)
     p = Path(raw)
-    require(raw and len(os.fsencode(raw)) <= 4096 and len(p.parts) <= 64 and ".." not in p.parts
-            and not raw.startswith("//") and "\\" not in raw and "\0" not in raw, "unsafe-path")
+    require(
+        raw
+        and len(os.fsencode(raw)) <= 4096
+        and len(p.parts) <= 64
+        and ".." not in p.parts
+        and not raw.startswith("//")
+        and "\\" not in raw
+        and "\0" not in raw,
+        "unsafe-path",
+    )
     return p.absolute()
 
 
@@ -98,8 +111,12 @@ def file_bytes(p, limit):
             require(0 < info.st_size <= limit, "input-size")
             with open(f"/proc/self/fd/{fd}", "rb") as stream:
                 data = stream.read(limit + 1)
-            require(len(data) == info.st_size and stamp(info) == stamp(os.fstat(fd))
-                    and stamp(info) == stamp(os.stat(p.name, dir_fd=parent, follow_symlinks=False)), "input-changed")
+            require(
+                len(data) == info.st_size
+                and stamp(info) == stamp(os.fstat(fd))
+                and stamp(info) == stamp(os.stat(p.name, dir_fd=parent, follow_symlinks=False)),
+                "input-changed",
+            )
             return data
         finally:
             os.close(fd)
@@ -113,9 +130,18 @@ def unzip(raw, *, wheel=False):
     result = {}
     cap_count = 256 if wheel else 12
     require(len(raw) >= 22, "malformed-archive")
-    magic, disk, central_disk, count, total_count, size, offset, comment = struct.unpack("<4s4H2IH", raw[-22:])
-    require(magic == b"PK\x05\x06" and disk == central_disk == comment == 0 and count == total_count
-            and 1 <= count <= cap_count and size <= count * 246 and offset + size == len(raw) - 22, "archive-directory-bounds")
+    magic, disk, central_disk, count, total_count, size, offset, comment = struct.unpack(
+        "<4s4H2IH", raw[-22:]
+    )
+    require(
+        magic == b"PK\x05\x06"
+        and disk == central_disk == comment == 0
+        and count == total_count
+        and 1 <= count <= cap_count
+        and size <= count * 246
+        and offset + size == len(raw) - 22,
+        "archive-directory-bounds",
+    )
     try:
         with zipfile.ZipFile(io.BytesIO(raw)) as z:
             entries = z.infolist()
@@ -123,14 +149,26 @@ def unzip(raw, *, wheel=False):
             total = 0
             for i in entries:
                 n = i.filename
-                require(n == i.orig_filename and len(n) <= 200 and n not in result and not i.is_dir()
-                        and all(re.fullmatch(r"[a-zA-Z0-9_][a-zA-Z0-9._-]*", piece) for piece in n.split("/"))
-                        and (wheel or "/" not in n), "unsafe-archive-member")
-                require(stat.S_IFMT(i.external_attr >> 16) in (0, stat.S_IFREG)
-                        and i.compress_type == zipfile.ZIP_STORED and not i.flag_bits and not i.extra and not i.comment
-                        and i.file_size == i.compress_size, "unsupported-archive-member")
+                require(
+                    n == i.orig_filename
+                    and len(n) <= 200
+                    and n not in result
+                    and not i.is_dir()
+                    and all(re.fullmatch(r"[a-zA-Z0-9_][a-zA-Z0-9._-]*", piece) for piece in n.split("/"))
+                    and (wheel or "/" not in n),
+                    "unsafe-archive-member",
+                )
+                require(
+                    stat.S_IFMT(i.external_attr >> 16) in (0, stat.S_IFREG)
+                    and i.compress_type == zipfile.ZIP_STORED
+                    and not i.flag_bits
+                    and not i.extra
+                    and not i.comment
+                    and i.file_size == i.compress_size,
+                    "unsupported-archive-member",
+                )
                 total += i.file_size
-                cap = (1024 * 1024 if wheel else WHEEL_LIMIT if n.endswith(".whl") else DOC_LIMIT)
+                cap = 1024 * 1024 if wheel else WHEEL_LIMIT if n.endswith(".whl") else DOC_LIMIT
                 require(0 <= i.file_size <= cap and total <= limit, "archive-work-limit")
                 result[n] = z.read(i)
             # The transport has one deterministic representation. Reject prefixes,
