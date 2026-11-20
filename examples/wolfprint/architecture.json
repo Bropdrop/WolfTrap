@@ -1,0 +1,35 @@
+{
+  "build_sha256": "22054fc0a5bd0769dea87d85ddfc7ca45641567e6d966a4548f52264b8ce1cdc",
+  "capabilities": [
+    "label",
+    "archive",
+    "read",
+    "append"
+  ],
+  "dependency_sha256": "5edd003d94b1f7b975b7dbf1c8661ce7e5de61721de5f531cf47795ae60f6b64",
+  "framework": "fixture-runner",
+  "framework_version": "1.0",
+  "mcp_tools": [
+    {
+      "schema_sha256": "47da7c90e02f1322066afd6bcfbf9926fd7c0be656fd139f643adea53e4b1fcf",
+      "server_sha256": "e03e2c40defb821f5df7bd5aa1a55326c3470cda2ca76a561d4d4d1458a449b2",
+      "tool_sha256": "aae940801e4693788b6506d8972a364d670b81f6c995294a3a3b8faba422b1fe"
+    },
+    {
+      "schema_sha256": "896bd334c6306f3b2bf7e969814fdc8ccac9545fdb5296cfbe05fd664d3a8f16",
+      "server_sha256": "4d57fb45752d3584537618a5fbd8222966645c454d5d3a8f29faf79a1eee1231",
+      "tool_sha256": "aae940801e4693788b6506d8972a364d670b81f6c995294a3a3b8faba422b1fe"
+    }
+  ],
+  "model_family": "example-1",
+  "model_provider": "fixture-lab",
+  "model_revision": {
+    "evidence_sha256": "64b9dfe42f498b10e716455422c81eb9f6c48a3d5d286b5314e16b239b603d44",
+    "label": "r1"
+  },
+  "permission_policy_sha256": "ad0ac819209eca072d67425512d5954c52824b2c95d1d6d02de68fa81fd51d3d",
+  "protected_config_sha256": "UNKNOWN",
+  "sandbox_sha256": "c10f46eb957453c4858cf6be94227c1ec52dc4311b0568d402b5298294d53122",
+  "sbom_sha256": "e3caa3cd5373b5af70e3c9b8ff1c1560e66e788eb719bb085c6a55cc7b9645f2",
+  "schema": "wolftrap.architecture/v1"
+}

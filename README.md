@@ -354,6 +354,11 @@ The challenge scores 178 authored snapshot/configuration cases and exercises
 
 ### Additional offline evaluation suites
 
+- Fingerprint an agent architecture with `wolftrap fingerprint-agent`. Compare fictional
+  tenant-scoped issuer records with host decisions and independently observed effects using
+  WolfPrint's opt-in Cursorial profile. Reproduce the evidence with
+  `verify-agent-fingerprint`, `challenge-wolfprint` and `verify-wolfprint`.
+  [WolfPrint manifests, identity evidence and policy proposals](docs/wolfprint.md).
 - Follow a fictional agent proposal through delegation, host authorization and
   an independently captured effect ledger. `wolftrap challenge-cursorial`
   exercises 156 authored chains and reproduces minimized counterexamples in

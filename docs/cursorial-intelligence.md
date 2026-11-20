@@ -38,6 +38,10 @@ Replay preserves the underlying exit code. The JSON retains the original capture
 
 ### Authoring a fictional capture
 
+For a tenant-scoped issuer, instance and architecture witness at preparation and commit,
+select the WolfPrint v2 envelope with `--require-wolfprint` and a separately pinned fictional
+registry. [Identity-qualified chain format and replay](wolfprint.md#identity-qualified-cursorial-profile)
+
 The envelope uses `schema: wolftrap.cursorial-chain/v1`, a `mode` of `behavior` or `metadata`, and four fixed source channels. Each channel contains its fixed source alias and an ordered `events` array. Channel membership controls the permitted record types. The schema accepts small integer aliases and enumerated operations. Free-form prompts, commands, URLs, credential values and customer names are outside the input language. [Complete delegated example](../examples/cursorial/authorized.json) · [Chain JSON Schema](../src/wolftrap/schemas/cursorial-chain-v1.schema.json)
 
 | Channel | Records | Interpretation |

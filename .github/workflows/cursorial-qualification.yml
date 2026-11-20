@@ -2,7 +2,7 @@ name: WolfTrap Cursorial Intelligence Engine qualification
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, feat/wolftrap-integrated-v1]
   push:
     branches: [main]
   workflow_dispatch:

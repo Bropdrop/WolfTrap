@@ -1,0 +1,868 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WolfPrint v1 offline fictional inputs",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/architecture"
+    },
+    {
+      "$ref": "#/$defs/request"
+    },
+    {
+      "$ref": "#/$defs/registry"
+    },
+    {
+      "$ref": "#/$defs/trace"
+    }
+  ],
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "minLength": 64,
+      "maxLength": 64,
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "alias": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 4095
+    },
+    "tick": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 999999
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 48,
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,47}$"
+    },
+    "lineage": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/alias"
+      },
+      "minItems": 1,
+      "maxItems": 5
+    },
+    "architecture": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "wolftrap.architecture/v1"
+        },
+        "framework": {
+          "anyOf": [
+            {
+              "const": "UNKNOWN"
+            },
+            {
+              "$ref": "#/$defs/label"
+            }
+          ]
+        },
+        "framework_version": {
+          "anyOf": [
+            {
+              "const": "UNKNOWN"
+            },
+            {
+              "$ref": "#/$defs/label"
+            }
+          ]
+        },
+        "model_provider": {
+          "anyOf": [
+            {
+              "const": "UNKNOWN"
+            },
+            {
+              "$ref": "#/$defs/label"
+            }
+          ]
+        },
+        "model_family": {
+          "anyOf": [
+            {
+              "const": "UNKNOWN"
+            },
+            {
+              "$ref": "#/$defs/label"
+            }
+          ]
+        },
+        "model_revision": {
+          "anyOf": [
+            {
+              "const": "UNKNOWN"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "$ref": "#/$defs/label"
+                },
+                "evidence_sha256": {
+                  "$ref": "#/$defs/digest"
+                }
+              },
+              "required": [
+                "label",
+                "evidence_sha256"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "build_sha256": {
+          "anyOf": [
+            {
+              "const": "UNKNOWN"
+            },
+            {
+              "$ref": "#/$defs/digest"
+            }
+          ]
+        },
+        "dependency_sha256": {
+          "anyOf": [
+            {
+              "const": "UNKNOWN"
+            },
+            {
+              "$ref": "#/$defs/digest"
+            }
+          ]
+        },
+        "sbom_sha256": {
+          "anyOf": [
+            {
+              "const": "UNKNOWN"
+            },
+            {
+              "$ref": "#/$defs/digest"
+            }
+          ]
+        },
+        "mcp_tools": {
+          "anyOf": [
+            {
+              "const": "UNKNOWN"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "server_sha256": {
+                    "$ref": "#/$defs/digest"
+                  },
+                  "tool_sha256": {
+                    "$ref": "#/$defs/digest"
+                  },
+                  "schema_sha256": {
+                    "$ref": "#/$defs/digest"
+                  }
+                },
+                "required": [
+                  "server_sha256",
+                  "tool_sha256",
+                  "schema_sha256"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 0,
+              "maxItems": 24
+            }
+          ]
+        },
+        "sandbox_sha256": {
+          "anyOf": [
+            {
+              "const": "UNKNOWN"
+            },
+            {
+              "$ref": "#/$defs/digest"
+            }
+          ]
+        },
+        "permission_policy_sha256": {
+          "anyOf": [
+            {
+              "const": "UNKNOWN"
+            },
+            {
+              "$ref": "#/$defs/digest"
+            }
+          ]
+        },
+        "capabilities": {
+          "$ref": "#/$defs/capabilitySet"
+        },
+        "protected_config_sha256": {
+          "anyOf": [
+            {
+              "const": "UNKNOWN"
+            },
+            {
+              "$ref": "#/$defs/digest"
+            }
+          ]
+        }
+      },
+      "required": [
+        "schema",
+        "framework",
+        "framework_version",
+        "model_provider",
+        "model_family",
+        "model_revision",
+        "build_sha256",
+        "dependency_sha256",
+        "sbom_sha256",
+        "mcp_tools",
+        "sandbox_sha256",
+        "permission_policy_sha256",
+        "capabilities"
+      ],
+      "additionalProperties": false
+    },
+    "statement": {
+      "type": "object",
+      "properties": {
+        "trust_domain": {
+          "$ref": "#/$defs/alias"
+        },
+        "issuer": {
+          "$ref": "#/$defs/alias"
+        },
+        "tenant": {
+          "$ref": "#/$defs/alias"
+        },
+        "principal": {
+          "$ref": "#/$defs/alias"
+        },
+        "instance": {
+          "$ref": "#/$defs/alias"
+        },
+        "nonce": {
+          "$ref": "#/$defs/alias"
+        },
+        "audience": {
+          "$ref": "#/$defs/alias"
+        },
+        "key_revision": {
+          "$ref": "#/$defs/alias"
+        },
+        "issued": {
+          "$ref": "#/$defs/tick"
+        },
+        "expires": {
+          "$ref": "#/$defs/tick"
+        },
+        "architecture_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "policy_revision": {
+          "$ref": "#/$defs/alias"
+        },
+        "delegation": {
+          "$ref": "#/$defs/lineage"
+        }
+      },
+      "required": [
+        "trust_domain",
+        "issuer",
+        "tenant",
+        "principal",
+        "instance",
+        "nonce",
+        "audience",
+        "key_revision",
+        "issued",
+        "expires",
+        "architecture_sha256",
+        "policy_revision",
+        "delegation"
+      ],
+      "additionalProperties": false
+    },
+    "operation": {
+      "type": "object",
+      "properties": {
+        "server": {
+          "$ref": "#/$defs/alias"
+        },
+        "tool": {
+          "$ref": "#/$defs/alias"
+        },
+        "schema_rev": {
+          "$ref": "#/$defs/alias"
+        },
+        "verb": {
+          "enum": [
+            "read",
+            "append",
+            "label",
+            "archive"
+          ]
+        },
+        "resource": {
+          "$ref": "#/$defs/alias"
+        },
+        "value": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4095
+        }
+      },
+      "required": [
+        "server",
+        "tool",
+        "schema_rev",
+        "verb",
+        "resource",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "request": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "wolftrap.instance-request/v1"
+        },
+        "claim": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/statement"
+            }
+          ]
+        },
+        "operation": {
+          "$ref": "#/$defs/operation"
+        }
+      },
+      "required": [
+        "schema",
+        "claim",
+        "operation"
+      ],
+      "additionalProperties": false
+    },
+    "key": {
+      "type": "object",
+      "properties": {
+        "revision": {
+          "$ref": "#/$defs/alias"
+        },
+        "previous": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4095
+        },
+        "since": {
+          "$ref": "#/$defs/tick"
+        },
+        "expires": {
+          "$ref": "#/$defs/tick"
+        },
+        "revoked_at": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/tick"
+            }
+          ]
+        }
+      },
+      "required": [
+        "revision",
+        "previous",
+        "since",
+        "expires",
+        "revoked_at"
+      ],
+      "additionalProperties": false
+    },
+    "baseline": {
+      "type": "object",
+      "properties": {
+        "principal": {
+          "$ref": "#/$defs/alias"
+        },
+        "architecture_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "instance": {
+          "$ref": "#/$defs/alias"
+        },
+        "key_revision": {
+          "$ref": "#/$defs/alias"
+        }
+      },
+      "required": [
+        "principal",
+        "architecture_sha256",
+        "instance",
+        "key_revision"
+      ],
+      "additionalProperties": false
+    },
+    "registration": {
+      "type": "object",
+      "properties": {
+        "principal": {
+          "$ref": "#/$defs/alias"
+        },
+        "keys": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/key"
+          },
+          "minItems": 1,
+          "maxItems": 8
+        }
+      },
+      "required": [
+        "principal",
+        "keys"
+      ],
+      "additionalProperties": false
+    },
+    "attestation": {
+      "type": "object",
+      "properties": {
+        "statement": {
+          "$ref": "#/$defs/statement"
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "framework",
+              "framework_version",
+              "model_provider",
+              "model_family",
+              "model_revision",
+              "build_sha256",
+              "dependency_sha256",
+              "sbom_sha256",
+              "mcp_tools",
+              "sandbox_sha256",
+              "permission_policy_sha256",
+              "capabilities",
+              "protected_config_sha256"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 13
+        },
+        "capabilities": {
+          "$ref": "#/$defs/capabilitySet"
+        }
+      },
+      "required": [
+        "statement",
+        "components",
+        "capabilities"
+      ],
+      "additionalProperties": false
+    },
+    "spent": {
+      "type": "object",
+      "properties": {
+        "principal": {
+          "$ref": "#/$defs/alias"
+        },
+        "nonce": {
+          "$ref": "#/$defs/alias"
+        },
+        "at": {
+          "$ref": "#/$defs/tick"
+        }
+      },
+      "required": [
+        "principal",
+        "nonce",
+        "at"
+      ],
+      "additionalProperties": false
+    },
+    "revoked": {
+      "type": "object",
+      "properties": {
+        "principal": {
+          "$ref": "#/$defs/alias"
+        },
+        "instance": {
+          "$ref": "#/$defs/alias"
+        },
+        "at": {
+          "$ref": "#/$defs/tick"
+        }
+      },
+      "required": [
+        "principal",
+        "instance",
+        "at"
+      ],
+      "additionalProperties": false
+    },
+    "grant": {
+      "type": "object",
+      "properties": {
+        "principal": {
+          "$ref": "#/$defs/alias"
+        },
+        "architecture_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "operation_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "scope": {
+          "$ref": "#/$defs/alias"
+        },
+        "epoch": {
+          "$ref": "#/$defs/alias"
+        },
+        "policy_revision": {
+          "$ref": "#/$defs/alias"
+        },
+        "delegation": {
+          "$ref": "#/$defs/lineage"
+        },
+        "since": {
+          "$ref": "#/$defs/tick"
+        },
+        "expires": {
+          "$ref": "#/$defs/tick"
+        },
+        "revoked_at": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/tick"
+            }
+          ]
+        }
+      },
+      "required": [
+        "principal",
+        "architecture_sha256",
+        "operation_sha256",
+        "scope",
+        "epoch",
+        "policy_revision",
+        "delegation",
+        "since",
+        "expires",
+        "revoked_at"
+      ],
+      "additionalProperties": false
+    },
+    "restriction": {
+      "type": "object",
+      "properties": {
+        "principal": {
+          "$ref": "#/$defs/alias"
+        },
+        "operation_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "scope": {
+          "$ref": "#/$defs/alias"
+        },
+        "policy_revision": {
+          "$ref": "#/$defs/alias"
+        },
+        "action": {
+          "enum": [
+            "REAUTHENTICATE",
+            "READ_ONLY",
+            "REQUIRE_HUMAN_APPROVAL",
+            "QUARANTINE",
+            "DENY"
+          ]
+        },
+        "since": {
+          "$ref": "#/$defs/tick"
+        },
+        "expires": {
+          "$ref": "#/$defs/tick"
+        },
+        "revoked_at": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/tick"
+            }
+          ]
+        },
+        "review": {
+          "$ref": "#/$defs/alias"
+        }
+      },
+      "required": [
+        "principal",
+        "operation_sha256",
+        "scope",
+        "policy_revision",
+        "action",
+        "since",
+        "expires",
+        "revoked_at",
+        "review"
+      ],
+      "additionalProperties": false
+    },
+    "anchor": {
+      "type": "object",
+      "properties": {
+        "trace_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "chain": {
+          "$ref": "#/$defs/alias"
+        },
+        "proposal": {
+          "$ref": "#/$defs/alias"
+        },
+        "binding": {
+          "$ref": "#/$defs/alias"
+        },
+        "phase": {
+          "enum": [
+            "prepare",
+            "commit"
+          ]
+        },
+        "at": {
+          "$ref": "#/$defs/tick"
+        },
+        "statement_sha256": {
+          "$ref": "#/$defs/digest"
+        },
+        "operation_sha256": {
+          "$ref": "#/$defs/digest"
+        }
+      },
+      "required": [
+        "trace_sha256",
+        "chain",
+        "proposal",
+        "binding",
+        "phase",
+        "at",
+        "statement_sha256",
+        "operation_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "registry": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "wolftrap.fixture-registry/v1"
+        },
+        "trust_domain": {
+          "$ref": "#/$defs/alias"
+        },
+        "issuer": {
+          "$ref": "#/$defs/alias"
+        },
+        "tenant": {
+          "$ref": "#/$defs/alias"
+        },
+        "audience": {
+          "$ref": "#/$defs/alias"
+        },
+        "since": {
+          "$ref": "#/$defs/tick"
+        },
+        "expires": {
+          "$ref": "#/$defs/tick"
+        },
+        "epoch": {
+          "$ref": "#/$defs/alias"
+        },
+        "policy_revision": {
+          "$ref": "#/$defs/alias"
+        },
+        "baseline": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/baseline"
+            }
+          ]
+        },
+        "principals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/registration"
+          },
+          "minItems": 0,
+          "maxItems": 16
+        },
+        "sessions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/attestation"
+          },
+          "minItems": 0,
+          "maxItems": 32
+        },
+        "used_nonces": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/spent"
+          },
+          "minItems": 0,
+          "maxItems": 64
+        },
+        "revocations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/revoked"
+          },
+          "minItems": 0,
+          "maxItems": 32
+        },
+        "grants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/grant"
+          },
+          "minItems": 0,
+          "maxItems": 64
+        },
+        "restrictions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/restriction"
+          },
+          "minItems": 0,
+          "maxItems": 32
+        },
+        "bindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/anchor"
+          },
+          "minItems": 0,
+          "maxItems": 48
+        }
+      },
+      "required": [
+        "schema",
+        "trust_domain",
+        "issuer",
+        "tenant",
+        "audience",
+        "since",
+        "expires",
+        "epoch",
+        "policy_revision",
+        "baseline",
+        "principals",
+        "sessions",
+        "used_nonces",
+        "revocations",
+        "grants",
+        "restrictions",
+        "bindings"
+      ],
+      "additionalProperties": false
+    },
+    "identity_witness": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "wolftrap.identity-witness/v1"
+        },
+        "binding": {
+          "$ref": "#/$defs/alias"
+        },
+        "phase": {
+          "enum": [
+            "prepare",
+            "commit"
+          ]
+        },
+        "claim": {
+          "$ref": "#/$defs/statement"
+        }
+      },
+      "required": [
+        "schema",
+        "binding",
+        "phase",
+        "claim"
+      ],
+      "additionalProperties": false
+    },
+    "trace": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "wolftrap.cursorial-identity-chain/v2"
+        },
+        "profile": {
+          "const": "wolfprint-fixture/v1"
+        },
+        "chain": {
+          "$ref": "cursorial-chain-v1.schema.json"
+        },
+        "identity_witnesses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identity_witness"
+          },
+          "minItems": 0,
+          "maxItems": 48
+        }
+      },
+      "required": [
+        "schema",
+        "profile",
+        "chain",
+        "identity_witnesses"
+      ],
+      "additionalProperties": false
+    },
+    "capabilitySet": {
+      "anyOf": [
+        {
+          "const": "UNKNOWN"
+        },
+        {
+          "type": "array",
+          "items": {
+            "enum": [
+              "read",
+              "append",
+              "label",
+              "archive"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 4
+        }
+      ]
+    }
+  }
+}

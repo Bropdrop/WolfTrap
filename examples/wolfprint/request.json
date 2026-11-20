@@ -1,0 +1,29 @@
+{
+  "claim": {
+    "architecture_sha256": "1eb831471e151d55469c3c49ed25cb699d2c6230fa093499b5935437032629ed",
+    "audience": 2,
+    "delegation": [
+      1,
+      2
+    ],
+    "expires": 145,
+    "instance": 12,
+    "issued": 2,
+    "issuer": 1,
+    "key_revision": 1,
+    "nonce": 22,
+    "policy_revision": 1,
+    "principal": 2,
+    "tenant": 2,
+    "trust_domain": 1
+  },
+  "operation": {
+    "resource": 2,
+    "schema_rev": 1,
+    "server": 1,
+    "tool": 1,
+    "value": 1,
+    "verb": "label"
+  },
+  "schema": "wolftrap.instance-request/v1"
+}
