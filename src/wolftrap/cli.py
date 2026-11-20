@@ -325,6 +325,12 @@ def _wolfprint(arguments: argparse.Namespace) -> int:
     return command(arguments)
 
 
+def _wolfnet(arguments: argparse.Namespace) -> int:
+    from .wolfnet_evidence import command
+
+    return command(arguments)
+
+
 def _verify_artex_chain(arguments: argparse.Namespace) -> int:
     from .artex_chain import verify_evidence
 
@@ -733,6 +739,39 @@ def build_parser() -> argparse.ArgumentParser:
             wp.add_argument("--chain", help="optional identity-qualified fictional trace for behavioral correlation")
         wp.add_argument("--evidence-dir" if name.startswith("verify") else "--output-dir", required=True)
         wp.set_defaults(handler=_wolfprint)
+
+    for name, help_text in (
+        ("verify-wolfnet-feed", "verify an offline signed advisory history and subscriber checkpoint"),
+        ("evaluate-wolfnet", "simulate a subscriber decision for one fictional principal and operation"),
+        ("challenge-wolfnet", "qualify WolfNet signatures, advisory lifecycle and subscriber decisions"),
+        ("verify-wolfnet-challenge", "independently regenerate and compare WolfNet qualification evidence"),
+    ):
+        wn = subparsers.add_parser(name, help=help_text)
+        wn.add_argument("--expected-head", help="trusted full WolfTrap commit ID")
+        if name in ("verify-wolfnet-feed", "evaluate-wolfnet"):
+            for role in ("feed", "trust", "checkpoint"):
+                wn.add_argument("--" + role, required=True, help="explicit local " + role + " JSON")
+            for role in ("trust", "checkpoint"):
+                wn.add_argument("--" + role + "-sha256", required=True, help="subscriber-selected byte pin")
+            wn.add_argument("--at", required=True, help="subscriber UTC time YYYY-MM-DDTHH:MM:SSZ")
+            wn.add_argument("--use-accepted", action="store_true", help="read-only evaluation of the pinned current head")
+            wn.add_argument("--witnesses", help="separately signed fictional observation receipts")
+            wn.add_argument("--trace", action="append", help="selected Cursorial identity trace, repeat up to four times")
+            wn.add_argument("--witness-registry", help="separate historical WolfPrint issuer and host registry")
+            wn.add_argument("--witness-registry-sha256", help="independent pin of historical registry bytes")
+            if name == "evaluate-wolfnet":
+                wn.add_argument("--verified-feed-dir", required=True, help="previously generated feed evidence to replay")
+                wn.add_argument("--verified-at", help="time of original feed verification, defaults to --at")
+                for role in ("policy", "manifest", "request", "registry"):
+                    wn.add_argument("--" + role, required=True, help="explicit local subscriber or presentation input")
+                wn.add_argument("--registry-sha256", required=True, help="independent current WolfPrint registry pin")
+                wn.add_argument("--policy-sha256", required=True, help="operator's local policy byte pin")
+            dest = wn.add_mutually_exclusive_group(required=True)
+            dest.add_argument("--output-dir", help="fresh directory for published evidence")
+            dest.add_argument("--evidence-dir", help="regenerate and compare every file in this bundle")
+        else:
+            wn.add_argument("--output-dir" if name == "challenge-wolfnet" else "--evidence-dir", required=True)
+        wn.set_defaults(handler=_wolfnet)
 
     camouflage = subparsers.add_parser(
         "challenge-cloud-camouflage", help="measure offline cloud-C2 blind spots and lookalikes")

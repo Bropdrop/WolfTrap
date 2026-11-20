@@ -1,0 +1,42 @@
+{
+  "schema": "wolftrap.wolfnet-witnesses/v1",
+  "witnesses": [
+    {
+      "body": {
+        "binding": 6,
+        "category": "unauthorized-effect",
+        "classification": "SYNTHETICALLY VERIFIED",
+        "expires_at": "2030-01-01T00:02:00Z",
+        "incident_ref": "947dd3b500252e29e1f6a27344e321a8ad9dab48a9095a7b7d55a1a161f74e00",
+        "observed_at": "2030-01-01T00:00:16Z",
+        "operation_sha256": "db9c7c1e2e2e87e6a77dac08f02a3b27a9d9d223f5067f2a488c98963027496d",
+        "provenance_ref": "730572cb4849e90c29bd4f80980f2b8b0d1e24306a40b49b6221d9d6011ff739",
+        "resource_scope": 2,
+        "schema": "wolftrap.wolfnet-observation/v1",
+        "subject": {
+          "architecture_sha256": "1eb831471e151d55469c3c49ed25cb699d2c6230fa093499b5935437032629ed",
+          "instance_id": "96dcd5fd6f96b3592135c9aa2a49b860ba5d48a94ea3912dca69450cf8f61cd0",
+          "issuer": 1,
+          "key_revision": 1,
+          "principal_id": "2c5f894119cc61db92e99020ecc5bdab23e621160edd439e8e8b1f36bddeeb84",
+          "tenant": 2,
+          "trust_domain": 1
+        },
+        "subscription": {
+          "issuer": 1,
+          "realm": 71,
+          "stream": 1,
+          "tenant": 2,
+          "trust_domain": 1
+        },
+        "trace_sha256": "6f98628bce270375819f34765a3e00c72210cf3ee5b2d0e46a2d3a6913007b41"
+      },
+      "seal": {
+        "alg": "Ed25519",
+        "key_revision": 1,
+        "signature": "290f5b801f67c0c1a3c684cf4a4a2d2fe42b68bd8d9dd1010c009cfe1e9232f061eded255733666073c15749d72d4bf9ca3bc25be258c01e580b93cda8ebb60d",
+        "signer": 5
+      }
+    }
+  ]
+}

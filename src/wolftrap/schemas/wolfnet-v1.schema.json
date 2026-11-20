@@ -1,0 +1,773 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WolfNet v1 closed fictional offline inputs",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/trust"
+    },
+    {
+      "$ref": "#/$defs/checkpoint"
+    },
+    {
+      "$ref": "#/$defs/feed"
+    },
+    {
+      "$ref": "#/$defs/evidence"
+    },
+    {
+      "$ref": "#/$defs/policy"
+    }
+  ],
+  "$defs": {
+    "alias": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 4095
+    },
+    "hash": {
+      "type": "string",
+      "minLength": 64,
+      "maxLength": 64,
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "signature": {
+      "type": "string",
+      "minLength": 128,
+      "maxLength": 128,
+      "pattern": "^[0-9a-f]{128}$"
+    },
+    "time": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 20,
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "advisory_id": {
+      "type": "string",
+      "minLength": 67,
+      "maxLength": 67,
+      "pattern": "^WN-[0-9a-f]{64}$"
+    },
+    "action": {
+      "enum": [
+        "ALLOW",
+        "MONITOR",
+        "REAUTHENTICATE",
+        "READ_ONLY",
+        "REQUIRE_HUMAN_APPROVAL",
+        "QUARANTINE",
+        "DENY"
+      ]
+    },
+    "confidence": {
+      "enum": [
+        "LOW",
+        "MEDIUM",
+        "HIGH"
+      ]
+    },
+    "classification": {
+      "enum": [
+        "STATIC REVIEW SIGNAL",
+        "SYNTHETICALLY VERIFIED",
+        "AUTHORIZED RUNTIME VERIFIED",
+        "INCONCLUSIVE"
+      ]
+    },
+    "category": {
+      "enum": [
+        "metadata-indicator",
+        "rejected-request",
+        "unauthorized-effect"
+      ]
+    },
+    "subscription": {
+      "type": "object",
+      "properties": {
+        "realm": {
+          "$ref": "#/$defs/alias"
+        },
+        "stream": {
+          "$ref": "#/$defs/alias"
+        },
+        "issuer": {
+          "$ref": "#/$defs/alias"
+        },
+        "trust_domain": {
+          "$ref": "#/$defs/alias"
+        },
+        "tenant": {
+          "$ref": "#/$defs/alias"
+        }
+      },
+      "required": [
+        "realm",
+        "stream",
+        "issuer",
+        "trust_domain",
+        "tenant"
+      ],
+      "additionalProperties": false
+    },
+    "subject": {
+      "type": "object",
+      "properties": {
+        "issuer": {
+          "$ref": "#/$defs/alias"
+        },
+        "trust_domain": {
+          "$ref": "#/$defs/alias"
+        },
+        "tenant": {
+          "$ref": "#/$defs/alias"
+        },
+        "principal_id": {
+          "$ref": "#/$defs/hash"
+        },
+        "instance_id": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/hash"
+            }
+          ]
+        },
+        "architecture_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "key_revision": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/alias"
+            }
+          ]
+        }
+      },
+      "required": [
+        "issuer",
+        "trust_domain",
+        "tenant",
+        "principal_id",
+        "instance_id",
+        "architecture_sha256",
+        "key_revision"
+      ],
+      "additionalProperties": false
+    },
+    "seal": {
+      "type": "object",
+      "properties": {
+        "signer": {
+          "$ref": "#/$defs/alias"
+        },
+        "key_revision": {
+          "$ref": "#/$defs/alias"
+        },
+        "alg": {
+          "const": "Ed25519"
+        },
+        "signature": {
+          "$ref": "#/$defs/signature"
+        }
+      },
+      "required": [
+        "signer",
+        "key_revision",
+        "alg",
+        "signature"
+      ],
+      "additionalProperties": false
+    },
+    "key": {
+      "type": "object",
+      "properties": {
+        "signer": {
+          "$ref": "#/$defs/alias"
+        },
+        "org": {
+          "$ref": "#/$defs/alias"
+        },
+        "role": {
+          "enum": [
+            "distributor",
+            "publisher",
+            "reviewer",
+            "observer"
+          ]
+        },
+        "revision": {
+          "$ref": "#/$defs/alias"
+        },
+        "predecessor": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4095
+        },
+        "public_key": {
+          "$ref": "#/$defs/hash"
+        },
+        "since": {
+          "$ref": "#/$defs/time"
+        },
+        "expires": {
+          "$ref": "#/$defs/time"
+        },
+        "revoked_at": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/time"
+            }
+          ]
+        }
+      },
+      "required": [
+        "signer",
+        "org",
+        "role",
+        "revision",
+        "predecessor",
+        "public_key",
+        "since",
+        "expires",
+        "revoked_at"
+      ],
+      "additionalProperties": false
+    },
+    "trust": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "wolftrap.wolfnet-trust/v1"
+        },
+        "subscription": {
+          "$ref": "#/$defs/subscription"
+        },
+        "revision": {
+          "$ref": "#/$defs/alias"
+        },
+        "clock_origin": {
+          "$ref": "#/$defs/time"
+        },
+        "since": {
+          "$ref": "#/$defs/time"
+        },
+        "expires": {
+          "$ref": "#/$defs/time"
+        },
+        "keys": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/key"
+          },
+          "minItems": 1,
+          "maxItems": 24
+        }
+      },
+      "required": [
+        "schema",
+        "subscription",
+        "revision",
+        "clock_origin",
+        "since",
+        "expires",
+        "keys"
+      ],
+      "additionalProperties": false
+    },
+    "checkpoint": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "wolftrap.wolfnet-checkpoint/v1"
+        },
+        "subscription": {
+          "$ref": "#/$defs/subscription"
+        },
+        "trust_revision": {
+          "$ref": "#/$defs/alias"
+        },
+        "trust_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 16
+        },
+        "head": {
+          "$ref": "#/$defs/hash"
+        },
+        "accepted_at": {
+          "$ref": "#/$defs/time"
+        }
+      },
+      "required": [
+        "schema",
+        "subscription",
+        "trust_revision",
+        "sequence",
+        "head",
+        "accepted_at"
+      ],
+      "additionalProperties": false
+    },
+    "advisory": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "wolftrap.wolfnet-advisory/v1"
+        },
+        "subscription": {
+          "$ref": "#/$defs/subscription"
+        },
+        "publisher": {
+          "$ref": "#/$defs/alias"
+        },
+        "serial": {
+          "$ref": "#/$defs/alias"
+        },
+        "advisory_id": {
+          "$ref": "#/$defs/advisory_id"
+        },
+        "revision": {
+          "$ref": "#/$defs/alias"
+        },
+        "created_at": {
+          "$ref": "#/$defs/time"
+        },
+        "updated_at": {
+          "$ref": "#/$defs/time"
+        },
+        "expires_at": {
+          "$ref": "#/$defs/time"
+        },
+        "supersedes": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/hash"
+            }
+          ]
+        },
+        "withdraws": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/hash"
+            }
+          ]
+        },
+        "status": {
+          "enum": [
+            "PENDING_REVIEW",
+            "ACTIVE",
+            "CONTESTED",
+            "WITHDRAWN"
+          ]
+        },
+        "subject": {
+          "$ref": "#/$defs/subject"
+        },
+        "category": {
+          "$ref": "#/$defs/category"
+        },
+        "operation_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "resource_scope": {
+          "$ref": "#/$defs/alias"
+        },
+        "incident_ref": {
+          "$ref": "#/$defs/hash"
+        },
+        "severity": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "identity_assurance": {
+          "enum": [
+            "UNKNOWN",
+            "DECLARED",
+            "FIXTURE_ISSUER_BOUND",
+            "RUNTIME_AUTHENTICATED"
+          ]
+        },
+        "evidence_class": {
+          "$ref": "#/$defs/classification"
+        },
+        "evidence_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "provenance_ref": {
+          "$ref": "#/$defs/hash"
+        },
+        "recommendation": {
+          "$ref": "#/$defs/action"
+        },
+        "distribution": {
+          "const": "FICTIONAL_REDACTED"
+        },
+        "sharing_consent": {
+          "type": "boolean"
+        },
+        "review_ref": {
+          "$ref": "#/$defs/alias"
+        },
+        "appeal_ref": {
+          "$ref": "#/$defs/alias"
+        }
+      },
+      "required": [
+        "schema",
+        "subscription",
+        "publisher",
+        "serial",
+        "advisory_id",
+        "revision",
+        "created_at",
+        "updated_at",
+        "expires_at",
+        "supersedes",
+        "withdraws",
+        "status",
+        "subject",
+        "category",
+        "operation_sha256",
+        "resource_scope",
+        "incident_ref",
+        "severity",
+        "confidence",
+        "identity_assurance",
+        "evidence_class",
+        "evidence_sha256",
+        "provenance_ref",
+        "recommendation",
+        "distribution",
+        "sharing_consent",
+        "review_ref",
+        "appeal_ref"
+      ],
+      "additionalProperties": false
+    },
+    "publication": {
+      "type": "object",
+      "properties": {
+        "record": {
+          "$ref": "#/$defs/advisory"
+        },
+        "author": {
+          "$ref": "#/$defs/seal"
+        },
+        "approvals": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/seal"
+          },
+          "minItems": 0,
+          "maxItems": 4
+        }
+      },
+      "required": [
+        "record",
+        "author",
+        "approvals"
+      ],
+      "additionalProperties": false
+    },
+    "snapshot": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "wolftrap.wolfnet-snapshot/v1"
+        },
+        "subscription": {
+          "$ref": "#/$defs/subscription"
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16
+        },
+        "previous": {
+          "$ref": "#/$defs/hash"
+        },
+        "published_at": {
+          "$ref": "#/$defs/time"
+        },
+        "expires_at": {
+          "$ref": "#/$defs/time"
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/publication"
+          },
+          "minItems": 0,
+          "maxItems": 4
+        }
+      },
+      "required": [
+        "schema",
+        "subscription",
+        "sequence",
+        "previous",
+        "published_at",
+        "expires_at",
+        "entries"
+      ],
+      "additionalProperties": false
+    },
+    "frame": {
+      "type": "object",
+      "properties": {
+        "body": {
+          "$ref": "#/$defs/snapshot"
+        },
+        "seal": {
+          "$ref": "#/$defs/seal"
+        }
+      },
+      "required": [
+        "body",
+        "seal"
+      ],
+      "additionalProperties": false
+    },
+    "feed": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "wolftrap.wolfnet-feed/v1"
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/frame"
+          },
+          "minItems": 1,
+          "maxItems": 16
+        }
+      },
+      "required": [
+        "schema",
+        "history"
+      ],
+      "additionalProperties": false
+    },
+    "observation": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "wolftrap.wolfnet-observation/v1"
+        },
+        "subscription": {
+          "$ref": "#/$defs/subscription"
+        },
+        "incident_ref": {
+          "$ref": "#/$defs/hash"
+        },
+        "provenance_ref": {
+          "$ref": "#/$defs/hash"
+        },
+        "subject": {
+          "$ref": "#/$defs/subject"
+        },
+        "category": {
+          "$ref": "#/$defs/category"
+        },
+        "operation_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "resource_scope": {
+          "$ref": "#/$defs/alias"
+        },
+        "observed_at": {
+          "$ref": "#/$defs/time"
+        },
+        "expires_at": {
+          "$ref": "#/$defs/time"
+        },
+        "classification": {
+          "$ref": "#/$defs/classification"
+        },
+        "trace_sha256": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/hash"
+            }
+          ]
+        },
+        "binding": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/alias"
+            }
+          ]
+        }
+      },
+      "required": [
+        "schema",
+        "subscription",
+        "incident_ref",
+        "provenance_ref",
+        "subject",
+        "category",
+        "operation_sha256",
+        "resource_scope",
+        "observed_at",
+        "expires_at",
+        "classification",
+        "trace_sha256",
+        "binding"
+      ],
+      "additionalProperties": false
+    },
+    "witness": {
+      "type": "object",
+      "properties": {
+        "body": {
+          "$ref": "#/$defs/observation"
+        },
+        "seal": {
+          "$ref": "#/$defs/seal"
+        }
+      },
+      "required": [
+        "body",
+        "seal"
+      ],
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "wolftrap.wolfnet-witnesses/v1"
+        },
+        "witnesses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/witness"
+          },
+          "minItems": 0,
+          "maxItems": 16
+        }
+      },
+      "required": [
+        "schema",
+        "witnesses"
+      ],
+      "additionalProperties": false
+    },
+    "policy": {
+      "type": "object",
+      "properties": {
+        "schema": {
+          "const": "wolftrap.wolfnet-policy/v1"
+        },
+        "subscription": {
+          "$ref": "#/$defs/subscription"
+        },
+        "revision": {
+          "$ref": "#/$defs/alias"
+        },
+        "since": {
+          "$ref": "#/$defs/time"
+        },
+        "expires": {
+          "$ref": "#/$defs/time"
+        },
+        "publishers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/alias"
+          },
+          "minItems": 1,
+          "maxItems": 16
+        },
+        "mode": {
+          "enum": [
+            "advisory",
+            "fictional-simulation"
+          ]
+        },
+        "permit_deny": {
+          "type": "boolean"
+        },
+        "disputed_instances": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/hash"
+          },
+          "minItems": 0,
+          "maxItems": 32
+        },
+        "min_severity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "min_confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "min_reviewers": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/action"
+          },
+          "minItems": 5,
+          "maxItems": 5
+        },
+        "appeal_holds": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/advisory_id"
+          },
+          "minItems": 0,
+          "maxItems": 32
+        }
+      },
+      "required": [
+        "schema",
+        "subscription",
+        "revision",
+        "since",
+        "expires",
+        "publishers",
+        "min_severity",
+        "min_confidence",
+        "min_reviewers",
+        "actions",
+        "appeal_holds"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

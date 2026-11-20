@@ -27,7 +27,7 @@ def definitions() -> dict:
         os.close(fd)
 
 
-def _matches(value, spec: dict) -> bool:
+def matches_schema(value, spec: dict, local_defs: dict) -> bool:
     if "$ref" in spec:
         if spec["$ref"] == "cursorial-chain-v1.schema.json":
             try:
@@ -35,9 +35,9 @@ def _matches(value, spec: dict) -> bool:
             except Gap:
                 return False
             return True
-        return _matches(value, definitions()[spec["$ref"].removeprefix("#/$defs/")])
+        return matches_schema(value, local_defs[spec["$ref"].removeprefix("#/$defs/")], local_defs)
     if "anyOf" in spec:
-        return any(_matches(value, alternative) for alternative in spec["anyOf"])
+        return any(matches_schema(value, alternative, local_defs) for alternative in spec["anyOf"])
     if "const" in spec:
         return value == spec["const"]
     if "enum" in spec:
@@ -47,20 +47,22 @@ def _matches(value, spec: dict) -> bool:
         return value is None
     if kind == "integer":
         return type(value) is int and spec["minimum"] <= value <= spec["maximum"]
+    if kind == "boolean":
+        return type(value) is bool
     if kind == "string":
         return (isinstance(value, str) and spec["minLength"] <= len(value) <= spec["maxLength"]
                 and re.fullmatch(spec["pattern"], value) is not None)
     if kind == "array":
         return (isinstance(value, list) and spec["minItems"] <= len(value) <= spec["maxItems"]
-                and all(_matches(item, spec["items"]) for item in value))
+                and all(matches_schema(item, spec["items"], local_defs) for item in value))
     if kind == "object":
         return (isinstance(value, dict) and set(spec["required"]) <= value.keys() <= spec["properties"].keys()
-                and all(_matches(v, spec["properties"][k]) for k, v in value.items()))
+                and all(matches_schema(v, spec["properties"][k], local_defs) for k, v in value.items()))
     raise Gap("unsupported-local-schema-keyword")
 
 
 def validate(value, kind: str) -> None:
-    need(_matches(value, definitions()[kind]), "invalid-" + kind + "-shape")
+    need(matches_schema(value, definitions()[kind], definitions()), "invalid-" + kind + "-shape")
 
 
 def domain_digest(domain: str, value) -> str:
