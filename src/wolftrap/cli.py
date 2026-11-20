@@ -527,6 +527,8 @@ def _reproduce(arguments: argparse.Namespace) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
+    from .mcp_evidence import command as mcp_command
+
     parser = argparse.ArgumentParser(
         prog="wolftrap",
         description=(
@@ -535,6 +537,24 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
+
+    for name, help_text in (
+        ("scan-mcp", "inspect two offline MCP tools/list snapshots"),
+        ("verify-mcp", "replay MCP inspection against the explicit source files"),
+        ("challenge-mcp", "qualify MCP rules against independently labelled synthetic controls"),
+        ("verify-mcp-challenge", "replay the synthetic MCP qualification and verify all evidence"),
+    ):
+        mcp = subparsers.add_parser(name, help=help_text)
+        if name in ("scan-mcp", "verify-mcp"):
+            mcp.add_argument("--baseline", required=True, help="operator-selected baseline snapshot")
+            mcp.add_argument("--candidate", required=True, help="candidate snapshot from the same capture stream")
+            mcp.add_argument("--baseline-sha256", help="expected baseline digest from an independent record")
+            mcp.add_argument("--config", help="optional local stdio client JSON configuration")
+        if name.startswith("verify"):
+            mcp.add_argument("--evidence-dir", required=True)
+        else:
+            mcp.add_argument("--output-dir", required=True, help="fresh evidence directory outside input directories")
+        mcp.set_defaults(handler=mcp_command)
 
     run = subparsers.add_parser("run", help="run a bounded synthetic campaign")
     run.add_argument("--seed", type=int, default=20261113)
