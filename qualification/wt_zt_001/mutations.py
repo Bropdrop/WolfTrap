@@ -39,8 +39,7 @@ MUTATIONS = [
 def trial(directory, case):
     env = dict(PATH=os.environ["PATH"], PYTHONPATH=str(HERE.parents[1] / "src"),
                PYTHONDONTWRITEBYTECODE="1", PYTHONNOUSERSITE="1", PYTHONHASHSEED="0")
-    code = "import experiment,json,sys; print(json.dumps(experiment.run([sys.argv[1]])[0],sort_keys=True))"
-    cmd = [sys.executable, "-I", str(HERE / "offline.py"), sys.executable, "-c", code, case]
+    cmd = [sys.executable, "-I", str(HERE / "offline.py"), sys.executable, "trace_trial.py", case]
     proc = subprocess.run(cmd, cwd=directory, capture_output=True, env=env, timeout=30)
     if proc.returncode:
         return None
@@ -57,11 +56,20 @@ def run():
             clean = path.read_text()
             if clean.count(old) < 1:
                 raise ValueError("mutation anchor missing")
-            baseline = trial(lab, case)
+            baseline_trial = trial(lab, case)
             path.write_text(clean.replace(old, new, 1))
-            mutant = trial(lab, case)
+            mutant_trial = trial(lab, case)
             path.write_text(clean)
-            restored = trial(lab, case)
+            restored_trial = trial(lab, case)
+            baseline, mutant, restored = [r["observation"] if r else None
+                                          for r in (baseline_trial, mutant_trial, restored_trial)]
+            first = None
+            if baseline_trial and mutant_trial:
+                for i, (a, b) in enumerate(zip(baseline_trial["events"], mutant_trial["events"])):
+                    if a[::2] != b[::2]:
+                        first = dict(event_index=i, original=baseline_trial["events"][i:i+3],
+                                     mutated=mutant_trial["events"][i:i+3])
+                        break
             label = "INCONCLUSIVE"
             difference = None
             if baseline and baseline["oracle"] == "MATCH" and restored == baseline and mutant:
@@ -72,7 +80,7 @@ def run():
                         break
             rows.append(dict(control=control, case=case, original=old, replacement=new,
                              classification=label, first_observable_difference=difference,
-                             baseline=baseline, mutated=mutant, restored=restored,
+                             first_executed_change=first, baseline=baseline, mutated=mutant, restored=restored,
                              restored_equal=bool(baseline and baseline==restored)))
     return rows
 

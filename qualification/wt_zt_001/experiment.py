@@ -75,20 +75,22 @@ def exercise(case, path):
         if action.get("claim-as-grant"):
             tokens["owner"] = memory.text
     dispatch = lambda: invoke(path, proposal, tokens, keys)
-    if mode_hint := action.get("mode"):
-        if mode_hint == "restart-expired-owner":
-            update(path, "UPDATE policy SET tick=13")
-        elif mode_hint == "old-client":
-            # The saved request predates a surviving host epoch. Deserialize it after fencing.
-            old_request = json.dumps([proposal, tokens])
-            update(path, "UPDATE policy SET generation=2")
-            proposal, tokens = json.loads(old_request)
+    mode = action.get("mode", "dispatch")
+    if mode == "restart-expired-owner":
+        update(path, "UPDATE policy SET tick=13")
+    elif mode == "old-client":
+        update(path, "UPDATE policy SET generation=2")
     witness_at_dispatch = oracle.observe(path)
     state = witness_at_dispatch["policy"]
     identity = host.assess_identity(tokens.get("issuer"), keys, state["tick"], proposal,
                                     state["generation"], state["credential"]).status if state else None
-    mode = action.get("mode", "dispatch")
-    if mode == "duplicate":
+    if mode in {"restart-expired-owner", "old-client"}:
+        # Start a fresh interpreter with only the previously prepared fictional request.
+        child = subprocess.run([sys.executable, str(Path(__file__).resolve()), "resume", str(path)],
+                               input=json.dumps([proposal, tokens]), text=True, capture_output=True,
+                               timeout=20, check=True)
+        responses = [child.stdout.strip()]
+    elif mode == "duplicate":
         responses = [dispatch(), dispatch()]
     elif mode == "concurrent":
         barrier = Barrier(2)
@@ -111,7 +113,7 @@ def exercise(case, path):
         else:
             responses.append("HOLD")
     elif mode == "fake-ack":
-        responses = ["ACK", "HOLD" if not oracle.observe(path)["effects"] else "RECOVERED"]
+        responses = ["ACK", "RECOVERED" if reconcile(path, proposal) == "RECOVERED" else "HOLD"]
     elif mode == "unqueryable":
         responses = ["TIMEOUT", reconcile(path.with_suffix(".missing"), proposal)]
     elif mode == "conflicting-receipt":
@@ -143,6 +145,9 @@ def run(ids=None):
 if __name__ == "__main__":
     if len(sys.argv) == 4 and sys.argv[1] == "child" and sys.argv[3] in {"before-commit", "after-commit"}:
         killed_child(Path(sys.argv[2]), sys.argv[3])
+    elif len(sys.argv) == 3 and sys.argv[1] == "resume":
+        proposal, tokens = json.loads(sys.stdin.read(32768))
+        print(invoke(Path(sys.argv[2]), proposal, tokens, fixtures.roots()))
     elif len(sys.argv) == 1:
         results = run()
         print(json.dumps(results, sort_keys=True, indent=2))

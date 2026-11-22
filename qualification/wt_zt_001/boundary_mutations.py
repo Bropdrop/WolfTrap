@@ -1,5 +1,4 @@
 """Single-guard experiments on fixture file capture and local artifact verification."""
-import hashlib
 import importlib.util
 import io
 import json
