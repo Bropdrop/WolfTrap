@@ -31,4 +31,7 @@ jobs:
           sudo unshare --net -- setpriv --reuid="$(id -u)" --regid="$(id -g)" \
             --clear-groups --no-new-privs -- env -i \
             PATH="$PATH" PYTHONDONTWRITEBYTECODE=1 PYTHONHASHSEED=0 \
-            python3 -m unittest discover -s qualification/geotrace -p test_recovery.py -v
+            bash -eu -c '
+              python3 -m unittest discover -s qualification/geotrace -p "test_recovery*.py" -v
+              python3 qualification/geotrace/qualify_mutations.py
+            '

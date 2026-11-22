@@ -17,6 +17,7 @@ import stat
 import sys
 import unicodedata
 import zipfile
+import zlib
 
 SCHEMA = "wolftrap.geotrace-recovery/v1"
 MANIFEST_SCHEMA = "wolftrap.geotrace-recovery-manifest/v1"
@@ -105,6 +106,7 @@ def inventory_zip(archive: bytes) -> list[dict[str, object]]:
         if not infos or len(infos) > MAX_FILES:
             raise UnsafeArtifact("ZIP file count outside allowed bounds")
         paths: dict[str, str] = {}
+        spellings: dict[str, str] = {}
         entries: list[dict[str, object]] = []
         total = 0
         for info in infos:
@@ -116,10 +118,18 @@ def inventory_zip(archive: bytes) -> list[dict[str, object]]:
                 raise UnsafeArtifact("encrypted ZIP members not supported")
             if info.compress_type not in (zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED):
                 raise UnsafeArtifact("unsupported ZIP compression")
+            # ZipInfo can normalize the decoded name (including truncation at NUL).
+            if info.orig_filename != info.filename:
+                raise UnsafeArtifact("ambiguous ZIP member name")
             name = safe_archive_name(info.filename, is_dir)
             alias = name.casefold()
             if alias in paths:
                 raise UnsafeArtifact("duplicate or case-ambiguous ZIP path")
+            parts = name.split("/")
+            for end in range(1, len(parts) + 1):
+                prefix = "/".join(parts[:end])
+                if spellings.setdefault(prefix.casefold(), prefix) != prefix:
+                    raise UnsafeArtifact("case-ambiguous ZIP path component")
             paths[alias] = "dir" if is_dir else "file"
             if is_dir:
                 if info.file_size != 0:
@@ -144,7 +154,7 @@ def inventory_zip(archive: bytes) -> list[dict[str, object]]:
                         if actual > MAX_MEMBER or actual > info.file_size:
                             raise UnsafeArtifact("ZIP member changed or exceeded bound")
                         digest.update(chunk)
-            except (OSError, ValueError, RuntimeError, EOFError, zipfile.BadZipFile) as exc:
+            except (OSError, ValueError, RuntimeError, EOFError, zlib.error, zipfile.BadZipFile) as exc:
                 raise UnsafeArtifact("ZIP payload invalid or inconsistent") from exc
             if actual != info.file_size:
                 raise UnsafeArtifact("ZIP payload size mismatch")
@@ -232,12 +242,8 @@ def publish(path: Path, data: bytes) -> None:
         os.close(fd)
 
 
-def create(archive: Path, output: Path, expected: str | None) -> dict[str, object]:
-    raw = read_regular(archive, MAX_ARCHIVE)
-    report = build_report(raw, expected)
-    body = encode(report)
-    markdown = render(report)
-    manifest = {
+def manifest_for(report: dict[str, object], body: bytes, markdown: bytes) -> dict[str, object]:
+    return {
         "schema": MANIFEST_SCHEMA,
         "state": "COMPLETE_INVENTORY_ONLY",
         "qualification": report["qualification"],
@@ -247,6 +253,14 @@ def create(archive: Path, output: Path, expected: str | None) -> dict[str, objec
             MARKDOWN: {"bytes": len(markdown), "sha256": sha(markdown)},
         },
     }
+
+
+def create(archive: Path, output: Path, expected: str | None) -> dict[str, object]:
+    raw = read_regular(archive, MAX_ARCHIVE)
+    report = build_report(raw, expected)
+    body = encode(report)
+    markdown = render(report)
+    manifest = manifest_for(report, body, markdown)
     open_evidence(output)
     publish(output / REPORT, body)
     publish(output / MARKDOWN, markdown)
@@ -259,7 +273,8 @@ def validate(archive: Path, directory: Path, expected: str | None) -> dict[str, 
         raise UnsafeArtifact("evidence directory unavailable")
     if {x.name for x in directory.iterdir()} != {REPORT, MARKDOWN, MANIFEST}:
         raise UnsafeArtifact("evidence contains missing or unexpected members")
-    manifest = strict_json(read_regular(directory / MANIFEST, 128 * 1024))
+    manifest_bytes = read_regular(directory / MANIFEST, 128 * 1024)
+    manifest = strict_json(manifest_bytes)
     if not isinstance(manifest, dict) or (
         manifest.get("schema") != MANIFEST_SCHEMA
         or manifest.get("state") != "COMPLETE_INVENTORY_ONLY"
@@ -276,7 +291,7 @@ def validate(archive: Path, directory: Path, expected: str | None) -> dict[str, 
     fresh = build_report(read_regular(archive, MAX_ARCHIVE), expected)
     if saved != fresh or payload[REPORT] != encode(fresh) or payload[MARKDOWN] != render(fresh):
         raise UnsafeArtifact("recovery report differs from an independent archive reread")
-    if manifest["archive_sha256"] != fresh["archive"]["sha256"] or manifest["qualification"] != fresh["qualification"]:
+    if manifest_bytes != encode(manifest_for(fresh, payload[REPORT], payload[MARKDOWN])):
         raise UnsafeArtifact("manifest conflicts with archive")
     return fresh
 
