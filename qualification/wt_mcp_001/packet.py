@@ -44,11 +44,11 @@ def collect(path, runs):
     check(path == path.resolve() and not path.is_relative_to(ROOT), "fresh external directory required")
     source = source_identity()
     path.mkdir(mode=0o700)
-    for source, target in [("suite/safety-case.json","safety-case.json"), ("mutation/mutations.json","mutations.json"),
+    for relative, target in [("suite/safety-case.json","safety-case.json"), ("mutation/mutations.json","mutations.json"),
                            ("codex/codex.json","codex.json"), ("suite/sdk.strace","sdk.strace"),
                            ("codex/codex.strace","codex.strace"), ("suite/sdk-state/witness.jsonl","sdk.jsonl"),
                            ("codex/state/witness.jsonl","codex.jsonl")]:
-        (path/target).write_bytes(read(runs/source))
+        (path/target).write_bytes(read(runs/relative))
     for client, base in [("sdk","suite/sdk-state"),("codex","codex/state")]:
         for name in EXPECTED:
             (path/(client+"-"+name)).write_bytes(read(runs/base/"bundle"/name))
