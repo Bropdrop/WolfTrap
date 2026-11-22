@@ -1,6 +1,6 @@
 # WolfTrap Security plugin v0.1.0 (candidate)
 
-A skills-only, local-first Agent Plugins package for Codex and supported ChatGPT desktop/Work plugin environments. It orchestrates WolfTrap's *existing* CLI. It does not contain an MCP server, grant remote access, install the WolfTrap engine, or publish anything to the public Plugins Directory.
+A skills-only, **desktop/local-executor-required** Agent Plugins package for supported Codex and ChatGPT desktop environments. Cloud-only sessions cannot be assumed to access local files or execute this CLI. It orchestrates WolfTrap's *existing* CLI. It does not contain an MCP server, grant remote access, install the WolfTrap engine, or publish anything to the public Plugins Directory.
 
 ## Contents
 
@@ -14,7 +14,7 @@ A skills-only, local-first Agent Plugins package for Codex and supported ChatGPT
 
 Python 3.11+ and a separately installed **reviewed and commit-pinned** WolfTrap CLI from this repository are required to execute scans. The CLI's `scan-build` mode may require the documented optional PyYAML dependency. Installation of the scanner is a separate conscious step; never install or execute dependencies from an untrusted scanned project.
 
-The plugin itself has **no network tools, no credentials, no lifecycle hooks and no MCP server**. Scans are limited to local source directories the user is authorized to inspect. They write evidence outside the inspected tree and do not execute that tree's project code.
+The portable manifest declares `extensions.com.openai.requires_local_executor: true` because this workflow calls a trusted local CLI. The plugin itself has **no network tools, no credentials, no lifecycle hooks and no MCP server**. Scans are limited to local source directories the user is authorized to inspect. They write evidence outside the inspected tree and do not execute that tree's project code.
 
 The public main CLI offers `scan-build`, `scan-agent`, `scan-effects`, `scan-prompts`, and `scan-go-authority`. Draft-branch capabilities like MCP Bloodhound, Cursorial, WolfPrint, WolfNet, and offline-product convenience commands are *not* automatically included. Refer to their own independent qualification and integration gates before advertising them.
 
@@ -43,7 +43,7 @@ Separately run a documented `wolftrap scan-build` command against a harmless loc
 
 ## Release gates
 
-This is a draft and not a security certification. Public distribution remains blocked pending (1) independent package review and clean install test, (2) each supported CLI mode's fixture-backed results, (3) evidence-verifier qualification, (4) input and output path abuse tests, (5) Windows/Linux client compatibility, and (6) confirmation of plugin-directory review requirements. No production deployment, public listing, or billed provider integration is performed by this change.
+This is a draft and not a security certification. Public distribution remains blocked pending (1) independent package review and clean install test, (2) each supported CLI mode's fixture-backed results, (3) evidence-verifier qualification, (4) input and output path abuse tests, (5) Windows/Linux client compatibility, and (6) confirmation of plugin-directory review requirements. No production deployment, public listing, or billed provider integration is performed by this change. A clean desktop client installation is still **NOT TESTED**. Publishing requires developer or business verification and platform review. OpenAI currently does not support adding MCP capability to an already-submitted skills-only plugin; a later MCP distribution would require an independently planned submission or a different initial packaging decision.
 
 Documentation: https://developers.openai.com/plugins/build/plugins
 License: Apache-2.0 (repository root).

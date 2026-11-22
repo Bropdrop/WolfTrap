@@ -23,6 +23,7 @@ class PluginPackageContract(unittest.TestCase):
         self.assertEqual(package["name"], "wolftrap-security")
         self.assertEqual(package["version"], "0.1.0")
         self.assertIn("com.openai", package["extensions"])
+        self.assertIs(package["extensions"]["com.openai"]["requires_local_executor"], True)
         self.assertTrue(package["extensions"]["com.openai"]["interface"]["displayName"])
 
     def test_repo_local_marketplace_path(self) -> None:

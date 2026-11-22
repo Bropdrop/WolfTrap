@@ -28,8 +28,13 @@
         "defaultPrompt": [
           "WolfTrap this authorized local repository.",
           "Verify the integrity and limits of this WolfTrap evidence bundle."
+        ],
+        "category": "Productivity",
+        "capabilities": [
+          "Read"
         ]
-      }
+      },
+      "requires_local_executor": true
     }
   }
 }
