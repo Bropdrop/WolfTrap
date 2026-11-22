@@ -130,18 +130,23 @@ def run(out,hosted):
         entry=install/HERE.relative_to(ROOT)
         pin=pin_for(entry,"drift-fixture")
         cmd=command(state,owner,pin,"drift-fixture",entry)
-        path=entry/"front.py"
-        old=path.read_bytes()
-        exits=[]
-        for content in (old,old+b"\n",old):
-            path.write_bytes(content)
-            exits.append(subprocess.run(cmd,input=b"",capture_output=True,timeout=15).returncode)
-        check(exits==[0,1,0],"changed distribution reused approved configuration")
-        summary["installed_drift_and_restoration"]=exits
+        summary["installed_drift_and_restoration"]={}
+        for member in ("front.py","launch.py","profile.py"):
+            path=entry/member
+            old=path.read_bytes()
+            exits=[]
+            # Exit 37 would be externally observable if unreviewed package code ran during launch.
+            for content in (old,b"raise SystemExit(37)\n",old):
+                path.write_bytes(content)
+                exits.append(subprocess.run(cmd,input=b"",capture_output=True,timeout=15).returncode)
+            check(exits==[0,1,0],"changed distribution reused approved configuration")
+            summary["installed_drift_and_restoration"][member]=exits
     check(source()==src,"source changed during execution")
     summary["profile"]="SYNTHETICALLY_VERIFIED"
     summary["mutation_limits"]={"full-host-compromise":"UNEXECUTED","whole-store-rollback":"UNEXECUTED",
-                                 "power-loss-durability":"UNEXECUTED","kernel-security":"UNEXECUTED"}
+                                 "power-loss-durability":"UNEXECUTED","kernel-security":"UNEXECUTED",
+                                 "individual-seccomp-rules":"UNEXECUTED","per-member-zip-verification":"UNEXECUTED",
+                                 "system-clock-rollback":"UNEXECUTED","sqlite-storage-failure":"UNEXECUTED"}
     summary["authority"]="Single operator-provisioned session with independently selected policy and configuration pins"
     summary["scope"]="Linux network-isolated synthetic captures alpha and beta"
     summary["limits"]=["Synthetic acceptance covers these schemas and approvals only.",

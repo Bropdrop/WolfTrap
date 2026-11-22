@@ -104,6 +104,7 @@ class Broker:
     def frame(self, obj):
         require(isinstance(obj,dict) and set(obj)<={"jsonrpc","method","params","id"} and obj["jsonrpc"]=="2.0")
         method = obj["method"]
+        require(isinstance(method,str))
         params = obj.get("params",{})
         require(isinstance(params,dict))
         if "id" not in obj:
@@ -114,6 +115,8 @@ class Broker:
         require(type(rid) is int and abs(rid)<2**53 or type(rid) is str and 0<len(rid)<=128)
         require(rid not in self.seen and len(self.seen)<512)
         self.seen.add(rid)
+        if method not in ("initialize","tools/list","tools/call","ping"):
+            return {"jsonrpc":"2.0","id":rid,"error":{"code":-32601,"message":"unknown method"}}
         if method=="initialize":
             require(self.phase=="new" and isinstance(params["protocolVersion"],str)
                     and isinstance(params["clientInfo"],dict) and isinstance(params["capabilities"],dict))

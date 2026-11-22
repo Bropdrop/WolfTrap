@@ -18,13 +18,13 @@ The earlier adapter used a prebound grant and one fixed capture. Its launcher, h
 
 The supervisor supplies a canonical local captures directory, a GeoTrace policy, a selection document and the expected SHA-256 of that document through an independently controlled channel. The selection schema and full fictional grant examples are in `fixtures.py` and the validation contract is in `owner.py`. Commissioning snapshots up to eight explicitly named JSON files, checks source hashes against the owner's selections, and records each resulting local inode and change time. The external examples use two distinct captures with different review outcomes. Owner approval of a digest assumes trusted local provisioning. Publisher identity is unverified.
 
-From the extracted package, use a fresh state path in a private operator directory. All path arguments below are absolute. Keep control and storage under the same supervisor, protect them from other writers and use the supplied revocation command.
+Keep a reviewed supervisor copy of `launch.py` and `reference_pin.py` in an owner-controlled directory separate from the package. It independently measures the candidate, places the accepted application bytes in sealed memory files, and mounts those bytes read-only before any candidate code executes. Start the supervisor from this trusted directory. Use a fresh state path in a private operator directory. All path arguments below are absolute. Keep control and storage under the same supervisor, protect them from other writers and use the supplied revocation command.
 
 ```bash
 q=qualification/wt_mcp_002
 /usr/bin/python3.13 -IBS "$q/owner.py" provision --selection "$selected_plan" \
   --selection-pin "$approved_selection_sha256" --captures "$captures" --geo "$geo_policy" --state "$state"
-/usr/bin/python3.13 -IBS "$q/launch.py" "$state" --owner-pin "$owner_pin" \
+/usr/bin/python3.13 -IBS "$trusted_supervisor/launch.py" "$state" --install "$installed_package" --owner-pin "$owner_pin" \
   --qualified-pin "$reviewed_runtime_pin" --session "$session" --client "$qualified_client"
 /usr/bin/python3.13 -IBS "$q/owner.py" revoke --state "$state"
 ```

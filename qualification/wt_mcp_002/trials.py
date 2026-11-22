@@ -32,7 +32,7 @@ def observe(state,handle):
 
 
 def command(state,policy,pin,client,install=HERE):
-    return ["/usr/bin/python3.13","-IBS",str(install/"launch.py"),str(state),"--owner-pin",sha(encode(policy)),
+    return ["/usr/bin/python3.13","-IBS",str(HERE/"launch.py"),str(state),"--install",str(install.parents[1]),"--owner-pin",sha(encode(policy)),
             "--qualified-pin",pin,"--session","session-a","--client",client]
 
 

@@ -26,7 +26,7 @@ CATALOG = {"tools": [{"name": name, "description": description,
                  "Scan an approved capture into its designated evidence slot.",
                  "Replay an approved evidence slot."))]}
 FILES = {"geotrace.json", "geotrace.sarif", "geotrace.md", "manifest.json"}
-NEW = ("profile.py","launch.py","broker.py","store.py","locked_worker.py","front.py","owner.py")
+NEW = ("profile.py","launch.py","broker.py","store.py","locked_worker.py","front.py","owner.py","reference_pin.py")
 MEMBERS = ([HERE / name for name in NEW] + [OLD / name for name in ("engine_entry.py","isolation.py")] +
            [ROOT / "src/wolftrap" / f for f in isolation.ENGINE] + [isolation.FILTER,
            ROOT / "plugins/wolftrap-security/plugin.json", ROOT / "pyproject.toml", ROOT / "LICENSE"])
