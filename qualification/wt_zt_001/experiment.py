@@ -123,7 +123,10 @@ def exercise(case, path):
     else:
         responses = [dispatch()]
     after = oracle.observe(path)
+    witness_checks = oracle.witnesses(tokens, proposal, state)
     result = oracle.verdict(case["expected"], before, after, responses)
+    if after["effects"] and not all(w["current_and_bound"] for w in witness_checks.values()):
+        result = "CONTROL_GAP"
     if "identity" in case["expected"] and identity != case["expected"]["identity"]:
         result = "CONTROL_GAP"
     if memory:
@@ -136,7 +139,7 @@ def exercise(case, path):
             result = "CONTROL_GAP"
     return dict(id=case["id"], expected=case["expected"], proposed=proposal, before=before,
                 at_dispatch=witness_at_dispatch, after=after, responses=responses,
-                identity=identity, memory=vars(memory) if memory else None, oracle=result)
+                identity=identity, witnesses=witness_checks, memory=vars(memory) if memory else None, oracle=result)
 
 
 def run(ids=None):
