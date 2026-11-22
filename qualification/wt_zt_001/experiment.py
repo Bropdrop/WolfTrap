@@ -1,0 +1,149 @@
+"""Research runner. Synthetic sources and fixed SQL fixtures only."""
+import concurrent.futures
+from contextlib import closing
+import json
+import os
+from pathlib import Path
+import sqlite3
+import subprocess
+import sys
+import tempfile
+from threading import Barrier
+
+import fixtures
+import host
+import oracle
+from recovery import reconcile
+
+HERE = Path(__file__).resolve().parent
+
+
+def invoke(path, proposal, tokens, keys):
+    try:
+        return host.submit(path, proposal, tokens, keys)
+    except host.Denied as exc:
+        return "DENY/" + str(exc)
+
+
+def update(path, sql):
+    with closing(sqlite3.connect(path)) as db, db:
+        db.execute(sql)
+
+
+def killed_child(path, point):
+    binding = fixtures.BASE.copy()
+    with closing(sqlite3.connect(path)) as db:
+        if point == "before-commit":
+            db.create_function("fixture_interrupt", 0, lambda: os._exit(74))
+            db.execute("CREATE TEMP TRIGGER dying AFTER INSERT ON effects "
+                       "BEGIN SELECT fixture_interrupt(); END")
+        host.dispatch(db, binding, {r: fixtures.issue(r, binding) for r in fixtures.ROLES}, fixtures.roots())
+        os._exit(75)
+
+
+def exercise(case, path):
+    action = case["input"]
+    binding = {**fixtures.BASE, **action.get("approved", {})}
+    proposal = {**binding, **action.get("propose", {})}
+    fixtures.provision(path, binding)
+    before = oracle.observe(path)
+    keys = fixtures.roots()
+    tokens = {r: fixtures.issue(r, binding) for r in fixtures.ROLES}
+    for role, params in action.get("issuance", {}).items():
+        tokens[role] = fixtures.issue(role, binding, **params)
+    if "missing" in action:
+        del tokens[action["missing"]]
+    if action.get("shared-custody"):
+        keys["policy"] = keys["owner"]
+        tokens["policy"] = fixtures.issue("policy", binding, signer="owner")
+    if action.get("replace-token"):
+        tokens["owner"] = tokens["policy"]
+    changes = {"revoked": "UPDATE policy SET credential_active=0",
+               "withdrawn": "UPDATE policy SET grant_active=0",
+               "fenced": "UPDATE policy SET generation=2",
+               "expired": "UPDATE policy SET tick=20",
+               "policy-change": "UPDATE policy SET policy_version='fixture-policy-v2'",
+               "lost-policy": "DELETE FROM policy",
+               "fact": "INSERT INTO facts VALUES ('fixture-observation-42')"}
+    if change := action.get("checkpoint"):
+        update(path, changes[change])
+    memory = None
+    if "source" in action:
+        memory = fixtures.recall(action["source"], action["content"])
+        if action.get("claim-as-grant"):
+            tokens["owner"] = memory.text
+    dispatch = lambda: invoke(path, proposal, tokens, keys)
+    if mode_hint := action.get("mode"):
+        if mode_hint == "restart-expired-owner":
+            update(path, "UPDATE policy SET tick=13")
+        elif mode_hint == "old-client":
+            # The saved request predates a surviving host epoch. Deserialize it after fencing.
+            old_request = json.dumps([proposal, tokens])
+            update(path, "UPDATE policy SET generation=2")
+            proposal, tokens = json.loads(old_request)
+    witness_at_dispatch = oracle.observe(path)
+    state = witness_at_dispatch["policy"]
+    identity = host.assess_identity(tokens.get("issuer"), keys, state["tick"], proposal,
+                                    state["generation"], state["credential"]).status if state else None
+    mode = action.get("mode", "dispatch")
+    if mode == "duplicate":
+        responses = [dispatch(), dispatch()]
+    elif mode == "concurrent":
+        barrier = Barrier(2)
+        def concurrent_dispatch():
+            barrier.wait(timeout=10)
+            return dispatch()
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
+            futures = [pool.submit(concurrent_dispatch) for _ in range(2)]
+            responses = sorted(f.result() for f in futures)
+    elif mode in {"before-commit", "after-commit"}:
+        child = subprocess.run([sys.executable, str(Path(__file__).resolve()), "child",
+                                str(path), mode], check=False, timeout=20)
+        responses = [f"EXIT/{child.returncode}"]
+        # Query independent durable state before deciding on recovery.
+        observed = reconcile(path, proposal)
+        if observed == "RECOVERED":
+            responses.extend(["RECOVERED", dispatch()])  # Deliberately inject a duplicate.
+        elif observed == "OBSERVED_EMPTY":
+            responses.extend([observed, dispatch()])
+        else:
+            responses.append("HOLD")
+    elif mode == "fake-ack":
+        responses = ["ACK", "HOLD" if not oracle.observe(path)["effects"] else "RECOVERED"]
+    elif mode == "unqueryable":
+        responses = ["TIMEOUT", reconcile(path.with_suffix(".missing"), proposal)]
+    elif mode == "conflicting-receipt":
+        responses = [dispatch(), reconcile(path, {**proposal, "destination": "purse-c"})]
+    else:
+        responses = [dispatch()]
+    after = oracle.observe(path)
+    result = oracle.verdict(case["expected"], before, after, responses)
+    if "identity" in case["expected"] and identity != case["expected"]["identity"]:
+        result = "CONTROL_GAP"
+    if memory and (memory.source != action["source"] or memory.trust != "UNTRUSTED_DATA" or
+                   memory.stages != ("SOURCE", "INGESTION", "MEMORY", "RETRIEVAL",
+                                     "DECISION", "PROPOSED EFFECT")):
+        result = "CONTROL_GAP"
+    return dict(id=case["id"], expected=case["expected"], proposed=proposal, before=before,
+                at_dispatch=witness_at_dispatch, after=after, responses=responses,
+                identity=identity, memory=vars(memory) if memory else None, oracle=result)
+
+
+def run(ids=None):
+    cases = json.loads((HERE / "cases.json").read_text())
+    selected = [c for c in cases if ids is None or c["id"] in ids]
+    if not selected or (ids is not None and len(selected) != len(ids)):
+        raise ValueError("invalid case selection")
+    with tempfile.TemporaryDirectory() as tmp:
+        return [exercise(case, Path(tmp) / f"case-{i}.sqlite") for i, case in enumerate(selected)]
+
+
+if __name__ == "__main__":
+    if len(sys.argv) == 4 and sys.argv[1] == "child" and sys.argv[3] in {"before-commit", "after-commit"}:
+        killed_child(Path(sys.argv[2]), sys.argv[3])
+    elif len(sys.argv) == 1:
+        results = run()
+        print(json.dumps(results, sort_keys=True, indent=2))
+        sys.exit(any(r["oracle"] != "MATCH" for r in results))
+    else:
+        sys.exit(2)
