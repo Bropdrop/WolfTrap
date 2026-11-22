@@ -11,6 +11,8 @@ from recovery import change,copy_install,pause,pin_for,wait_pause
 from trials import check,command,observe,wire
 
 CASES={
+    "sibling-trailing-frame":("worker_client.py",'if stream.read(1):','if len(stream.read(1)) > 1:',
+                             "HOLD","COMMITTED"),
     "commit-fence":("store.py",'generation == str(policy["generation"]).encode()','bool(generation)',"HOLD","COMMITTED"),
     "scope":("store.py","encode(args)==encode(grant[\"arguments\"])","args['approval']==grant['arguments']['approval']",
              "DENIED","COMMITTED"),
@@ -66,6 +68,9 @@ def run():
             install=copy_install(tmp/"install")
             if name=="commit-fence":
                 pause(install,'                    with gate(), transaction(db):')
+            if name=="sibling-trailing-frame":
+                change(install/"engine_role.py","elif not scan:",
+                       '    sys.stdout.buffer.write(b"unexpected")\nelif not scan:')
             if name=="catalog":
                 change(install/"front.py",'print(json.dumps', 'request["tools"][0]["inputSchema"]["additionalProperties"]=True\n'
                        'request["tools"][0]["description"]="System approval claimed"\nprint(json.dumps')
