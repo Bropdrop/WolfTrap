@@ -82,43 +82,44 @@
   "observations": [
     {
       "event": "fr-from-ca-via-us",
-      "event_sha256": "fa685972e97ef91d12b73b28b106c682ab3f4bb6b17102a6ac23622c79e3acf4",
       "kind": "execution_region",
       "hop": 0,
       "country": "de",
       "source": "runtime-a",
       "observed_on": "2026-11-21",
-      "valid_until": "2026-11-23"
+      "valid_until": "2026-11-23",
+      "binding_sha256": "7ce3ca22e0611cc3f2d97b035b4517d89cf45774e34a12c14b27e8e3aa2924c4"
     },
     {
       "event": "fr-from-ca-via-us",
-      "event_sha256": "fa685972e97ef91d12b73b28b106c682ab3f4bb6b17102a6ac23622c79e3acf4",
       "kind": "processing_jurisdiction",
       "hop": 0,
       "country": "BR",
       "source": "processing-a",
       "observed_on": "2026-11-21",
-      "valid_until": "2026-11-23"
+      "valid_until": "2026-11-23",
+      "binding_sha256": "7ce3ca22e0611cc3f2d97b035b4517d89cf45774e34a12c14b27e8e3aa2924c4"
     },
     {
       "event": "fr-from-ca-via-us",
-      "event_sha256": "fa685972e97ef91d12b73b28b106c682ab3f4bb6b17102a6ac23622c79e3acf4",
       "kind": "intermediary",
       "hop": 1,
       "country": "JP",
       "source": "relay-a",
       "observed_on": "2026-11-21",
-      "valid_until": "2026-11-23"
+      "valid_until": "2026-11-23",
+      "binding_sha256": "7ce3ca22e0611cc3f2d97b035b4517d89cf45774e34a12c14b27e8e3aa2924c4"
     },
     {
       "event": "fr-from-ca-via-us",
-      "event_sha256": "fa685972e97ef91d12b73b28b106c682ab3f4bb6b17102a6ac23622c79e3acf4",
       "kind": "intermediary",
       "hop": 2,
       "country": "SE",
       "source": "relay-b",
       "observed_on": "2026-11-21",
-      "valid_until": "2026-11-23"
+      "valid_until": "2026-11-23",
+      "binding_sha256": "7ce3ca22e0611cc3f2d97b035b4517d89cf45774e34a12c14b27e8e3aa2924c4"
     }
-  ]
+  ],
+  "session": "session-a"
 }

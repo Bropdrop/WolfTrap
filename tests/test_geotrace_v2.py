@@ -116,7 +116,7 @@ class GeoTraceV2Tests(unittest.TestCase):
 
     def test_legacy_capture_advisory(self):
         self.src = self.src["capture"]
-        self.policy.update(task="v1-import",workload="unknown")
+        self.policy.update(task="v1-import",workload="unknown",session="unknown")
         self.save()
         self.assertEqual(self.cli(),2)
         row = self.report()["events"][0]
@@ -222,3 +222,17 @@ class GeoTraceV2Tests(unittest.TestCase):
         outcomes = self.report()["events"][0]["policy_results"]
         self.assertEqual(outcomes["provider_origin"], "REVIEW_REQUIRED")
         self.assertEqual(outcomes["execution_region"], "INCONCLUSIVE")
+
+    def test_old_observations_rejected_in_new_session(self):
+        self.src["session"] = self.policy["session"] = "session-b"
+        self.save()
+        self.assertEqual(self.cli(), 2)
+        self.assertFalse(self.out.exists())
+
+    def test_shared_output_parent_refused(self):
+        parent = self.base / "shared"
+        parent.mkdir()
+        parent.chmod(0o777)
+        self.out = parent / "new"
+        self.assertEqual(self.cli(), 2)
+        self.assertFalse(self.out.exists())

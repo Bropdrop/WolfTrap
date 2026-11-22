@@ -55,10 +55,11 @@ def observation(codes, basis):
 
 def evaluate(source, policy, as_of):
     now = day(as_of)
-    fields(policy, ("schema", "task", "workload", "allowed", "max_age_days", "valid_from", "valid_until"))
+    fields(policy, ("schema", "task", "workload", "session", "allowed", "max_age_days", "valid_from", "valid_until"))
     require(policy["schema"] == POLICY and day(policy["valid_from"]) <= now <= day(policy["valid_until"]))
     v1.valid_id(policy["task"], "task")
     v1.valid_id(policy["workload"], "workload")
+    v1.valid_id(policy["session"], "session")
     age = policy["max_age_days"]
     require(type(age) is int and 0 <= age <= 366)
     allow = policy["allowed"]
@@ -71,11 +72,11 @@ def evaluate(source, policy, as_of):
 
     if source.get("schema") == v1.INPUT_SCHEMA:
         capture, context = source, []
-        require(policy["task"] == "v1-import" and policy["workload"] == "unknown")
+        require(policy["task"] == "v1-import" and policy["workload"] == policy["session"] == "unknown")
     else:
-        fields(source, ("schema", "task", "workload", "capture", "observations"))
+        fields(source, ("schema", "task", "workload", "session", "capture", "observations"))
         require(source["schema"] == INPUT and source["task"] == policy["task"]
-                and source["workload"] == policy["workload"])
+                and source["workload"] == policy["workload"] and source["session"] == policy["session"])
         capture, context = source["capture"], source["observations"]
     require(isinstance(capture, dict) and day(capture["snapshot_date"]) == now)
     require(isinstance(context, list) and len(context) <= 512)
@@ -83,14 +84,15 @@ def evaluate(source, policy, as_of):
     require(isinstance(capture.get("providers"), list) and
             sum(len(p["domains"]) for p in capture["providers"]) <= 512)
     legacy = v1.analyze(capture)
-    events = {e["id"]: digest(v1.canonical(e)) for e in capture["events"]}
+    scope = {key: policy[key] for key in ("task", "workload", "session")}
+    events = {e["id"]: digest(v1.canonical({**scope, "event": e})) for e in capture["events"]}
     claims = defaultdict(list)
     seen = set()
     references = defaultdict(list)
     for index, item in enumerate(context):
-        fields(item, ("event", "event_sha256", "kind", "hop", "country", "source", "observed_on", "valid_until"))
+        fields(item, ("event", "binding_sha256", "kind", "hop", "country", "source", "observed_on", "valid_until"))
         kind, hop = item["kind"], item["hop"]
-        require(kind in CONTEXT and item["event"] in events and events[item["event"]] == item["event_sha256"])
+        require(kind in CONTEXT and item["event"] in events and events[item["event"]] == item["binding_sha256"])
         require(type(hop) is int and (1 <= hop <= 32 if kind == "intermediary" else hop == 0))
         origin = v1.valid_id(item["source"], "source")
         key = (item["event"], kind, hop)

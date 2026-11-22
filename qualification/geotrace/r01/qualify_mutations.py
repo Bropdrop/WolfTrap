@@ -14,7 +14,7 @@ CASES = (
      "test_missing_context_cannot_borrow_network_location"),
     ("freshness", "geotrace.py", "if usable:", "if current is not None:", "test_expired_or_stale"),
     ("conflict", "geotrace.py", 'if len(unique) > 1', 'if len(unique) > 512', "test_context_conflict"),
-    ("destination-binding", "geotrace.py", 'and events[item["event"]] == item["event_sha256"]',
+    ("destination-binding", "geotrace.py", 'and events[item["event"]] == item["binding_sha256"]',
      '', "test_changed_destination_invalidates_context"),
     ("policy-pin", "geotrace_cli.py", "geo.require(hmac.compare_digest(geo.digest(policy_raw), args.policy_sha256))",
      'geo.require(bool(policy_raw))', "test_policy_provenance_and_freshness"),

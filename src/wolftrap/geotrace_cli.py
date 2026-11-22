@@ -24,10 +24,12 @@ def directory(path):
 
 
 def read_member(parent, name, limit):
+    selected = os.stat(name, dir_fd=parent, follow_symlinks=False)
+    geo.require(stat.S_ISREG(selected.st_mode) and selected.st_nlink == 1)
     fd = os.open(name, os.O_RDONLY | os.O_NONBLOCK | os.O_NOFOLLOW, dir_fd=parent)
     with os.fdopen(fd, "rb") as stream:
         before = os.fstat(fd)
-        geo.require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and 0 < before.st_size <= limit)
+        geo.require(os.path.samestat(selected, before) and before.st_nlink == 1 and 0 < before.st_size <= limit)
         data = stream.read(before.st_size + 1)
         after = os.stat(name, dir_fd=parent, follow_symlinks=False)
         geo.require(len(data) == before.st_size and os.path.samestat(before, after)
