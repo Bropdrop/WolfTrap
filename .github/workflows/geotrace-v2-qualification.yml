@@ -30,5 +30,6 @@ jobs:
               python3 -m unittest discover -s "$r/wolftrap-api-geotrace-v1/tests" -v
               python3 -m unittest discover -s "$r/independent_tests" -v
               PYTHONPATH=src python3 -m unittest tests.test_geotrace_v2 -v
+              python3 "$r/qualify_mutations.py"
               PYTHONPATH=src python3 -m unittest discover -s plugins/wolftrap-security/tests -p test_integration.py -k geotrace -v
             '
