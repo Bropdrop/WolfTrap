@@ -1,5 +1,7 @@
 # WolfTrap
 
+This R01 draft adds offline GeoTrace v2 country assessment and exact evidence replay in engine 0.6.0 and the skills-only plugin 0.2.0. [Contract, example and qualification results](qualification/geotrace/r01/README.md)
+
 **The wolf follows the evidence. Authority does not follow the herd.**
 
 <img src="docs/assets/wolftrap-canadian-wolf.jpg" alt="Original Canadian grey wolf illustration for WolfTrap" width="460">

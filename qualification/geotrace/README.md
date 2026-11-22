@@ -1,5 +1,7 @@
 # WT-GEO-R00 — GeoTrace original source recovery gate
 
+> R00 historical checkpoint. The later [R01 reproduction and integration assessment](r01/README.md) records recovery of the six original files and the current release verdict.
+
 **Status: RECOVERY IMPLEMENTED / FIRST-RELEASE GEOTRACE STILL BLOCKED.**
 
 This is new tooling introduced after WT-ZT-001 PR #29. It is not the missing
