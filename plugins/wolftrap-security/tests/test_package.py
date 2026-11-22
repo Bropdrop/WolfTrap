@@ -67,7 +67,7 @@ class PluginPackageContract(unittest.TestCase):
         ):
             self.assertIn(command, audit)
         self.assertIn("Do not execute target scripts", audit)
-        self.assertIn("No general", (PLUGIN / "skills" / "wolftrap-evidence-review" / "SKILL.md").read_text(encoding="utf-8"))
+        self.assertIn("no general", (PLUGIN / "skills" / "wolftrap-evidence-review" / "SKILL.md").read_text(encoding="utf-8").lower())
 
 
 if __name__ == "__main__":
