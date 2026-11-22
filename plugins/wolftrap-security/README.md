@@ -47,3 +47,28 @@ This is a draft and not a security certification. Public distribution remains bl
 
 Documentation: https://developers.openai.com/plugins/build/plugins
 License: Apache-2.0 (repository root).
+
+## Offline integration qualification (second gate)
+
+The CI job additionally invokes the exact checked-out WolfTrap public-main CLI
+using harmless local fixtures, *inside a Linux network namespace* after its
+reviewed, SHA-256-pinned PyYAML wheel is installed. The seven test methods
+exercise the supported build, agent, effects, prompt, and Go static modes,
+their applicable CLI evidence verifiers, retained report digests, conditional
+positive controls, empty/unsupported input, evidence tampering, file traversal,
+symlink selection, and attempted in-source evidence output. These are bounded
+developer acceptance tests, not hostile penetration testing of third parties.
+
+To reproduce the fixture checks on a trusted Linux checkout (Python 3.12):
+
+```bash
+python -I -m pip --isolated install --no-cache-dir --no-deps \
+  --only-binary=:all: --require-hashes \
+  -r .github/qualification-requirements.txt
+PYTHONPATH=src python -m unittest discover \
+  -s plugins/wolftrap-security/tests -p 'test_integration.py' -v
+```
+
+The scanner must stay separate from untrusted inspected code. A passing run
+does **not** demonstrate that Codex or ChatGPT installed or activated the
+plugin, or that unpublished draft-branch security modules are shipped.
