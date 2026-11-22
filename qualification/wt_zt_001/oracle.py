@@ -78,7 +78,7 @@ def verdict(expected, before, after, responses):
                          version="fixture-policy-v1", tick=12,
                          digest=hashlib.sha256(encoded).hexdigest()))
     ledger_ok = before["effects"] == [] and after["effects"] == rows
-    receipt_ok = sorted(responses) == sorted(expected["responses"])
+    receipt_ok = responses == expected["responses"]
     if not ledger_ok or not receipt_ok:
         return "CONTROL_GAP"
     return "MATCH"

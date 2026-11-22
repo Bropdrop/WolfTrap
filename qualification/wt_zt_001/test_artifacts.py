@@ -5,6 +5,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
+from unittest.mock import patch
 
 import evidence
 
@@ -82,6 +83,20 @@ class EvidenceBoundary(unittest.TestCase):
         manifest["members"]["assessment.json"] = evidence.metadata(report.read_bytes())
         meta.write_bytes(evidence.encode(manifest))
         self.reject()
+
+    def test_interrupted_evidence_persistence(self):
+        partial = self.path.parent / "interrupted"
+        args = ["evidence.py", "create", "--expected-commit", self.pin, "--evidence-dir", str(partial)]
+        with patch("sys.argv", args), patch.object(evidence, "expected", return_value=self.baseline):
+            with patch.object(os, "fsync", side_effect=OSError("fixture interruption")):
+                self.assertEqual(evidence.main(), 2)
+        fd = evidence.directory(partial, False)
+        try:
+            with self.assertRaises(ValueError):
+                evidence.verify(fd, self.baseline)
+        finally:
+            os.close(fd)
+        self.assertNotIn("manifest.json", os.listdir(partial))
 
     def test_reject_in_tree(self):
         with self.assertRaises(ValueError):
