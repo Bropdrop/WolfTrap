@@ -142,4 +142,4 @@ def evaluate(source, policy, as_of):
     return {"schema": REPORT, "as_of": as_of, "events":rows, "outcome":status,
             "confidence":"STATIC_REVIEW_SIGNAL", "operator_identity":"UNVERIFIED",
             "workload_identity":"UNVERIFIED", "action_authorization":"NOT_EVALUATED",
-            "protected_effects_committed":0}
+            "effect_observation":"OUTSIDE_SCOPE"}

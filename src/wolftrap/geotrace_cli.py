@@ -1,5 +1,6 @@
 """POSIX descriptor-relative capture selection and evidence replay for GeoTrace."""
 from contextlib import contextmanager
+from importlib.resources import files as package_files
 import hmac
 import os
 from pathlib import Path
@@ -42,9 +43,19 @@ def absolute(value):
 
 def artifacts(report):
     status = report["outcome"]
-    files = {"geotrace.json": _json(report),
-             "geotrace.md": (f"# GeoTrace v2\n\n{status} across {len(report['events'])} events.\n\n"
-                             "Country observations are claims. Action authorization was not evaluated.\n").encode()}
+    markdown = ["# GeoTrace v2", "", f"{status} across {len(report['events'])} events.",
+                "", "Country observations are claims. Action authorization was not evaluated.", ""]
+    for row in report["events"]:
+        markdown.append(f"## Event {row['event_index']}")
+        markdown.append("")
+        for name, point in row["geography"].items():
+            countries = ", ".join(point["countries"]) or "unknown"
+            markdown.append(f"- {name}: {point['state']} ({countries})")
+        for point in row["intermediaries"]:
+            countries = ", ".join(point["countries"]) or "unknown"
+            markdown.append(f"- intermediary {point['hop']}: {point['state']} ({countries})")
+        markdown.append("")
+    files = {"geotrace.json": _json(report), "geotrace.md": ("\n".join(markdown) + "\n").encode()}
     signals = []
     for row in report["events"]:
         for dim, result in sorted(row["policy_results"].items()):
@@ -79,7 +90,10 @@ def inspect(args):
     source = geo.parse(raw)
     geo.require(isinstance(source, dict))
     report = geo.evaluate(source, geo.parse(policy_raw), args.as_of)
-    report.update(engine_version=__version__, input_sha256=geo.digest(raw),
+    # Fingerprint the trusted installed sources, including the shared file and encoding helpers.
+    modules = ("_geotrace_v1.py", "geotrace.py", "geotrace_cli.py", "agent_scan.py")
+    code = {name: geo.digest(package_files("wolftrap").joinpath(name).read_bytes()) for name in modules}
+    report.update(engine_version=__version__, engine_members=code, input_sha256=geo.digest(raw),
                   selection_sha256=geo.digest(args.file.encode()), policy_sha256=args.policy_sha256)
     files = artifacts(report)
     creating = args.command == "scan-geotrace"

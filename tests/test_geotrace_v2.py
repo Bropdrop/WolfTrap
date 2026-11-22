@@ -57,7 +57,7 @@ class GeoTraceV2Tests(unittest.TestCase):
         self.assertEqual(row["destination_role"], "gateway_hop")
         self.assertEqual(rep["action_authorization"], "NOT_EVALUATED")
         self.assertEqual(rep["operator_identity"], "UNVERIFIED")
-        self.assertEqual(rep["protected_effects_committed"], 0)
+        self.assertEqual(rep["effect_observation"], "OUTSIDE_SCOPE")
         all_bytes = b"".join(f.read_bytes() for f in self.out.iterdir())
         for value in ["192.0.2.10", "api.fr.test", hashlib.sha256(b"192.0.2.10").hexdigest()]:
             self.assertNotIn(value.encode(), all_bytes)
@@ -185,3 +185,40 @@ class GeoTraceV2Tests(unittest.TestCase):
         q.rename(self.base/"original")
         q.symlink_to(self.base/"original")
         self.assertEqual(self.cli(verify=True),2)
+
+    def test_provider_substitution_does_not_reidentify_workload(self):
+        self.src["capture"]["providers"][0]["origin_country"] = "CN"
+        self.save()
+        self.assertEqual(self.cli(), 1)
+        report = self.report()
+        row = report["events"][0]
+        self.assertEqual(row["geography"]["execution_region"]["countries"], ["DE"])
+        self.assertEqual(row["policy_results"]["provider_origin"], "REVIEW_REQUIRED")
+        self.assertEqual(report["workload_identity"], "UNVERIFIED")
+
+    def test_workload_substitution_and_invalid_country(self):
+        self.src["workload"] = "impostor"
+        self.save()
+        self.assertEqual(self.cli(), 2)
+        self.src["workload"] = self.policy["workload"]
+        self.src["observations"][0]["country"] = "ZZ"
+        self.save()
+        self.assertEqual(self.cli(), 2)
+        self.assertFalse(self.out.exists())
+
+    def test_preserved_example_reference(self):
+        from wolftrap import _geotrace_v1
+        original = EXAMPLES.parent / "wolftrap-api-geotrace-v1/examples"
+        document = json.loads((original / "synthetic-multi-country.json").read_bytes())
+        reference = json.loads((original / "synthetic-report.json").read_bytes())
+        self.assertEqual(_geotrace_v1.analyze(document), reference)
+        self.assertFalse(hasattr(_geotrace_v1, "scan"))
+
+    def test_review_survives_missing_evidence_in_another_dimension(self):
+        self.policy["allowed"]["provider_origin"] = ["JP"]
+        self.src["observations"] = []
+        self.save()
+        self.assertEqual(self.cli(), 2)
+        outcomes = self.report()["events"][0]["policy_results"]
+        self.assertEqual(outcomes["provider_origin"], "REVIEW_REQUIRED")
+        self.assertEqual(outcomes["execution_region"], "INCONCLUSIVE")
