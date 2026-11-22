@@ -30,7 +30,7 @@ def run():
         if clean.count(original) != 1:
             raise ValueError("changed mutation anchor")
         with tempfile.TemporaryDirectory() as tmp:
-            target = Path(tmp) / "src"
+            target = Path(tmp) / "engine" / "src"
             shutil.copytree(REPO / "src/wolftrap", target / "wolftrap",
                             ignore=shutil.ignore_patterns("__pycache__"))
             path = target / "wolftrap" / filename
