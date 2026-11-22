@@ -72,3 +72,7 @@ PYTHONPATH=src python -m unittest discover \
 The scanner must stay separate from untrusted inspected code. A passing run
 does **not** demonstrate that Codex or ChatGPT installed or activated the
 plugin, or that unpublished draft-branch security modules are shipped.
+
+## Upgrades and compatibility
+
+See [UPGRADES.md](UPGRADES.md). Keep plugin and engine releases independently pinned and qualified. A new scanner rule with unchanged CLI can be an engine-only update; new commands or evidence schemas require plugin compatibility changes. This candidate is deliberately unsubmitted until the skills-only versus MCP-initial choice is reviewed.
