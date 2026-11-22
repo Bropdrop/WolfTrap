@@ -1,0 +1,22 @@
+{
+  "schema": "wolftrap.api-geotrace-input/v1",
+  "snapshot_date": "2026-11-22",
+  "synthetic": true,
+  "providers": [
+    {"id": "example-fr", "name": "Synthetic France Provider", "origin_country": "FR", "domains": ["api.fr.test"], "evidence_ref": "synthetic-provider-registry-fr-v1", "verified_on": "2026-11-22"},
+    {"id": "example-cn", "name": "Synthetic China Provider", "origin_country": "CN", "domains": ["api.cn.test"], "evidence_ref": "synthetic-provider-registry-cn-v1", "verified_on": "2026-11-22"},
+    {"id": "example-br", "name": "Synthetic Brazil Provider", "origin_country": "BR", "domains": ["api.br.test"], "evidence_ref": "synthetic-provider-registry-br-v1", "verified_on": "2026-11-22"}
+  ],
+  "geo_ranges": [
+    {"network": "192.0.2.0/24", "country": "CA", "evidence_ref": "synthetic-geo-ca", "verified_on": "2026-11-22"},
+    {"network": "198.51.100.0/24", "country": "US", "evidence_ref": "synthetic-geo-us", "verified_on": "2026-11-22"},
+    {"network": "203.0.113.0/24", "country": "JP", "evidence_ref": "synthetic-geo-jp", "verified_on": "2026-11-22"}
+  ],
+  "events": [
+    {"id": "fr-from-ca-via-us", "source_ip": "192.0.2.10", "destination_ip": "198.51.100.45", "tls_sni": "api.fr.test", "source_role": "client_egress", "destination_role": "api_endpoint"},
+    {"id": "cn-from-jp-via-proxy", "source_ip": "203.0.113.44", "destination_ip": "198.51.100.12", "tls_sni": "api.cn.test", "source_role": "proxy_egress", "destination_role": "proxy_hop"},
+    {"id": "br-origin-unlocated", "source_ip": "192.0.2.11", "destination_ip": "2001:db8::12", "http_host": "api.br.test", "source_role": "client_egress", "destination_role": "unknown"},
+    {"id": "unknown-is-not-cn", "source_ip": "192.0.2.12", "destination_ip": "198.51.100.7", "tls_sni": "api.unknown.test", "source_role": "client_egress", "destination_role": "api_endpoint"}
+  ],
+  "policy": {"allowed_provider_countries": ["CA", "FR", "BR", "JP", "US"], "review_unknowns": true}
+}
