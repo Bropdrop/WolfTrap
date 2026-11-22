@@ -22,7 +22,7 @@ def reply(status, **values):
 
 
 def propose(value):
-    rc, data = worker(HERE/"front.py",payload=encode(value))
+    rc, data = worker(encode(value))
     require(rc==0 and parse(data)=={"proposal":value})
 
 
@@ -122,7 +122,7 @@ class Broker:
                     and isinstance(params["clientInfo"],dict) and isinstance(params["capabilities"],dict))
             self.phase="initialized"
             value={"protocolVersion":VERSION,"capabilities":{"tools":{}},
-                   "serverInfo":{"name":"wolftrap-local","version":"0.2.0"}}
+                   "serverInfo":{"name":"wolftrap-local","version":"0.3.0"}}
         elif method=="tools/list" and self.phase=="ready":
             require(set(params)<={"_meta"} and isinstance(params.get("_meta",{}),dict))
             with gate():
@@ -150,7 +150,11 @@ def bounded(obj,depth=0):
 
 def main():
     os.umask(0o077)
-    broker=Broker(*sys.argv[1:])
+    from locked_worker import install
+    from worker_client import connect
+    connect(*map(int, sys.argv[5:]))
+    install()
+    broker=Broker(*sys.argv[1:5])
     for _ in range(1024):
         line=sys.stdin.buffer.readline(32769)
         if not line:

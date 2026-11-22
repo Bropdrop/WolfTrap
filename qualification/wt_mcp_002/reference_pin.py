@@ -7,7 +7,8 @@ import platform
 import stat
 
 ENGINE=("__init__.py","agent_scan.py","agent_rules.py","geotrace.py","geotrace_cli.py","_geotrace_v1.py")
-ADAPTER=("profile.py","launch.py","broker.py","store.py","locked_worker.py","front.py","owner.py","reference_pin.py")
+ADAPTER=("profile.py","launch.py","broker.py","store.py","locked_worker.py","front.py","owner.py","reference_pin.py",
+       "engine_role.py","sibling.py","job_wire.py","worker_client.py")
 LIBS=("libc.so.6","libm.so.6","libexpat.so.1","libz.so.1","libffi.so.8","libseccomp.so.2",
       "libcrypto.so.3","liblzma.so.5","libbz2.so.1.0","libselinux.so.1","libcap.so.2",
       "libpcre2-8.so.0","libsqlite3.so.0")

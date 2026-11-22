@@ -6,6 +6,7 @@ import importlib.metadata
 import json
 import os
 from pathlib import Path
+import re
 import select
 import shutil
 import subprocess
@@ -83,18 +84,51 @@ def codex(binary,cmd,owner):
         return observed
 
 
+def completed_calls(path):
+    pending = {}
+    with path.open() as trace:
+        for line in trace:
+            pid, call = line.rstrip().split(maxsplit=1)
+            if call.endswith("<unfinished ...>"):
+                pending[pid] = call.removesuffix("<unfinished ...>")
+                continue
+            if call.startswith("<... ") and " resumed>" in call:
+                call = pending.pop(pid, "") + call.split(" resumed>", 1)[1]
+            yield pid, call
+
+
 def trace_check(path):
-    filters={}
-    executing=set()
-    for line in path.read_text().splitlines():
-        pid=line.split(maxsplit=1)[0]
+    filters = {}
+    executing = set()
+    launches = set()
+    parents = {}
+    namespaces = set()
+    supervisor = None
+    for pid, line in completed_calls(path):
+        success = re.search(r" = (\d+)$", line)
+        if 'execve("/usr/bin/python3.13"' in line and 'launch.py"' in line and success:
+            supervisor = pid
+        if 'execve("/usr/bin/bwrap"' in line and success:
+            check(all(flag in line for flag in ('"--unshare-user"', '"--disable-userns"', '"--unshare-all"',
+                  '"--cap-drop", "ALL"')), "missing required namespace launch flag")
+            launches.add(pid)
+        if success and re.match(r"(?:clone3?|vfork|fork)\(", line):
+            # Internal child PIDs can be namespace-local. Only launcher children are host PID witnesses.
+            if pid == supervisor:
+                parents[success[1]] = pid
+        if "clone(" in line and all(flag in line for flag in ("CLONE_NEWUSER", "CLONE_NEWNET", "CLONE_NEWNS")):
+            if success and int(success[1]) > 0:
+                namespaces.add(pid)
         if "seccomp(SECCOMP_SET_MODE_FILTER, 0, {len=" in line and line.endswith("= 0"):
-            filters[pid]=filters.get(pid,0)+1
+            filters[pid] = filters.get(pid, 0) + 1
         if 'openat(AT_FDCWD, "/role.py"' in line and " = -1" not in line:
-            check(filters.get(pid,0)>=2,"role opened before both seccomp filters")
+            check(filters.get(pid, 0) >= 2, "role opened before both seccomp filters")
             executing.add(pid)
-    check(len(executing)>=5,"incomplete client process trace")
-    return {"filtered_roles_observed":len(executing),"minimum_filters_before_role":min(filters[p] for p in executing)}
+    check(len(executing) >= 5 and len(launches) == len(executing) + 1, "incomplete sandbox trace")
+    check(supervisor and launches <= parents.keys() and launches <= namespaces, "missing sibling launch witness")
+    return {"filtered_roles_observed":len(executing), "minimum_filters_before_role":min(filters[p] for p in executing),
+            "supervisor_pid":supervisor, "direct_bwrap_children":sorted(launches, key=int),
+            "user_mount_net_namespace_launches":len(launches)}
 
 
 def run(out, install=HERE):
@@ -117,7 +151,7 @@ def run(out, install=HERE):
         cmd=command(state,owner,pin,client,install)
         trace=out/(kind+".strace")
         cmd=["/usr/bin/strace","-f","-qq","-s","100","-o",str(trace),"-e",
-             "trace=seccomp,execve,clone,unshare,mount,openat",*cmd]
+             "trace=seccomp,execve,clone,clone3,vfork,fork,unshare,mount,openat",*cmd]
         statuses=asyncio.run(sdk(cmd,owner)) if kind=="sdk" else codex(binary,cmd,owner)
         observed=observe(state,"alpha")
         check({n:v["sha256"] for n,v in observed["files"].items()}==REF["alpha"]["expected"],"independent bytes")
