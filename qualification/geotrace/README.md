@@ -107,3 +107,42 @@ These tests generate only fictional ZIPs in private temporary directories,
 confirm rejection of unsafe artifacts, and ensure no uploaded source code is
 executed. **Passing recovery-gate tests cannot substitute for the missing 21
 original GeoTrace tests.**
+
+## R00 integration qualification
+
+The supplied recovery-gate package is 10,607 bytes with SHA-256
+`62a873a7abbf77002434e5015e33e526ba9e7cc7980a7985a95427b0e2fffe2f`.
+Its four regular members were compared byte for byte to commit
+`d3d0fad2b6f263a181fec93c9b68d1f1c71e57c2`, tree
+`fa859c8b11744772b47fd5fd96f1d80bc1a9ae40`. This identifies the user-supplied
+gate archive. Its publisher identity was not independently authenticated.
+
+The integration additionally checks canonical manifest bytes and rejects
+ambiguous decoded member and implicit parent names. The 19 original gate tests
+and three integration regressions passed on the qualified implementation
+`5ac63741f792f518c5013bfa8a687866fd2cab15`, tree
+`0b916e8e746dbd99d5898e2c4425433f639057e6`. Run from the repository root:
+
+```sh
+python3 -I qualification/wt_zt_001/offline.py python3 -B -m unittest discover -s qualification/geotrace -p 'test_recovery*.py' -v
+python3 -I qualification/wt_zt_001/offline.py python3 -B qualification/geotrace/qualify_mutations.py
+```
+
+All six one-control mutation trials were DETECTED. The independent suite
+caught removal of the expected digest check, false custody, a fabricated
+v1 test count, promotion of release status, acceptance of an undeclared
+manifest field and acceptance of inconsistent implicit directory casing.
+Every clean and restored control passed. An initial harness layout placed
+temporary evidence under the disposable checkout and made four trials
+INCONCLUSIVE. Relocating the fixtures allowed all six trials to execute
+with the original outside-tree guard intact.
+
+The verifier recomputes the inventory from an independent reread using the
+same parser and serialization implementation. This checks consistency with
+the selected bytes under the tested profile. It does not provide an
+independent parser implementation. Use a private local filesystem with
+trusted path ancestors for the archive and evidence.
+
+The dedicated workflow runs the same suites in a network namespace on a
+read-only GitHub job. Local qualification used the inherited Linux libseccomp
+launcher. See [the proposed v2 evidence contract and integration sequence](V2-ARCHITECTURE.md).
