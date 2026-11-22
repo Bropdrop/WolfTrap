@@ -28,6 +28,8 @@ class Denied(ValueError):
 
 
 def statement(token, role, roots, tick):
+    if token is None:
+        raise Denied("missing-witness")
     if not isinstance(token, str) or len(token) > 8192:
         raise Denied("missing-or-invalid-witness")
     try:
