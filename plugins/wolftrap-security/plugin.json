@@ -1,0 +1,35 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "wolftrap-security",
+  "version": "0.1.0",
+  "description": "Offline, evidence-first security review for authorized local repositories using WolfTrap.",
+  "author": {
+    "name": "Governable Intelligence",
+    "url": "https://github.com/Bropdrop/WolfTrap"
+  },
+  "homepage": "https://github.com/Bropdrop/WolfTrap",
+  "repository": "https://github.com/Bropdrop/WolfTrap",
+  "license": "Apache-2.0",
+  "keywords": [
+    "security",
+    "static-analysis",
+    "agent-security",
+    "trust-boundaries",
+    "evidence"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "WolfTrap Security",
+        "shortDescription": "Evidence-first offline repository review",
+        "longDescription": "Inspect authorized local repositories with the existing WolfTrap static-analysis CLI. Report conditional security signals, verification status, gaps and reproducible evidence without executing inspected project code.",
+        "developerName": "Governable Intelligence",
+        "websiteURL": "https://github.com/Bropdrop/WolfTrap",
+        "defaultPrompt": [
+          "WolfTrap this authorized local repository.",
+          "Verify the integrity and limits of this WolfTrap evidence bundle."
+        ]
+      }
+    }
+  }
+}
