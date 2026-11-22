@@ -51,7 +51,7 @@ class StateQualification(unittest.TestCase):
         with closing(sqlite3.connect(self.path)) as db:
             db.execute("CREATE TRIGGER interrupt AFTER INSERT ON effects "
                        "BEGIN SELECT RAISE(ABORT, 'fictional commit failure'); END")
-            with self.assertRaises(host.Denied):
+            with self.assertRaises(host.Hold):
                 host.dispatch(db, fixtures.BASE, self.tokens, self.roots)
         with closing(sqlite3.connect(self.path)) as observer:
             self.assertEqual(observer.execute("SELECT * FROM effects").fetchall(), [])
@@ -64,4 +64,6 @@ class StateQualification(unittest.TestCase):
         self.assertEqual(reconcile(self.path, fixtures.BASE), "HOLD")
         self.path.rename(self.path.with_suffix(".lost"))
         self.assertEqual(reconcile(self.path, fixtures.BASE), "HOLD")
+        with self.assertRaises(host.Hold):
+            host.submit(self.path, fixtures.BASE, self.tokens, self.roots)
         self.assertFalse(self.path.exists())

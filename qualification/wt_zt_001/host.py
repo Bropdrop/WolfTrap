@@ -27,6 +27,10 @@ class Denied(ValueError):
     pass
 
 
+class Hold(RuntimeError):
+    """The caller must independently reconcile before further dispatch."""
+
+
 def statement(token, role, roots, tick):
     if token is None:
         raise Denied("missing-witness")
@@ -117,10 +121,15 @@ def dispatch(db, proposal, tokens, roots):
             db.execute("INSERT INTO effects VALUES (?, ?, ?, ?, ?, ?)",
                        (proposal["slot"], binding, digest, generation, version, tick))
         except sqlite3.IntegrityError as exc:
-            raise Denied("spent-slot") from exc
+            if exc.sqlite_errorcode == sqlite3.SQLITE_CONSTRAINT_PRIMARYKEY:
+                raise Denied("spent-slot") from exc
+            raise Hold("unresolved-commit") from exc
     return "ACK"
 
 
 def submit(path, proposal, tokens, roots):
-    with closing(sqlite3.connect(path, timeout=10)) as db:
-        return dispatch(db, proposal, tokens, roots)
+    try:
+        with closing(sqlite3.connect(path.as_uri() + "?mode=rw", uri=True, timeout=10)) as db:
+            return dispatch(db, proposal, tokens, roots)
+    except sqlite3.Error as exc:
+        raise Hold("host-state-unavailable") from exc

@@ -4,7 +4,7 @@ import io
 import json
 import os
 from pathlib import Path
-import sys
+import stat
 import zipfile
 
 from evidence import directory, encode, git, metadata
@@ -56,7 +56,6 @@ def check(fd, package):
         raise ValueError("unexpected package set")
     for name, data in package.items():
         item = os.open(name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=fd)
-        import stat
         with os.fdopen(item, "rb") as stream:
             info = os.fstat(item)
             if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1 or info.st_size != len(data):

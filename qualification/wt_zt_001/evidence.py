@@ -36,6 +36,7 @@ def git(*args):
 def expected(pin):
     if not re.fullmatch("[0-9a-f]{40}", pin) or git("rev-parse", pin + "^{commit}").decode().strip() != pin:
         raise ValueError("exact externally selected commit required")
+    git("merge-base", "--is-ancestor", "d9a91cc1fae237600d67239ebdcf9200388229ca", pin)
     tree = git("rev-parse", pin + "^{tree}").decode().strip()
     with tempfile.TemporaryDirectory() as tmp:
         work = Path(tmp)

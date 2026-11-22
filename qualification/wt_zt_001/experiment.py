@@ -21,6 +21,8 @@ HERE = Path(__file__).resolve().parent
 def invoke(path, proposal, tokens, keys):
     try:
         return host.submit(path, proposal, tokens, keys)
+    except host.Hold:
+        return "HOLD"
     except host.Denied as exc:
         return "DENY/" + str(exc)
 
