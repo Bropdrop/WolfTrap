@@ -2,6 +2,7 @@
 import concurrent.futures
 from contextlib import closing
 import json
+import hashlib
 import os
 from pathlib import Path
 import sqlite3
@@ -71,7 +72,8 @@ def exercise(case, path):
         update(path, changes[change])
     memory = None
     if "source" in action:
-        memory = fixtures.recall(action["source"], action["content"])
+        memory = fixtures.recall(path.with_suffix(".memory"), action["source"], action["content"],
+                                 binding, lose_source=action.get("drop-source", False))
         if action.get("claim-as-grant"):
             tokens["owner"] = memory.text
     dispatch = lambda: invoke(path, proposal, tokens, keys)
@@ -124,10 +126,14 @@ def exercise(case, path):
     result = oracle.verdict(case["expected"], before, after, responses)
     if "identity" in case["expected"] and identity != case["expected"]["identity"]:
         result = "CONTROL_GAP"
-    if memory and (memory.source != action["source"] or memory.trust != "UNTRUSTED_DATA" or
-                   memory.stages != ("SOURCE", "INGESTION", "MEMORY", "RETRIEVAL",
-                                     "DECISION", "PROPOSED EFFECT")):
-        result = "CONTROL_GAP"
+    if memory:
+        expected_source = None if action.get("drop-source") else action["source"]
+        expected_digest = hashlib.sha256(action["content"].encode()).hexdigest() if expected_source else None
+        if (memory.source != expected_source or memory.source_sha256 != expected_digest or
+                memory.trust != "UNTRUSTED_DATA" or memory.provenance != case["expected"]["provenance"] or
+                memory.origin_task == memory.retrieval_task or memory.origin_session == memory.retrieval_session or
+                memory.stages != ("SOURCE", "INGESTION", "MEMORY", "RETRIEVAL", "DECISION", "PROPOSED EFFECT")):
+            result = "CONTROL_GAP"
     return dict(id=case["id"], expected=case["expected"], proposed=proposal, before=before,
                 at_dispatch=witness_at_dispatch, after=after, responses=responses,
                 identity=identity, memory=vars(memory) if memory else None, oracle=result)

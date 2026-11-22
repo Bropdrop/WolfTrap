@@ -3,7 +3,7 @@ import hashlib
 import json
 import sqlite3
 from contextlib import closing
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 import jwt
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
@@ -50,17 +50,30 @@ def provision(path, binding):
 
 @dataclass(frozen=True)
 class Observation:
-    source: str
+    source: str | None
+    source_sha256: str | None
+    origin_task: str
+    origin_session: str
+    retrieval_task: str
+    retrieval_session: str
     trust: str
+    provenance: str
     stages: tuple
     text: str
 
-    def derive(self, stage, text):
-        return Observation(self.source, self.trust, (*self.stages, stage), text)
 
-
-def recall(source, text):
-    item = Observation(source, "UNTRUSTED_DATA", ("SOURCE",), text)
-    for stage in ("INGESTION", "MEMORY", "RETRIEVAL", "DECISION", "PROPOSED EFFECT"):
-        item = item.derive(stage, "Untrusted summary: " + item.text if stage == "MEMORY" else item.text)
-    return item
+def recall(path, source, text, binding, *, lose_source=False):
+    """Persist a summary in an earlier fixture session and reopen it for a different task."""
+    digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
+    with closing(sqlite3.connect(path)) as db, db:
+        db.execute("CREATE TABLE memories(source TEXT, digest TEXT, task TEXT, session TEXT, summary TEXT)")
+        db.execute("INSERT INTO memories VALUES(?,?,?,?,?)",
+                   (source, digest, "task-previous", "session-previous", "Untrusted summary: " + text))
+        if lose_source:
+            db.execute("UPDATE memories SET source=NULL, digest=NULL")
+    with closing(sqlite3.connect(path.as_uri() + "?mode=ro", uri=True)) as reader:
+        source, digest, task, session, summary = reader.execute("SELECT * FROM memories").fetchone()
+    item = Observation(source, digest, task, session, binding["task"], binding["session"],
+                       "UNTRUSTED_DATA", "ATTRIBUTED" if source and digest else "INCONCLUSIVE",
+                       ("SOURCE", "INGESTION", "MEMORY", "RETRIEVAL"), summary)
+    return replace(item, stages=(*item.stages, "DECISION", "PROPOSED EFFECT"))
