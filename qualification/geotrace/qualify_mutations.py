@@ -27,12 +27,15 @@ TRIALS = [
 
 
 def trial(folder, source, test_id):
-    folder.mkdir()
+    suite_dir = folder / "checkout" / "qualification" / "geotrace"
+    suite_dir.mkdir(parents=True)
+    temporary = folder / "fixtures"
+    temporary.mkdir()
     for suite in ("test_recovery.py", "test_recovery_contract.py"):
-        shutil.copyfile(HERE / suite, folder / suite)
-    (folder / "recovery.py").write_bytes(source)
+        shutil.copyfile(HERE / suite, suite_dir / suite)
+    (suite_dir / "recovery.py").write_bytes(source)
     proc = subprocess.run([sys.executable, "-B", "-m", "unittest", "-v", test_id],
-                          cwd=folder, env={"PATH":os.defpath, "TMPDIR":str(folder),
+                          cwd=suite_dir, env={"PATH":os.defpath, "TMPDIR":str(temporary),
                                            "PYTHONNOUSERSITE":"1", "PYTHONHASHSEED":"0"},
                           capture_output=True, text=True, timeout=30)
     output = proc.stderr
