@@ -1,4 +1,4 @@
-# WolfTrap Security plugin v0.1.0 (candidate)
+# WolfTrap Security plugin v0.2.0 (candidate)
 
 A skills-only, **desktop/local-executor-required** Agent Plugins package for supported Codex and ChatGPT desktop environments. Cloud-only sessions cannot be assumed to access local files or execute this CLI. It orchestrates WolfTrap's *existing* CLI. It does not contain an MCP server, grant remote access, install the WolfTrap engine, or publish anything to the public Plugins Directory.
 
@@ -18,12 +18,14 @@ The portable manifest declares `extensions.com.openai.requires_local_executor: t
 
 The public main CLI offers `scan-build`, `scan-agent`, `scan-effects`, `scan-prompts`, and `scan-go-authority`. Draft-branch capabilities like MCP Bloodhound, Cursorial, WolfPrint, WolfNet, and offline-product convenience commands are *not* automatically included. Refer to their own independent qualification and integration gates before advertising them.
 
+This candidate adds `scan-geotrace` and `verify-geotrace` in engine 0.6.0. Select a reviewed R01 engine and plugin revision independently. GeoTrace takes one explicitly selected JSON capture and an external pinned policy on POSIX. Policy comparisons are advisory and do not authorize actions. See the audit and evidence-review skills for the exact arguments.
+
 ## Try as a repository-local plugin
 
 For a supported Codex CLI environment:
 
 ```bash
-codex plugin marketplace add Bropdrop/WolfTrap --ref feat/wolftrap-codex-plugin-v0-1
+codex plugin marketplace add /absolute/path/to/reviewed-r01-checkout
 codex plugin marketplace list
 ```
 

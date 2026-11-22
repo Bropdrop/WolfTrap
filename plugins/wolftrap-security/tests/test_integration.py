@@ -74,6 +74,24 @@ class PluginOfflineIntegration(unittest.TestCase):
             f"stdout:\n{result.stdout}\nstderr:\n{result.stderr}",
         )
 
+    def test_geotrace_candidate_scan_and_replay(self) -> None:
+        examples = REPO / "qualification/geotrace/r01/examples"
+        policy = examples / "policy/policy.json"
+        pin = hashlib.sha256(policy.read_bytes()).hexdigest()
+        args = ("--root", examples / "capture", "--file", "capture.json", "--policy", policy,
+                "--policy-sha256", pin, "--as-of", "2026-11-22")
+        before = snapshot(examples)
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "evidence"
+            self.assert_exit(run_cli("scan-geotrace", *args, "--output-dir", out), 0)
+            self.assert_exit(run_cli("verify-geotrace", *args, "--evidence-dir", out), 0)
+            report = json.loads((out / "geotrace.json").read_bytes())
+            self.assertEqual(report["action_authorization"], "NOT_EVALUATED")
+            self.assertEqual(report["events"][0]["geography"]["execution_region"]["countries"], ["DE"])
+            (out / "geotrace.md").write_text("Unverified replacement")
+            self.assert_exit(run_cli("verify-geotrace", *args, "--evidence-dir", out), 2)
+        self.assertEqual(before, snapshot(examples))
+
     def test_existing_safe_build_fixture(self) -> None:
         target = FIXTURES / "action_safe"
         before = snapshot(target)

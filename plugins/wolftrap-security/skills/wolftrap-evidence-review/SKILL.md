@@ -15,3 +15,13 @@ Use this skill when the user asks to verify, compare, or interpret previously ge
 6. Present the recorded statuses without escalation: `STATIC REVIEW SIGNAL`, `SYNTHETICALLY VERIFIED`, `INCONCLUSIVE`, `NOT TESTED`. `LIVE VERIFIED` requires independently recorded exercise of an authorized real implementation; do not infer it from a fixture or manifest.
 
 Return a concise audit trail containing evidence paths, source revision when known, commands, digests or verification results, contradictions, and precise remaining gaps. Do not upload source or reports without explicit approval.
+
+## GeoTrace v2 replay
+
+Use the same reviewed engine and the independently selected original capture, policy digest and evaluation date used for the assessment.
+
+```sh
+wolftrap verify-geotrace --root "$ROOT" --file "$CAPTURE" --policy "$POLICY" --policy-sha256 "$PIN" --as-of "$DAY" --evidence-dir "$OUT"
+```
+
+Exit 0 verifies the closed JSON, Markdown, SARIF and manifest against a fresh read. Preserve the reported geographic outcome even when replay succeeds. Exit 2 means replay could not establish consistency. No authorization or historical publisher attestation follows from matching bytes.

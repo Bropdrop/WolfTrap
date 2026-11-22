@@ -23,10 +23,10 @@ As of November 2026, OpenAI's submission guidance says you cannot add an MCP ser
 
 For hosted MCP plugins, eligible tool-server updates can pass through continuous scanning without a new plugin ZIP; changes to bundled skills and metadata still require an updated ZIP, review, and publication. Server-origin changes have additional restrictions.
 
-## Proposed capabilities (not shipped)
+## Candidate versions and deferred work
 
 - 0.1: Public-main offline scanners and evidence review
-- 0.2: MCP Bloodhound after its independent release gate
+- 0.2: R01 offline GeoTrace v2 scan and evidence replay with the separately pinned 0.6.0 engine. MCP Bloodhound remains deferred pending its independent release gate.
 - 0.3: Cursorial and WolfPrint after integration tests
 - 0.4: WolfNet signed registry after qualification
 - 0.5: WolfAlibi receipt review through a separate trust boundary

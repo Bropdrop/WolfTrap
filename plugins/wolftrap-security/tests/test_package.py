@@ -21,7 +21,7 @@ class PluginPackageContract(unittest.TestCase):
             "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
         )
         self.assertEqual(package["name"], "wolftrap-security")
-        self.assertEqual(package["version"], "0.1.0")
+        self.assertEqual(package["version"], "0.2.0")
         self.assertIn("com.openai", package["extensions"])
         self.assertIs(package["extensions"]["com.openai"]["requires_local_executor"], True)
         self.assertTrue(package["extensions"]["com.openai"]["interface"]["displayName"])
@@ -63,7 +63,7 @@ class PluginPackageContract(unittest.TestCase):
         )
         for command in (
             "scan-build", "scan-agent", "scan-effects", "scan-prompts",
-            "scan-go-authority", "verify-effects", "verify-prompts",
+            "scan-go-authority", "scan-geotrace", "verify-geotrace", "verify-effects", "verify-prompts",
             "verify-go-authority",
         ):
             self.assertIn(command, audit)

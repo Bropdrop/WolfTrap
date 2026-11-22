@@ -586,6 +586,9 @@ def build_parser() -> argparse.ArgumentParser:
     effect_verify.add_argument("--evidence-dir", required=True)
     effect_verify.set_defaults(handler=_verify_effects)
 
+    from . import geotrace_cli
+    geotrace_cli.configure(subparsers)
+
     go_scanner = subparsers.add_parser(
         "scan-go-authority", help="offline conditional Go tool-permission and egress review")
     go_scanner.add_argument("--root", required=True)
