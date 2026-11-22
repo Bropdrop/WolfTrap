@@ -7,7 +7,7 @@ import subprocess
 import tempfile
 
 from qualify import (CAP, SCAN, VERIFY, EXPECTED, HERE, ROOT, bundle, check, commands,
-                     grant, ledger, provision, session, sha)
+                     grant, ledger, provision, session, sha, source_identity)
 
 MUTATIONS = {
     "catalog-substitution": ("host.py", "require(value == catalog())", "require(bool(value))"),
@@ -29,6 +29,9 @@ def copy_install(root):
     shutil.copytree(HERE, install, ignore=ignore)
     shutil.copytree(ROOT / "src", root / "src", ignore=ignore)
     shutil.copytree(ROOT / "plugins", root / "plugins", ignore=ignore)
+    shutil.copyfile(ROOT/"pyproject.toml", root/"pyproject.toml")
+    (root/".agents/plugins").mkdir(parents=True)
+    shutil.copyfile(ROOT/".agents/plugins/marketplace.json", root/".agents/plugins/marketplace.json")
     filter_path = root / "qualification/wt_zt_001/offline.py"
     filter_path.parent.mkdir()
     shutil.copyfile(ROOT / "qualification/wt_zt_001/offline.py", filter_path)
@@ -148,10 +151,13 @@ if __name__ == "__main__":
     out = p.parse_args().output.absolute()
     check(out.resolve() == out and not out.is_relative_to(ROOT), "fresh external output required")
     out.mkdir(mode=0o700)
+    source = source_identity()
     rows = []
     for name in MUTATIONS:
         record = run_case(name)
         rows.append(record)
         print(name, record["classification"], flush=True)
-    (out/"mutations.json").write_text(json.dumps({"mutations":rows, "drift":drift()},indent=2)+"\n")
+    changes = drift()
+    check(source_identity() == source, "checkout changed during mutation qualification")
+    (out/"mutations.json").write_text(json.dumps({"source":source,"mutations":rows,"drift":changes},indent=2)+"\n")
     raise SystemExit(any(r["classification"] != "DETECTED" for r in rows))

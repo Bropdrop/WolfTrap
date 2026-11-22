@@ -5,9 +5,8 @@ import json
 import os
 from pathlib import Path
 import stat
-import subprocess
 
-from qualify import EXPECTED, ROOT, check, trace_observations
+from qualify import EXPECTED, ROOT, check, source_identity, trace_observations
 
 REPORTS = {"safety-case.json", "mutations.json", "codex.json", "sdk.strace", "codex.strace",
            "sdk.jsonl", "codex.jsonl", "source.json"}
@@ -43,7 +42,7 @@ def inventory(path):
 
 def collect(path, runs):
     check(path == path.resolve() and not path.is_relative_to(ROOT), "fresh external directory required")
-    check(not subprocess.check_output(["git","status","--porcelain"], cwd=ROOT), "clean checkout required")
+    source = source_identity()
     path.mkdir(mode=0o700)
     for source, target in [("suite/safety-case.json","safety-case.json"), ("mutation/mutations.json","mutations.json"),
                            ("codex/codex.json","codex.json"), ("suite/sdk.strace","sdk.strace"),
@@ -53,9 +52,10 @@ def collect(path, runs):
     for client, base in [("sdk","suite/sdk-state"),("codex","codex/state")]:
         for name in EXPECTED:
             (path/(client+"-"+name)).write_bytes(read(runs/base/"bundle"/name))
-    head, tree = subprocess.check_output(["git","rev-parse","HEAD","HEAD^{tree}"],cwd=ROOT,text=True).splitlines()
-    (path/"source.json").write_text(json.dumps({"schema":"wolftrap.mcp-safety-packet/v1",
-                "repository":"Bropdrop/WolfTrap","commit":head,"tree":tree},sort_keys=True)+"\n")
+    for name in ("safety-case.json", "mutations.json", "codex.json"):
+        check(json.loads(read(path/name))["source"] == source, "mixed run or checkout")
+    head, tree = source["commit"], source["tree"]
+    (path/"source.json").write_text(json.dumps(source,sort_keys=True)+"\n")
     (path/"manifest.json").write_text(json.dumps(inventory(path),indent=2,sort_keys=True)+"\n")
     print(digest(read(path/"manifest.json")), head, tree)
 
@@ -71,6 +71,7 @@ def verify(path, pin, commit, tree):
     codex = json.loads(read(path/"codex.json"))
     check(case["schema"] == "wolftrap.mcp-safety-case/v1" and codex["classification"] ==
           "SYNTHETICALLY_VERIFIED", "unsupported safety case")
+    check(case["source"] == codex["source"] == source, "client run revision mismatch")
     cases = case["cases"]
     check(set(cases) == DENIALS | {"permitted-catalog","transport-metadata","no-evidence",
           "monitored-agent-permitted","independent-replay","duplicate-dispatch",
@@ -109,6 +110,7 @@ def verify(path, pin, commit, tree):
         check(all(r["configuration"] == inv["digest"] for r in journal), "mixed configuration")
         check(report["os_witness"] == trace_observations(path/(client+".strace")), "OS trace mismatch")
     data = json.loads(read(path/"mutations.json"))
+    check(data["source"] == source, "mutation run revision mismatch")
     check({r["id"] for r in data["mutations"]} == MUTANTS and len(data["mutations"]) == len(MUTANTS),
           "mutation inventory")
     for r in data["mutations"]:

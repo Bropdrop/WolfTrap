@@ -10,11 +10,12 @@ import subprocess
 import tempfile
 import time
 
-from qualify import trace_command, trace_observations
+from qualify import source_identity, trace_command, trace_observations
 from qualify import CAP, SCAN, VERIFY, EXPECTED, bundle, check, commands, grant, ledger, provision
 
 
 def run(out):
+    source = source_identity()
     out.mkdir(mode=0o700)
     state = out / "state"
     provision(state)
@@ -71,7 +72,8 @@ def run(out):
             finally:
                 proc.terminate()
                 proc.wait(timeout=10)
-    return {"configuration":inventory, "observations":rows, "witness":ledger(state),
+    check(source_identity() == source, "checkout changed during Codex qualification")
+    return {"source":source, "configuration":inventory, "observations":rows, "witness":ledger(state),
             "os_witness":trace_observations(trace), "binary_sha256":binary_sha, "version":subprocess.check_output([binary, "--version"], text=True).strip()}
 
 

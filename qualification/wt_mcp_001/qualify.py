@@ -42,6 +42,17 @@ def grant(name, **changes):
                      policy_version="owner-policy-1", destination="bundle-a", operation=OPS[name]), **changes)
 
 
+def source_identity():
+    def git(*args):
+        return subprocess.check_output(["git", *args], cwd=ROOT, text=True).strip()
+    check(not git("status", "--porcelain"), "qualification requires a clean checkout")
+    remote = git("remote", "get-url", "origin").removesuffix(".git")
+    check(remote in ("https://github.com/Bropdrop/WolfTrap", "git@github.com:Bropdrop/WolfTrap"),
+          "unrecognized repository origin")
+    return {"schema":"wolftrap.mcp-safety-packet/v1","repository":"Bropdrop/WolfTrap",
+            "commit":git("rev-parse","HEAD"), "tree":git("rev-parse","HEAD^{tree}")}
+
+
 def provision(state):
     state.mkdir(mode=0o700)
     (state / "control").mkdir(mode=0o700)
@@ -80,8 +91,8 @@ def commands(state, install=HERE, model="synthetic-no-model-v1", harness="extern
         "libcrypto.so.3","liblzma.so.5","libbz2.so.1.0","libselinux.so.1","libcap.so.2","libpcre2-8.so.0")]
     sys_files += [p for p in Path("/usr/lib/python3.13").rglob("*") if p.is_file()
                   and p.resolve().is_relative_to("/usr/lib/python3.13")]
-    expected = {"engine":group(root,[root/p for p in published if p.startswith("src/")]),
-                "plugin":group(root,[root/p for p in published if p.startswith("plugins/")]),
+    expected = {"engine":group(root,[root/"pyproject.toml"] + [root/p for p in published if p.startswith("src/")]),
+                "plugin":group(root,[root/".agents/plugins/marketplace.json"] + [root/p for p in published if p.startswith("plugins/")]),
                 "schema":sha((install/"catalog.json").read_bytes()),
                 "host":group(root,[install/p for p in ("host.py","configuration.py","frontend.py","engine_entry.py")]),
                 "sandbox":group(root,[install/"isolation.py",install/"launch.py",install/"install-files.json",
@@ -311,7 +322,7 @@ def main():
     check(out.resolve() == out and not out.is_relative_to(ROOT), "use fresh external output")
     out.mkdir(mode=0o700)
     os.environ["WT_FICTIONAL_CANARY"] = "synthetic"
-    summary = {"schema": "wolftrap.mcp-safety-case/v1"}
+    summary = {"schema": "wolftrap.mcp-safety-case/v1", "source":source_identity()}
     state = out / "case-state"
     provision(state)
     inventory, cmd = commands(state)
@@ -338,6 +349,7 @@ def main():
     trace = out/"sdk.strace"
     summary["sdk"] = {"configuration": inv, "observations": asyncio.run(client_sdk(state, trace_command(cmd, trace))),
                       "os_witness": trace_observations(trace)}
+    check(source_identity() == summary["source"], "checkout changed during execution")
     (out / "safety-case.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n")
     print("Verified", len(summary["cases"]), "request cases, three OS profiles and the SDK transport")
 

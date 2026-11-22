@@ -36,7 +36,8 @@ def command(state):
     entry_files = ("catalog.json", "install-files.json", "isolation.py", "host.py", "launch.py",
                    "configuration.py", "frontend.py", "engine_entry.py", "test_profile.py",
                    "qualify.py", "qualify_mutations.py", "codex_client.py", "packet.py")
-    selected = [ROOT / rel for rel in published] + [HERE / name for name in entry_files] + [FILTER]
+    selected = [ROOT / rel for rel in published] + [HERE / name for name in entry_files]
+    selected.extend((FILTER, ROOT / "pyproject.toml", ROOT / ".agents/plugins/marketplace.json"))
     for path in selected:
         require(path.resolve() == path and path.is_file())
         cmd.extend(("--ro-bind", str(path), "/app/" + str(path.relative_to(ROOT))))

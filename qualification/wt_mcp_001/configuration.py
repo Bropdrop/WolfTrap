@@ -31,8 +31,8 @@ def configuration(policy_digest, model, harness):
     runtime.extend(members(Path("/usr/lib/python3.13")))
     # CPython can load distribution bytecode even with -B. Bind that identity too.
     runtime.extend(Path("/usr/lib/python3.13").rglob("*.pyc"))
-    return {"engine": fingerprint(members(ROOT / "src/wolftrap"), ROOT),
-            "plugin": fingerprint(members(plugin), ROOT), "schema": sha((HERE/"catalog.json").read_bytes()),
+    return {"engine": fingerprint([*members(ROOT / "src/wolftrap"), ROOT/"pyproject.toml"], ROOT),
+            "plugin": fingerprint([*members(plugin), ROOT/".agents/plugins/marketplace.json"], ROOT), "schema": sha((HERE/"catalog.json").read_bytes()),
             "host": fingerprint([HERE/"host.py", HERE/"configuration.py", HERE/"frontend.py",
                                  HERE/"engine_entry.py"], ROOT),
             "policy": policy_digest, "sandbox": fingerprint([HERE/"isolation.py", HERE/"launch.py", HERE/"install-files.json", FILTER], ROOT),
