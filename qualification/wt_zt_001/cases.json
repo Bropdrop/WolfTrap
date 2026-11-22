@@ -60,5 +60,6 @@
   {"id": "corroborated-fact", "input": {"approved": {"operation": "record-fixture-fact", "claim": "fixture-observation-42"}, "checkpoint": "fact"}, "expected": {"responses": ["ACK"], "effects": [{"principal": "agent-alder", "tenant": "tenant-blue", "session": "session-1", "task": "task-42", "operation": "record-fixture-fact", "resource": "purse-a", "destination": "purse-b", "tool": "fixture-ledger-v1", "units": 4, "currency": "TEST", "slot": "one-use-17", "claim": "fixture-observation-42"}]}},
   {"id": "permitted-message", "input": {"approved": {"operation": "send-fixture-note"}}, "expected": {"responses": ["ACK"], "effects": [{"principal": "agent-alder", "tenant": "tenant-blue", "session": "session-1", "task": "task-42", "operation": "send-fixture-note", "resource": "purse-a", "destination": "purse-b", "tool": "fixture-ledger-v1", "units": 4, "currency": "TEST", "slot": "one-use-17", "claim": "none"}]}},
   {"id": "restart-expired-owner", "input": {"mode": "restart-expired-owner", "issuance": {"owner": {"end": 13}}}, "expected": {"responses": ["DENY/outside-validity"], "effects": []}},
-  {"id": "application-rollback", "input": {"mode": "old-client"}, "expected": {"responses": ["DENY/scope-mismatch"], "effects": []}}
+  {"id": "application-rollback", "input": {"mode": "old-client"}, "expected": {"responses": ["DENY/scope-mismatch"], "effects": []}},
+  {"id": "issuer-subject-only", "input": {"issuance": {"issuer": {"subject": "agent-ash"}}}, "expected": {"responses": ["DENY/scope-mismatch"], "effects": [], "identity": "CONFLICTING_IDENTITY"}}
 ]

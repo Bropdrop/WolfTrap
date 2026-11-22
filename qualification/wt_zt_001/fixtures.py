@@ -27,7 +27,7 @@ def roots():
 
 
 def issue(role, binding, *, signer=None, generation=1, version=VERSION, start=10, end=20,
-          scope_patch=None):
+          scope_patch=None, subject=None):
     encoded = json.dumps(binding, sort_keys=True, separators=(",", ":")).encode()
     if role == "issuer":
         scope = {k: binding[k] for k in ("principal", "tenant", "session")}
@@ -37,7 +37,7 @@ def issue(role, binding, *, signer=None, generation=1, version=VERSION, start=10
                      version=version, generation=generation)
     scope.update(scope_patch or {})
     return jwt.encode(dict(iss=role, aud="urn:wolftrap:fixture:host",
-                           sub=binding["principal"], jti=binding["slot"], nbf=start, exp=end,
+                           sub=binding["principal"] if subject is None else subject, jti=binding["slot"], nbf=start, exp=end,
                            scope=scope), key(signer or role), algorithm="EdDSA")
 
 

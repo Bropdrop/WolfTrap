@@ -13,6 +13,7 @@ MUTATIONS = [
     ("credential revocation", "revoked", "if not active:", "if active is None:"),
     ("grant revocation", "withdrawn", "if not grant_active:", "if grant_active is None:"),
     ("credential principal", "substitute-principal", 'claim["sub"] != proposal["principal"] or ', ""),
+    ("credential principal minimized", "issuer-subject-only", 'claim["sub"] != proposal["principal"] or ', ""),
     ("credential tenant", "substitute-tenant", 'scope["generation"] = generation',
      'scope["generation"] = generation\n    scope["tenant"] = claim["scope"].get("tenant")'),
     ("host exact task", "substitute-task", "if proposal != allowed:",
