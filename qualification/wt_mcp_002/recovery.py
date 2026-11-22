@@ -24,10 +24,8 @@ def copy_install(dest):
 
 
 def pin_for(install,client):
-    cmd=["/usr/bin/python3.13","-IBS","-c",
-         "import sys;sys.path.insert(0,sys.argv[1]);from profile import measurement;print(measurement(sys.argv[2]))",
-         str(install),client]
-    return subprocess.check_output(cmd,text=True,env={}).strip()
+    from reference_pin import expected_configuration
+    return expected_configuration(install,client)
 
 
 def change(path,old,new):

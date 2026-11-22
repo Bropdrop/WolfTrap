@@ -32,10 +32,10 @@ def source():
 
 
 def audit_controls(out,runs):
-    refpin=sha((HERE/"reference.json").read_bytes())
+    refpin="3421ee83fb916dba6177bf21709d2ff9a24839f9d2a8b4e77eba8a708b980877"
     results={}
     for candidate in ("alpha","beta"):
-        ownerpin=sha((runs/"state/control/owner.json").read_bytes())
+        ownerpin=json.loads((runs/"trials.json").read_bytes())["owner_pin"]
         row=audit.verify(runs/"state",candidate,ownerpin,refpin)
         check(row["status"]=="VERIFIED_COMMIT","independent slot audit")
         results[candidate]=row
@@ -106,6 +106,13 @@ def run(out,hosted):
         summary["stages"][label]={"command":cmd,"exit":done.returncode}
         save()
         check(done.returncode==0,label+" did not qualify")
+    try:
+        from confinement import run as check_profiles
+        summary["worker_profiles"]=check_profiles()
+    except (ValueError,OSError,AssertionError,subprocess.SubprocessError):
+        summary["os_gate"]="BLOCKED: explicit worker profile could not demonstrate confinement"
+        save()
+        return 2
     for label in REQUIRED:
         filename=label+(".json" if label=="mutations" else "")
         execute(label,label+".py","--output",out/filename)
@@ -133,6 +140,14 @@ def run(out,hosted):
         summary["installed_drift_and_restoration"]=exits
     check(source()==src,"source changed during execution")
     summary["profile"]="SYNTHETICALLY_VERIFIED"
+    summary["mutation_limits"]={"full-host-compromise":"UNEXECUTED","whole-store-rollback":"UNEXECUTED",
+                                 "power-loss-durability":"UNEXECUTED","kernel-security":"UNEXECUTED"}
+    summary["authority"]="Single operator-provisioned session with independently selected policy and configuration pins"
+    summary["scope"]="Linux network-isolated synthetic captures alpha and beta"
+    summary["limits"]=["Synthetic acceptance covers these schemas and approvals only.",
+                       "A benign scope mismatch may deny a legitimate request until recommissioned.",
+                       "A compromised host may falsify both its journal and stored bytes.",
+                       "OS canaries measure the attempted operations and do not exhaust kernel behavior."]
     save()
     return 0
 

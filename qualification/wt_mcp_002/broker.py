@@ -55,6 +55,7 @@ class Broker:
                     previous = journal(db,key)
                     if previous:
                         if name==SCAN:
+                            snapshot(policy,args["source"],selection)
                             scan_complete(db,policy,args,expected)
                             return reply("ALREADY_COMMITTED")
                         return reply("HOLD" if previous==[("DISPATCH",scope)] else "DENIED")

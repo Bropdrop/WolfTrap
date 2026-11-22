@@ -25,7 +25,7 @@ def run():
                     mounts=[] if mode=="front" else isolation.engine_mounts(mode=="scan",p,output)
                     rc,raw=worker(HERE/"os_probe.py",mounts,[str(p/"private-canary")])
                     actual=json.loads(raw)
-                    expected={"socket":"EPERM","fork":"EPERM","shell":False,"inherited":"EBADF","secret":"ENOENT",
+                    expected={"socket":"EPERM","fork":"EPERM","exec_nonexistent":"EPERM","shell":False,"inherited":"EBADF","secret":"ENOENT",
                               "environment":False,"source_write":"ENOENT" if mode=="front" else "EROFS",
                               "source_read":"ENOENT" if mode=="front" else "ALLOWED","install_write":"EROFS",
                               "unapproved_write":"EROFS","slot_write":{"front":"ENOENT","scan":"ALLOWED",

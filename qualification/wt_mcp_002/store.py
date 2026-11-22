@@ -49,8 +49,14 @@ def file_at(parent, name, limit):
 
 @contextmanager
 def dirfd(path):
-    fd = os.open(path,os.O_DIRECTORY|os.O_NOFOLLOW|os.O_RDONLY)
+    require(path.is_absolute() and path.anchor=="/" and ".." not in path.parts)
+    flags=os.O_DIRECTORY|os.O_NOFOLLOW|os.O_RDONLY
+    fd=os.open("/",flags)
     try:
+        for component in path.parts[1:]:
+            child=os.open(component,flags,dir_fd=fd)
+            os.close(fd)
+            fd=child
         yield fd
     finally:
         os.close(fd)
@@ -88,11 +94,20 @@ def authorize(owner_pin, session, name, args):
     return policy,selection
 
 
+def bounded_names(fd, maximum):
+    result=set()
+    with os.scandir(fd) as entries:
+        for entry in entries:
+            require(len(result)<maximum)
+            result.add(entry.name)
+    return result
+
+
 def snapshot(policy, source, selection):
     with dirfd(SOURCES) as fd:
         root = os.fstat(fd)
         require([root.st_dev,root.st_ino,root.st_ctime_ns] == policy["root_identity"])
-        require(set(os.listdir(fd)) == {token(k)+".json" for k in policy["sources"]} and len(policy["sources"])<=8)
+        require(bounded_names(fd,8) == {token(k)+".json" for k in policy["sources"]} and len(policy["sources"])<=8)
         data,identity = file_at(fd,token(source)+".json",LIMIT)
         require(identity==selection["identity"] and sha(data)==selection["digest"])
         require(os.fstat(fd).st_ctime_ns==root.st_ctime_ns)
@@ -104,7 +119,7 @@ def snapshot(policy, source, selection):
 
 def artifact_bytes(path, expected):
     with dirfd(path) as fd:
-        require(set(os.listdir(fd)) == set(expected) == FILES)
+        require(bounded_names(fd,len(FILES)) == set(expected) == FILES)
         contents = {name:file_at(fd,name,1<<20)[0] for name in sorted(FILES)}
     require({n:sha(v) for n,v in contents.items()}==expected)
     return contents

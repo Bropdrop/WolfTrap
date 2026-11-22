@@ -24,6 +24,7 @@ def child():
 
 path=Path("/capture/sample.json")
 print(json.dumps({"socket":test(lambda:socket.socket().close()),"fork":test(child),
+                  "exec_nonexistent":test(lambda:os.execve("/absent-fixture",["fixture"],{})),
                   "shell":Path("/bin/sh").exists(),"inherited":test(lambda:os.fstat(87)),
                   "secret":test(lambda:Path(sys.argv[1]).read_bytes()),"environment":"WT_PRIVATE_CANARY" in os.environ,
                   "source_write":test(lambda:path.open("ab").close()),"source_read":test(path.read_bytes),

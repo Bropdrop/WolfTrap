@@ -11,7 +11,7 @@ import tempfile
 
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 from profile import FILES,INPUT_KEYS,OPS,ROOT,SCAN,directory,encode,require,sha
-from store import DB_SCHEMA,LIMIT,dirfd,file_at,parse,token
+from store import DB_SCHEMA,LIMIT,bounded_names,dirfd,file_at,parse,token
 
 
 def identity(path):
@@ -75,7 +75,7 @@ def provision(destination,selection,selection_pin,captures,geo):
         for sub in ("sources","effects","control"):
             (state/sub).mkdir(mode=0o700)
         with dirfd(captures) as fd:
-            require(set(os.listdir(fd))=={h+".json" for h in plan["sources"]})
+            require(bounded_names(fd,8)=={h+".json" for h in plan["sources"]})
             before=os.fstat(fd).st_ctime_ns
             for handle,src in plan["sources"].items():
                 data,_=file_at(fd,handle+".json",LIMIT)

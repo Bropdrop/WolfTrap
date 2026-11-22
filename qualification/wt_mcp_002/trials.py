@@ -15,6 +15,9 @@ from fixtures import REF,arguments,provision,revoke
 from profile import CAP,HERE,ROOT,SCAN,VERIFY,encode,measurement,sha
 
 
+WIRE_OBSERVATIONS=[]
+
+
 def check(ok, reason):
     if not ok:
         raise AssertionError(reason)
@@ -40,6 +43,7 @@ class Wire:
         self.n=0
 
     def raw(self,data):
+        self.request_digest=sha(data)
         self.proc.stdin.write(data+b"\n")
         self.proc.stdin.flush()
 
@@ -48,7 +52,15 @@ class Wire:
             poll.register(self.proc.stdout,selectors.EVENT_READ)
             check(poll.select(20),"stdio timeout")
         raw=self.proc.stdout.readline()
-        return json.loads(raw) if raw else None
+        reply=json.loads(raw) if raw else None
+        if reply is None:
+            verdict="EOF"
+        elif "error" in reply:
+            verdict=reply["error"]["code"]
+        else:
+            verdict=reply["result"].get("structuredContent",{}).get("status","PROTOCOL_OK")
+        WIRE_OBSERVATIONS.append({"frame_sha256":self.request_digest,"observed":verdict})
+        return reply
 
     def send(self,method,params=None):
         self.n+=1
@@ -104,10 +116,12 @@ def protocol(w,args,rows):
 
 
 def trial(out):
+    WIRE_OBSERVATIONS.clear()
     state=out/"state"
     policy=provision(state)
     client="synthetic-wire-v2"
-    pin=measurement(client)
+    from reference_pin import expected_configuration
+    pin=expected_configuration(HERE,client)
     cmd=command(state,policy,pin,client)
     rows=[]
     observations=[]
@@ -183,7 +197,17 @@ def trial(out):
             status=w.call(SCAN,arguments(owner,SCAN,"alpha"))
             check(status in ("DENIED","HOLD") and observe(alternate,"alpha")=={"journal":[],"files":{}},label)
         rows.append(label)
-    return {"schema":"wolftrap.mcp-002-trials/v1","cases":rows,"configuration":pin,"observations":observations}
+    alternate=out/"receipt-source-change"
+    owner=provision(alternate)
+    with wire(command(alternate,owner,pin,client)) as w:
+        args=arguments(owner,SCAN,"alpha")
+        check(w.call(SCAN,args)=="COMMITTED","stale receipt positive")
+        source=alternate/"sources/alpha.json"
+        source.write_bytes(source.read_bytes())
+        check(w.call(SCAN,args)=="HOLD" and len(observe(alternate,"alpha")["journal"])==2,"stale receipt")
+        rows.append("stale-source-retry")
+    return {"schema":"wolftrap.mcp-002-trials/v1","cases":rows,"configuration":pin,"owner_pin":sha(encode(policy)),
+            "wire_observations":WIRE_OBSERVATIONS,"observations":observations}
 
 
 if __name__=="__main__":

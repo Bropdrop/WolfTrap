@@ -11,11 +11,15 @@ from profile import HERE, HOST_LIBS, MEMBERS, ROOT, directory, isolation, measur
 def command(state):
     directory(state)
     require(not state.is_relative_to(ROOT) and not ROOT.is_relative_to(state))
-    require(set(os.listdir(state)) == {"control","sources","effects"})
+    from store import bounded_names,dirfd
+    with dirfd(state) as fd:
+        require(bounded_names(fd,3)=={"control","sources","effects"})
     for name in ("control","sources","effects"):
         directory(state/name)
-    require(set(os.listdir(state/"control")) == {"owner.json","generation","gate","geo.json"})
-    require(1 <= len(os.listdir(state/"sources")) <= 8)
+    with dirfd(state/"control") as fd:
+        require(bounded_names(fd,4)=={"owner.json","generation","gate","geo.json"})
+    with dirfd(state/"sources") as fd:
+        require(bounded_names(fd,8))
     cmd = [isolation.BWRAP,"--unshare-all","--unshare-user","--die-with-parent","--new-session",
            "--clearenv","--cap-drop","ALL","--size","16777216","--tmpfs","/tmp","--proc","/proc","--dev","/dev"]
     def mount(src,dest,flag="--ro-bind"):
