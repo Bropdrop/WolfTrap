@@ -1,0 +1,20 @@
+{
+  "name": "wolftrap-local",
+  "interface": {
+    "displayName": "WolfTrap Security (local candidate)"
+  },
+  "plugins": [
+    {
+      "name": "wolftrap-security",
+      "source": {
+        "source": "local",
+        "path": "./plugins/wolftrap-security"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

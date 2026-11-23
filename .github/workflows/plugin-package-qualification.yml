@@ -1,0 +1,60 @@
+name: WolfTrap skills-only qualification
+
+on:
+  pull_request:
+    paths:
+      - '.agents/plugins/marketplace.json'
+      - 'plugins/wolftrap-security/**'
+      - '.github/qualification-requirements.txt'
+      - '.github/workflows/plugin-package-qualification.yml'
+      - 'LICENSE'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Validate manifest and reproduce the frozen ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip --isolated install 'jsonschema==4.26.0'
+          curl -fsSL https://agent-plugins.org/schemas/1.0.0/plugin.schema.json -o "$RUNNER_TEMP/schema.json"
+          tool=plugins/wolftrap-security/tools/skills_package.py
+          for name in skills repeat; do
+            python -B "$tool" build "$RUNNER_TEMP/$name.zip" --commit HEAD --schema "$RUNNER_TEMP/schema.json"
+          done
+          cmp "$RUNNER_TEMP/skills.zip" "$RUNNER_TEMP/repeat.zip"
+          printf '%s  %s\n' 418a88d4ba3a069662d0731aff924ac17938882303e3b2c94a2365836d0b3350 "$RUNNER_TEMP/skills.zip" | sha256sum --check -
+          python -B "$tool" verify "$RUNNER_TEMP/skills.zip" --commit HEAD --schema "$RUNNER_TEMP/schema.json"
+          python -B -m unittest discover -s plugins/wolftrap-security/tools -v
+          python -B -m unittest discover -s plugins/wolftrap-security/tests -p test_package.py -v
+      - name: Install the pinned public CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          git worktree add --detach "$RUNNER_TEMP/wolftrap-source" ec6c3c1b2a50d702d202bd9b4e40842ba6e395f2
+          python -m venv "$RUNNER_TEMP/wolftrap-cli"
+          pip="$RUNNER_TEMP/wolftrap-cli/bin/pip"
+          "$pip" --isolated install 'setuptools==84.2.1'
+          "$pip" --isolated install --no-index --no-deps --no-build-isolation "$RUNNER_TEMP/wolftrap-source"
+          "$pip" --isolated install --no-deps --only-binary=:all: --require-hashes -r .github/qualification-requirements.txt
+          "$RUNNER_TEMP/wolftrap-cli/bin/python" -c 'from importlib.metadata import version; assert version("wolftrap") == "0.5.3"'
+      - name: Exercise the installed CLI with network isolated
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo unshare --net -- setpriv --reuid="$(id -u)" --regid="$(id -g)" --clear-groups --no-new-privs \
+            env -i PATH="$PATH" WOLFTRAP_CLI="$RUNNER_TEMP/wolftrap-cli/bin/wolftrap" \
+            python -B -m unittest discover -s plugins/wolftrap-security/tests -p test_integration.py -v
