@@ -17,24 +17,8 @@ WolfTrap Security is one stable plugin identity with a separately governed secur
 4. Run the existing offline fixture suite, evidence-verifier and tamper tests, permissions/path tests, and clean installation test.
 5. Increment the plugin manifest version as needed, build and review a complete ZIP, submit it to the **existing** plugin, resolve findings, and publish the approved replacement. Do not replace a published version until review succeeds.
 
-## Critical MCP decision
+## Distribution tracks
 
-As of November 2026, OpenAI's submission guidance says you cannot add an MCP server to a plugin already submitted as skills-only. PR #28 is still a draft and has NOT been submitted, so adding a local or remote MCP adapter before first submission remains an option. Local MCP submission has an eligibility and review process. Alternatively, publish the skills-only plugin and later distribute MCP as a separate plugin.
+The skills-only v0.2.0 submission candidate supports the five qualified public-main CLI modes listed in the plugin README. The protected Linux MCP adapter remains a separate evaluation. OpenAI currently requires MCP configuration in the initial submission for a plugin that uses it. A later local MCP listing requires its own eligibility, organization allowlisting and clean desktop qualification.
 
-For hosted MCP plugins, eligible tool-server updates can pass through continuous scanning without a new plugin ZIP; changes to bundled skills and metadata still require an updated ZIP, review, and publication. Server-origin changes have additional restrictions.
-
-## Candidate versions and deferred work
-
-- 0.1: Public-main offline scanners and evidence review
-- 0.2: R01 offline GeoTrace v2 scan and evidence replay with the separately pinned 0.6.0 engine. MCP Bloodhound remains deferred pending its independent release gate.
-- 0.3: Cursorial and WolfPrint after integration tests
-- 0.4: WolfNet signed registry after qualification
-- 0.5: WolfAlibi receipt review through a separate trust boundary
-- 1.0: Fully qualified composition, only if demonstrated by evidence
-
-No future version number guarantees an implementation, funding, acceptance, or security certification.
-
-Official references:
-https://developers.openai.com/plugins/deploy/submission
-https://developers.openai.com/plugins/deploy/desktop-only
-https://developers.openai.com/plugins/deploy/app-review
+[OpenAI submission](https://developers.openai.com/plugins/deploy/submission) · [Desktop-only plugins](https://developers.openai.com/plugins/deploy/desktop-only)

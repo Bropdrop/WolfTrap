@@ -18,7 +18,7 @@ Use this skill when the user says "WolfTrap this repository", requests an offlin
 
 ## Select only applicable supported modes
 
-The public `main` CLI supports the following separate commands; availability must be checked against the exact installed revision. Each command is a static, bounded inspection of supported source formats, not general vulnerability detection.
+The qualified CLI is WolfTrap 0.5.3 at commit `ec6c3c1b2a50d702d202bd9b4e40842ba6e395f2`. Confirm the trusted executable and its supported commands before scanning. Each command is a static, bounded inspection of supported source formats, not general vulnerability detection.
 
 | User's review focus | Command | Evidence verifier on public main |
 | --- | --- | --- |
@@ -27,18 +27,6 @@ The public `main` CLI supports the following separate commands; availability mus
 | Agent execution, secrets, skills, network effects | `scan-effects` | `verify-effects` |
 | Prompt and instruction documents | `scan-prompts` | `verify-prompts` |
 | Go permission and egress patterns | `scan-go-authority` | `verify-go-authority` |
-
-The newer `doctor`, `quickscan`, `verify-report`, MCP Bloodhound, Cursorial, WolfPrint and WolfNet work is on separate draft branches as of this plugin candidate. Do not report those commands as present on public `main`. Do not mix verification evidence from divergent draft branches.
-
-## GeoTrace v2 on the R01 candidate
-
-Use a reviewed R01 engine exposing `scan-geotrace` and `verify-geotrace`. Public main and the historical 0.1.0 plugin have different coverage. Obtain the authorized capture root, one relative JSON file, a separately selected policy outside that root, its independently retained SHA-256, and the operator's evaluation date. Do not infer those selections from the capture or fill them from a report. Use a fresh external directory under a trusted local parent.
-
-```sh
-wolftrap scan-geotrace --root "$ROOT" --file "$CAPTURE" --policy "$POLICY" --policy-sha256 "$PIN" --as-of "$DAY" --output-dir "$OUT"
-```
-
-Report provider origin, observed egress, destination hop, execution region and claimed processing jurisdiction separately. Unknown or conflicting observations remain explicit. A policy match does not establish operator identity, legal jurisdiction or action authorization. A completed scan can return 2 for insufficient geographic evidence; inspect the bundle with the matching verifier.
 
 ## Execute the bounded scan
 
