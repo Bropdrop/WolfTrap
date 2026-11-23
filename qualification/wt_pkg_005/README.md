@@ -72,6 +72,18 @@ The workflow targets a pull request stacked on `feat/wt-mcp-003-sibling-sandbox`
 
 A hosted runner's namespace result applies to that runner. A compatible device can establish the scoped exact-package runtime result with its own evidence. The hosted lane remains separately accounted for.
 
+## Chromebook qualification record
+
+The operator reported exit 0 for each phase on Debian 13 Crostini (x86-64), with kernel `6.6.119-09251-gf81e51484dec`, CPython 3.13.5, Bubblewrap 0.11.0, strace 6.13 and libseccomp 2.6.0. These platform measurements are operator-reported and absent from the summaries. The three supplied summaries agree on the source and assembly pins above, the prior commit, and driver SHA-256 `ea6f28b4727480369c5fd20322c686ddbd8ff7ca5d9ca14a7b9bd9595fa03d00`, which matches local tooling commit `59fa5bb18fe918606e45b29797df83f9b5cc6f2b`.
+
+| Phase | Reconciled coverage | Supplied summary SHA-256 |
+| --- | --- | --- |
+| Portable | PASS. Assembly integrity, independent rebuild within the phase, package substitution rejection, clean installation, uninstall and retained prior files. | `5ea86b208e4a3a532cc31b1e0c1138159a62ffbf5330e11a7646c99d73792d6b` |
+| Exact-package qualification | PASS. Assembly and clean installation, namespace preflight, discovery and denial, authorized scan, retry, evidence replay and read-only audit, file rollback and audit after removal. | `fafd0170c20f2b3bfc449a46a57e959ada5ccd0d7eb3a3c6b11b48e95d4b17e5` |
+| Stateful rollback | PASS. Same package checks, plus PR #33 recognition of the existing live commitment as `ALREADY_COMMITTED`, denial after revocation, and the driver’s journal and artifact equality check. | `0821d787e891771a534c8ce264f31fbe25c4d3340651085023886d74e1375050` |
+
+The supplied runtime summaries omit the driver's `mcp_outcomes` list. Their check maps match the expected device-mode checks. Raw protocol and SQLite evidence stays on the device and has not been independently replayed. The PR #33 result applies to reuse of the existing live commitment and subsequent revocation. Fresh PR #33 scans and whole-store restoration remain unqualified.
+
 ## Review record and current verdict
 
 | Gate | Status |
@@ -80,10 +92,11 @@ A hosted runner's namespace result applies to that runner. A compatible device c
 | Portable assembly and installed files | **GO for independent device evaluation.** The Cloud build matched WT-MCP-004 byte for byte. Repeat builds, a substituted transport rejection, both clean extracted inventories, candidate removal and prior file verification passed. |
 | Protected runtime on Codex Cloud | **BLOCK.** The user UID map was read-only before a broker could launch. The hosted-style outer isolation check also blocked. |
 | Historical Crostini source result | The saved records reconcile with 49 request cases, 11 recovery cases and nine detected/restored mutations at PR #34. The operator additionally reported two successful audits, six tamper rejections and restoration of valid evidence. The original DBs, raw GeoTrace bundles, kernel traces and six machine-readable tamper records were absent from the handoff and remain **NOT REPLAYED**. |
-| Exact-package Crostini run | **BLOCK / NOT TESTED.** Requires the independent device run and review. |
-| Stateful rollback | **BLOCK / NOT TESTED.** The prior runtime and in-place journal, artifact and revocation checks need separate execution on a compatible host. |
+| Exact-package Crostini run | **GO for the reported Crostini fixture run.** The device summaries were reconciled against the reviewed driver. |
+| Stateful rollback | **GO for the demonstrated live-state reuse and revocation case.** Fresh PR #33 scans and whole-store restoration remain unqualified. |
 | Intended clients and distribution | SDK and Codex app-server claims keep their historical test scope. Exact-package client registration, desktop installation, macOS and Windows compatibility, OpenAI local-MCP eligibility, publisher identity and signed provenance remain open. Real model-selected behavior is **NOT TESTED**. |
-| Stacked draft and production | **BLOCK.** A new stacked draft requires review of qualification of the implemented work. Production and submission require separate decisions and evidence. |
+| Stacked draft | **GO for review.** The three supplied device summaries and the local portable rebuild support the scoped evaluation. |
+| Production and submission | **BLOCK.** Signed provenance, independent security review, client compatibility and distribution eligibility remain separate gates. |
 
 The local rebuilds used CPython 3.12.14 and 3.13.5. Independent archive inspection checked 10 outer payloads and 24 adapter payloads against their receipts and pinned Git blobs. The original source's portable suites passed 21 GeoTrace v1, 22 GeoTrace v2 and 13 plugin tests. The workflow shell steps were exercised on Codex Cloud. A GitHub-hosted run remains pending.
 
