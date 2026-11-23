@@ -68,8 +68,8 @@ and optional gate allow-through paths. They do not prove authorization bypasses.
 > **Public beta:** The read-only CI/build inspector, Stage 5.1 agent inspector,
 > synthetic challenge labs, and community CI/build Action are available on
 > `main`. The CI/build Action's
-> [hosted qualification passed](https://github.com/Bropdrop/WolfTrap/actions/runs/45096749403)
-> at baseline commit `0365228c93acfaaf353cb285cdfedb79c48ead87`.
+> [hosted qualification passed](https://github.com/Bropdrop/WolfTrap/actions/runs/45201337824)
+> at selected Action beta commit `343bd56f04a35f37de183d42d82a33b6454765b0`.
 > [Action release notes](https://github.com/Bropdrop/WolfTrap/releases)
 > record each release's exact source and qualification. An empty scan is
 > **not a security certification**.

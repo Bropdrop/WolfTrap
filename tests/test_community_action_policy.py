@@ -11,7 +11,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 BRANCH = "feat/wolftrap-community-onramp-v0_6"
-PUBLISHED_ACTION_SHA = "0365228c93acfaaf353cb285cdfedb79c48ead87"
+PUBLISHED_ACTION_SHA = "343bd56f04a35f37de183d42d82a33b6454765b0"
 PINNED = re.compile(r"^[^@]+@[0-9a-f]{40}$")
 
 
