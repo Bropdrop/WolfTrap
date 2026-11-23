@@ -26,7 +26,7 @@ jobs:
 
       - name: Inspect build trust paths (advisory by default)
         id: wolftrap
-        uses: GovernableIntelligence/WolfTrap@4d1f075dadf257375a0ea59d39dea9151d07e3f5
+        uses: Bropdrop/WolfTrap@0365228c93acfaaf353cb285cdfedb79c48ead87
         with:
           root: '.'
           fail-on-findings: 'false'

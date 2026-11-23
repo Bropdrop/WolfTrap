@@ -8,6 +8,13 @@ WolfTrap is public defensive security research from Governable Intelligence.
 The Canadian grey wolf is the project's unofficial mascot. WolfTrap has no FBI
 affiliation or endorsement.
 
+**GitHub Action beta: WolfTrap — Offline CI Trust Review.** Add the
+[starter workflow](https://github.com/Bropdrop/WolfTrap/blob/main/examples/wolftrap-scan.yml)
+to inspect supported GitHub Actions and Dockerfile/Containerfile configurations
+and retain downloadable evidence. This Action runs only the CI/build scanner;
+the agent, effects, prompt-document and Go inspectors below are separate CLI
+commands. See [installation and behavior](#option-b-add-the-github-action-public-beta).
+
 WolfTrap is a **read-only, offline trust-boundary inspector** for GitHub
 Actions, Dockerfiles, bounded JavaScript/TypeScript agent code, and Stage 5.2
 protected-effect boundary patterns across agent skills and scripts. Stage 5.3
@@ -60,10 +67,12 @@ and optional gate allow-through paths. They do not prove authorization bypasses.
 
 > **Public beta:** The read-only CI/build inspector, Stage 5.1 agent inspector,
 > synthetic challenge labs, and community CI/build Action are available on
-> `main`. The earlier community Action's
-> [hosted qualification passed](https://github.com/GovernableIntelligence/WolfTrap/actions/runs/43663128275)
-> at commit `4d1f075dadf257375a0ea59d39dea9151d07e3f5` before this
-> documentation update. An empty scan is **not a security certification**.
+> `main`. The CI/build Action's
+> [hosted qualification passed](https://github.com/Bropdrop/WolfTrap/actions/runs/45096749403)
+> at baseline commit `0365228c93acfaaf353cb285cdfedb79c48ead87`.
+> [Action release notes](https://github.com/Bropdrop/WolfTrap/releases)
+> record each release's exact source and qualification. An empty scan is
+> **not a security certification**.
 > Findings are conditional and require human review; there are no confirmed
 > external exploits here.
 
@@ -74,7 +83,7 @@ and optional gate allow-through paths. They do not prove authorization bypasses.
 Requires Python 3.11+ and a local authorized checkout:
 
 ```bash
-git clone https://github.com/GovernableIntelligence/WolfTrap.git
+git clone https://github.com/Bropdrop/WolfTrap.git
 cd WolfTrap
 python3 -m pip install -e '.[build-scan]'
 wolftrap scan-build --root /path/to/YOUR-repository --output-dir /tmp/wolftrap-review
@@ -87,12 +96,32 @@ repository.
 
 ### Option B: Add the GitHub Action (public beta)
 
-Copy [`examples/wolftrap-scan.yml`](examples/wolftrap-scan.yml) to
+Copy the [current starter workflow](https://github.com/Bropdrop/WolfTrap/blob/main/examples/wolftrap-scan.yml) to
 `.github/workflows/wolftrap.yml` in **your** repository. It uses a read-only
 token, checks out the requested revision without persisting credentials, runs
-only WolfTrap's scanner, and retains a report artifact. The example pins a
+only WolfTrap's CI/build scanner, and retains a report artifact. The example pins a
 hosted-qualified Action implementation to an immutable 40-character commit
-SHA; review that exact revision before adopting or updating the pin.
+SHA in **Bropdrop/WolfTrap**; review that exact revision before adopting or
+updating the pin. Action releases use the `action-v` tag prefix, separately
+from the Python CLI and the WolfTrap Security skills-only plugin versions.
+
+The supported starter uses `ubuntu-24.04` and Python 3.12. It scans a local
+checkout without executing the inspected project's code. No model API key or
+WolfTrap server is required. **Offline describes the inspection:** Action
+setup downloads Python/packages, and evidence upload contacts GitHub.
+
+| Input | Default | Behavior |
+| --- | --- | --- |
+| `root` | `.` | Local checked-out repository to inspect; not a URL. |
+| `fail-on-findings` | `'false'` | Advisory findings keep the job green; `'true'` makes them fail it. Incomplete or unsupported input always fails. |
+| `artifact-name` | `wolftrap-scan-evidence` | Evidence artifact name; retention is 14 days. |
+
+Outputs are `status`, `findings`, `unknown-inputs`, and `evidence-dir`.
+Evidence includes JSON, Markdown, SARIF, integrity manifests, and an Action
+summary. `NO_PATTERN_MATCH` means no supported pattern matched;
+`REVIEW_REQUIRED` means a conditional signal needs human review;
+`INCONCLUSIVE` means the inspection is incomplete. The Action is a beta
+review aid and does not certify a repository as secure.
 
 Or run the 128-case offline detector challenge yourself:
 
