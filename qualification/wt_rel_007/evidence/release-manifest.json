@@ -1,0 +1,15 @@
+{
+  "driverSha256": "ea6f28b4727480369c5fd20322c686ddbd8ff7ca5d9ca14a7b9bd9595fa03d00",
+  "publisherAuthority": "UNVERIFIED",
+  "schema": "wolftrap.release-manifest/v1",
+  "scope": "linux-evaluation",
+  "sourceCommit": "4d39dbee2aca4a680cd1a916bc4beb0f54cccb30",
+  "sourceTree": "a04d65fd3535c74ea8991e557b14d1e6899caa8e",
+  "status": "UNSIGNED_REVIEW",
+  "subjects": {
+    "rebuild.intoto.json": "82a8bf7b87eb7923d595bdf4b7420df8529a96d725ff885409f8d9fab364286f",
+    "sbom.cdx.json": "ca8a85e0204da5183bda3facbbcdba4f8ad943ffdc1fd82d3e7d3bf2c522a1e7",
+    "wolftrap-wt-pkg-005-linux-evaluation.zip": "f4d6188d47bb6c4fdcde3c76b54cb5ac0430c927d3d43b82b15b79c427c535dd"
+  },
+  "toolingCommit": "8a33bc6d2230bff0a05aff77648a8362ed8e84eb"
+}

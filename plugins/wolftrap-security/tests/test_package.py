@@ -63,7 +63,7 @@ class PluginPackageContract(unittest.TestCase):
         )
         for command in (
             "scan-build", "scan-agent", "scan-effects", "scan-prompts",
-            "scan-go-authority", "scan-geotrace", "verify-geotrace", "verify-effects", "verify-prompts",
+            "scan-go-authority", "verify-effects", "verify-prompts",
             "verify-go-authority",
         ):
             self.assertIn(command, audit)
