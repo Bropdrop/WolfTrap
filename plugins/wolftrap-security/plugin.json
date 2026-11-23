@@ -1,0 +1,43 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "wolftrap-security",
+  "version": "0.2.0",
+  "description": "Static review and evidence checks for authorized local repositories using the separately installed WolfTrap CLI.",
+  "author": {
+    "name": "Governable Intelligence",
+    "url": "https://github.com/Bropdrop/WolfTrap"
+  },
+  "homepage": "https://github.com/Bropdrop/WolfTrap",
+  "repository": "https://github.com/Bropdrop/WolfTrap",
+  "license": "Apache-2.0",
+  "keywords": [
+    "security",
+    "static-analysis",
+    "agent-security",
+    "trust-boundaries",
+    "evidence"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "WolfTrap Security",
+        "shortDescription": "Offline static review",
+        "longDescription": "Review authorized local GitHub Actions workflows, Dockerfiles, agent source, prompt documents, and Go permission patterns using a separately installed WolfTrap CLI. The skills explain static signals, check supported saved evidence, and report unsupported or inconclusive inputs. The workflow reads local files and writes evidence to a user-approved directory outside the inspected tree. It does not execute project code. A supported desktop local executor is required.",
+        "developerName": "Governable Intelligence",
+        "websiteURL": "https://github.com/Bropdrop/WolfTrap",
+        "defaultPrompt": [
+          "WolfTrap this authorized local repository.",
+          "Verify the integrity and limits of this WolfTrap evidence bundle."
+        ],
+        "category": "Productivity",
+        "capabilities": [
+          "Read"
+        ],
+        "supportURL": "https://github.com/Bropdrop/WolfTrap/issues",
+        "logo": "./assets/wolftrap.png",
+        "composerIcon": "./assets/wolftrap.png"
+      },
+      "requires_local_executor": true
+    }
+  }
+}
