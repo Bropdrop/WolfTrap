@@ -11,6 +11,7 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -19,17 +20,17 @@ FIXTURES = REPO / "tests" / "fixtures"
 
 
 def run_cli(*args: object) -> subprocess.CompletedProcess[str]:
-    cli = Path(os.environ["WOLFTRAP_CLI"])
-    if not cli.is_absolute() or not cli.is_file():
-        raise ValueError("WOLFTRAP_CLI must name the installed absolute CLI path")
+    source = Path(os.environ["WOLFTRAP_SOURCE"])
+    if not source.is_absolute() or not (source / "src" / "wolftrap" / "__main__.py").is_file():
+        raise ValueError("WOLFTRAP_SOURCE must name the pinned public CLI checkout")
     env = dict(os.environ)
-    env.pop("PYTHONPATH", None)
+    env["PYTHONPATH"] = str(source / "src")
     env["PYTHONDONTWRITEBYTECODE"] = "1"
     env["PYTHONHASHSEED"] = "0"
     env["PYTHONNOUSERSITE"] = "1"
     return subprocess.run(
-        [cli, *(str(arg) for arg in args)],
-        cwd=cli.parent,
+        [sys.executable, "-m", "wolftrap", *(str(arg) for arg in args)],
+        cwd=source,
         env=env,
         capture_output=True,
         text=True,

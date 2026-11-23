@@ -33,7 +33,7 @@ python3 -B "$tool" verify "$zip" --commit "$commit" --schema "$out/schema.json"
 printf '%s  %s\n' 418a88d4ba3a069662d0731aff924ac17938882303e3b2c94a2365836d0b3350 "$zip" | sha256sum --check -
 ```
 
-CI installs the pinned public CLI and its hash-locked build parser in an isolated environment, then runs authorized local fixtures without network access. Coverage includes all five scan modes, the three matching verifiers, evidence integrity, unsafe paths and unsupported input returning `INCONCLUSIVE`.
+CI uses the pinned public CLI checkout and its hash-locked build parser, then runs authorized local fixtures without network access. Coverage includes all five scan modes, the three matching verifiers, evidence integrity, unsafe paths and unsupported input returning `INCONCLUSIVE`.
 
 ## Desktop and submission gates
 
