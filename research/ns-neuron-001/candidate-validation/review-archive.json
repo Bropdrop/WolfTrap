@@ -1,0 +1,11 @@
+{
+  "checks": {
+    "all_manifest_hashes_match": true,
+    "all_payloads_identical": true,
+    "exact_candidate_member_set": true,
+    "inventory_complete": true
+  },
+  "members": 97,
+  "sha256": "ff4868ad7248e1135821eab3d1af3145185a32c0fa66c436d15b0046b8ec1456",
+  "version": "0.3.0a1+ns.neuron.1"
+}

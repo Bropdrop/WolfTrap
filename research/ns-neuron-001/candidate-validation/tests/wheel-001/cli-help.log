@@ -1,0 +1,38 @@
+usage: wolftrap-neuralscope [-h] [--version]
+                            {demo,inspect,compare,local,fetch-model,pretrained-plan,pretrained,replay-pretrained,neuron,attention-plan,attention,replay-attention,verify,replay,api-plan,api-run}
+                            ...
+
+WolfTrap NeuralScope experimental neural inspection
+
+positional arguments:
+  {demo,inspect,compare,local,fetch-model,pretrained-plan,pretrained,replay-pretrained,neuron,attention-plan,attention,replay-attention,verify,replay,api-plan,api-run}
+    demo                run a constructed local transformer experiment; no API
+    inspect             read local safetensors structure and numeric
+                        statistics
+    compare             compare two local weight-file inventories
+    local               intervene in supported local GPT-2 weights with
+                        predeclared token-ID cases
+    fetch-model         explicitly acquire the pinned DistilGPT2 numeric
+                        assets
+    pretrained-plan     freeze fixed tokenized cases before inference; local
+                        assets only
+    pretrained          compare with Transformers, then run the fixed study if
+                        parity passes
+    replay-pretrained   reproduce saved reference, intervention and study
+                        arrays offline
+    neuron              measure one discovery-selected MLP neuron on the
+                        pinned local checkpoint
+    attention-plan      freeze the fixed 72-head attention study; no inference
+    attention           discover one attention head, freeze it, then test
+                        held-out inputs
+    replay-attention    recompute all attention traces, selection, and results
+    verify              verify closed file inventory without model execution
+    replay              rerun the recorded local experiment and compare
+                        metrics and tensors
+    api-plan            preview a behavioral pilot with zero requests
+    api-run             dry run by default; --live explicitly enables billable
+                        requests
+
+options:
+  -h, --help            show this help message and exit
+  --version             show program's version number and exit

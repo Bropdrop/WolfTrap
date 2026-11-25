@@ -1,0 +1,310 @@
+{
+  "behavioral_safety": "NOT_ASSESSED",
+  "format": "safetensors-supported-subset",
+  "metadata": {
+    "origin": "constructed untrained validation circuit",
+    "version": "0.3.0a1"
+  },
+  "parameter_count": 1080,
+  "publisher_authenticity": "NOT_ESTABLISHED",
+  "schema": "wolftrap.neuralscope.weight-inventory/v1",
+  "sha256": "b1920241d333607e81f26b031acae000bdee906575d0b84b2bbf7868fe5c4ae4",
+  "size_bytes": 5808,
+  "tensor_count": 16,
+  "tensors": [
+    {
+      "bytes": 96,
+      "dtype": "F32",
+      "elements": 24,
+      "finite_count": 24,
+      "finite_max": 0.0,
+      "finite_min": 0.0,
+      "name": "transformer.h.0.attn.c_attn.bias",
+      "nan_count": 0,
+      "negative_infinity_count": 0,
+      "nonfinite_count": 0,
+      "positive_infinity_count": 0,
+      "sha256": "2ea9ab9198d1638007400cd2c3bef1cc745b864b76011a0e1bc52180ac6452d4",
+      "shape": [
+        24
+      ],
+      "value_scan": "SCANNED"
+    },
+    {
+      "bytes": 768,
+      "dtype": "F32",
+      "elements": 192,
+      "finite_count": 192,
+      "finite_max": 0.5,
+      "finite_min": -0.5,
+      "name": "transformer.h.0.attn.c_attn.weight",
+      "nan_count": 0,
+      "negative_infinity_count": 0,
+      "nonfinite_count": 0,
+      "positive_infinity_count": 0,
+      "sha256": "9d3cd882317ea1d75100c7b59b4d63f606dae6e6a5ee70be18902732741b7813",
+      "shape": [
+        8,
+        24
+      ],
+      "value_scan": "SCANNED"
+    },
+    {
+      "bytes": 32,
+      "dtype": "F32",
+      "elements": 8,
+      "finite_count": 8,
+      "finite_max": 0.0,
+      "finite_min": 0.0,
+      "name": "transformer.h.0.attn.c_proj.bias",
+      "nan_count": 0,
+      "negative_infinity_count": 0,
+      "nonfinite_count": 0,
+      "positive_infinity_count": 0,
+      "sha256": "66687aadf862bd776c8fc18b8e9f8e20089714856ee233b3902a591d0d5f2925",
+      "shape": [
+        8
+      ],
+      "value_scan": "SCANNED"
+    },
+    {
+      "bytes": 256,
+      "dtype": "F32",
+      "elements": 64,
+      "finite_count": 64,
+      "finite_max": 8.0,
+      "finite_min": -8.0,
+      "name": "transformer.h.0.attn.c_proj.weight",
+      "nan_count": 0,
+      "negative_infinity_count": 0,
+      "nonfinite_count": 0,
+      "positive_infinity_count": 0,
+      "sha256": "0dc147fce19ff7c16f9f7798452b6bf6dadb3a77f0f84ea527e199d51a3b2560",
+      "shape": [
+        8,
+        8
+      ],
+      "value_scan": "SCANNED"
+    },
+    {
+      "bytes": 32,
+      "dtype": "F32",
+      "elements": 8,
+      "finite_count": 8,
+      "finite_max": 0.0,
+      "finite_min": 0.0,
+      "name": "transformer.h.0.ln_1.bias",
+      "nan_count": 0,
+      "negative_infinity_count": 0,
+      "nonfinite_count": 0,
+      "positive_infinity_count": 0,
+      "sha256": "66687aadf862bd776c8fc18b8e9f8e20089714856ee233b3902a591d0d5f2925",
+      "shape": [
+        8
+      ],
+      "value_scan": "SCANNED"
+    },
+    {
+      "bytes": 32,
+      "dtype": "F32",
+      "elements": 8,
+      "finite_count": 8,
+      "finite_max": 1.0,
+      "finite_min": 1.0,
+      "name": "transformer.h.0.ln_1.weight",
+      "nan_count": 0,
+      "negative_infinity_count": 0,
+      "nonfinite_count": 0,
+      "positive_infinity_count": 0,
+      "sha256": "4f05df05f8da9356bd66425351f166a5f7305b7c805e6900d9ec0f50790c9886",
+      "shape": [
+        8
+      ],
+      "value_scan": "SCANNED"
+    },
+    {
+      "bytes": 32,
+      "dtype": "F32",
+      "elements": 8,
+      "finite_count": 8,
+      "finite_max": 0.0,
+      "finite_min": 0.0,
+      "name": "transformer.h.0.ln_2.bias",
+      "nan_count": 0,
+      "negative_infinity_count": 0,
+      "nonfinite_count": 0,
+      "positive_infinity_count": 0,
+      "sha256": "66687aadf862bd776c8fc18b8e9f8e20089714856ee233b3902a591d0d5f2925",
+      "shape": [
+        8
+      ],
+      "value_scan": "SCANNED"
+    },
+    {
+      "bytes": 32,
+      "dtype": "F32",
+      "elements": 8,
+      "finite_count": 8,
+      "finite_max": 1.0,
+      "finite_min": 1.0,
+      "name": "transformer.h.0.ln_2.weight",
+      "nan_count": 0,
+      "negative_infinity_count": 0,
+      "nonfinite_count": 0,
+      "positive_infinity_count": 0,
+      "sha256": "4f05df05f8da9356bd66425351f166a5f7305b7c805e6900d9ec0f50790c9886",
+      "shape": [
+        8
+      ],
+      "value_scan": "SCANNED"
+    },
+    {
+      "bytes": 128,
+      "dtype": "F32",
+      "elements": 32,
+      "finite_count": 32,
+      "finite_max": 0.0,
+      "finite_min": 0.0,
+      "name": "transformer.h.0.mlp.c_fc.bias",
+      "nan_count": 0,
+      "negative_infinity_count": 0,
+      "nonfinite_count": 0,
+      "positive_infinity_count": 0,
+      "sha256": "38723a2e5e8a17aa7950dc008209944e898f69a7bd10a23c839d341e935fd5ca",
+      "shape": [
+        32
+      ],
+      "value_scan": "SCANNED"
+    },
+    {
+      "bytes": 1024,
+      "dtype": "F32",
+      "elements": 256,
+      "finite_count": 256,
+      "finite_max": 0.0,
+      "finite_min": 0.0,
+      "name": "transformer.h.0.mlp.c_fc.weight",
+      "nan_count": 0,
+      "negative_infinity_count": 0,
+      "nonfinite_count": 0,
+      "positive_infinity_count": 0,
+      "sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+      "shape": [
+        8,
+        32
+      ],
+      "value_scan": "SCANNED"
+    },
+    {
+      "bytes": 32,
+      "dtype": "F32",
+      "elements": 8,
+      "finite_count": 8,
+      "finite_max": 0.0,
+      "finite_min": 0.0,
+      "name": "transformer.h.0.mlp.c_proj.bias",
+      "nan_count": 0,
+      "negative_infinity_count": 0,
+      "nonfinite_count": 0,
+      "positive_infinity_count": 0,
+      "sha256": "66687aadf862bd776c8fc18b8e9f8e20089714856ee233b3902a591d0d5f2925",
+      "shape": [
+        8
+      ],
+      "value_scan": "SCANNED"
+    },
+    {
+      "bytes": 1024,
+      "dtype": "F32",
+      "elements": 256,
+      "finite_count": 256,
+      "finite_max": 0.0,
+      "finite_min": 0.0,
+      "name": "transformer.h.0.mlp.c_proj.weight",
+      "nan_count": 0,
+      "negative_infinity_count": 0,
+      "nonfinite_count": 0,
+      "positive_infinity_count": 0,
+      "sha256": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+      "shape": [
+        32,
+        8
+      ],
+      "value_scan": "SCANNED"
+    },
+    {
+      "bytes": 32,
+      "dtype": "F32",
+      "elements": 8,
+      "finite_count": 8,
+      "finite_max": 0.0,
+      "finite_min": 0.0,
+      "name": "transformer.ln_f.bias",
+      "nan_count": 0,
+      "negative_infinity_count": 0,
+      "nonfinite_count": 0,
+      "positive_infinity_count": 0,
+      "sha256": "66687aadf862bd776c8fc18b8e9f8e20089714856ee233b3902a591d0d5f2925",
+      "shape": [
+        8
+      ],
+      "value_scan": "SCANNED"
+    },
+    {
+      "bytes": 32,
+      "dtype": "F32",
+      "elements": 8,
+      "finite_count": 8,
+      "finite_max": 1.0,
+      "finite_min": 1.0,
+      "name": "transformer.ln_f.weight",
+      "nan_count": 0,
+      "negative_infinity_count": 0,
+      "nonfinite_count": 0,
+      "positive_infinity_count": 0,
+      "sha256": "4f05df05f8da9356bd66425351f166a5f7305b7c805e6900d9ec0f50790c9886",
+      "shape": [
+        8
+      ],
+      "value_scan": "SCANNED"
+    },
+    {
+      "bytes": 512,
+      "dtype": "F32",
+      "elements": 128,
+      "finite_count": 128,
+      "finite_max": 0.0,
+      "finite_min": 0.0,
+      "name": "transformer.wpe.weight",
+      "nan_count": 0,
+      "negative_infinity_count": 0,
+      "nonfinite_count": 0,
+      "positive_infinity_count": 0,
+      "sha256": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560",
+      "shape": [
+        16,
+        8
+      ],
+      "value_scan": "SCANNED"
+    },
+    {
+      "bytes": 256,
+      "dtype": "F32",
+      "elements": 64,
+      "finite_count": 64,
+      "finite_max": 1.0,
+      "finite_min": -1.0,
+      "name": "transformer.wte.weight",
+      "nan_count": 0,
+      "negative_infinity_count": 0,
+      "nonfinite_count": 0,
+      "positive_infinity_count": 0,
+      "sha256": "ff0076c1a8a4b4cc2212741a04c0d8c6f3b692606b644078471ea297c9f053c2",
+      "shape": [
+        8,
+        8
+      ],
+      "value_scan": "SCANNED"
+    }
+  ]
+}

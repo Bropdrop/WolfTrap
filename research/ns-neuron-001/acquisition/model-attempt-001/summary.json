@@ -1,0 +1,9 @@
+{
+  "disposition": "read-only files 0444 and directory 0555",
+  "expected": 7,
+  "files_verified": 7,
+  "pilot_source_sha256": "6372d218768d98f487bf89e41230da111bcb16532a8d95818796043f962ef8ce",
+  "reference_pin_sha256": "2303d3e65bcec8b33b6ef998525807981daef4a96788416c56095fc22aa75745",
+  "revision": "2290a62682d06624634c1f46a6ad5be0f47f38aa",
+  "status": "VERIFIED"
+}

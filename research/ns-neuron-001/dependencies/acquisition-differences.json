@@ -1,0 +1,27 @@
+[
+  {
+    "distribution": "filelock",
+    "initial_download_only": "4.3.1",
+    "historical_reference_and_offline_install": "4.2.4"
+  },
+  {
+    "distribution": "markupsafe",
+    "initial_download_only": "3.0.4",
+    "historical_reference_and_offline_install": "3.0.3"
+  },
+  {
+    "distribution": "pip",
+    "initial_download_only": null,
+    "historical_reference_and_offline_install": "25.0.1"
+  },
+  {
+    "distribution": "regex",
+    "initial_download_only": "2026.11.23",
+    "historical_reference_and_offline_install": "2026.11.19"
+  },
+  {
+    "distribution": "setuptools",
+    "initial_download_only": "84.2.1",
+    "historical_reference_and_offline_install": "78.1.0"
+  }
+]

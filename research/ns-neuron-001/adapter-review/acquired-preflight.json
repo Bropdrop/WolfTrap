@@ -1,0 +1,67 @@
+{
+  "dependencies": {
+    "safetensors": {
+      "module_located": true,
+      "module_origin": "safetensors/__init__.py",
+      "version": "0.8.0"
+    },
+    "tokenizers": {
+      "module_located": true,
+      "module_origin": "tokenizers/__init__.py",
+      "version": "0.23.3"
+    },
+    "torch": {
+      "module_located": true,
+      "module_origin": "torch/__init__.py",
+      "version": "2.15.0+cpu"
+    },
+    "transformers": {
+      "module_located": true,
+      "module_origin": "transformers/__init__.py",
+      "version": "5.24.0"
+    }
+  },
+  "expected_revision": "2290a62682d06624634c1f46a6ad5be0f47f38aa",
+  "model": {
+    "directory_supplied": true,
+    "extra_names": [],
+    "files": {
+      "README.md": {
+        "expected_sha256": "111f8d09ac565c745d91df88929147159eaa62b2e58e03943a2e03c1a1439ad7",
+        "observed_sha256": "111f8d09ac565c745d91df88929147159eaa62b2e58e03943a2e03c1a1439ad7"
+      },
+      "config.json": {
+        "expected_sha256": "4ec5947c1d59fee6212cdf3b0ec1a53eac02092554c5ff0a733488cbd2c64f3a",
+        "observed_sha256": "4ec5947c1d59fee6212cdf3b0ec1a53eac02092554c5ff0a733488cbd2c64f3a"
+      },
+      "merges.txt": {
+        "expected_sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+        "observed_sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5"
+      },
+      "model.safetensors": {
+        "expected_sha256": "e1ff18884359fe8beb795a5f414feb85a6ce3d929ad019c0d958c039d2b94a1b",
+        "observed_sha256": "e1ff18884359fe8beb795a5f414feb85a6ce3d929ad019c0d958c039d2b94a1b"
+      },
+      "tokenizer.json": {
+        "expected_sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6",
+        "observed_sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+      },
+      "tokenizer_config.json": {
+        "expected_sha256": "5e04eb606e3a1583530a42e36c2a6b6615c86f34fe77e44d9ddeb43ff940931f",
+        "observed_sha256": "5e04eb606e3a1583530a42e36c2a6b6615c86f34fe77e44d9ddeb43ff940931f"
+      },
+      "vocab.json": {
+        "expected_sha256": "196139668be63f3b5d6574427317ae82f612a97c5d1cdaf36ed2256dbf636783",
+        "observed_sha256": "196139668be63f3b5d6574427317ae82f612a97c5d1cdaf36ed2256dbf636783"
+      }
+    },
+    "inventory_verified": true,
+    "matched_files": 7,
+    "missing_names": []
+  },
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "python_version": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "scope": "Local package discovery and pinned file inventory; no model load or forwards",
+  "source_sha256": "6372d218768d98f487bf89e41230da111bcb16532a8d95818796043f962ef8ce",
+  "status": "LOCAL_INPUTS_LOCATED"
+}

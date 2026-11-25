@@ -1,0 +1,19 @@
+{
+  "scope": "Supplemental unpadded DistilGPT2 measurement on the eight original held-out capital prompts after successful standalone selection and numerical checks. This protocol evaluates a fixed intervention using the recovered NumPy GPT2Model without changing the release.",
+  "entry_gate": "Require MEASURED, validated selection hash chain, all original numerical checks passing their original bounds, and exact seven-file checkpoint. Never select or change cases, controls, selection, or limits using validation.",
+  "selection": "Consume exclusively the discovery-frozen layer, neuron, same-layer control IDs, selected signed vector, and six norm-matched random vectors in the original selection.json.",
+  "cases": "All four validation_positive and all four validation_control prompts in protocol order, single unpadded sequence each. Re-tokenize every text; verify exact match with nonpadding IDs, position IDs, attention mask and target/foil encodings.",
+  "engines": "Recovered read-only NumPy GPT2Model versus the locally reviewed HF GPT2LMHeadModel in float32 eager eval on CPU, one thread per library and no KV cache. Use each engine's own baseline tensors.",
+  "interventions": "For selected and six fixed same-layer random neurons, zero the final-token post-GELU activation on HF and subtract a_j times its projection row from the final-token MLP output in NumPy. Compare each engine's complete logits, all positions and vocabulary. Add each of the seven discovery-frozen vectors separately to the final-token MLP output at each of six layers and compare complete logits and margins.",
+  "mechanism": "Compare unhooked and instrumented HF baseline, selected projection-input activation and all layer MLP outputs, residual block inputs/outputs and attention output arrays across engines on baseline and selected ablation. On NumPy compare selected or control row subtraction with independent direct recomputation of zeroed projection before bias; the final-position row is the only changed token. Test NumPy no-op patch, Torch zero addition, and restored baseline for exact equality.",
+  "numerics_basis": "Cross-engine tensor limits inherited from the recovered examples/pretrained-protocol.json reference_comparison. Both independent singlet runs are also compared with the original batched per-prompt margin effects (4e-3 is four times the inherited absolute logit ceiling for a difference of margins). No threshold changes after observing held-out results.",
+  "full_logit_max_abs_error": 0.001,
+  "full_logit_rmse": 0.0001,
+  "intermediate_atol": 0.0002,
+  "intermediate_rtol": 0.0002,
+  "same_numpy_projection_max_abs_error": 0.0001,
+  "margin_effect_vs_original_max_abs_error": 0.004,
+  "hook_restoration_and_no_op_max_abs_error": 0,
+  "evidence": "Per-case text/IDs, activations, target and foil margins, projection reconstructions, both engine array hashes, checks, maxima/locations and RMSE. Save paired raw baseline and selected full logits and key intermediates as compressed NPZ per prompt. Stream per-control and per-layer metrics to JSON for each prompt.",
+  "failure_policy": "A failed source numerical gate suppresses this held-out comparison. A supplemental mismatch is retained as a negative finding and blocks a cross-engine parity claim. No tolerance or selection adjustments."
+}

@@ -1,0 +1,16 @@
+{
+  "bytes": 352824413,
+  "completed_utc": "2026-11-25T00:27:30.186809+00:00",
+  "curl_exit": 0,
+  "error": "",
+  "expected_bytes": 352824413,
+  "expected_sha256": "e1ff18884359fe8beb795a5f414feb85a6ce3d929ad019c0d958c039d2b94a1b",
+  "final_host": "us.aws.cdn.hf.co",
+  "http": "200",
+  "passed_size_sha256_http_tls": true,
+  "redirects": 1,
+  "sha256": "e1ff18884359fe8beb795a5f414feb85a6ce3d929ad019c0d958c039d2b94a1b",
+  "source_url": "https://huggingface.co/distilbert/distilgpt2/resolve/2290a62682d06624634c1f46a6ad5be0f47f38aa/model.safetensors",
+  "started_utc": "2026-11-25T00:26:47.804323+00:00",
+  "tls_verify_result": 0
+}

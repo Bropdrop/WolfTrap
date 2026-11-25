@@ -1,0 +1,165 @@
+{
+  "cases": [
+    {
+      "alternative_id": 5,
+      "clean_ids": [
+        0,
+        1,
+        3
+      ],
+      "corrupt_ids": [
+        0,
+        2,
+        3
+      ],
+      "id": "prefix_0",
+      "positions": [
+        2
+      ],
+      "split": "discovery",
+      "target_id": 4
+    },
+    {
+      "alternative_id": 5,
+      "clean_ids": [
+        0,
+        0,
+        1,
+        3
+      ],
+      "corrupt_ids": [
+        0,
+        0,
+        2,
+        3
+      ],
+      "id": "prefix_1",
+      "positions": [
+        3
+      ],
+      "split": "validation",
+      "target_id": 4
+    },
+    {
+      "alternative_id": 5,
+      "clean_ids": [
+        0,
+        0,
+        0,
+        1,
+        3
+      ],
+      "corrupt_ids": [
+        0,
+        0,
+        0,
+        2,
+        3
+      ],
+      "id": "prefix_2",
+      "positions": [
+        4
+      ],
+      "split": "discovery",
+      "target_id": 4
+    },
+    {
+      "alternative_id": 5,
+      "clean_ids": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        3
+      ],
+      "corrupt_ids": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        3
+      ],
+      "id": "prefix_3",
+      "positions": [
+        5
+      ],
+      "split": "validation",
+      "target_id": 4
+    },
+    {
+      "alternative_id": 5,
+      "clean_ids": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        3
+      ],
+      "corrupt_ids": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        3
+      ],
+      "id": "prefix_4",
+      "positions": [
+        6
+      ],
+      "split": "discovery",
+      "target_id": 4
+    },
+    {
+      "alternative_id": 5,
+      "clean_ids": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        3
+      ],
+      "corrupt_ids": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        3
+      ],
+      "id": "prefix_5",
+      "positions": [
+        7
+      ],
+      "split": "validation",
+      "target_id": 4
+    }
+  ],
+  "claim_scope": "constructed untrained copying circuit; six predeclared synthetic variants only",
+  "minimum_gap": 0.001,
+  "schema": "wolftrap.neuralscope.cases/v1",
+  "sites": [
+    "blocks.0.attn.head.0",
+    "blocks.0.attn.head.1"
+  ],
+  "token_labels": [
+    "BOS",
+    "red",
+    "blue",
+    "query",
+    "RED",
+    "BLUE",
+    "filler",
+    "EOS"
+  ]
+}

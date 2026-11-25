@@ -1,0 +1,13 @@
+{
+  "numpy": "2.3.5",
+  "pilot_sha256": "6372d218768d98f487bf89e41230da111bcb16532a8d95818796043f962ef8ce",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "python": "3.12.14",
+  "run_source_sha256": {
+    "control_draws.py": "289d543fd44f93e208bf998b4fc7f0055af60b791685a073000e9e85d442c1c0",
+    "fixture_reference.py": "6510a7a37371976683e87d602f33b7a8adcb1456dfea4c20d3a6b265aaee4a2c",
+    "measure_fixture.py": "f55a43352be85237b9b370d3775b5f087ec55728797b2bcef36aab5bd5f0885f"
+  },
+  "scipy": "1.17.0",
+  "weights_sha256": "04270ba8a80677b53e08219936971a6a9e1aeb3f0ece2f42f18af3db0d8129aa"
+}

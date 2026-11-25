@@ -1,0 +1,764 @@
+{
+  "eos_token_id": 50256,
+  "foil": 11307,
+  "groups": {
+    "discovery_control": [
+      {
+        "aligned": true,
+        "batch_token_ids": [
+          50256,
+          464,
+          3139,
+          286,
+          4486,
+          318
+        ],
+        "mask": [
+          0,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "position_ids": [
+          0,
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "single_ids": [
+          464,
+          3139,
+          286,
+          4486,
+          318
+        ],
+        "text": "The capital of Germany is"
+      },
+      {
+        "aligned": true,
+        "batch_token_ids": [
+          464,
+          2260,
+          3139,
+          286,
+          4486,
+          318
+        ],
+        "mask": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "position_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "single_ids": [
+          464,
+          2260,
+          3139,
+          286,
+          4486,
+          318
+        ],
+        "text": "The national capital of Germany is"
+      },
+      {
+        "aligned": true,
+        "batch_token_ids": [
+          50256,
+          27079,
+          468,
+          663,
+          3139,
+          287
+        ],
+        "mask": [
+          0,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "position_ids": [
+          0,
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "single_ids": [
+          27079,
+          468,
+          663,
+          3139,
+          287
+        ],
+        "text": "Germany has its capital in"
+      },
+      {
+        "aligned": true,
+        "batch_token_ids": [
+          464,
+          3139,
+          1748,
+          286,
+          4486,
+          318
+        ],
+        "mask": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "position_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "single_ids": [
+          464,
+          3139,
+          1748,
+          286,
+          4486,
+          318
+        ],
+        "text": "The capital city of Germany is"
+      }
+    ],
+    "discovery_positive": [
+      {
+        "aligned": true,
+        "batch_token_ids": [
+          50256,
+          464,
+          3139,
+          286,
+          4881,
+          318
+        ],
+        "mask": [
+          0,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "position_ids": [
+          0,
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "single_ids": [
+          464,
+          3139,
+          286,
+          4881,
+          318
+        ],
+        "text": "The capital of France is"
+      },
+      {
+        "aligned": true,
+        "batch_token_ids": [
+          464,
+          2260,
+          3139,
+          286,
+          4881,
+          318
+        ],
+        "mask": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "position_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "single_ids": [
+          464,
+          2260,
+          3139,
+          286,
+          4881,
+          318
+        ],
+        "text": "The national capital of France is"
+      },
+      {
+        "aligned": true,
+        "batch_token_ids": [
+          50256,
+          28572,
+          468,
+          663,
+          3139,
+          287
+        ],
+        "mask": [
+          0,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "position_ids": [
+          0,
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "single_ids": [
+          28572,
+          468,
+          663,
+          3139,
+          287
+        ],
+        "text": "France has its capital in"
+      },
+      {
+        "aligned": true,
+        "batch_token_ids": [
+          464,
+          3139,
+          1748,
+          286,
+          4881,
+          318
+        ],
+        "mask": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "position_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "single_ids": [
+          464,
+          3139,
+          1748,
+          286,
+          4881,
+          318
+        ],
+        "text": "The capital city of France is"
+      }
+    ],
+    "validation_control": [
+      {
+        "aligned": true,
+        "batch_token_ids": [
+          50256,
+          50256,
+          50256,
+          2061,
+          318,
+          262,
+          3139,
+          286,
+          4486,
+          30,
+          632,
+          318
+        ],
+        "mask": [
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "position_ids": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "single_ids": [
+          2061,
+          318,
+          262,
+          3139,
+          286,
+          4486,
+          30,
+          632,
+          318
+        ],
+        "text": "What is the capital of Germany? It is"
+      },
+      {
+        "aligned": true,
+        "batch_token_ids": [
+          50256,
+          50256,
+          50256,
+          50256,
+          464,
+          5852,
+          286,
+          1230,
+          287,
+          4486,
+          318,
+          287
+        ],
+        "mask": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "position_ids": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "single_ids": [
+          464,
+          5852,
+          286,
+          1230,
+          287,
+          4486,
+          318,
+          287
+        ],
+        "text": "The seat of government in Germany is in"
+      },
+      {
+        "aligned": true,
+        "batch_token_ids": [
+          50256,
+          50256,
+          50256,
+          50256,
+          50256,
+          464,
+          3139,
+          1748,
+          5140,
+          287,
+          4486,
+          318
+        ],
+        "mask": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "position_ids": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "single_ids": [
+          464,
+          3139,
+          1748,
+          5140,
+          287,
+          4486,
+          318
+        ],
+        "text": "The capital city located in Germany is"
+      },
+      {
+        "aligned": true,
+        "batch_token_ids": [
+          1532,
+          1965,
+          284,
+          1438,
+          262,
+          3139,
+          286,
+          4486,
+          11,
+          314,
+          561,
+          910
+        ],
+        "mask": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "position_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "single_ids": [
+          1532,
+          1965,
+          284,
+          1438,
+          262,
+          3139,
+          286,
+          4486,
+          11,
+          314,
+          561,
+          910
+        ],
+        "text": "If asked to name the capital of Germany, I would say"
+      }
+    ],
+    "validation_positive": [
+      {
+        "aligned": true,
+        "batch_token_ids": [
+          50256,
+          50256,
+          50256,
+          2061,
+          318,
+          262,
+          3139,
+          286,
+          4881,
+          30,
+          632,
+          318
+        ],
+        "mask": [
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "position_ids": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "single_ids": [
+          2061,
+          318,
+          262,
+          3139,
+          286,
+          4881,
+          30,
+          632,
+          318
+        ],
+        "text": "What is the capital of France? It is"
+      },
+      {
+        "aligned": true,
+        "batch_token_ids": [
+          50256,
+          50256,
+          50256,
+          50256,
+          464,
+          5852,
+          286,
+          1230,
+          287,
+          4881,
+          318,
+          287
+        ],
+        "mask": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "position_ids": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "single_ids": [
+          464,
+          5852,
+          286,
+          1230,
+          287,
+          4881,
+          318,
+          287
+        ],
+        "text": "The seat of government in France is in"
+      },
+      {
+        "aligned": true,
+        "batch_token_ids": [
+          50256,
+          50256,
+          50256,
+          50256,
+          50256,
+          464,
+          3139,
+          1748,
+          5140,
+          287,
+          4881,
+          318
+        ],
+        "mask": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "position_ids": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "single_ids": [
+          464,
+          3139,
+          1748,
+          5140,
+          287,
+          4881,
+          318
+        ],
+        "text": "The capital city located in France is"
+      },
+      {
+        "aligned": true,
+        "batch_token_ids": [
+          1532,
+          1965,
+          284,
+          1438,
+          262,
+          3139,
+          286,
+          4881,
+          11,
+          314,
+          561,
+          910
+        ],
+        "mask": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "position_ids": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ],
+        "single_ids": [
+          1532,
+          1965,
+          284,
+          1438,
+          262,
+          3139,
+          286,
+          4881,
+          11,
+          314,
+          561,
+          910
+        ],
+        "text": "If asked to name the capital of France, I would say"
+      }
+    ]
+  },
+  "target": 6342,
+  "targets": {
+    " Berlin": [
+      11307
+    ],
+    " Paris": [
+      6342
+    ]
+  },
+  "tokenizer": "GPT2Tokenizer"
+}

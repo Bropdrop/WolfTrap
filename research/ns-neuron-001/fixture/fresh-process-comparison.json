@@ -1,0 +1,22 @@
+{
+  "discovery.json": {
+    "sha256": "50d5ea7506b1f8e1a41b75d3131997934e2f01e4f62b336e633a3e37b68b6ae2",
+    "byte_identical": true
+  },
+  "fixture.safetensors": {
+    "sha256": "04270ba8a80677b53e08219936971a6a9e1aeb3f0ece2f42f18af3db0d8129aa",
+    "byte_identical": true
+  },
+  "protocol.json": {
+    "sha256": "4cf16e607fd33278732e3a3e6323552d22323f8b91cdc225808f64da4184cbea",
+    "byte_identical": true
+  },
+  "results.json": {
+    "sha256": "128da8150c4f7e0475210bac98963e5c794133bed1366fecc481e5946c2eccf0",
+    "byte_identical": true
+  },
+  "selection.json": {
+    "sha256": "c049462e1546745dc2c22e2dc42d3d1d6eff02d2de1db2c67589c5e790df18f6",
+    "byte_identical": true
+  }
+}

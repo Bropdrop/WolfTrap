@@ -1,0 +1,19 @@
+{
+  "inherited": {
+    "count": 194,
+    "outcomes": {
+      "ok": 194
+    }
+  },
+  "new": {
+    "count": 20,
+    "modules": {
+      "test_neuron_cli": 5,
+      "test_neuron_probe": 15
+    },
+    "outcomes": {
+      "ok": 20
+    }
+  },
+  "missing_inherited": []
+}

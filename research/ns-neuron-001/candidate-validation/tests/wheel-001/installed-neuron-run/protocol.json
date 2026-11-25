@@ -1,0 +1,619 @@
+{
+  "batches": {
+    "discovery_control": {
+      "attention_mask": [
+        [
+          0,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          0,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      "input_ids": [
+        [
+          50256,
+          464,
+          3139,
+          286,
+          4486,
+          318
+        ],
+        [
+          464,
+          2260,
+          3139,
+          286,
+          4486,
+          318
+        ],
+        [
+          50256,
+          27079,
+          468,
+          663,
+          3139,
+          287
+        ],
+        [
+          464,
+          3139,
+          1748,
+          286,
+          4486,
+          318
+        ]
+      ],
+      "position_ids": [
+        [
+          0,
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        [
+          0,
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      ]
+    },
+    "discovery_positive": {
+      "attention_mask": [
+        [
+          0,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          0,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      "input_ids": [
+        [
+          50256,
+          464,
+          3139,
+          286,
+          4881,
+          318
+        ],
+        [
+          464,
+          2260,
+          3139,
+          286,
+          4881,
+          318
+        ],
+        [
+          50256,
+          28572,
+          468,
+          663,
+          3139,
+          287
+        ],
+        [
+          464,
+          3139,
+          1748,
+          286,
+          4881,
+          318
+        ]
+      ],
+      "position_ids": [
+        [
+          0,
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        [
+          0,
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      ]
+    },
+    "validation_control": {
+      "attention_mask": [
+        [
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      "input_ids": [
+        [
+          50256,
+          50256,
+          50256,
+          2061,
+          318,
+          262,
+          3139,
+          286,
+          4486,
+          30,
+          632,
+          318
+        ],
+        [
+          50256,
+          50256,
+          50256,
+          50256,
+          464,
+          5852,
+          286,
+          1230,
+          287,
+          4486,
+          318,
+          287
+        ],
+        [
+          50256,
+          50256,
+          50256,
+          50256,
+          50256,
+          464,
+          3139,
+          1748,
+          5140,
+          287,
+          4486,
+          318
+        ],
+        [
+          1532,
+          1965,
+          284,
+          1438,
+          262,
+          3139,
+          286,
+          4486,
+          11,
+          314,
+          561,
+          910
+        ]
+      ],
+      "position_ids": [
+        [
+          0,
+          0,
+          0,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ]
+      ]
+    },
+    "validation_positive": {
+      "attention_mask": [
+        [
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      "input_ids": [
+        [
+          50256,
+          50256,
+          50256,
+          2061,
+          318,
+          262,
+          3139,
+          286,
+          4881,
+          30,
+          632,
+          318
+        ],
+        [
+          50256,
+          50256,
+          50256,
+          50256,
+          464,
+          5852,
+          286,
+          1230,
+          287,
+          4881,
+          318,
+          287
+        ],
+        [
+          50256,
+          50256,
+          50256,
+          50256,
+          50256,
+          464,
+          3139,
+          1748,
+          5140,
+          287,
+          4881,
+          318
+        ],
+        [
+          1532,
+          1965,
+          284,
+          1438,
+          262,
+          3139,
+          286,
+          4881,
+          11,
+          314,
+          561,
+          910
+        ]
+      ],
+      "position_ids": [
+        [
+          0,
+          0,
+          0,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11
+        ]
+      ]
+    }
+  },
+  "cross_layer_injection": "add signed, normalized selected projection row to final-position MLP output at each layer; scale fixed by median absolute discovery activation times row norm",
+  "derivative": "local gradient dot projection row times activation, not a general vocabulary J-lens",
+  "exact_ablation": "zero post-activation at final position before MLP output projection",
+  "execution": "CPU float32 eval, no API",
+  "foil": 11307,
+  "metadata": {
+    "model": "distilbert/distilgpt2",
+    "model_file_sha256": {
+      "README.md": "111f8d09ac565c745d91df88929147159eaa62b2e58e03943a2e03c1a1439ad7",
+      "config.json": "4ec5947c1d59fee6212cdf3b0ec1a53eac02092554c5ff0a733488cbd2c64f3a",
+      "merges.txt": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+      "model.safetensors": "e1ff18884359fe8beb795a5f414feb85a6ce3d929ad019c0d958c039d2b94a1b",
+      "tokenizer.json": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6",
+      "tokenizer_config.json": "5e04eb606e3a1583530a42e36c2a6b6615c86f34fe77e44d9ddeb43ff940931f",
+      "vocab.json": "196139668be63f3b5d6574427317ae82f612a97c5d1cdaf36ed2256dbf636783"
+    },
+    "revision": "2290a62682d06624634c1f46a6ad5be0f47f38aa",
+    "texts": {
+      "discovery_control": [
+        "The capital of Germany is",
+        "The national capital of Germany is",
+        "Germany has its capital in",
+        "The capital city of Germany is"
+      ],
+      "discovery_positive": [
+        "The capital of France is",
+        "The national capital of France is",
+        "France has its capital in",
+        "The capital city of France is"
+      ],
+      "validation_control": [
+        "What is the capital of Germany? It is",
+        "The seat of government in Germany is in",
+        "The capital city located in Germany is",
+        "If asked to name the capital of Germany, I would say"
+      ],
+      "validation_positive": [
+        "What is the capital of France? It is",
+        "The seat of government in France is in",
+        "The capital city located in France is",
+        "If asked to name the capital of France, I would say"
+      ]
+    },
+    "transformers": "5.24.0"
+  },
+  "model_parameters": 81912576,
+  "random_direction_controls": 6,
+  "random_neuron_controls": 6,
+  "schema": "NS-NEURON-001/protocol-v1",
+  "seed": 17023,
+  "selection": "positive discovery mean first-order margin decrease; top 8 checked by exact ablation; largest positive exact mean wins; tie layer/neuron ascending",
+  "selection_floor": 0.0001,
+  "target": 6342,
+  "torch": "2.15.0+cpu",
+  "validation": "held-out positive and matched negative prompts; fixed target-foil margin; same-layer random neuron controls and equal-norm random directions"
+}

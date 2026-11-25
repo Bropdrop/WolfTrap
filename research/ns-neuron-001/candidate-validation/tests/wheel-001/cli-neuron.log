@@ -1,0 +1,13 @@
+Loading weights:   0%|          | 0/76 [00:00<?, ?it/s]Loading weights: 100%|██████████| 76/76 [00:00<00:00, 4834.64it/s]
+{
+  "manifest_sha256": "8e36c30aff823121058aad1cabd56eafe0a5f3caddc3d5871e45f62f7405726b",
+  "mechanism_checks_passed": true,
+  "output": "${STUDY_ROOT}/candidate-validation/tests/wheel-001/installed-neuron-run",
+  "selection": {
+    "direction_norm": 10.131855010986328,
+    "layer": 0,
+    "neuron": 874,
+    "sign": 1
+  },
+  "status": "MEASURED"
+}

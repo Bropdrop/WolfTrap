@@ -1,0 +1,85 @@
+{
+  "elementwise_comparison_count_by_run": [
+    523,
+    523
+  ],
+  "fresh_process_tensor_comparison": {
+    "arrays": 521,
+    "changed": [],
+    "prior_trace_sha256": "27e34645369ae3466eadf32553349f23844f29e93a1bc09b7c605a91ad15d4f8"
+  },
+  "largest_absolute_errors": {
+    "ablation_subtraction": {
+      "comparison": "discovery_positive/L0N874/logit-parity",
+      "error": 4.57763671875e-05
+    },
+    "batch_singleton": {
+      "comparison": "discovery_positive/L4N3015/singleton-0/logits",
+      "error": 0.00011444091796875
+    },
+    "direction": {
+      "comparison": "chosen-direction",
+      "error": 1.1920928955078125e-07
+    },
+    "gradient_fd": {
+      "comparison": "validation_positive/gradient-vs-finite-difference",
+      "error": 0.016211379319429398
+    },
+    "noop": {
+      "comparison": "discovery_positive/L0N874/hooked-baseline",
+      "error": 0.0
+    },
+    "projection": {
+      "comparison": "discovery_positive/L4N840/projection-parity",
+      "error": 3.0517578125e-05
+    },
+    "reported_effect": {
+      "comparison": "discovery_positive/reported-baseline",
+      "error": 0.0
+    },
+    "score": {
+      "comparison": "discovery_positive/score-inventory",
+      "error": 8.940696716308594e-08
+    }
+  },
+  "numeric_evidence_comparison": {
+    "model-state-hashes.json": {
+      "byte_equal": true,
+      "sha256_by_run": [
+        "cef63714fb466a8d02a84bab1f7b2991ad314e19ef18e39cf259ae65592c37d9",
+        "cef63714fb466a8d02a84bab1f7b2991ad314e19ef18e39cf259ae65592c37d9"
+      ]
+    },
+    "per-case.json": {
+      "byte_equal": true,
+      "sha256_by_run": [
+        "6a0c8b7d0fd600d1c199691d6ca132277c8da2dc73baace59329278c2598ba39",
+        "6a0c8b7d0fd600d1c199691d6ca132277c8da2dc73baace59329278c2598ba39"
+      ]
+    },
+    "review-discovery-scores.json": {
+      "byte_equal": true,
+      "sha256_by_run": [
+        "a8e1136eb8ab79125df933c699edd57e0da9817551d13ee243eff59678da6c11",
+        "a8e1136eb8ab79125df933c699edd57e0da9817551d13ee243eff59678da6c11"
+      ]
+    },
+    "tensor-trace.json": {
+      "byte_equal": true,
+      "sha256_by_run": [
+        "27e34645369ae3466eadf32553349f23844f29e93a1bc09b7c605a91ad15d4f8",
+        "27e34645369ae3466eadf32553349f23844f29e93a1bc09b7c605a91ad15d4f8"
+      ]
+    }
+  },
+  "pretrained_pilot_evidence_sha256": {
+    "discovery": "602dd73ddb0ebe60c71c0bd4358fda67f1c52a72d0179d1c62d5c1ad0fac037c",
+    "protocol": "45d7425959432611354b4bcebde7a08625a5e7d2d992912e8089989ba57fd561",
+    "results": "96126215c388507c52c1d911c13453ec89df09c846802de8b0f2c7c912563bbb",
+    "selection": "03d17526a26d08ba238b2e594c0ebc91ebf8f1d98f6fad4b91dca0550fcbd02f"
+  },
+  "statuses": [
+    "MEASUREMENT_MATCH",
+    "MEASUREMENT_MATCH"
+  ]
+}

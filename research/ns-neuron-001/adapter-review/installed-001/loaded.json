@@ -1,0 +1,86 @@
+{
+  "adapter_sha256": "6372d218768d98f487bf89e41230da111bcb16532a8d95818796043f962ef8ce",
+  "architecture": "gpt2",
+  "attn_implementation": "eager",
+  "class": "GPT2LMHeadModel",
+  "methods": [
+    {
+      "file": "transformers/models/gpt2/modeling_gpt2.py",
+      "file_sha256": "7b7ad00ce7f7be4283704b4aaeccdbd0d637981af1e8694f3a8c1aa5c3c4253b",
+      "first_line": 647,
+      "method": "GPT2LMHeadModel.forward",
+      "method_sha256": "6a2c3b0db18c674403934a09d2673f3d743f24291682302ee966baa0d0f9ec77"
+    },
+    {
+      "file": "transformers/models/gpt2/modeling_gpt2.py",
+      "file_sha256": "7b7ad00ce7f7be4283704b4aaeccdbd0d637981af1e8694f3a8c1aa5c3c4253b",
+      "first_line": 510,
+      "method": "GPT2Model.forward",
+      "method_sha256": "3439fb7d548e8e1d1de4c1408f90c36af825d981abe2540b476f184712cf40a5"
+    },
+    {
+      "file": "transformers/models/gpt2/modeling_gpt2.py",
+      "file_sha256": "7b7ad00ce7f7be4283704b4aaeccdbd0d637981af1e8694f3a8c1aa5c3c4253b",
+      "first_line": 264,
+      "method": "GPT2Block.forward",
+      "method_sha256": "f64f1ea064fe0b6be447890b15d8b9f290c56452acd41ef903bfafa3d6bd0124"
+    },
+    {
+      "file": "transformers/models/gpt2/modeling_gpt2.py",
+      "file_sha256": "7b7ad00ce7f7be4283704b4aaeccdbd0d637981af1e8694f3a8c1aa5c3c4253b",
+      "first_line": 240,
+      "method": "GPT2MLP.forward",
+      "method_sha256": "9e0eb4565b3bc9641f77663a7313df6fc42385939debdaa66024d7ddbb642858"
+    },
+    {
+      "file": "transformers/pytorch_utils.py",
+      "file_sha256": "f1908bb1b85714fee71c127d55e306d8eac5a2f6565f58d7a29075ae82ab6beb",
+      "first_line": 117,
+      "method": "Conv1D.forward",
+      "method_sha256": "8ece78f40b528e90ae57955ce3774c5b9b868b714d9f5aa1682ae9767b8a8694"
+    }
+  ],
+  "parameter_count": 81912576,
+  "parameter_dtypes": [
+    "torch.float32"
+  ],
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "projection_classes": [
+    "Conv1D",
+    "Conv1D",
+    "Conv1D",
+    "Conv1D",
+    "Conv1D",
+    "Conv1D"
+  ],
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "torch": "2.15.0+cpu",
+  "training": false,
+  "transformers": "5.24.0",
+  "weight_shapes": [
+    [
+      3072,
+      768
+    ],
+    [
+      3072,
+      768
+    ],
+    [
+      3072,
+      768
+    ],
+    [
+      3072,
+      768
+    ],
+    [
+      3072,
+      768
+    ],
+    [
+      3072,
+      768
+    ]
+  ]
+}

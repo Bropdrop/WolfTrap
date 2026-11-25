@@ -1,0 +1,217 @@
+{
+  "altered_files": {
+    "candidate-validation/candidate-vs-standalone.json": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "b122a202faeb13203d33829abcd820ad1a2af92af59107b90677a2721f0efbc0",
+      "public_sha256": "b2d8ee390c5aa0e881d1fbdc4867e1965bbbb609733c17d2cc3d48209a8fe7be"
+    },
+    "candidate-validation/cli-output.json": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "5d510e05872240c0d05e28137490339a65d61af2d3999cbadc947391f03b5bff",
+      "public_sha256": "c4f43ec05617d63ffe28a1cfb1595e2d7de319d7657d99570c3cc8e1a26c68da"
+    },
+    "candidate-validation/independent-review.md": {
+      "edit": "Identified historical review timing and archive-based comparisons.",
+      "original_sha256": "f9491fc85aa3c5e228fcac6d24d1998423ce214f0dbebd9ecf7dbfd4ef9ba412",
+      "public_sha256": "e0e0936c533cea5df9d02b2cb063aad097d183f8de39dc4bc4a35fd820ad7fff"
+    },
+    "candidate-validation/review-cli-smoke.json": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "ba228ee3771fa3c8babe94ad4c999925750a5667602844d40b067c7c43e9821d",
+      "public_sha256": "7454a3da4c0f9e68de2b7bf66736ced7cfbe0754057112dbbc052bd72affb936"
+    },
+    "candidate-validation/tests/TESTS.md": {
+      "edit": "Documented the externally supplied archive input required for historical byte checks and the location of public test evidence.",
+      "original_sha256": "a65bc1d44def7e44ba3be55e2081af642d1bae411b7afe59d63b09efe9b41d34",
+      "public_sha256": "ea3a0425029e34850c72f94fa3907995aa3238df07aef8ed83f6d9182aeeefca"
+    },
+    "candidate-validation/tests/candidate-001/summary.json": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "c8039e3022614ce793defaa8eea10188002c32e46f93bd21d335de9c2a20836f",
+      "public_sha256": "071de3195a233bd3b2b363eade99d2a8efd1c52faf696a2d9d7ca7e5c2a8dadf"
+    },
+    "candidate-validation/tests/recovered-001/summary.json": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "7730d1b3945ea705f78a6067b713a928ab8e61fad06e68f680a260781a87d170",
+      "public_sha256": "81d5bda65df6f596ff3ef82581323a8d3eda21f33176f904db972a7a49b5aea4"
+    },
+    "candidate-validation/tests/recovered-002/summary.json": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "147e21c52bd4fdadcc8fb7294cb85d5dbd1aba1b89b59a99a6ea9d910be082df",
+      "public_sha256": "d622efa2f02c486e399967374431e5455236ce25b9708ebbf3bd3a8b96b9b580"
+    },
+    "candidate-validation/tests/wheel-001/build-wheel.log": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "ea09ee33a5c5846e2f4c5a4817d56f0cc3b9b0c81a85ff90e93a485a5c811143",
+      "public_sha256": "05d7dfe426e336a75c09aa115aa49c06ff2a529e55b21397f2cca37181cf571d"
+    },
+    "candidate-validation/tests/wheel-001/cli-neuron.log": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "e6a585d666af115ed051bddba3476103c4256c4f90e34a5114d7cabe1821a0ca",
+      "public_sha256": "5d42a4638748ca6117d28c6a0a9d6c31a2298a7a8896354e854fabecb07241b4"
+    },
+    "candidate-validation/tests/wheel-001/commands.json": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "8aceb405835d27ff03e519f0256636525288189e0323232adcc5e8042e3d526b",
+      "public_sha256": "013a19eb23f7a60f5bf64e4c34c774e054ef4d2cd0cc374999d346527ecbe696"
+    },
+    "candidate-validation/tests/wheel-001/import-installed.log": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "08c2843e249382d4d146659b6e60a9307503983818361b9c6da986be65bf9589",
+      "public_sha256": "c511aa512a822bdcb671547006ed8a22256b611e21f111b8a539f8605d008406"
+    },
+    "candidate-validation/tests/wheel-001/summary.json": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "f3074a826299b4d2478c0c192fe6ea5f5dcfabf99c9fab40eb64f96ac329cc39",
+      "public_sha256": "73b3597bf005d6df27c5feb56ddd22aff29858654fb8bf450c78c61fcb1e2aee"
+    },
+    "candidate-validation/tests/wheel-smoke-environment.log": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "0009c2f4f2652d89e77c156f75416d656dc3329709049aa404210f1858c67ece",
+      "public_sha256": "07f08e24b066f59fe6a403887036e9e7019d4c50d2bf6a48171a87d41f166876"
+    },
+    "fixture/attempt-001/commands.json": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "c500dcf6665f7824b820da736d8baffc099364d8202b9f372563cda12049402b",
+      "public_sha256": "8351653d8e9774137e44320b17543baf5db504ff591d86eabeb8cdad1e24cd19"
+    },
+    "fixture/attempt-001/environment.json": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "026abec11151f96b0e996f7e621b3135719de307b708d73bcc1a4f460d17fe23",
+      "public_sha256": "13bbe8bb7388a4f976fb25deac924ff4ec98102620f29f125a114c46822c489f"
+    },
+    "fixture/attempt-001/focused-tests.stderr": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "28d244457ee30fdfe7ff2bfaccd94c297bbdbfa340e54bbbdbfac0adb6fed295",
+      "public_sha256": "3a844c6efbd8a0787e6e54b6421617ee826820d80dde970053182bf2bdb63dfb"
+    },
+    "fixture/attempt-001/saved-weights.stderr": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "9fbafddd39855a54614cf5b6a51a7c69b471c3c00176b39f59459573484f2ab8",
+      "public_sha256": "3a77940febdcf92b573f7e7c4116ebeb4189c9002b702261e6cc32315316aeea"
+    },
+    "fixture/attempt-002/commands.json": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "d50df5e206239d7e997d419b2e942acb1989ff5383a9946f10699c33ba8b8672",
+      "public_sha256": "ab73821a2324e813d5d0bdcee5dc36dfd7ceaddf0feb0ff01bb5acfc6ddb442a"
+    },
+    "fixture/attempt-002/environment.json": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "76797beb5e745a6be464e0492aa9f2a4b1f707bb829ffd13fa50d3f033a570f7",
+      "public_sha256": "b7ba08d951b2ef59c847774a1f1e1d69d7e37f992468e70551cf8cfa66791188"
+    },
+    "fixture/attempt-002/saved-weights.stderr": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "3ea75ce3249f86fba7114cb6bef14f702499a52f14913e76ae29e3e72fd06110",
+      "public_sha256": "bed636fc18c57635cb7fdab08f8e793859ad611867b67ec44ad7faf9102a7b33"
+    },
+    "fixture/attempt-003/commands.json": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "5c0cf041b7a3224f9670b6343c6ea07a35d61240383c37735ccf772af55eec73",
+      "public_sha256": "96e46dd59d376c022feb437f585f18ab22890af28ccea265a065c520986a095a"
+    },
+    "fixture/attempt-003/environment.json": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "4fa1850eeddda96f08aeed15effc199dc1a841e35a0788e21c14b350d6e38976",
+      "public_sha256": "9c596d03267fa272a10bf3a21d0806f9f1c1e3ab33c75549cafd736f1e7b4a6d"
+    },
+    "fixture/attempt-004/commands.json": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "8c250fcf902225168cdc04c851df876532f50796d45190a494dae577a64ea2d7",
+      "public_sha256": "b4a6c2e5f8db1926d8a4fd542bee805ab73b3dfdbdd5772be66284c50176c4b5"
+    },
+    "fixture/attempt-004/environment.json": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "0c04b8bd62a4d9ab773cd0fe29618d881869e91c2ec8c7aa4716b41ec737256b",
+      "public_sha256": "04db5e51d9435e6be81529ed20886ed2381b405516468435d7356b2ad14dfae9"
+    },
+    "independent/SHA256SUMS": {
+      "edit": "Regenerated hash entries for the public copies; the original checksums were verified against the preserved review snapshot.",
+      "original_sha256": "6258c163c33ca8d9c6ac2534d128c28dc9592d16653d6645933e1c4d2cff2115",
+      "public_sha256": "f66ee5f992d2ddc9e9b42690609bae057f334c3882ab1663713ae24997066d30"
+    },
+    "independent/torch-run-001/first.log": {
+      "edit": "Replaced private filesystem prefixes or ephemeral directory names with descriptive path variables.",
+      "original_sha256": "25dd03b0c072fb183895fe6ab771c781546464995fb22b4b3aa28cc52832d7b8",
+      "public_sha256": "2f5790a5772d95f933df455dce97fbfea421804fe46d3788c86d0a4681691496"
+    }
+  },
+  "binary_contents_reviewed": [
+    {
+      "bytes": 78772,
+      "contents": "19035 finite float32 parameters from the two-layer synthetic miniature transformer",
+      "file": "fixture/attempt-003/saved-weights-replay/fixture.safetensors",
+      "sha256": "04270ba8a80677b53e08219936971a6a9e1aeb3f0ece2f42f18af3db0d8129aa"
+    },
+    {
+      "bytes": 78772,
+      "contents": "19035 finite float32 parameters from the two-layer synthetic miniature transformer",
+      "file": "fixture/attempt-004/saved-weights-replay/fixture.safetensors",
+      "sha256": "04270ba8a80677b53e08219936971a6a9e1aeb3f0ece2f42f18af3db0d8129aa"
+    },
+    {
+      "bytes": 78772,
+      "contents": "19035 finite float32 parameters from the two-layer synthetic miniature transformer",
+      "file": "fixture/retrained-001/fixture.safetensors",
+      "sha256": "5eb9584dbbe58f1d0834b96883d55e2347d2a934b9895d68434111c348d990d8"
+    },
+    {
+      "bytes": 1063527,
+      "contents": "105 finite numeric arrays from synthetic-fixture measurement, 161136 values",
+      "file": "independent/run-001/first/arrays.npz",
+      "sha256": "23c956569013dc8769a163491a4ddc1b4bb9f8f7f275741110d48a9f8edbdf51"
+    },
+    {
+      "bytes": 1063527,
+      "contents": "105 finite numeric arrays from synthetic-fixture measurement, 161136 values",
+      "file": "independent/run-001/replay/arrays.npz",
+      "sha256": "23c956569013dc8769a163491a4ddc1b4bb9f8f7f275741110d48a9f8edbdf51"
+    },
+    {
+      "bytes": 1063527,
+      "contents": "105 finite numeric arrays from synthetic-fixture measurement, 161136 values",
+      "file": "independent/run-002-offline/first/arrays.npz",
+      "sha256": "23c956569013dc8769a163491a4ddc1b4bb9f8f7f275741110d48a9f8edbdf51"
+    },
+    {
+      "bytes": 1063527,
+      "contents": "105 finite numeric arrays from synthetic-fixture measurement, 161136 values",
+      "file": "independent/run-002-offline/replay/arrays.npz",
+      "sha256": "23c956569013dc8769a163491a4ddc1b4bb9f8f7f275741110d48a9f8edbdf51"
+    },
+    {
+      "bytes": 527679,
+      "contents": "105 finite numeric arrays from synthetic-fixture measurement, 161136 values",
+      "file": "independent/torch-run-002/first/arrays.npz",
+      "sha256": "fdd7547e73fb6c7bc0e88547bf03f274722f6df3764777a199d30e9bed235b95"
+    },
+    {
+      "bytes": 527679,
+      "contents": "105 finite numeric arrays from synthetic-fixture measurement, 161136 values",
+      "file": "independent/torch-run-002/replay/arrays.npz",
+      "sha256": "fdd7547e73fb6c7bc0e88547bf03f274722f6df3764777a199d30e9bed235b95"
+    }
+  ],
+  "directories": [
+    "fixture",
+    "candidate-validation",
+    "independent"
+  ],
+  "dropped_files": [],
+  "internal_manifests": {
+    "candidate-validation/pretrained-run/manifest.json and candidate-validation/tests/wheel-001/installed-neuron-run/manifest.json": "Both historical unsigned manifests and every sealed measurement file retain their original bytes. Historical source digests refer to the tested source snapshot.",
+    "independent/SHA256SUMS": "The original manifest verified before transformation. Its scope and ordering are preserved; affected public file digests have been recomputed.",
+    "inherited and build receipts": "Internal original archive, wheel and file hashes refer to the original execution, including comparisons to owner-provided inputs. The original release archives and built wheel are outside this publication."
+  },
+  "path_variables": {
+    "BASE_PYTHON_PREFIX": "installation prefix of the base Python runtime",
+    "EPHEMERAL_WHEEL_CACHE": "temporary pip wheel cache directory",
+    "INPUT_ROOT": "user-supplied local model, environments, wheels and temporary test copies",
+    "SMOKE_TMP": "temporary invalid-model smoke-test directory",
+    "STUDY_ROOT": "research/ns-neuron-001 in the public checkout"
+  },
+  "schema": "NS-NEURON-001/publication-diff-v1",
+  "source_file_count": 182,
+  "source_files_included": 182,
+  "unchanged_byte_count_files": 155
+}

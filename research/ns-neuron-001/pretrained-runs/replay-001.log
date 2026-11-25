@@ -1,0 +1,12 @@
+Loading weights:   0%|          | 0/76 [00:00<?, ?it/s]Loading weights: 100%|██████████| 76/76 [00:00<00:00, 4338.27it/s]
+{
+  "status": "MEASURED",
+  "mode": "pretrained",
+  "selection": {
+    "layer": 0,
+    "neuron": 874,
+    "sign": 1,
+    "direction_norm": 10.131855010986328
+  },
+  "mechanism_checks_passed": true
+}

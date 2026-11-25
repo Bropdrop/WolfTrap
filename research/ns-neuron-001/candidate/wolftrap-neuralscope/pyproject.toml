@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wolftrap-neuralscope"
+version = "0.3.0a1+ns.neuron.1"
+description = "Experimental paired neural interventions and reproducible behavioral evidence"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {file = "LICENSE"}
+dependencies = ["numpy>=1.24,<3"]
+
+[project.optional-dependencies]
+reference = ["torch==2.15.0", "transformers==5.24.0", "tokenizers==0.23.3", "safetensors==0.8.0"]
+
+[project.scripts]
+wolftrap-neuralscope = "neuralscope.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["neuralscope*"]

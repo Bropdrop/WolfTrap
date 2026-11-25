@@ -1,0 +1,19 @@
+{
+  "candidate_version": "0.3.0a1+ns.neuron.1",
+  "publication_python_files_compared_to_qualified_candidate": 37,
+  "candidate_python_files_match": true,
+  "offline_candidate_suite": {
+    "tests_passed": 214,
+    "tests_skipped": 0,
+    "log": "candidate-validation/publication-unittest.log"
+  },
+  "fresh_offline_candidate_run_compared_to_qualified_study": {
+    "discovery.json": "602dd73ddb0ebe60c71c0bd4358fda67f1c52a72d0179d1c62d5c1ad0fac037c",
+    "protocol.json": "45d7425959432611354b4bcebde7a08625a5e7d2d992912e8089989ba57fd561",
+    "selection.json": "03d17526a26d08ba238b2e594c0ebc91ebf8f1d98f6fad4b91dca0550fcbd02f",
+    "results.json": "96126215c388507c52c1d911c13453ec89df09c846802de8b0f2c7c912563bbb"
+  },
+  "fresh_candidate_manifest_sha256": "8e36c30aff823121058aad1cabd56eafe0a5f3caddc3d5871e45f62f7405726b",
+  "status": "MEASURED",
+  "context": "Checks on the source tree prepared for the draft PR. The four scientific outputs are byte-identical to the original qualification and the fresh integrated run. Source-tree redactions are recorded in candidate/PUBLICATION.md."
+}

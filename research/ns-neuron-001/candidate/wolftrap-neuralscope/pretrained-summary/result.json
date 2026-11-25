@@ -1,0 +1,325 @@
+{
+  "api_credit_spent_usd": 0,
+  "api_requests": 0,
+  "learned_parameter_elements": 81912576,
+  "model": {
+    "files": {
+      "README.md": {
+        "bytes": 10992,
+        "git_blob_sha1": "86f7c9ae4422de194e6b6104b0acc9c8b9d2cd0a",
+        "sha256": "111f8d09ac565c745d91df88929147159eaa62b2e58e03943a2e03c1a1439ad7"
+      },
+      "config.json": {
+        "bytes": 762,
+        "git_blob_sha1": "fed02aafb76b46aa5da200966f9e42262e758023",
+        "sha256": "4ec5947c1d59fee6212cdf3b0ec1a53eac02092554c5ff0a733488cbd2c64f3a"
+      },
+      "merges.txt": {
+        "bytes": 456318,
+        "git_blob_sha1": "226b0752cac7789c48f0cb3ec53eda48b7be36cc",
+        "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5"
+      },
+      "model.safetensors": {
+        "bytes": 352824413,
+        "git_blob_sha1": "4a39931cbb1d0cbf2285b4f9afde21d69fca9dce",
+        "sha256": "e1ff18884359fe8beb795a5f414feb85a6ce3d929ad019c0d958c039d2b94a1b"
+      },
+      "tokenizer.json": {
+        "bytes": 1355256,
+        "git_blob_sha1": "4b988bccc9dc5adacd403c00b4704976196548f8",
+        "sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+      },
+      "tokenizer_config.json": {
+        "bytes": 26,
+        "git_blob_sha1": "be4d21d94f3b4687e5a54d84bf6ab46ed0f8defd",
+        "sha256": "5e04eb606e3a1583530a42e36c2a6b6615c86f34fe77e44d9ddeb43ff940931f"
+      },
+      "vocab.json": {
+        "bytes": 1042301,
+        "git_blob_sha1": "1f1d9aaca301414e7f6c9396df506798ff4eb9a6",
+        "sha256": "196139668be63f3b5d6574427317ae82f612a97c5d1cdaf36ed2256dbf636783"
+      }
+    },
+    "license": "Apache-2.0",
+    "network_requests": 0,
+    "publisher_signature": "NOT_VERIFIED",
+    "repo_id": "distilbert/distilgpt2",
+    "revision": "2290a62682d06624634c1f46a6ad5be0f47f38aa",
+    "scope": "byte identity of this checkpoint and tokenizer, not behavioral safety",
+    "status": "PINNED_MODEL_MATCH"
+  },
+  "network_requests_during_experiment": 0,
+  "parity": {
+    "baseline_sequences": 12,
+    "claim": "one pinned checkpoint, recorded inputs and intervention sites; reference implementations share intake but not forward computation",
+    "intervention_comparisons": 45,
+    "intervention_donors": "same registered recipe using each engine's own measured baseline activations",
+    "maximum_activation_absolute_error": 0.0006103515625,
+    "maximum_activation_scaled_error": 0.07706433278010844,
+    "maximum_logit_absolute_error": 0.00012969970703125,
+    "maximum_logit_rmse": 2.6605306899160345e-05,
+    "reference_hooks_bitwise_invariant": true,
+    "schema": "wolftrap.neuralscope.pretrained-parity/v1",
+    "status": "PASS"
+  },
+  "protocol_sha256": "47215ccf548bd3c612b9349e3ba816d8ad8939016e28cbe402d364717bd3abeb",
+  "reference": {
+    "attention_implementation": "eager",
+    "baseline_instrumentation": "observing hooks; no replacement when unpatched",
+    "cache_enabled": false,
+    "device": "cpu",
+    "dtype": "float32",
+    "evaluation_mode": true,
+    "head_intervention": "HF c_proj output + (replacement - original head contribution)",
+    "implementation": "transformers.GPT2LMHeadModel",
+    "model_downloads": false,
+    "model_repository_code_executed": false,
+    "modeling_gpt2_sha256": "7b7ad00ce7f7be4283704b4aaeccdbd0d637981af1e8694f3a8c1aa5c3c4253b",
+    "numpy": "2.3.5",
+    "torch": "2.15.0+cpu",
+    "transformers": "5.24.0",
+    "validated_excluded_buffers": [],
+    "validation_shared_with": "neuralscope.core.GPT2Model (no forward reuse)"
+  },
+  "replay_inputs": "separate seven-file model directory must match the included model pin",
+  "schema": "wolftrap.neuralscope.pretrained-result/v1",
+  "scope": "pretrained computation and finite paired interventions; no general security certification",
+  "status": "MEASURED",
+  "study": {
+    "all_cases_retained": true,
+    "case_count": 6,
+    "cases": [
+      {
+        "baseline_gap": 0.7397575378417969,
+        "both_answer_preferences_present": true,
+        "clean_margin": 0.5923194885253906,
+        "clean_prefers_target": true,
+        "corrupt_margin": -0.14743804931640625,
+        "corrupt_prefers_alternative": true,
+        "id": "repeat_colors",
+        "positive_normalizable_contrast": true,
+        "split": "discovery"
+      },
+      {
+        "baseline_gap": 6.879005432128906,
+        "both_answer_preferences_present": true,
+        "clean_margin": 6.230640411376953,
+        "clean_prefers_target": true,
+        "corrupt_margin": -0.6483650207519531,
+        "corrupt_prefers_alternative": true,
+        "id": "repeat_animals",
+        "positive_normalizable_contrast": true,
+        "split": "discovery"
+      },
+      {
+        "baseline_gap": 4.653354644775391,
+        "both_answer_preferences_present": true,
+        "clean_margin": 4.610595703125,
+        "clean_prefers_target": true,
+        "corrupt_margin": -0.042758941650390625,
+        "corrupt_prefers_alternative": true,
+        "id": "repeat_cities",
+        "positive_normalizable_contrast": true,
+        "split": "discovery"
+      },
+      {
+        "baseline_gap": 3.1459274291992188,
+        "both_answer_preferences_present": true,
+        "clean_margin": 1.8462104797363281,
+        "clean_prefers_target": true,
+        "corrupt_margin": -1.2997169494628906,
+        "corrupt_prefers_alternative": true,
+        "id": "repeat_shades",
+        "positive_normalizable_contrast": true,
+        "split": "validation"
+      },
+      {
+        "baseline_gap": 7.990592956542969,
+        "both_answer_preferences_present": true,
+        "clean_margin": 1.6890373229980469,
+        "clean_prefers_target": true,
+        "corrupt_margin": -6.301555633544922,
+        "corrupt_prefers_alternative": true,
+        "id": "repeat_sky",
+        "positive_normalizable_contrast": true,
+        "split": "validation"
+      },
+      {
+        "baseline_gap": 1.9126358032226562,
+        "both_answer_preferences_present": true,
+        "clean_margin": 1.5283966064453125,
+        "clean_prefers_target": true,
+        "corrupt_margin": -0.38423919677734375,
+        "corrupt_prefers_alternative": true,
+        "id": "repeat_numbers",
+        "positive_normalizable_contrast": true,
+        "split": "validation"
+      }
+    ],
+    "claim": "finite predeclared repeated-token contrasts and tested MLP outputs only; no population inference or security certification",
+    "registration_sha256": "47215ccf548bd3c612b9349e3ba816d8ad8939016e28cbe402d364717bd3abeb",
+    "schema": "wolftrap.neuralscope.pretrained-behavior/v1",
+    "selected_site": "blocks.2.mlp_out",
+    "selected_validation_cases": 3,
+    "selected_validation_mean": 0.016694508502519943,
+    "selected_validation_usable_cases": 3,
+    "selection_outcome": "POSITIVE_DISCOVERY_EFFECT",
+    "split_summary": {
+      "discovery": {
+        "both_answer_preferences_present": 3,
+        "cases": 3,
+        "positive_normalizable_contrasts": 3
+      },
+      "validation": {
+        "both_answer_preferences_present": 3,
+        "cases": 3,
+        "positive_normalizable_contrasts": 3
+      }
+    },
+    "tested_sites": [
+      {
+        "discovery_mean": 0.010913695781310462,
+        "discovery_usable_cases": 3,
+        "site": "blocks.0.mlp_out",
+        "validation_values": [
+          0.0018976919700346556,
+          0.033249374846635725,
+          -0.003793484461073903
+        ]
+      },
+      {
+        "discovery_mean": -0.007273013430471532,
+        "discovery_usable_cases": 3,
+        "site": "blocks.1.mlp_out",
+        "validation_values": [
+          0.031798769471047164,
+          0.05292249053080032,
+          -0.00013961299278400274
+        ]
+      },
+      {
+        "discovery_mean": 0.017388331292756687,
+        "discovery_usable_cases": 3,
+        "site": "blocks.2.mlp_out",
+        "validation_values": [
+          -0.05254969770312579,
+          0.06981619202114303,
+          0.032817031189542586
+        ]
+      },
+      {
+        "discovery_mean": -0.05071916045878092,
+        "discovery_usable_cases": 3,
+        "site": "blocks.3.mlp_out",
+        "validation_values": [
+          -0.07127561277868183,
+          0.14998429358863333,
+          0.07204429321919639
+        ]
+      },
+      {
+        "discovery_mean": -0.5433971145889878,
+        "discovery_usable_cases": 3,
+        "site": "blocks.4.mlp_out",
+        "validation_values": [
+          -0.06148885757730821,
+          0.021661003128869913,
+          -0.3012828439565524
+        ]
+      },
+      {
+        "discovery_mean": -0.059374620664165,
+        "discovery_usable_cases": 3,
+        "site": "blocks.5.mlp_out",
+        "validation_values": [
+          -0.03816846654362994,
+          0.043579801459502764,
+          0.26184217349507166
+        ]
+      }
+    ]
+  },
+  "study_executed": true,
+  "validated_nonparameter_buffers": [
+    {
+      "bytes": 4194304,
+      "dtype": "float32",
+      "name": "transformer.h.0.attn.bias",
+      "reason": "exact deterministic lower-triangular causal mask regenerated by both engines",
+      "sha256": "e16420835229addd98c66a061dd8a9bea9b405eff3738f4bb00ff603f98400d1",
+      "shape": [
+        1,
+        1,
+        1024,
+        1024
+      ]
+    },
+    {
+      "bytes": 4194304,
+      "dtype": "float32",
+      "name": "transformer.h.1.attn.bias",
+      "reason": "exact deterministic lower-triangular causal mask regenerated by both engines",
+      "sha256": "e16420835229addd98c66a061dd8a9bea9b405eff3738f4bb00ff603f98400d1",
+      "shape": [
+        1,
+        1,
+        1024,
+        1024
+      ]
+    },
+    {
+      "bytes": 4194304,
+      "dtype": "float32",
+      "name": "transformer.h.2.attn.bias",
+      "reason": "exact deterministic lower-triangular causal mask regenerated by both engines",
+      "sha256": "e16420835229addd98c66a061dd8a9bea9b405eff3738f4bb00ff603f98400d1",
+      "shape": [
+        1,
+        1,
+        1024,
+        1024
+      ]
+    },
+    {
+      "bytes": 4194304,
+      "dtype": "float32",
+      "name": "transformer.h.3.attn.bias",
+      "reason": "exact deterministic lower-triangular causal mask regenerated by both engines",
+      "sha256": "e16420835229addd98c66a061dd8a9bea9b405eff3738f4bb00ff603f98400d1",
+      "shape": [
+        1,
+        1,
+        1024,
+        1024
+      ]
+    },
+    {
+      "bytes": 4194304,
+      "dtype": "float32",
+      "name": "transformer.h.4.attn.bias",
+      "reason": "exact deterministic lower-triangular causal mask regenerated by both engines",
+      "sha256": "e16420835229addd98c66a061dd8a9bea9b405eff3738f4bb00ff603f98400d1",
+      "shape": [
+        1,
+        1,
+        1024,
+        1024
+      ]
+    },
+    {
+      "bytes": 4194304,
+      "dtype": "float32",
+      "name": "transformer.h.5.attn.bias",
+      "reason": "exact deterministic lower-triangular causal mask regenerated by both engines",
+      "sha256": "e16420835229addd98c66a061dd8a9bea9b405eff3738f4bb00ff603f98400d1",
+      "shape": [
+        1,
+        1,
+        1024,
+        1024
+      ]
+    }
+  ],
+  "version": "0.2.0a1",
+  "weights_included_in_evidence_directory": false
+}

@@ -1,0 +1,1551 @@
+{
+  "failure_keys": [],
+  "functional_mechanism": {
+    "validation_control.ablation_singleton_batch": {
+      "limit": 1e-10,
+      "max_abs": 0.0
+    },
+    "validation_control.baseline_singleton_batch": {
+      "limit": 1e-10,
+      "max_abs": 0.0
+    },
+    "validation_control.gradient_vs_central_difference_max_abs": {
+      "limit": 1e-06,
+      "max_abs": 1.2473755639508255e-09
+    },
+    "validation_control.prior_position_logit_change": {
+      "limit": 1e-10,
+      "max_abs": 0.0
+    },
+    "validation_control.projection_reconstruction_max_abs": {
+      "limit": 1e-10,
+      "max_abs": 2.220446049250313e-16
+    },
+    "validation_control.restored_baseline": {
+      "limit": 1e-10,
+      "max_abs": 0.0
+    },
+    "validation_control.subtraction_vs_zeroing_logits_max_abs": {
+      "limit": 1e-10,
+      "max_abs": 4.440892098500626e-16
+    },
+    "validation_control.subtraction_vs_zeroing_projected_max_abs": {
+      "limit": 1e-10,
+      "max_abs": 2.220446049250313e-16
+    },
+    "validation_control.trace_vs_uninstrumented_max_abs": {
+      "limit": 1e-10,
+      "max_abs": 0.0
+    },
+    "validation_control.zero_vector_change": {
+      "limit": 1e-10,
+      "max_abs": 0.0
+    },
+    "validation_positive.ablation_singleton_batch": {
+      "limit": 1e-10,
+      "max_abs": 0.0
+    },
+    "validation_positive.baseline_singleton_batch": {
+      "limit": 1e-10,
+      "max_abs": 0.0
+    },
+    "validation_positive.gradient_vs_central_difference_max_abs": {
+      "limit": 1e-06,
+      "max_abs": 2.6119124224566193e-09
+    },
+    "validation_positive.prior_position_logit_change": {
+      "limit": 1e-10,
+      "max_abs": 0.0
+    },
+    "validation_positive.projection_reconstruction_max_abs": {
+      "limit": 1e-10,
+      "max_abs": 4.440892098500626e-16
+    },
+    "validation_positive.restored_baseline": {
+      "limit": 1e-10,
+      "max_abs": 0.0
+    },
+    "validation_positive.subtraction_vs_zeroing_logits_max_abs": {
+      "limit": 1e-10,
+      "max_abs": 8.881784197001252e-16
+    },
+    "validation_positive.subtraction_vs_zeroing_projected_max_abs": {
+      "limit": 1e-10,
+      "max_abs": 6.661338147750939e-16
+    },
+    "validation_positive.trace_vs_uninstrumented_max_abs": {
+      "limit": 1e-10,
+      "max_abs": 0.0
+    },
+    "validation_positive.zero_vector_change": {
+      "limit": 1e-10,
+      "max_abs": 0.0
+    }
+  },
+  "history": {
+    "all_128_first_order_scores": {
+      "limit": 2e-05,
+      "max_abs": 1.4587963774459478e-08,
+      "mean_abs": 1.5870873019149654e-09,
+      "shape": [
+        128
+      ]
+    },
+    "discovery.baseline_margin": {
+      "limit": 2e-05,
+      "max_abs": 1.5211024653183358e-06,
+      "mean_abs": 6.552666006835276e-07,
+      "shape": [
+        12
+      ]
+    },
+    "discovery_control.token_ids": true,
+    "discovery_positive.token_ids": true,
+    "entire_ranking_order": true,
+    "exact_order": true,
+    "frozen_discovery_binding": true,
+    "frozen_selection_binding": true,
+    "generated_control_norms": {
+      "limit": 1e-06,
+      "max_abs": 6.068652669277697e-08,
+      "mean_abs": 1.800297057726515e-08,
+      "shape": [
+        6
+      ]
+    },
+    "selection.direction": {
+      "limit": 2e-05,
+      "max_abs": 2.8708865951188045e-08,
+      "mean_abs": 1.089801829117984e-08,
+      "shape": [
+        32
+      ]
+    },
+    "selection.direction_norm": {
+      "limit": 2e-05,
+      "max_abs": 4.87977767082981e-08,
+      "mean_abs": 4.87977767082981e-08,
+      "shape": []
+    },
+    "selection.discovery_exact_mean": {
+      "limit": 2e-05,
+      "max_abs": 2.744105012109088e-07,
+      "mean_abs": 2.744105012109088e-07,
+      "shape": []
+    },
+    "selection.discovery_predicted_mean": {
+      "limit": 2e-05,
+      "max_abs": 6.504252914041331e-09,
+      "mean_abs": 6.504252914041331e-09,
+      "shape": []
+    },
+    "selection.layer": true,
+    "selection.neuron": true,
+    "selection.random_directions": {
+      "limit": 2e-05,
+      "max_abs": 4.470348358154297e-08,
+      "mean_abs": 8.613824320491403e-09,
+      "shape": [
+        6,
+        32
+      ]
+    },
+    "selection.random_neurons_same_layer": true,
+    "selection.sign": true,
+    "shortlist.L0N50.exact_mean": {
+      "limit": 2e-05,
+      "max_abs": 3.701241091391694e-08,
+      "mean_abs": 3.701241091391694e-08,
+      "shape": []
+    },
+    "shortlist.L0N50.per_prompt": {
+      "limit": 2e-05,
+      "max_abs": 1.8005904447448984e-06,
+      "mean_abs": 5.258054434816491e-07,
+      "shape": [
+        12
+      ]
+    },
+    "shortlist.L0N50.predicted_mean": {
+      "limit": 2e-05,
+      "max_abs": 3.1329668390839283e-09,
+      "mean_abs": 3.1329668390839283e-09,
+      "shape": []
+    },
+    "shortlist.L1N19.exact_mean": {
+      "limit": 2e-05,
+      "max_abs": 2.744105012109088e-07,
+      "mean_abs": 2.744105012109088e-07,
+      "shape": []
+    },
+    "shortlist.L1N19.per_prompt": {
+      "limit": 2e-05,
+      "max_abs": 2.238314124269891e-06,
+      "mean_abs": 8.022269388785475e-07,
+      "shape": [
+        12
+      ]
+    },
+    "shortlist.L1N19.predicted_mean": {
+      "limit": 2e-05,
+      "max_abs": 6.504252914041331e-09,
+      "mean_abs": 6.504252914041331e-09,
+      "shape": []
+    },
+    "shortlist.L1N23.exact_mean": {
+      "limit": 2e-05,
+      "max_abs": 1.0754430457282638e-07,
+      "mean_abs": 1.0754430457282638e-07,
+      "shape": []
+    },
+    "shortlist.L1N23.per_prompt": {
+      "limit": 2e-05,
+      "max_abs": 2.854531190088494e-06,
+      "mean_abs": 6.996766979128211e-07,
+      "shape": [
+        12
+      ]
+    },
+    "shortlist.L1N23.predicted_mean": {
+      "limit": 2e-05,
+      "max_abs": 3.419710549457111e-09,
+      "mean_abs": 3.419710549457111e-09,
+      "shape": []
+    },
+    "shortlist.L1N28.exact_mean": {
+      "limit": 2e-05,
+      "max_abs": 2.8580121913535095e-07,
+      "mean_abs": 2.8580121913535095e-07,
+      "shape": []
+    },
+    "shortlist.L1N28.per_prompt": {
+      "limit": 2e-05,
+      "max_abs": 2.692431049666766e-06,
+      "mean_abs": 6.529919234961786e-07,
+      "shape": [
+        12
+      ]
+    },
+    "shortlist.L1N28.predicted_mean": {
+      "limit": 2e-05,
+      "max_abs": 8.656593266861967e-09,
+      "mean_abs": 8.656593266861967e-09,
+      "shape": []
+    },
+    "shortlist.L1N48.exact_mean": {
+      "limit": 2e-05,
+      "max_abs": 1.414355403905887e-07,
+      "mean_abs": 1.414355403905887e-07,
+      "shape": []
+    },
+    "shortlist.L1N48.per_prompt": {
+      "limit": 2e-05,
+      "max_abs": 2.090681354260937e-06,
+      "mean_abs": 8.729286966602245e-07,
+      "shape": [
+        12
+      ]
+    },
+    "shortlist.L1N48.predicted_mean": {
+      "limit": 2e-05,
+      "max_abs": 1.4143475390859805e-08,
+      "mean_abs": 1.4143475390859805e-08,
+      "shape": []
+    },
+    "shortlist.L1N51.exact_mean": {
+      "limit": 2e-05,
+      "max_abs": 1.6427675146070408e-07,
+      "mean_abs": 1.6427675146070408e-07,
+      "shape": []
+    },
+    "shortlist.L1N51.per_prompt": {
+      "limit": 2e-05,
+      "max_abs": 1.7715874642831864e-06,
+      "mean_abs": 6.68026698846802e-07,
+      "shape": [
+        12
+      ]
+    },
+    "shortlist.L1N51.predicted_mean": {
+      "limit": 2e-05,
+      "max_abs": 1.5033873503739192e-09,
+      "mean_abs": 1.5033873503739192e-09,
+      "shape": []
+    },
+    "shortlist.L1N55.exact_mean": {
+      "limit": 2e-05,
+      "max_abs": 1.1677043776359142e-09,
+      "mean_abs": 1.1677043776359142e-09,
+      "shape": []
+    },
+    "shortlist.L1N55.per_prompt": {
+      "limit": 2e-05,
+      "max_abs": 1.946668448660205e-06,
+      "mean_abs": 7.196150806354495e-07,
+      "shape": [
+        12
+      ]
+    },
+    "shortlist.L1N55.predicted_mean": {
+      "limit": 2e-05,
+      "max_abs": 1.4587963774459478e-08,
+      "mean_abs": 1.4587963774459478e-08,
+      "shape": []
+    },
+    "shortlist.L1N61.exact_mean": {
+      "limit": 2e-05,
+      "max_abs": 1.4880071249126492e-07,
+      "mean_abs": 1.4880071249126492e-07,
+      "shape": []
+    },
+    "shortlist.L1N61.per_prompt": {
+      "limit": 2e-05,
+      "max_abs": 2.4636716089432298e-06,
+      "mean_abs": 9.950810517800335e-07,
+      "shape": [
+        12
+      ]
+    },
+    "shortlist.L1N61.predicted_mean": {
+      "limit": 2e-05,
+      "max_abs": 6.426833752681826e-10,
+      "mean_abs": 6.426833752681826e-10,
+      "shape": []
+    },
+    "supplied_manifest_bindings": true,
+    "training_pairs": true,
+    "validation_control.all_exact_positive": true,
+    "validation_control.baseline_expected_token_top1_count": true,
+    "validation_control.baseline_margin": {
+      "limit": 2e-05,
+      "max_abs": 1.2641406055280413e-06,
+      "mean_abs": 4.4812965612391526e-07,
+      "shape": [
+        12
+      ]
+    },
+    "validation_control.central_difference": {
+      "limit": 0.001,
+      "max_abs": 0.0005310785009537966,
+      "mean_abs": 0.00023942308566112422,
+      "shape": [
+        12
+      ]
+    },
+    "validation_control.cross_layer.0.chosen_delta": {
+      "limit": 2e-05,
+      "max_abs": 1.2632152408542652e-06,
+      "mean_abs": 6.403177612579469e-07,
+      "shape": [
+        12
+      ]
+    },
+    "validation_control.cross_layer.0.chosen_minus_random_mean": {
+      "limit": 2e-05,
+      "max_abs": 1.7451058457462754e-06,
+      "mean_abs": 5.074889364043803e-07,
+      "shape": [
+        12
+      ]
+    },
+    "validation_control.cross_layer.0.layer": true,
+    "validation_control.cross_layer.0.random_delta": {
+      "limit": 2e-05,
+      "max_abs": 1.9359431808751992e-06,
+      "mean_abs": 6.315041547713365e-07,
+      "shape": [
+        6,
+        12
+      ]
+    },
+    "validation_control.cross_layer.0.random_mean_delta": {
+      "limit": 2e-05,
+      "max_abs": 6.48785007939523e-07,
+      "mean_abs": 4.159494874459715e-07,
+      "shape": [
+        12
+      ]
+    },
+    "validation_control.cross_layer.1.chosen_delta": {
+      "limit": 2e-05,
+      "max_abs": 1.359061036154685e-06,
+      "mean_abs": 5.787986966006761e-07,
+      "shape": [
+        12
+      ]
+    },
+    "validation_control.cross_layer.1.chosen_minus_random_mean": {
+      "limit": 2e-05,
+      "max_abs": 9.496910410716763e-07,
+      "mean_abs": 3.702921088181525e-07,
+      "shape": [
+        12
+      ]
+    },
+    "validation_control.cross_layer.1.layer": true,
+    "validation_control.cross_layer.1.random_delta": {
+      "limit": 2e-05,
+      "max_abs": 2.6615934736184954e-06,
+      "mean_abs": 6.202678591860078e-07,
+      "shape": [
+        6,
+        12
+      ]
+    },
+    "validation_control.cross_layer.1.random_mean_delta": {
+      "limit": 2e-05,
+      "max_abs": 1.217245782096036e-06,
+      "mean_abs": 4.2242309589768525e-07,
+      "shape": [
+        12
+      ]
+    },
+    "validation_control.exact_ablation_margin_decrease": {
+      "limit": 2e-05,
+      "max_abs": 1.4839289717016868e-06,
+      "mean_abs": 5.636715845932135e-07,
+      "shape": [
+        12
+      ]
+    },
+    "validation_control.first_order_prediction": {
+      "limit": 2e-05,
+      "max_abs": 1.6791248860087427e-09,
+      "mean_abs": 6.701226755214303e-10,
+      "shape": [
+        12
+      ]
+    },
+    "validation_control.gradient": {
+      "limit": 2e-05,
+      "max_abs": 5.225648475049027e-08,
+      "mean_abs": 2.8923907387234937e-08,
+      "shape": [
+        12
+      ]
+    },
+    "validation_control.mean_exact_ablation": {
+      "limit": 2e-05,
+      "max_abs": 4.319154677610154e-07,
+      "mean_abs": 4.319154677610154e-07,
+      "shape": []
+    },
+    "validation_control.random_neuron_margin_decrease": {
+      "limit": 2e-05,
+      "max_abs": 1.980728798756104e-06,
+      "mean_abs": 6.420702297492575e-07,
+      "shape": [
+        6,
+        12
+      ]
+    },
+    "validation_control.random_neuron_mean": {
+      "limit": 2e-05,
+      "max_abs": 9.48256569316755e-08,
+      "mean_abs": 9.48256569316755e-08,
+      "shape": []
+    },
+    "validation_control.token_ids": true,
+    "validation_positive.all_exact_positive": true,
+    "validation_positive.baseline_expected_token_top1_count": true,
+    "validation_positive.baseline_margin": {
+      "limit": 2e-05,
+      "max_abs": 1.606800509534878e-06,
+      "mean_abs": 5.307377404969079e-07,
+      "shape": [
+        12
+      ]
+    },
+    "validation_positive.central_difference": {
+      "limit": 0.001,
+      "max_abs": 0.00037827654840327796,
+      "mean_abs": 0.00018773527061203646,
+      "shape": [
+        12
+      ]
+    },
+    "validation_positive.cross_layer.0.chosen_delta": {
+      "limit": 2e-05,
+      "max_abs": 1.619883923886789e-06,
+      "mean_abs": 6.103530916975094e-07,
+      "shape": [
+        12
+      ]
+    },
+    "validation_positive.cross_layer.0.chosen_minus_random_mean": {
+      "limit": 2e-05,
+      "max_abs": 6.759461812499978e-07,
+      "mean_abs": 3.948425650266337e-07,
+      "shape": [
+        12
+      ]
+    },
+    "validation_positive.cross_layer.0.layer": true,
+    "validation_positive.cross_layer.0.random_delta": {
+      "limit": 2e-05,
+      "max_abs": 2.2174413754072475e-06,
+      "mean_abs": 7.016753873366632e-07,
+      "shape": [
+        6,
+        12
+      ]
+    },
+    "validation_positive.cross_layer.0.random_mean_delta": {
+      "limit": 2e-05,
+      "max_abs": 1.616662253550033e-06,
+      "mean_abs": 4.7012105913099106e-07,
+      "shape": [
+        12
+      ]
+    },
+    "validation_positive.cross_layer.1.chosen_delta": {
+      "limit": 2e-05,
+      "max_abs": 1.3115140138353354e-06,
+      "mean_abs": 6.298272093493059e-07,
+      "shape": [
+        12
+      ]
+    },
+    "validation_positive.cross_layer.1.chosen_minus_random_mean": {
+      "limit": 2e-05,
+      "max_abs": 1.1316946608025402e-06,
+      "mean_abs": 4.4830023176664624e-07,
+      "shape": [
+        12
+      ]
+    },
+    "validation_positive.cross_layer.1.layer": true,
+    "validation_positive.cross_layer.1.random_delta": {
+      "limit": 2e-05,
+      "max_abs": 2.484694926252473e-06,
+      "mean_abs": 6.26815445955072e-07,
+      "shape": [
+        6,
+        12
+      ]
+    },
+    "validation_positive.cross_layer.1.random_mean_delta": {
+      "limit": 2e-05,
+      "max_abs": 1.507351120515893e-06,
+      "mean_abs": 4.6513147603851934e-07,
+      "shape": [
+        12
+      ]
+    },
+    "validation_positive.exact_ablation_margin_decrease": {
+      "limit": 2e-05,
+      "max_abs": 1.2687473605055288e-06,
+      "mean_abs": 4.956469033719676e-07,
+      "shape": [
+        12
+      ]
+    },
+    "validation_positive.first_order_prediction": {
+      "limit": 2e-05,
+      "max_abs": 3.166458224096447e-08,
+      "mean_abs": 1.3186064149138069e-08,
+      "shape": [
+        12
+      ]
+    },
+    "validation_positive.gradient": {
+      "limit": 2e-05,
+      "max_abs": 6.537633157055467e-08,
+      "mean_abs": 2.6302539662496443e-08,
+      "shape": [
+        12
+      ]
+    },
+    "validation_positive.mean_exact_ablation": {
+      "limit": 2e-05,
+      "max_abs": 1.7319464899051562e-07,
+      "mean_abs": 1.7319464899051562e-07,
+      "shape": []
+    },
+    "validation_positive.random_neuron_margin_decrease": {
+      "limit": 2e-05,
+      "max_abs": 2.4610786439893673e-06,
+      "mean_abs": 7.085081701700228e-07,
+      "shape": [
+        6,
+        12
+      ]
+    },
+    "validation_positive.random_neuron_mean": {
+      "limit": 2e-05,
+      "max_abs": 1.214905462031124e-07,
+      "mean_abs": 1.214905462031124e-07,
+      "shape": []
+    },
+    "validation_positive.token_ids": true
+  },
+  "process_replay": {
+    "array_inventory": true,
+    "arrays": {
+      "discovery.L0.first_order": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          64
+        ]
+      },
+      "discovery.L0.gradient": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          32
+        ]
+      },
+      "discovery.L1.first_order": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          64
+        ]
+      },
+      "discovery.L1.gradient": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          32
+        ]
+      },
+      "discovery.ablate.L0N50.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "discovery.ablate.L1N19.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "discovery.ablate.L1N23.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "discovery.ablate.L1N28.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "discovery.ablate.L1N48.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "discovery.ablate.L1N51.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "discovery.ablate.L1N55.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "discovery.ablate.L1N61.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "discovery.baseline.L0.activation": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          64
+        ]
+      },
+      "discovery.baseline.L0.projected": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "discovery.baseline.L0.residual": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "discovery.baseline.L1.activation": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          64
+        ]
+      },
+      "discovery.baseline.L1.projected": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "discovery.baseline.L1.residual": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "discovery.baseline.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.ablate.L0.activation": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          64
+        ]
+      },
+      "validation_control.ablate.L0.projected": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_control.ablate.L0.residual": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_control.ablate.L1.activation": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          64
+        ]
+      },
+      "validation_control.ablate.L1.projected": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_control.ablate.L1.residual": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_control.ablate.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.baseline.L0.activation": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          64
+        ]
+      },
+      "validation_control.baseline.L0.projected": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_control.baseline.L0.residual": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_control.baseline.L1.activation": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          64
+        ]
+      },
+      "validation_control.baseline.L1.projected": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_control.baseline.L1.residual": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_control.baseline.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.contribution": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          32
+        ]
+      },
+      "validation_control.gradient": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          32
+        ]
+      },
+      "validation_control.inject.L0.direction0.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.inject.L0.direction1.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.inject.L0.direction2.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.inject.L0.direction3.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.inject.L0.direction4.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.inject.L0.direction5.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.inject.L0.direction6.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.inject.L1.direction0.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.inject.L1.direction1.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.inject.L1.direction2.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.inject.L1.direction3.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.inject.L1.direction4.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.inject.L1.direction5.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.inject.L1.direction6.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.random_neuron.N15.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.random_neuron.N27.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.random_neuron.N38.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.random_neuron.N39.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.random_neuron.N62.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.random_neuron.N8.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_control.subtract.L0.activation": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          64
+        ]
+      },
+      "validation_control.subtract.L0.projected": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_control.subtract.L0.residual": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_control.subtract.L1.activation": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          64
+        ]
+      },
+      "validation_control.subtract.L1.projected": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_control.subtract.L1.residual": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_control.subtract.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.ablate.L0.activation": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          64
+        ]
+      },
+      "validation_positive.ablate.L0.projected": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_positive.ablate.L0.residual": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_positive.ablate.L1.activation": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          64
+        ]
+      },
+      "validation_positive.ablate.L1.projected": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_positive.ablate.L1.residual": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_positive.ablate.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.baseline.L0.activation": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          64
+        ]
+      },
+      "validation_positive.baseline.L0.projected": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_positive.baseline.L0.residual": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_positive.baseline.L1.activation": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          64
+        ]
+      },
+      "validation_positive.baseline.L1.projected": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_positive.baseline.L1.residual": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_positive.baseline.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.contribution": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          32
+        ]
+      },
+      "validation_positive.gradient": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          32
+        ]
+      },
+      "validation_positive.inject.L0.direction0.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.inject.L0.direction1.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.inject.L0.direction2.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.inject.L0.direction3.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.inject.L0.direction4.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.inject.L0.direction5.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.inject.L0.direction6.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.inject.L1.direction0.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.inject.L1.direction1.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.inject.L1.direction2.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.inject.L1.direction3.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.inject.L1.direction4.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.inject.L1.direction5.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.inject.L1.direction6.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.random_neuron.N15.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.random_neuron.N27.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.random_neuron.N38.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.random_neuron.N39.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.random_neuron.N62.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.random_neuron.N8.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      },
+      "validation_positive.subtract.L0.activation": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          64
+        ]
+      },
+      "validation_positive.subtract.L0.projected": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_positive.subtract.L0.residual": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_positive.subtract.L1.activation": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          64
+        ]
+      },
+      "validation_positive.subtract.L1.projected": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_positive.subtract.L1.residual": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          32
+        ]
+      },
+      "validation_positive.subtract.logits": {
+        "bitwise_equal": true,
+        "max_abs": 0.0,
+        "shape": [
+          12,
+          4,
+          27
+        ]
+      }
+    },
+    "discovery.json": true,
+    "environment.json": true,
+    "partitions.json": true,
+    "results.json": true,
+    "selection.json": true
+  },
+  "scope": "independent float64 fixture and separate-process replay",
+  "status": "INDEPENDENT_FIXTURE_AGREEMENT",
+  "summaries": {
+    "validation_control": {
+      "count_positive": 0,
+      "cross_layer_means": [
+        0.1270615825311572,
+        0.1218228266557519
+      ],
+      "mean_exact": -0.010871643913632415,
+      "mean_random_neuron": 0.005808377807704885
+    },
+    "validation_positive": {
+      "count_positive": 12,
+      "cross_layer_means": [
+        0.07467701010977587,
+        0.07435476348071739
+      ],
+      "mean_exact": 0.05761415328240179,
+      "mean_random_neuron": -0.0048201636768594085
+    }
+  }
+}

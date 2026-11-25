@@ -1,0 +1,406 @@
+{
+  "claim": "byte integrity relative to this unsigned receipt only",
+  "context": {
+    "external_model_inputs": {
+      "files": {
+        "README.md": {
+          "bytes": 10992,
+          "git_blob_sha1": "86f7c9ae4422de194e6b6104b0acc9c8b9d2cd0a",
+          "sha256": "111f8d09ac565c745d91df88929147159eaa62b2e58e03943a2e03c1a1439ad7"
+        },
+        "config.json": {
+          "bytes": 762,
+          "git_blob_sha1": "fed02aafb76b46aa5da200966f9e42262e758023",
+          "sha256": "4ec5947c1d59fee6212cdf3b0ec1a53eac02092554c5ff0a733488cbd2c64f3a"
+        },
+        "merges.txt": {
+          "bytes": 456318,
+          "git_blob_sha1": "226b0752cac7789c48f0cb3ec53eda48b7be36cc",
+          "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5"
+        },
+        "model.safetensors": {
+          "bytes": 352824413,
+          "git_blob_sha1": "4a39931cbb1d0cbf2285b4f9afde21d69fca9dce",
+          "sha256": "e1ff18884359fe8beb795a5f414feb85a6ce3d929ad019c0d958c039d2b94a1b"
+        },
+        "tokenizer.json": {
+          "bytes": 1355256,
+          "git_blob_sha1": "4b988bccc9dc5adacd403c00b4704976196548f8",
+          "sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+        },
+        "tokenizer_config.json": {
+          "bytes": 26,
+          "git_blob_sha1": "be4d21d94f3b4687e5a54d84bf6ab46ed0f8defd",
+          "sha256": "5e04eb606e3a1583530a42e36c2a6b6615c86f34fe77e44d9ddeb43ff940931f"
+        },
+        "vocab.json": {
+          "bytes": 1042301,
+          "git_blob_sha1": "1f1d9aaca301414e7f6c9396df506798ff4eb9a6",
+          "sha256": "196139668be63f3b5d6574427317ae82f612a97c5d1cdaf36ed2256dbf636783"
+        }
+      },
+      "license": "Apache-2.0",
+      "license_basis": "The pinned README model card declares Apache-2.0; the repository has no standalone LICENSE file.",
+      "pin_basis": "Small files matched the repository API Git blob IDs; the weight SHA-256 and size come from its Git LFS pointer. Acquisition verifies every full file against SHA-256 and size.",
+      "publisher_signature": "NOT_VERIFIED",
+      "repo_id": "distilbert/distilgpt2",
+      "revision": "2290a62682d06624634c1f46a6ad5be0f47f38aa",
+      "schema": "wolftrap.neuralscope.pretrained-pin/v1",
+      "source_url": "https://huggingface.co/distilbert/distilgpt2/tree/2290a62682d06624634c1f46a6ad5be0f47f38aa"
+    },
+    "kind": "pretrained-reference-and-intervention-study",
+    "protocol_sha256": "47215ccf548bd3c612b9349e3ba816d8ad8939016e28cbe402d364717bd3abeb",
+    "source_files": {
+      "__init__.py": {
+        "bytes": 106,
+        "sha256": "2252d7ecfd5aeb079f52679e492d597f866335bd8d53c84e35346d80f5d49f76"
+      },
+      "__main__.py": {
+        "bytes": 10561,
+        "sha256": "48239d9fc3f20e7f4adfab71a5a0970b8a554260798a33223c5b676c222e7419"
+      },
+      "api_lab.py": {
+        "bytes": 22478,
+        "sha256": "94a6c284537ec03f8f4751c940ba93cae7b47554d5961378eec7b2f7a798a6e4"
+      },
+      "core.py": {
+        "bytes": 17304,
+        "sha256": "1e1db1505c6a3baaf682edfb890d7d0271821943c6cfb8d3edfb7c6e97168e87"
+      },
+      "evidence.py": {
+        "bytes": 7171,
+        "sha256": "4370e8acff85f91fe401fc15415f3d3950a6915080e517c6f1b99be9e2c6ab9d"
+      },
+      "experiment.py": {
+        "bytes": 16762,
+        "sha256": "60cfc9c4f5d25e9a34aa2322805e635c1782e6912dc61761bd1aa2294794b9f8"
+      },
+      "pretrained.py": {
+        "bytes": 12236,
+        "sha256": "47bf1029d9b7c9a17f79edb9c9ce898eaf67f3c73f9b61323d8a5aaee21f3946"
+      },
+      "pretrained_report.py": {
+        "bytes": 19575,
+        "sha256": "0cd0032941fe3306b88e05772c6a3f248941a254ccaecf6ec3baa5f2564e9e51"
+      },
+      "qualification.py": {
+        "bytes": 20021,
+        "sha256": "7505f8e284fed1e04a0d27605d7a79f3161486f0d8cbe6b4d2447d75ba1838e4"
+      },
+      "reference.py": {
+        "bytes": 17618,
+        "sha256": "d2171de73886e6b24894d880f2d9d7ebe967d3a6abbd37bd716102ca02925c9b"
+      },
+      "report.py": {
+        "bytes": 4193,
+        "sha256": "d9639f66dc1ee7a11e36e2212166a5b2134f197a919703a80cf1d54cfacf292f"
+      },
+      "study.py": {
+        "bytes": 15848,
+        "sha256": "19001a741dd8d3d82c97e0c30f5bb41eb3d799ba1ab89b36f9132c6bc777009f"
+      },
+      "weights.py": {
+        "bytes": 17649,
+        "sha256": "9fe4a08ab02c059d4dee111e5fcc96ad0fd345abc85e53aa0e8a26f0e01739df"
+      }
+    },
+    "version": "0.2.0a1"
+  },
+  "directories": [
+    "parity",
+    "parity/traces",
+    "study",
+    "study/traces"
+  ],
+  "files": {
+    "config.json": {
+      "bytes": 763,
+      "sha256": "392b1a46388217a77353b67ea7414bc4aba0f9d5f53cb6fe15b7e4989fcdff12"
+    },
+    "environment.json": {
+      "bytes": 2894,
+      "sha256": "7d44d014f87f3e1a46d3ef561d55206d01e18eb6d846b530c5713baba4e1bbfb"
+    },
+    "model-pin.json": {
+      "bytes": 2079,
+      "sha256": "2303d3e65bcec8b33b6ef998525807981daef4a96788416c56095fc22aa75745"
+    },
+    "parity/result.json": {
+      "bytes": 410811,
+      "sha256": "5f619f3e9056791fe6941a887b54b746ca212c0e31cfbb40e6c4b9e55aa170e0"
+    },
+    "parity/traces/baseline-repeat_animals-clean.npz": {
+      "bytes": 6017344,
+      "sha256": "97b7a2f72f2b730ca2b2c1777ad1bcd5f3fb6d16f8fe46bb6c301bc0bdc3e73d"
+    },
+    "parity/traces/baseline-repeat_animals-corrupt.npz": {
+      "bytes": 6017344,
+      "sha256": "2aeeba590f326d7dfd4683b686e7e1a948401806200b9da4d67d9465ba7db574"
+    },
+    "parity/traces/baseline-repeat_cities-clean.npz": {
+      "bytes": 6017344,
+      "sha256": "25b64e80b9b0f6696dfa0a3e21993ba9080e11799b77fdfcf49787d133a83198"
+    },
+    "parity/traces/baseline-repeat_cities-corrupt.npz": {
+      "bytes": 6017344,
+      "sha256": "008e3a17a477973ab40511a4e3a52dbbd2bf9492dbbd4110485152915dd26720"
+    },
+    "parity/traces/baseline-repeat_colors-clean.npz": {
+      "bytes": 6017344,
+      "sha256": "cccb2c600f294a9cd29f61deca34b3d9708882f37a57cb3b236b10942f0d1115"
+    },
+    "parity/traces/baseline-repeat_colors-corrupt.npz": {
+      "bytes": 6017344,
+      "sha256": "d18863806beebda76f67179b00f3b4939a20d1935a50a1b6344374acf1cdba00"
+    },
+    "parity/traces/baseline-repeat_numbers-clean.npz": {
+      "bytes": 6017344,
+      "sha256": "08b5d97158793160948b6dcb7a45c44dda265ac01d5f4888a099a2a84b38e029"
+    },
+    "parity/traces/baseline-repeat_numbers-corrupt.npz": {
+      "bytes": 6017344,
+      "sha256": "d82f239fed1fb39b48f160f9b65df65fab27f981cec40cfdf0ef102205bd637e"
+    },
+    "parity/traces/baseline-repeat_shades-clean.npz": {
+      "bytes": 6017344,
+      "sha256": "866480b6130322bb1f1be49af1dfb8870eaea236b31ed6f6cb6e73a9c507ee42"
+    },
+    "parity/traces/baseline-repeat_shades-corrupt.npz": {
+      "bytes": 6017344,
+      "sha256": "7dac30300e10aeb2a1d0c4a13a1fb67cfd1389b8361d15e081cef207d196a290"
+    },
+    "parity/traces/baseline-repeat_sky-clean.npz": {
+      "bytes": 6017344,
+      "sha256": "ea85c7b420900b36117e2480f7735b2aac9281fb4d7f04db0bae0ff09b734294"
+    },
+    "parity/traces/baseline-repeat_sky-corrupt.npz": {
+      "bytes": 6017344,
+      "sha256": "d4bd10bec1478543fa124e5755f331d8a5df48327057e68b091fe0abab2377e1"
+    },
+    "parity/traces/patch-blocks.0.attn.head.0-ablate.npz": {
+      "bytes": 2041994,
+      "sha256": "8f8796a80e3c002aabf6ba62e3afc5a13edc8421a04943488716e7d77fdf62d8"
+    },
+    "parity/traces/patch-blocks.0.attn.head.0-restore.npz": {
+      "bytes": 2041994,
+      "sha256": "346f8549f22688d1a412537ddc8b9f0945c143ae627185902d81ce0cce2f8dd1"
+    },
+    "parity/traces/patch-blocks.0.attn.head.0-reverse.npz": {
+      "bytes": 2041994,
+      "sha256": "388e1b7078b490c1ca997f4e26b5e5b1063ee1c6b4490e153e74f9d5b48097eb"
+    },
+    "parity/traces/patch-blocks.0.attn.head.0-self_clean.npz": {
+      "bytes": 2041994,
+      "sha256": "0804495955e9a59f37557e4b5e58e3470313f10f7b900ab4ce4936776ed98d30"
+    },
+    "parity/traces/patch-blocks.0.attn.head.0-self_corrupt.npz": {
+      "bytes": 2041994,
+      "sha256": "00e7c1c80e12825978992829c10b87e2099ac46e8c60cf6949d8a4e1edc0cca0"
+    },
+    "parity/traces/patch-blocks.0.mlp_out-ablate.npz": {
+      "bytes": 2041994,
+      "sha256": "1f1bc406b50c854003726baf2ff2df6a5d4fdc96311d74412fad85d7414a622d"
+    },
+    "parity/traces/patch-blocks.0.mlp_out-restore.npz": {
+      "bytes": 2041994,
+      "sha256": "bc5cbc9f06e0862571b974a136df878f10e897a20a85e881844fbb7f10b51b2b"
+    },
+    "parity/traces/patch-blocks.0.mlp_out-reverse.npz": {
+      "bytes": 2041994,
+      "sha256": "b705a28a9e41fc431ed357d19a0373355802a8dd085644b3afa34ca38d9cf022"
+    },
+    "parity/traces/patch-blocks.0.mlp_out-self_clean.npz": {
+      "bytes": 2041994,
+      "sha256": "aa79e0e4e0bf275f26e71ba3943fbfef14902931400594dbc27144cdb48981fa"
+    },
+    "parity/traces/patch-blocks.0.mlp_out-self_corrupt.npz": {
+      "bytes": 2041994,
+      "sha256": "ae65da95c73b37e388bb9823d4a7292f95893124785519a0fec2a4c710ccdffd"
+    },
+    "parity/traces/patch-blocks.1.mlp_out-ablate.npz": {
+      "bytes": 2041994,
+      "sha256": "b07d68b9c1e6f96d867338e42be5313f75d8556775204173d92f642908d60b2c"
+    },
+    "parity/traces/patch-blocks.1.mlp_out-restore.npz": {
+      "bytes": 2041994,
+      "sha256": "175cb67626f11b6a5484c52adbb21daa3b0fd3f9f46e1caf4f81333d3c9ac5b1"
+    },
+    "parity/traces/patch-blocks.1.mlp_out-reverse.npz": {
+      "bytes": 2041994,
+      "sha256": "52b214dc189e04a706a8bb74a11d2871344643b354ea8e0937950190a4d32af4"
+    },
+    "parity/traces/patch-blocks.1.mlp_out-self_clean.npz": {
+      "bytes": 2041994,
+      "sha256": "51f9de3c734716308f67d67c9f2ce887141519b9009f8f05f85ea276a41ede33"
+    },
+    "parity/traces/patch-blocks.1.mlp_out-self_corrupt.npz": {
+      "bytes": 2041994,
+      "sha256": "5de2b705169fb7e9bef9ba2045367d6adf280cef49b01471c01804367decf52e"
+    },
+    "parity/traces/patch-blocks.2.attn.head.0-ablate.npz": {
+      "bytes": 2041994,
+      "sha256": "0389ae701dac3b687e21ec9b9fa6ad675435ce71b53de125052ede2990e55d89"
+    },
+    "parity/traces/patch-blocks.2.attn.head.0-restore.npz": {
+      "bytes": 2041994,
+      "sha256": "c8de7addece324a652ece079ed83af6f18208d4965cf23042083c9324a6d2b99"
+    },
+    "parity/traces/patch-blocks.2.attn.head.0-reverse.npz": {
+      "bytes": 2041994,
+      "sha256": "c1e9c26ebe9ee79127f34dfe0526cd509364dda26e64ba79faa0822f970dfc9d"
+    },
+    "parity/traces/patch-blocks.2.attn.head.0-self_clean.npz": {
+      "bytes": 2041994,
+      "sha256": "684b62bce94fabf26385f856c6be77345ccfc61cf9901fc429b8b3a1fcd459c8"
+    },
+    "parity/traces/patch-blocks.2.attn.head.0-self_corrupt.npz": {
+      "bytes": 2041994,
+      "sha256": "5854f38df312e5aaca48467561af2cff4ea72b276db96dbe556f658e0e40426f"
+    },
+    "parity/traces/patch-blocks.2.mlp_out-ablate.npz": {
+      "bytes": 2041994,
+      "sha256": "5ba3591f1e6bbaac608a7530803100a970f4669658827489f66a1a4f3d6e6350"
+    },
+    "parity/traces/patch-blocks.2.mlp_out-restore.npz": {
+      "bytes": 2041994,
+      "sha256": "39f6a44628dd691a2244686b38bf5caa551ea4344f5fa0b263efb7ff854cddd4"
+    },
+    "parity/traces/patch-blocks.2.mlp_out-reverse.npz": {
+      "bytes": 2041994,
+      "sha256": "d6f72e02e8bc42dfd7fa1785f99715b5ee1a07974ce3e902b6ed1dae9f97aea6"
+    },
+    "parity/traces/patch-blocks.2.mlp_out-self_clean.npz": {
+      "bytes": 2041994,
+      "sha256": "9381c0c55396e36949db75d04f93c68a15391caf3b337b6064c87238e7d0e2e8"
+    },
+    "parity/traces/patch-blocks.2.mlp_out-self_corrupt.npz": {
+      "bytes": 2041994,
+      "sha256": "e02dccc18bed9e8800003f6c8439a89338291792f8ac6dc8526b00c0cd69dccd"
+    },
+    "parity/traces/patch-blocks.3.mlp_out-ablate.npz": {
+      "bytes": 2041994,
+      "sha256": "aa4e3c61d1aa8e0db9549c27638c95cd8081fb1bef732d34f394a7b9da5a0adf"
+    },
+    "parity/traces/patch-blocks.3.mlp_out-restore.npz": {
+      "bytes": 2041994,
+      "sha256": "a9a88cc8ca4d12c606f472845a71aafe2224bbbd69e2e276eeed81c403393c06"
+    },
+    "parity/traces/patch-blocks.3.mlp_out-reverse.npz": {
+      "bytes": 2041994,
+      "sha256": "bc3961a7536f853ad7d84b278e77b64796e453134a6b8625f029dcf2be33394c"
+    },
+    "parity/traces/patch-blocks.3.mlp_out-self_clean.npz": {
+      "bytes": 2041994,
+      "sha256": "78f973b0bf0a8021d03d2d75326cd9f0356cf5373e3d928eb407ec7615a60b9a"
+    },
+    "parity/traces/patch-blocks.3.mlp_out-self_corrupt.npz": {
+      "bytes": 2041994,
+      "sha256": "b14af3f803973bcf045c378a43d682b1af4b77f225cb364891cbe202d4ff97e8"
+    },
+    "parity/traces/patch-blocks.4.mlp_out-ablate.npz": {
+      "bytes": 2041994,
+      "sha256": "0261882a5351bb5d9b9b381b3ed13e26bf23a2ff07990784ab61b8b5ded257b0"
+    },
+    "parity/traces/patch-blocks.4.mlp_out-restore.npz": {
+      "bytes": 2041994,
+      "sha256": "e6a82c55592ba40f432298d1dacd1f6e49d2014b14dbecd9a35aa063c0a4ba39"
+    },
+    "parity/traces/patch-blocks.4.mlp_out-reverse.npz": {
+      "bytes": 2041994,
+      "sha256": "821a3151af825f63c608a87f0476b998b12987d33c4ec121c8393b95c6f2ab38"
+    },
+    "parity/traces/patch-blocks.4.mlp_out-self_clean.npz": {
+      "bytes": 2041994,
+      "sha256": "30ec6ba16dee06426c312242db3a990256d23668cc6b6b86331e0a5df53c81a1"
+    },
+    "parity/traces/patch-blocks.4.mlp_out-self_corrupt.npz": {
+      "bytes": 2041994,
+      "sha256": "27ef752f2045c459c4f319d00b490318b3cb46dd96ef93ac37f1622279f5ec2d"
+    },
+    "parity/traces/patch-blocks.5.attn.head.0-ablate.npz": {
+      "bytes": 2041994,
+      "sha256": "39f6f9dd41b06ef83cceb6fcfcc559e20687d26d7ce7f7d312c9d4ee8e47b893"
+    },
+    "parity/traces/patch-blocks.5.attn.head.0-restore.npz": {
+      "bytes": 2041994,
+      "sha256": "57fa4026e83dc71e31a2f9c47849f503672646be353a6ade60c7c2b9c1eea28e"
+    },
+    "parity/traces/patch-blocks.5.attn.head.0-reverse.npz": {
+      "bytes": 2041994,
+      "sha256": "07c3e563b42b43cd7de9e9a200e4bf1e9d7f1781a28d29fe4c52a64a1471d9f1"
+    },
+    "parity/traces/patch-blocks.5.attn.head.0-self_clean.npz": {
+      "bytes": 2041994,
+      "sha256": "505dcf5fe205861abe99fa7e9e1ef214765664ca44eaf945721ba5898f87fca0"
+    },
+    "parity/traces/patch-blocks.5.attn.head.0-self_corrupt.npz": {
+      "bytes": 2041994,
+      "sha256": "d20a865c9d586f0cfb53f332923f8389ce4737e5c38e8d024ec9b10cf492d6d0"
+    },
+    "parity/traces/patch-blocks.5.mlp_out-ablate.npz": {
+      "bytes": 2041994,
+      "sha256": "03c314306be992948b8f6a6b1ac0e17dc5522c55e0fad5148b2192e790134cd0"
+    },
+    "parity/traces/patch-blocks.5.mlp_out-restore.npz": {
+      "bytes": 2041994,
+      "sha256": "7df5758878679ba814e96288b47deb1dca801293ac2fbf8accd258e2804a1961"
+    },
+    "parity/traces/patch-blocks.5.mlp_out-reverse.npz": {
+      "bytes": 2041994,
+      "sha256": "79a40c4b45571d5be27f1c96edf1e67a88c379c7e89c2f41f9e0149bc7bc7608"
+    },
+    "parity/traces/patch-blocks.5.mlp_out-self_clean.npz": {
+      "bytes": 2041994,
+      "sha256": "266b48dbff552657184e365e2d4cdaa24dcf1d4ee791eaffa0031db038f15f89"
+    },
+    "parity/traces/patch-blocks.5.mlp_out-self_corrupt.npz": {
+      "bytes": 2041994,
+      "sha256": "e25681b58dadd25a1aba807a1fcf4a603ef3498d4ef9c7675d0c73ebd6299adf"
+    },
+    "protocol.json": {
+      "bytes": 10654,
+      "sha256": "47215ccf548bd3c612b9349e3ba816d8ad8939016e28cbe402d364717bd3abeb"
+    },
+    "report.html": {
+      "bytes": 17105,
+      "sha256": "50f4338e3f1184d05c6f3d6cd19aa2de98f61998e3d0c6aaeea640bd365060df"
+    },
+    "result.json": {
+      "bytes": 11046,
+      "sha256": "a0e6df016c7334618c0cfabef957e9c697fcff48c3514bf7fe2932c4cdd073f7"
+    },
+    "study/behavior.json": {
+      "bytes": 4626,
+      "sha256": "9db45773aabc98e3dd47621f7b635d0acdc536d1e478c607396cf783202e92d9"
+    },
+    "study/result.json": {
+      "bytes": 24960,
+      "sha256": "d29b786b38360b66073a9e7022c97b40b4498e86fc8d798db818ca63c8e7ee51"
+    },
+    "study/traces/repeat_animals.npz": {
+      "bytes": 9442082,
+      "sha256": "1656124373b569c8f44295a52b45a3b3c34b4ce476062b31347b48ff8c2ecce9"
+    },
+    "study/traces/repeat_cities.npz": {
+      "bytes": 9442082,
+      "sha256": "dbe68a374d40d30b65189b15648e607bfda788185b91178134d1296a81e000f1"
+    },
+    "study/traces/repeat_colors.npz": {
+      "bytes": 9442082,
+      "sha256": "67c123c46c7e4a28f5545092c40c32243e586d094733ee908162738f8c123ba2"
+    },
+    "study/traces/repeat_numbers.npz": {
+      "bytes": 9442082,
+      "sha256": "b2f125f287a92e95a566df5a52dcb64fca8ef36ff7222c26ca91d5eb74312762"
+    },
+    "study/traces/repeat_shades.npz": {
+      "bytes": 9442082,
+      "sha256": "49098826c6d3c9ddb49e33412a26c174b6602fcd66a8bba7f87d170edbc97caa"
+    },
+    "study/traces/repeat_sky.npz": {
+      "bytes": 9442082,
+      "sha256": "2172b18c721a34d388439e00f65ed05eb37066717f73904ab879bf535fde587b"
+    }
+  },
+  "schema": "wolftrap.neuralscope.evidence/v1"
+}

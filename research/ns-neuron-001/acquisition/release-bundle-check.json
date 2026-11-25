@@ -1,0 +1,11 @@
+{
+  "declared": 89,
+  "extra": [],
+  "manifest_sha256": "fd6eb55d488502667475d9bb680e5b66cddbc7220ceeb2fa60c4f42de0ce657a",
+  "mismatches": [],
+  "missing": [],
+  "observed": 89,
+  "schema": "wolftrap.neuralscope.source-bundle/v1",
+  "verified": true,
+  "version": "0.3.0a1"
+}

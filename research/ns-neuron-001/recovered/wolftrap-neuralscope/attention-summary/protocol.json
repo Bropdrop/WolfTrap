@@ -1,0 +1,1205 @@
+{
+  "builder_performs_inference": false,
+  "cases": [
+    {
+      "alternative_id": 18873,
+      "alternative_text": " lemon",
+      "changed_ids": [
+        17180,
+        18873,
+        17180,
+        18873,
+        17180
+      ],
+      "changed_text": " apple lemon apple lemon apple",
+      "clean_ids": [
+        17180,
+        10912,
+        17180,
+        10912,
+        17180
+      ],
+      "clean_text": " apple orange apple orange apple",
+      "condition": "repeat",
+      "group_id": "fruit",
+      "id": "fruit_repeat_forward",
+      "orientation": "forward",
+      "positions": [
+        4
+      ],
+      "split": "discovery",
+      "target_id": 10912,
+      "target_text": " orange"
+    },
+    {
+      "alternative_id": 10912,
+      "alternative_text": " orange",
+      "changed_ids": [
+        17180,
+        10912,
+        17180,
+        10912,
+        17180
+      ],
+      "changed_text": " apple orange apple orange apple",
+      "clean_ids": [
+        17180,
+        18873,
+        17180,
+        18873,
+        17180
+      ],
+      "clean_text": " apple lemon apple lemon apple",
+      "condition": "repeat",
+      "group_id": "fruit",
+      "id": "fruit_repeat_reverse",
+      "orientation": "reverse",
+      "positions": [
+        4
+      ],
+      "split": "discovery",
+      "target_id": 18873,
+      "target_text": " lemon"
+    },
+    {
+      "alternative_id": 18873,
+      "alternative_text": " lemon",
+      "changed_ids": [
+        17180,
+        17180,
+        18873,
+        18873,
+        17180
+      ],
+      "changed_text": " apple apple lemon lemon apple",
+      "clean_ids": [
+        17180,
+        17180,
+        10912,
+        10912,
+        17180
+      ],
+      "clean_text": " apple apple orange orange apple",
+      "condition": "control",
+      "group_id": "fruit",
+      "id": "fruit_control_forward",
+      "orientation": "forward",
+      "positions": [
+        4
+      ],
+      "split": "discovery",
+      "target_id": 10912,
+      "target_text": " orange"
+    },
+    {
+      "alternative_id": 10912,
+      "alternative_text": " orange",
+      "changed_ids": [
+        17180,
+        17180,
+        10912,
+        10912,
+        17180
+      ],
+      "changed_text": " apple apple orange orange apple",
+      "clean_ids": [
+        17180,
+        17180,
+        18873,
+        18873,
+        17180
+      ],
+      "clean_text": " apple apple lemon lemon apple",
+      "condition": "control",
+      "group_id": "fruit",
+      "id": "fruit_control_reverse",
+      "orientation": "reverse",
+      "positions": [
+        4
+      ],
+      "split": "discovery",
+      "target_id": 18873,
+      "target_text": " lemon"
+    },
+    {
+      "alternative_id": 2344,
+      "alternative_text": " wind",
+      "changed_ids": [
+        6290,
+        2344,
+        6290,
+        2344,
+        6290
+      ],
+      "changed_text": " rain wind rain wind rain",
+      "clean_ids": [
+        6290,
+        6729,
+        6290,
+        6729,
+        6290
+      ],
+      "clean_text": " rain snow rain snow rain",
+      "condition": "repeat",
+      "group_id": "weather",
+      "id": "weather_repeat_forward",
+      "orientation": "forward",
+      "positions": [
+        4
+      ],
+      "split": "discovery",
+      "target_id": 6729,
+      "target_text": " snow"
+    },
+    {
+      "alternative_id": 6729,
+      "alternative_text": " snow",
+      "changed_ids": [
+        6290,
+        6729,
+        6290,
+        6729,
+        6290
+      ],
+      "changed_text": " rain snow rain snow rain",
+      "clean_ids": [
+        6290,
+        2344,
+        6290,
+        2344,
+        6290
+      ],
+      "clean_text": " rain wind rain wind rain",
+      "condition": "repeat",
+      "group_id": "weather",
+      "id": "weather_repeat_reverse",
+      "orientation": "reverse",
+      "positions": [
+        4
+      ],
+      "split": "discovery",
+      "target_id": 2344,
+      "target_text": " wind"
+    },
+    {
+      "alternative_id": 2344,
+      "alternative_text": " wind",
+      "changed_ids": [
+        6290,
+        6290,
+        2344,
+        2344,
+        6290
+      ],
+      "changed_text": " rain rain wind wind rain",
+      "clean_ids": [
+        6290,
+        6290,
+        6729,
+        6729,
+        6290
+      ],
+      "clean_text": " rain rain snow snow rain",
+      "condition": "control",
+      "group_id": "weather",
+      "id": "weather_control_forward",
+      "orientation": "forward",
+      "positions": [
+        4
+      ],
+      "split": "discovery",
+      "target_id": 6729,
+      "target_text": " snow"
+    },
+    {
+      "alternative_id": 6729,
+      "alternative_text": " snow",
+      "changed_ids": [
+        6290,
+        6290,
+        6729,
+        6729,
+        6290
+      ],
+      "changed_text": " rain rain snow snow rain",
+      "clean_ids": [
+        6290,
+        6290,
+        2344,
+        2344,
+        6290
+      ],
+      "clean_text": " rain rain wind wind rain",
+      "condition": "control",
+      "group_id": "weather",
+      "id": "weather_control_reverse",
+      "orientation": "reverse",
+      "positions": [
+        4
+      ],
+      "split": "discovery",
+      "target_id": 2344,
+      "target_text": " wind"
+    },
+    {
+      "alternative_id": 4512,
+      "alternative_text": " train",
+      "changed_ids": [
+        1097,
+        4512,
+        1097,
+        4512,
+        1097
+      ],
+      "changed_text": " car train car train car",
+      "clean_ids": [
+        1097,
+        1323,
+        1097,
+        1323,
+        1097
+      ],
+      "clean_text": " car bus car bus car",
+      "condition": "repeat",
+      "group_id": "transport",
+      "id": "transport_repeat_forward",
+      "orientation": "forward",
+      "positions": [
+        4
+      ],
+      "split": "discovery",
+      "target_id": 1323,
+      "target_text": " bus"
+    },
+    {
+      "alternative_id": 1323,
+      "alternative_text": " bus",
+      "changed_ids": [
+        1097,
+        1323,
+        1097,
+        1323,
+        1097
+      ],
+      "changed_text": " car bus car bus car",
+      "clean_ids": [
+        1097,
+        4512,
+        1097,
+        4512,
+        1097
+      ],
+      "clean_text": " car train car train car",
+      "condition": "repeat",
+      "group_id": "transport",
+      "id": "transport_repeat_reverse",
+      "orientation": "reverse",
+      "positions": [
+        4
+      ],
+      "split": "discovery",
+      "target_id": 4512,
+      "target_text": " train"
+    },
+    {
+      "alternative_id": 4512,
+      "alternative_text": " train",
+      "changed_ids": [
+        1097,
+        1097,
+        4512,
+        4512,
+        1097
+      ],
+      "changed_text": " car car train train car",
+      "clean_ids": [
+        1097,
+        1097,
+        1323,
+        1323,
+        1097
+      ],
+      "clean_text": " car car bus bus car",
+      "condition": "control",
+      "group_id": "transport",
+      "id": "transport_control_forward",
+      "orientation": "forward",
+      "positions": [
+        4
+      ],
+      "split": "discovery",
+      "target_id": 1323,
+      "target_text": " bus"
+    },
+    {
+      "alternative_id": 1323,
+      "alternative_text": " bus",
+      "changed_ids": [
+        1097,
+        1097,
+        1323,
+        1323,
+        1097
+      ],
+      "changed_text": " car car bus bus car",
+      "clean_ids": [
+        1097,
+        1097,
+        4512,
+        4512,
+        1097
+      ],
+      "clean_text": " car car train train car",
+      "condition": "control",
+      "group_id": "transport",
+      "id": "transport_control_reverse",
+      "orientation": "reverse",
+      "positions": [
+        4
+      ],
+      "split": "discovery",
+      "target_id": 4512,
+      "target_text": " train"
+    },
+    {
+      "alternative_id": 7545,
+      "alternative_text": " milk",
+      "changed_ids": [
+        8887,
+        7545,
+        8887,
+        7545,
+        8887
+      ],
+      "changed_text": " tea milk tea milk tea",
+      "clean_ids": [
+        8887,
+        6891,
+        8887,
+        6891,
+        8887
+      ],
+      "clean_text": " tea coffee tea coffee tea",
+      "condition": "repeat",
+      "group_id": "drinks",
+      "id": "drinks_repeat_forward",
+      "orientation": "forward",
+      "positions": [
+        4
+      ],
+      "split": "validation",
+      "target_id": 6891,
+      "target_text": " coffee"
+    },
+    {
+      "alternative_id": 6891,
+      "alternative_text": " coffee",
+      "changed_ids": [
+        8887,
+        6891,
+        8887,
+        6891,
+        8887
+      ],
+      "changed_text": " tea coffee tea coffee tea",
+      "clean_ids": [
+        8887,
+        7545,
+        8887,
+        7545,
+        8887
+      ],
+      "clean_text": " tea milk tea milk tea",
+      "condition": "repeat",
+      "group_id": "drinks",
+      "id": "drinks_repeat_reverse",
+      "orientation": "reverse",
+      "positions": [
+        4
+      ],
+      "split": "validation",
+      "target_id": 7545,
+      "target_text": " milk"
+    },
+    {
+      "alternative_id": 7545,
+      "alternative_text": " milk",
+      "changed_ids": [
+        8887,
+        8887,
+        7545,
+        7545,
+        8887
+      ],
+      "changed_text": " tea tea milk milk tea",
+      "clean_ids": [
+        8887,
+        8887,
+        6891,
+        6891,
+        8887
+      ],
+      "clean_text": " tea tea coffee coffee tea",
+      "condition": "control",
+      "group_id": "drinks",
+      "id": "drinks_control_forward",
+      "orientation": "forward",
+      "positions": [
+        4
+      ],
+      "split": "validation",
+      "target_id": 6891,
+      "target_text": " coffee"
+    },
+    {
+      "alternative_id": 6891,
+      "alternative_text": " coffee",
+      "changed_ids": [
+        8887,
+        8887,
+        6891,
+        6891,
+        8887
+      ],
+      "changed_text": " tea tea coffee coffee tea",
+      "clean_ids": [
+        8887,
+        8887,
+        7545,
+        7545,
+        8887
+      ],
+      "clean_text": " tea tea milk milk tea",
+      "condition": "control",
+      "group_id": "drinks",
+      "id": "drinks_control_reverse",
+      "orientation": "reverse",
+      "positions": [
+        4
+      ],
+      "split": "validation",
+      "target_id": 7545,
+      "target_text": " milk"
+    },
+    {
+      "alternative_id": 15317,
+      "alternative_text": " copper",
+      "changed_ids": [
+        6953,
+        15317,
+        6953,
+        15317,
+        6953
+      ],
+      "changed_text": " iron copper iron copper iron",
+      "clean_ids": [
+        6953,
+        7771,
+        6953,
+        7771,
+        6953
+      ],
+      "clean_text": " iron steel iron steel iron",
+      "condition": "repeat",
+      "group_id": "metals",
+      "id": "metals_repeat_forward",
+      "orientation": "forward",
+      "positions": [
+        4
+      ],
+      "split": "validation",
+      "target_id": 7771,
+      "target_text": " steel"
+    },
+    {
+      "alternative_id": 7771,
+      "alternative_text": " steel",
+      "changed_ids": [
+        6953,
+        7771,
+        6953,
+        7771,
+        6953
+      ],
+      "changed_text": " iron steel iron steel iron",
+      "clean_ids": [
+        6953,
+        15317,
+        6953,
+        15317,
+        6953
+      ],
+      "clean_text": " iron copper iron copper iron",
+      "condition": "repeat",
+      "group_id": "metals",
+      "id": "metals_repeat_reverse",
+      "orientation": "reverse",
+      "positions": [
+        4
+      ],
+      "split": "validation",
+      "target_id": 15317,
+      "target_text": " copper"
+    },
+    {
+      "alternative_id": 15317,
+      "alternative_text": " copper",
+      "changed_ids": [
+        6953,
+        6953,
+        15317,
+        15317,
+        6953
+      ],
+      "changed_text": " iron iron copper copper iron",
+      "clean_ids": [
+        6953,
+        6953,
+        7771,
+        7771,
+        6953
+      ],
+      "clean_text": " iron iron steel steel iron",
+      "condition": "control",
+      "group_id": "metals",
+      "id": "metals_control_forward",
+      "orientation": "forward",
+      "positions": [
+        4
+      ],
+      "split": "validation",
+      "target_id": 7771,
+      "target_text": " steel"
+    },
+    {
+      "alternative_id": 7771,
+      "alternative_text": " steel",
+      "changed_ids": [
+        6953,
+        6953,
+        7771,
+        7771,
+        6953
+      ],
+      "changed_text": " iron iron steel steel iron",
+      "clean_ids": [
+        6953,
+        6953,
+        15317,
+        15317,
+        6953
+      ],
+      "clean_text": " iron iron copper copper iron",
+      "condition": "control",
+      "group_id": "metals",
+      "id": "metals_control_reverse",
+      "orientation": "reverse",
+      "positions": [
+        4
+      ],
+      "split": "validation",
+      "target_id": 15317,
+      "target_text": " copper"
+    },
+    {
+      "alternative_id": 19716,
+      "alternative_text": " prince",
+      "changed_ids": [
+        5822,
+        19716,
+        5822,
+        19716,
+        5822
+      ],
+      "changed_text": " king prince king prince king",
+      "clean_ids": [
+        5822,
+        16599,
+        5822,
+        16599,
+        5822
+      ],
+      "clean_text": " king queen king queen king",
+      "condition": "repeat",
+      "group_id": "royalty",
+      "id": "royalty_repeat_forward",
+      "orientation": "forward",
+      "positions": [
+        4
+      ],
+      "split": "validation",
+      "target_id": 16599,
+      "target_text": " queen"
+    },
+    {
+      "alternative_id": 16599,
+      "alternative_text": " queen",
+      "changed_ids": [
+        5822,
+        16599,
+        5822,
+        16599,
+        5822
+      ],
+      "changed_text": " king queen king queen king",
+      "clean_ids": [
+        5822,
+        19716,
+        5822,
+        19716,
+        5822
+      ],
+      "clean_text": " king prince king prince king",
+      "condition": "repeat",
+      "group_id": "royalty",
+      "id": "royalty_repeat_reverse",
+      "orientation": "reverse",
+      "positions": [
+        4
+      ],
+      "split": "validation",
+      "target_id": 19716,
+      "target_text": " prince"
+    },
+    {
+      "alternative_id": 19716,
+      "alternative_text": " prince",
+      "changed_ids": [
+        5822,
+        5822,
+        19716,
+        19716,
+        5822
+      ],
+      "changed_text": " king king prince prince king",
+      "clean_ids": [
+        5822,
+        5822,
+        16599,
+        16599,
+        5822
+      ],
+      "clean_text": " king king queen queen king",
+      "condition": "control",
+      "group_id": "royalty",
+      "id": "royalty_control_forward",
+      "orientation": "forward",
+      "positions": [
+        4
+      ],
+      "split": "validation",
+      "target_id": 16599,
+      "target_text": " queen"
+    },
+    {
+      "alternative_id": 16599,
+      "alternative_text": " queen",
+      "changed_ids": [
+        5822,
+        5822,
+        16599,
+        16599,
+        5822
+      ],
+      "changed_text": " king king queen queen king",
+      "clean_ids": [
+        5822,
+        5822,
+        19716,
+        19716,
+        5822
+      ],
+      "clean_text": " king king prince prince king",
+      "condition": "control",
+      "group_id": "royalty",
+      "id": "royalty_control_reverse",
+      "orientation": "reverse",
+      "positions": [
+        4
+      ],
+      "split": "validation",
+      "target_id": 19716,
+      "target_text": " prince"
+    }
+  ],
+  "evidence_policy": {
+    "distinct_lexical_groups_per_split": 3,
+    "exclude_or_rewrite_unhelpful_cases": false,
+    "freeze_requirement": "canonical local protocol before first inference, then canonical local selection before held-out inference; neither is an independently timestamped registry",
+    "inactive_head_assumption": "none",
+    "limitations": [
+      "frequency-matched control changes token order and distances, so a positive difference is not proof of a unique induction mechanism",
+      "discovery searches 72 candidates and its maximum can be optimistic; validation does not reselect",
+      "orientations reuse the same inputs and must not be counted as independent lexical samples",
+      "pairwise preference is different from vocabulary-wide highest-scoring token",
+      "projected-head intervention effects are local to the tested checkpoint, inputs, and positions",
+      "zero ablation can produce atypical internal activity"
+    ],
+    "orientations_independent": false,
+    "population_confidence_interval": null,
+    "retain_all_records": true,
+    "retained_statistics": [
+      "all 72 discovery head scores",
+      "both orientation means",
+      "per-group effects",
+      "raw margins",
+      "target and alternative ranks",
+      "global top token",
+      "pairwise preference changes"
+    ]
+  },
+  "forward_pass_counts": {
+    "counts_assume": "reuse unique baselines across both orientations; reuse first discovery case candidate scans for reference comparison",
+    "discovery_candidate_restore_passes": 864,
+    "discovery_candidate_total": 876,
+    "discovery_reference_hooked_baselines": 12,
+    "discovery_reference_restore_passes": 72,
+    "discovery_reference_total": 96,
+    "discovery_reference_unhooked_baselines": 12,
+    "discovery_unique_baselines": 12,
+    "maximum_candidate_total": 948,
+    "maximum_combined_total": 1128,
+    "maximum_reference_total": 180,
+    "no_selection_candidate_total": 876,
+    "no_selection_reference_total": 96,
+    "validation_candidate_interventions": 60,
+    "validation_candidate_total": 72,
+    "validation_reference_hooked_baselines": 12,
+    "validation_reference_interventions": 60,
+    "validation_reference_total": 84,
+    "validation_reference_unhooked_baselines": 12,
+    "validation_unique_baselines": 12
+  },
+  "lexical_groups": [
+    {
+      "id": "fruit",
+      "split": "discovery",
+      "token_ids": [
+        17180,
+        10912,
+        18873
+      ],
+      "words": [
+        "apple",
+        "orange",
+        "lemon"
+      ]
+    },
+    {
+      "id": "weather",
+      "split": "discovery",
+      "token_ids": [
+        6290,
+        6729,
+        2344
+      ],
+      "words": [
+        "rain",
+        "snow",
+        "wind"
+      ]
+    },
+    {
+      "id": "transport",
+      "split": "discovery",
+      "token_ids": [
+        1097,
+        1323,
+        4512
+      ],
+      "words": [
+        "car",
+        "bus",
+        "train"
+      ]
+    },
+    {
+      "id": "drinks",
+      "split": "validation",
+      "token_ids": [
+        8887,
+        6891,
+        7545
+      ],
+      "words": [
+        "tea",
+        "coffee",
+        "milk"
+      ]
+    },
+    {
+      "id": "metals",
+      "split": "validation",
+      "token_ids": [
+        6953,
+        7771,
+        15317
+      ],
+      "words": [
+        "iron",
+        "steel",
+        "copper"
+      ]
+    },
+    {
+      "id": "royalty",
+      "split": "validation",
+      "token_ids": [
+        5822,
+        16599,
+        19716
+      ],
+      "words": [
+        "king",
+        "queen",
+        "prince"
+      ]
+    }
+  ],
+  "minimum_gap": 0.05,
+  "model_identity": {
+    "files": {
+      "README.md": {
+        "bytes": 10992,
+        "git_blob_sha1": "86f7c9ae4422de194e6b6104b0acc9c8b9d2cd0a",
+        "sha256": "111f8d09ac565c745d91df88929147159eaa62b2e58e03943a2e03c1a1439ad7"
+      },
+      "config.json": {
+        "bytes": 762,
+        "git_blob_sha1": "fed02aafb76b46aa5da200966f9e42262e758023",
+        "sha256": "4ec5947c1d59fee6212cdf3b0ec1a53eac02092554c5ff0a733488cbd2c64f3a"
+      },
+      "merges.txt": {
+        "bytes": 456318,
+        "git_blob_sha1": "226b0752cac7789c48f0cb3ec53eda48b7be36cc",
+        "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5"
+      },
+      "model.safetensors": {
+        "bytes": 352824413,
+        "git_blob_sha1": "4a39931cbb1d0cbf2285b4f9afde21d69fca9dce",
+        "sha256": "e1ff18884359fe8beb795a5f414feb85a6ce3d929ad019c0d958c039d2b94a1b"
+      },
+      "tokenizer.json": {
+        "bytes": 1355256,
+        "git_blob_sha1": "4b988bccc9dc5adacd403c00b4704976196548f8",
+        "sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+      },
+      "tokenizer_config.json": {
+        "bytes": 26,
+        "git_blob_sha1": "be4d21d94f3b4687e5a54d84bf6ab46ed0f8defd",
+        "sha256": "5e04eb606e3a1583530a42e36c2a6b6615c86f34fe77e44d9ddeb43ff940931f"
+      },
+      "vocab.json": {
+        "bytes": 1042301,
+        "git_blob_sha1": "1f1d9aaca301414e7f6c9396df506798ff4eb9a6",
+        "sha256": "196139668be63f3b5d6574427317ae82f612a97c5d1cdaf36ed2256dbf636783"
+      }
+    },
+    "license": "Apache-2.0",
+    "license_basis": "The pinned README model card declares Apache-2.0; the repository has no standalone LICENSE file.",
+    "pin_basis": "Small files matched the repository API Git blob IDs; the weight SHA-256 and size come from its Git LFS pointer. Acquisition verifies every full file against SHA-256 and size.",
+    "publisher_signature": "NOT_VERIFIED",
+    "repo_id": "distilbert/distilgpt2",
+    "revision": "2290a62682d06624634c1f46a6ad5be0f47f38aa",
+    "schema": "wolftrap.neuralscope.pretrained-pin/v1",
+    "source_url": "https://huggingface.co/distilbert/distilgpt2/tree/2290a62682d06624634c1f46a6ad5be0f47f38aa"
+  },
+  "reference_comparison": {
+    "activation_atol": 0.0002,
+    "activation_rtol": 0.0002,
+    "argmax_requirement": "observed and reported, not a substitute for full numerical comparison",
+    "arithmetic": "CPU float32; deterministic evaluation; eager attention; no KV cache",
+    "baseline_scope": "all unique sequences used in a reached stage: hooked and unhooked reference passes",
+    "discovery_intervention_case": "fruit_repeat_forward",
+    "discovery_intervention_sites": [
+      "blocks.0.attn.head.0",
+      "blocks.0.attn.head.1",
+      "blocks.0.attn.head.2",
+      "blocks.0.attn.head.3",
+      "blocks.0.attn.head.4",
+      "blocks.0.attn.head.5",
+      "blocks.0.attn.head.6",
+      "blocks.0.attn.head.7",
+      "blocks.0.attn.head.8",
+      "blocks.0.attn.head.9",
+      "blocks.0.attn.head.10",
+      "blocks.0.attn.head.11",
+      "blocks.1.attn.head.0",
+      "blocks.1.attn.head.1",
+      "blocks.1.attn.head.2",
+      "blocks.1.attn.head.3",
+      "blocks.1.attn.head.4",
+      "blocks.1.attn.head.5",
+      "blocks.1.attn.head.6",
+      "blocks.1.attn.head.7",
+      "blocks.1.attn.head.8",
+      "blocks.1.attn.head.9",
+      "blocks.1.attn.head.10",
+      "blocks.1.attn.head.11",
+      "blocks.2.attn.head.0",
+      "blocks.2.attn.head.1",
+      "blocks.2.attn.head.2",
+      "blocks.2.attn.head.3",
+      "blocks.2.attn.head.4",
+      "blocks.2.attn.head.5",
+      "blocks.2.attn.head.6",
+      "blocks.2.attn.head.7",
+      "blocks.2.attn.head.8",
+      "blocks.2.attn.head.9",
+      "blocks.2.attn.head.10",
+      "blocks.2.attn.head.11",
+      "blocks.3.attn.head.0",
+      "blocks.3.attn.head.1",
+      "blocks.3.attn.head.2",
+      "blocks.3.attn.head.3",
+      "blocks.3.attn.head.4",
+      "blocks.3.attn.head.5",
+      "blocks.3.attn.head.6",
+      "blocks.3.attn.head.7",
+      "blocks.3.attn.head.8",
+      "blocks.3.attn.head.9",
+      "blocks.3.attn.head.10",
+      "blocks.3.attn.head.11",
+      "blocks.4.attn.head.0",
+      "blocks.4.attn.head.1",
+      "blocks.4.attn.head.2",
+      "blocks.4.attn.head.3",
+      "blocks.4.attn.head.4",
+      "blocks.4.attn.head.5",
+      "blocks.4.attn.head.6",
+      "blocks.4.attn.head.7",
+      "blocks.4.attn.head.8",
+      "blocks.4.attn.head.9",
+      "blocks.4.attn.head.10",
+      "blocks.4.attn.head.11",
+      "blocks.5.attn.head.0",
+      "blocks.5.attn.head.1",
+      "blocks.5.attn.head.2",
+      "blocks.5.attn.head.3",
+      "blocks.5.attn.head.4",
+      "blocks.5.attn.head.5",
+      "blocks.5.attn.head.6",
+      "blocks.5.attn.head.7",
+      "blocks.5.attn.head.8",
+      "blocks.5.attn.head.9",
+      "blocks.5.attn.head.10",
+      "blocks.5.attn.head.11"
+    ],
+    "discovery_operation": "restore",
+    "failure_policy": "retain mismatches and stop interpretation; do not widen frozen tolerances",
+    "full_logit_max_abs_error": 0.001,
+    "full_logit_rmse": 0.0001,
+    "hooked_baseline_vs_unhooked": "bitwise identical",
+    "patch_donor_policy": "each engine uses its own captured donor and recipient; baseline activations are compared separately",
+    "self_patch_margin_atol": 1e-06,
+    "validation_interventions": "all selected-head operations, conditions, and orientations"
+  },
+  "schema": "wolftrap.neuralscope.attention-protocol/v1",
+  "selection": {
+    "control_gap_requirement": "none: raw control effects remain usable even when the control gap is zero or negative",
+    "each_orientation_repeated_mean": "strictly greater than zero across all three discovery lexical groups",
+    "eligible_sites": [
+      "blocks.0.attn.head.0",
+      "blocks.0.attn.head.1",
+      "blocks.0.attn.head.2",
+      "blocks.0.attn.head.3",
+      "blocks.0.attn.head.4",
+      "blocks.0.attn.head.5",
+      "blocks.0.attn.head.6",
+      "blocks.0.attn.head.7",
+      "blocks.0.attn.head.8",
+      "blocks.0.attn.head.9",
+      "blocks.0.attn.head.10",
+      "blocks.0.attn.head.11",
+      "blocks.1.attn.head.0",
+      "blocks.1.attn.head.1",
+      "blocks.1.attn.head.2",
+      "blocks.1.attn.head.3",
+      "blocks.1.attn.head.4",
+      "blocks.1.attn.head.5",
+      "blocks.1.attn.head.6",
+      "blocks.1.attn.head.7",
+      "blocks.1.attn.head.8",
+      "blocks.1.attn.head.9",
+      "blocks.1.attn.head.10",
+      "blocks.1.attn.head.11",
+      "blocks.2.attn.head.0",
+      "blocks.2.attn.head.1",
+      "blocks.2.attn.head.2",
+      "blocks.2.attn.head.3",
+      "blocks.2.attn.head.4",
+      "blocks.2.attn.head.5",
+      "blocks.2.attn.head.6",
+      "blocks.2.attn.head.7",
+      "blocks.2.attn.head.8",
+      "blocks.2.attn.head.9",
+      "blocks.2.attn.head.10",
+      "blocks.2.attn.head.11",
+      "blocks.3.attn.head.0",
+      "blocks.3.attn.head.1",
+      "blocks.3.attn.head.2",
+      "blocks.3.attn.head.3",
+      "blocks.3.attn.head.4",
+      "blocks.3.attn.head.5",
+      "blocks.3.attn.head.6",
+      "blocks.3.attn.head.7",
+      "blocks.3.attn.head.8",
+      "blocks.3.attn.head.9",
+      "blocks.3.attn.head.10",
+      "blocks.3.attn.head.11",
+      "blocks.4.attn.head.0",
+      "blocks.4.attn.head.1",
+      "blocks.4.attn.head.2",
+      "blocks.4.attn.head.3",
+      "blocks.4.attn.head.4",
+      "blocks.4.attn.head.5",
+      "blocks.4.attn.head.6",
+      "blocks.4.attn.head.7",
+      "blocks.4.attn.head.8",
+      "blocks.4.attn.head.9",
+      "blocks.4.attn.head.10",
+      "blocks.4.attn.head.11",
+      "blocks.5.attn.head.0",
+      "blocks.5.attn.head.1",
+      "blocks.5.attn.head.2",
+      "blocks.5.attn.head.3",
+      "blocks.5.attn.head.4",
+      "blocks.5.attn.head.5",
+      "blocks.5.attn.head.6",
+      "blocks.5.attn.head.7",
+      "blocks.5.attn.head.8",
+      "blocks.5.attn.head.9",
+      "blocks.5.attn.head.10",
+      "blocks.5.attn.head.11"
+    ],
+    "margin": "final-token logit(target) minus logit(alternative)",
+    "metric": "mean across three lexical groups and both orientations of (repeat restoration delta minus control restoration delta), in raw logits",
+    "minimum_repeated_mean": 0.01,
+    "minimum_specificity_score": 0.01,
+    "repeat_baseline_gap": "strictly greater than 0.05 for every discovery repeated case; orientations share these underlying gaps",
+    "restoration_delta": "patched changed margin minus unpatched changed margin",
+    "rule": "choose the eligible head with greatest specificity score; choose none if no head qualifies",
+    "tie_break": "exact numeric ties: ascending layer, then ascending head",
+    "validation_access": "freeze selection JSON and its SHA-256 before any validation forward pass; no replacement selection"
+  },
+  "sites": [
+    "blocks.0.attn.head.0",
+    "blocks.0.attn.head.1",
+    "blocks.0.attn.head.2",
+    "blocks.0.attn.head.3",
+    "blocks.0.attn.head.4",
+    "blocks.0.attn.head.5",
+    "blocks.0.attn.head.6",
+    "blocks.0.attn.head.7",
+    "blocks.0.attn.head.8",
+    "blocks.0.attn.head.9",
+    "blocks.0.attn.head.10",
+    "blocks.0.attn.head.11",
+    "blocks.1.attn.head.0",
+    "blocks.1.attn.head.1",
+    "blocks.1.attn.head.2",
+    "blocks.1.attn.head.3",
+    "blocks.1.attn.head.4",
+    "blocks.1.attn.head.5",
+    "blocks.1.attn.head.6",
+    "blocks.1.attn.head.7",
+    "blocks.1.attn.head.8",
+    "blocks.1.attn.head.9",
+    "blocks.1.attn.head.10",
+    "blocks.1.attn.head.11",
+    "blocks.2.attn.head.0",
+    "blocks.2.attn.head.1",
+    "blocks.2.attn.head.2",
+    "blocks.2.attn.head.3",
+    "blocks.2.attn.head.4",
+    "blocks.2.attn.head.5",
+    "blocks.2.attn.head.6",
+    "blocks.2.attn.head.7",
+    "blocks.2.attn.head.8",
+    "blocks.2.attn.head.9",
+    "blocks.2.attn.head.10",
+    "blocks.2.attn.head.11",
+    "blocks.3.attn.head.0",
+    "blocks.3.attn.head.1",
+    "blocks.3.attn.head.2",
+    "blocks.3.attn.head.3",
+    "blocks.3.attn.head.4",
+    "blocks.3.attn.head.5",
+    "blocks.3.attn.head.6",
+    "blocks.3.attn.head.7",
+    "blocks.3.attn.head.8",
+    "blocks.3.attn.head.9",
+    "blocks.3.attn.head.10",
+    "blocks.3.attn.head.11",
+    "blocks.4.attn.head.0",
+    "blocks.4.attn.head.1",
+    "blocks.4.attn.head.2",
+    "blocks.4.attn.head.3",
+    "blocks.4.attn.head.4",
+    "blocks.4.attn.head.5",
+    "blocks.4.attn.head.6",
+    "blocks.4.attn.head.7",
+    "blocks.4.attn.head.8",
+    "blocks.4.attn.head.9",
+    "blocks.4.attn.head.10",
+    "blocks.4.attn.head.11",
+    "blocks.5.attn.head.0",
+    "blocks.5.attn.head.1",
+    "blocks.5.attn.head.2",
+    "blocks.5.attn.head.3",
+    "blocks.5.attn.head.4",
+    "blocks.5.attn.head.5",
+    "blocks.5.attn.head.6",
+    "blocks.5.attn.head.7",
+    "blocks.5.attn.head.8",
+    "blocks.5.attn.head.9",
+    "blocks.5.attn.head.10",
+    "blocks.5.attn.head.11"
+  ],
+  "title": "DistilGPT2 counterbalanced repeated-token attention-head study",
+  "tokenizer_identity": {
+    "add_special_tokens": false,
+    "files": {
+      "merges.txt": {
+        "bytes": 456318,
+        "git_blob_sha1": "226b0752cac7789c48f0cb3ec53eda48b7be36cc",
+        "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5"
+      },
+      "tokenizer.json": {
+        "bytes": 1355256,
+        "git_blob_sha1": "4b988bccc9dc5adacd403c00b4704976196548f8",
+        "sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+      },
+      "tokenizer_config.json": {
+        "bytes": 26,
+        "git_blob_sha1": "be4d21d94f3b4687e5a54d84bf6ab46ed0f8defd",
+        "sha256": "5e04eb606e3a1583530a42e36c2a6b6615c86f34fe77e44d9ddeb43ff940931f"
+      },
+      "vocab.json": {
+        "bytes": 1042301,
+        "git_blob_sha1": "1f1d9aaca301414e7f6c9396df506798ff4eb9a6",
+        "sha256": "196139668be63f3b5d6574427317ae82f612a97c5d1cdaf36ed2256dbf636783"
+      }
+    },
+    "repo_id": "distilbert/distilgpt2",
+    "revision": "2290a62682d06624634c1f46a6ad5be0f47f38aa"
+  },
+  "validation": {
+    "each_orientation_repeated_mean": "strictly greater than zero",
+    "group_specificity": "mean of repeat-minus-control restoration delta across both orientations for one lexical group",
+    "interpretation": "descriptive threshold flags for three held-out groups, not a statistical significance test or population claim",
+    "minimum_positive_group_specificity": 2,
+    "minimum_repeated_mean": 0.01,
+    "minimum_specificity_score": 0.01,
+    "operations": [
+      "restore",
+      "reverse",
+      "self_clean",
+      "self_changed",
+      "ablate"
+    ],
+    "repeat_baseline_gap": "strictly greater than 0.05 for each repeated case",
+    "self_patch_margin_atol": 1e-06,
+    "sites": "only the one head selected from discovery; skip if none selected"
+  }
+}

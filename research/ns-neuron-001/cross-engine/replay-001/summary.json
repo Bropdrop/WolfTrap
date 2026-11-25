@@ -1,0 +1,49 @@
+{
+  "all_arrays_bitwise_equal": true,
+  "cases": [
+    {
+      "case": "validation_positive-0",
+      "compared": 124,
+      "same_float32_bytes": true
+    },
+    {
+      "case": "validation_positive-1",
+      "compared": 124,
+      "same_float32_bytes": true
+    },
+    {
+      "case": "validation_positive-2",
+      "compared": 124,
+      "same_float32_bytes": true
+    },
+    {
+      "case": "validation_positive-3",
+      "compared": 124,
+      "same_float32_bytes": true
+    },
+    {
+      "case": "validation_control-0",
+      "compared": 124,
+      "same_float32_bytes": true
+    },
+    {
+      "case": "validation_control-1",
+      "compared": 124,
+      "same_float32_bytes": true
+    },
+    {
+      "case": "validation_control-2",
+      "compared": 124,
+      "same_float32_bytes": true
+    },
+    {
+      "case": "validation_control-3",
+      "compared": 124,
+      "same_float32_bytes": true
+    }
+  ],
+  "arrays_compared": 992,
+  "script_sha256": "53d1959fa07bef8b56d72444637bec232981c8f05728e3d06896b5ceefb50dc9",
+  "registration_sha256": "dfb0f67bd4d8722a44e86aee76cbf911e66dc8fd9abec3fc40717e5e20a25f7d",
+  "scope": "Both engines' complete unpadded baseline and selected-ablation logits and observed intermediates; same deterministic runtime in a separate process."
+}

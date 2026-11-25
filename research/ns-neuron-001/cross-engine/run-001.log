@@ -1,0 +1,9 @@
+Loading weights:   0%|          | 0/76 [00:00<?, ?it/s]Loading weights: 100%|██████████| 76/76 [00:00<00:00, 4864.22it/s]
+validation_positive 0
+validation_positive 1
+validation_positive 2
+validation_positive 3
+validation_control 0
+validation_control 1
+validation_control 2
+validation_control 3

@@ -1,0 +1,184 @@
+{
+  "artifacts": {
+    "discovery.json": {
+      "byte_identical": true,
+      "replay": "602dd73ddb0ebe60c71c0bd4358fda67f1c52a72d0179d1c62d5c1ad0fac037c",
+      "study": "602dd73ddb0ebe60c71c0bd4358fda67f1c52a72d0179d1c62d5c1ad0fac037c"
+    },
+    "protocol.json": {
+      "byte_identical": true,
+      "replay": "45d7425959432611354b4bcebde7a08625a5e7d2d992912e8089989ba57fd561",
+      "study": "45d7425959432611354b4bcebde7a08625a5e7d2d992912e8089989ba57fd561"
+    },
+    "results.json": {
+      "byte_identical": true,
+      "replay": "96126215c388507c52c1d911c13453ec89df09c846802de8b0f2c7c912563bbb",
+      "study": "96126215c388507c52c1d911c13453ec89df09c846802de8b0f2c7c912563bbb"
+    },
+    "selection.json": {
+      "byte_identical": true,
+      "replay": "03d17526a26d08ba238b2e594c0ebc91ebf8f1d98f6fad4b91dca0550fcbd02f",
+      "study": "03d17526a26d08ba238b2e594c0ebc91ebf8f1d98f6fad4b91dca0550fcbd02f"
+    }
+  },
+  "exit_codes": [
+    0,
+    0
+  ],
+  "groups": {
+    "validation_control": {
+      "baseline_expected_token_top1_count": 0,
+      "correct_pairwise_preference_count": 4,
+      "cross_layer": [
+        {
+          "chosen_mean": 0.03791522979736328,
+          "layer": 0,
+          "mean_chosen_minus_random": 0.006876314990222454,
+          "random_mean": 0.031038920084635418
+        },
+        {
+          "chosen_mean": -0.09311866760253906,
+          "layer": 1,
+          "mean_chosen_minus_random": -0.12370840343646705,
+          "random_mean": 0.030589739481608074
+        },
+        {
+          "chosen_mean": -0.19237995147705078,
+          "layer": 2,
+          "mean_chosen_minus_random": -0.2731035528704524,
+          "random_mean": 0.08072360356648763
+        },
+        {
+          "chosen_mean": -0.25603294372558594,
+          "layer": 3,
+          "mean_chosen_minus_random": -0.28009558096528053,
+          "random_mean": 0.024062633514404297
+        },
+        {
+          "chosen_mean": -0.06849384307861328,
+          "layer": 4,
+          "mean_chosen_minus_random": -0.02755371667444706,
+          "random_mean": -0.04094012578328451
+        },
+        {
+          "chosen_mean": 0.0435333251953125,
+          "layer": 5,
+          "mean_chosen_minus_random": 0.07060956954956055,
+          "random_mean": -0.027076244354248047
+        }
+      ],
+      "exact_per_prompt": [
+        0.004207611083984375,
+        -0.00323486328125,
+        -0.5259056091308594,
+        -0.003437042236328125
+      ],
+      "mean_exact": -0.13209247589111328,
+      "mean_random_neuron": 0.0011719067891438801,
+      "pairwise_preference_flips_after_ablation": 0,
+      "positive_effect_count": 1,
+      "row_count": 4
+    },
+    "validation_positive": {
+      "baseline_expected_token_top1_count": 0,
+      "correct_pairwise_preference_count": 4,
+      "cross_layer": [
+        {
+          "chosen_mean": -0.040329933166503906,
+          "layer": 0,
+          "mean_chosen_minus_random": 0.019173145294189453,
+          "random_mean": -0.05950307846069336
+        },
+        {
+          "chosen_mean": 0.0885763168334961,
+          "layer": 1,
+          "mean_chosen_minus_random": 0.17828480899333954,
+          "random_mean": -0.08970848719278972
+        },
+        {
+          "chosen_mean": 0.06913948059082031,
+          "layer": 2,
+          "mean_chosen_minus_random": 0.17203903757035732,
+          "random_mean": -0.10289955139160156
+        },
+        {
+          "chosen_mean": 0.13099288940429688,
+          "layer": 3,
+          "mean_chosen_minus_random": 0.16473976708948612,
+          "random_mean": -0.03374687830607096
+        },
+        {
+          "chosen_mean": 0.1317605972290039,
+          "layer": 4,
+          "mean_chosen_minus_random": 0.12013339810073376,
+          "random_mean": 0.011627197265625
+        },
+        {
+          "chosen_mean": 0.009222030639648438,
+          "layer": 5,
+          "mean_chosen_minus_random": 0.03783035185188055,
+          "random_mean": -0.028608322143554688
+        }
+      ],
+      "exact_per_prompt": [
+        -0.1842193603515625,
+        0.00848388671875,
+        0.729248046875,
+        -0.007404327392578125
+      ],
+      "mean_exact": 0.13652706146240234,
+      "mean_random_neuron": -0.0014774004618326824,
+      "pairwise_preference_flips_after_ablation": 0,
+      "positive_effect_count": 2,
+      "row_count": 4
+    }
+  },
+  "mechanism_checks_passed": true,
+  "model_readonly_modes_after_replay": {
+    "README.md": "0o444",
+    "config.json": "0o444",
+    "merges.txt": "0o444",
+    "model.safetensors": "0o444",
+    "tokenizer.json": "0o444",
+    "tokenizer_config.json": "0o444",
+    "vocab.json": "0o444"
+  },
+  "model_sha256": {
+    "README.md": {
+      "expected": "111f8d09ac565c745d91df88929147159eaa62b2e58e03943a2e03c1a1439ad7",
+      "observed_after_replay": "111f8d09ac565c745d91df88929147159eaa62b2e58e03943a2e03c1a1439ad7"
+    },
+    "config.json": {
+      "expected": "4ec5947c1d59fee6212cdf3b0ec1a53eac02092554c5ff0a733488cbd2c64f3a",
+      "observed_after_replay": "4ec5947c1d59fee6212cdf3b0ec1a53eac02092554c5ff0a733488cbd2c64f3a"
+    },
+    "merges.txt": {
+      "expected": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+      "observed_after_replay": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5"
+    },
+    "model.safetensors": {
+      "expected": "e1ff18884359fe8beb795a5f414feb85a6ce3d929ad019c0d958c039d2b94a1b",
+      "observed_after_replay": "e1ff18884359fe8beb795a5f414feb85a6ce3d929ad019c0d958c039d2b94a1b"
+    },
+    "tokenizer.json": {
+      "expected": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6",
+      "observed_after_replay": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+    },
+    "tokenizer_config.json": {
+      "expected": "5e04eb606e3a1583530a42e36c2a6b6615c86f34fe77e44d9ddeb43ff940931f",
+      "observed_after_replay": "5e04eb606e3a1583530a42e36c2a6b6615c86f34fe77e44d9ddeb43ff940931f"
+    },
+    "vocab.json": {
+      "expected": "196139668be63f3b5d6574427317ae82f612a97c5d1cdaf36ed2256dbf636783",
+      "observed_after_replay": "196139668be63f3b5d6574427317ae82f612a97c5d1cdaf36ed2256dbf636783"
+    }
+  },
+  "replay_and_pin_match": true,
+  "scope": "Same-host separate-process empirical replay and descriptive arithmetic",
+  "score_inventory_size": 18432,
+  "selected_layer": 0,
+  "selected_neuron": 874,
+  "shortlist_size": 8,
+  "source_sha256": "6372d218768d98f487bf89e41230da111bcb16532a8d95818796043f962ef8ce",
+  "study_status": "MEASURED"
+}

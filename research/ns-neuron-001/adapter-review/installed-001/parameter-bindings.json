@@ -1,0 +1,309 @@
+{
+  "checked": {
+    "transformer.h.0.attn.c_attn.bias": {
+      "checkpoint_key": "transformer.h.0.attn.c_attn.bias",
+      "equal": true
+    },
+    "transformer.h.0.attn.c_attn.weight": {
+      "checkpoint_key": "transformer.h.0.attn.c_attn.weight",
+      "equal": true
+    },
+    "transformer.h.0.attn.c_proj.bias": {
+      "checkpoint_key": "transformer.h.0.attn.c_proj.bias",
+      "equal": true
+    },
+    "transformer.h.0.attn.c_proj.weight": {
+      "checkpoint_key": "transformer.h.0.attn.c_proj.weight",
+      "equal": true
+    },
+    "transformer.h.0.ln_1.bias": {
+      "checkpoint_key": "transformer.h.0.ln_1.bias",
+      "equal": true
+    },
+    "transformer.h.0.ln_1.weight": {
+      "checkpoint_key": "transformer.h.0.ln_1.weight",
+      "equal": true
+    },
+    "transformer.h.0.ln_2.bias": {
+      "checkpoint_key": "transformer.h.0.ln_2.bias",
+      "equal": true
+    },
+    "transformer.h.0.ln_2.weight": {
+      "checkpoint_key": "transformer.h.0.ln_2.weight",
+      "equal": true
+    },
+    "transformer.h.0.mlp.c_fc.bias": {
+      "checkpoint_key": "transformer.h.0.mlp.c_fc.bias",
+      "equal": true
+    },
+    "transformer.h.0.mlp.c_fc.weight": {
+      "checkpoint_key": "transformer.h.0.mlp.c_fc.weight",
+      "equal": true
+    },
+    "transformer.h.0.mlp.c_proj.bias": {
+      "checkpoint_key": "transformer.h.0.mlp.c_proj.bias",
+      "equal": true
+    },
+    "transformer.h.0.mlp.c_proj.weight": {
+      "checkpoint_key": "transformer.h.0.mlp.c_proj.weight",
+      "equal": true
+    },
+    "transformer.h.1.attn.c_attn.bias": {
+      "checkpoint_key": "transformer.h.1.attn.c_attn.bias",
+      "equal": true
+    },
+    "transformer.h.1.attn.c_attn.weight": {
+      "checkpoint_key": "transformer.h.1.attn.c_attn.weight",
+      "equal": true
+    },
+    "transformer.h.1.attn.c_proj.bias": {
+      "checkpoint_key": "transformer.h.1.attn.c_proj.bias",
+      "equal": true
+    },
+    "transformer.h.1.attn.c_proj.weight": {
+      "checkpoint_key": "transformer.h.1.attn.c_proj.weight",
+      "equal": true
+    },
+    "transformer.h.1.ln_1.bias": {
+      "checkpoint_key": "transformer.h.1.ln_1.bias",
+      "equal": true
+    },
+    "transformer.h.1.ln_1.weight": {
+      "checkpoint_key": "transformer.h.1.ln_1.weight",
+      "equal": true
+    },
+    "transformer.h.1.ln_2.bias": {
+      "checkpoint_key": "transformer.h.1.ln_2.bias",
+      "equal": true
+    },
+    "transformer.h.1.ln_2.weight": {
+      "checkpoint_key": "transformer.h.1.ln_2.weight",
+      "equal": true
+    },
+    "transformer.h.1.mlp.c_fc.bias": {
+      "checkpoint_key": "transformer.h.1.mlp.c_fc.bias",
+      "equal": true
+    },
+    "transformer.h.1.mlp.c_fc.weight": {
+      "checkpoint_key": "transformer.h.1.mlp.c_fc.weight",
+      "equal": true
+    },
+    "transformer.h.1.mlp.c_proj.bias": {
+      "checkpoint_key": "transformer.h.1.mlp.c_proj.bias",
+      "equal": true
+    },
+    "transformer.h.1.mlp.c_proj.weight": {
+      "checkpoint_key": "transformer.h.1.mlp.c_proj.weight",
+      "equal": true
+    },
+    "transformer.h.2.attn.c_attn.bias": {
+      "checkpoint_key": "transformer.h.2.attn.c_attn.bias",
+      "equal": true
+    },
+    "transformer.h.2.attn.c_attn.weight": {
+      "checkpoint_key": "transformer.h.2.attn.c_attn.weight",
+      "equal": true
+    },
+    "transformer.h.2.attn.c_proj.bias": {
+      "checkpoint_key": "transformer.h.2.attn.c_proj.bias",
+      "equal": true
+    },
+    "transformer.h.2.attn.c_proj.weight": {
+      "checkpoint_key": "transformer.h.2.attn.c_proj.weight",
+      "equal": true
+    },
+    "transformer.h.2.ln_1.bias": {
+      "checkpoint_key": "transformer.h.2.ln_1.bias",
+      "equal": true
+    },
+    "transformer.h.2.ln_1.weight": {
+      "checkpoint_key": "transformer.h.2.ln_1.weight",
+      "equal": true
+    },
+    "transformer.h.2.ln_2.bias": {
+      "checkpoint_key": "transformer.h.2.ln_2.bias",
+      "equal": true
+    },
+    "transformer.h.2.ln_2.weight": {
+      "checkpoint_key": "transformer.h.2.ln_2.weight",
+      "equal": true
+    },
+    "transformer.h.2.mlp.c_fc.bias": {
+      "checkpoint_key": "transformer.h.2.mlp.c_fc.bias",
+      "equal": true
+    },
+    "transformer.h.2.mlp.c_fc.weight": {
+      "checkpoint_key": "transformer.h.2.mlp.c_fc.weight",
+      "equal": true
+    },
+    "transformer.h.2.mlp.c_proj.bias": {
+      "checkpoint_key": "transformer.h.2.mlp.c_proj.bias",
+      "equal": true
+    },
+    "transformer.h.2.mlp.c_proj.weight": {
+      "checkpoint_key": "transformer.h.2.mlp.c_proj.weight",
+      "equal": true
+    },
+    "transformer.h.3.attn.c_attn.bias": {
+      "checkpoint_key": "transformer.h.3.attn.c_attn.bias",
+      "equal": true
+    },
+    "transformer.h.3.attn.c_attn.weight": {
+      "checkpoint_key": "transformer.h.3.attn.c_attn.weight",
+      "equal": true
+    },
+    "transformer.h.3.attn.c_proj.bias": {
+      "checkpoint_key": "transformer.h.3.attn.c_proj.bias",
+      "equal": true
+    },
+    "transformer.h.3.attn.c_proj.weight": {
+      "checkpoint_key": "transformer.h.3.attn.c_proj.weight",
+      "equal": true
+    },
+    "transformer.h.3.ln_1.bias": {
+      "checkpoint_key": "transformer.h.3.ln_1.bias",
+      "equal": true
+    },
+    "transformer.h.3.ln_1.weight": {
+      "checkpoint_key": "transformer.h.3.ln_1.weight",
+      "equal": true
+    },
+    "transformer.h.3.ln_2.bias": {
+      "checkpoint_key": "transformer.h.3.ln_2.bias",
+      "equal": true
+    },
+    "transformer.h.3.ln_2.weight": {
+      "checkpoint_key": "transformer.h.3.ln_2.weight",
+      "equal": true
+    },
+    "transformer.h.3.mlp.c_fc.bias": {
+      "checkpoint_key": "transformer.h.3.mlp.c_fc.bias",
+      "equal": true
+    },
+    "transformer.h.3.mlp.c_fc.weight": {
+      "checkpoint_key": "transformer.h.3.mlp.c_fc.weight",
+      "equal": true
+    },
+    "transformer.h.3.mlp.c_proj.bias": {
+      "checkpoint_key": "transformer.h.3.mlp.c_proj.bias",
+      "equal": true
+    },
+    "transformer.h.3.mlp.c_proj.weight": {
+      "checkpoint_key": "transformer.h.3.mlp.c_proj.weight",
+      "equal": true
+    },
+    "transformer.h.4.attn.c_attn.bias": {
+      "checkpoint_key": "transformer.h.4.attn.c_attn.bias",
+      "equal": true
+    },
+    "transformer.h.4.attn.c_attn.weight": {
+      "checkpoint_key": "transformer.h.4.attn.c_attn.weight",
+      "equal": true
+    },
+    "transformer.h.4.attn.c_proj.bias": {
+      "checkpoint_key": "transformer.h.4.attn.c_proj.bias",
+      "equal": true
+    },
+    "transformer.h.4.attn.c_proj.weight": {
+      "checkpoint_key": "transformer.h.4.attn.c_proj.weight",
+      "equal": true
+    },
+    "transformer.h.4.ln_1.bias": {
+      "checkpoint_key": "transformer.h.4.ln_1.bias",
+      "equal": true
+    },
+    "transformer.h.4.ln_1.weight": {
+      "checkpoint_key": "transformer.h.4.ln_1.weight",
+      "equal": true
+    },
+    "transformer.h.4.ln_2.bias": {
+      "checkpoint_key": "transformer.h.4.ln_2.bias",
+      "equal": true
+    },
+    "transformer.h.4.ln_2.weight": {
+      "checkpoint_key": "transformer.h.4.ln_2.weight",
+      "equal": true
+    },
+    "transformer.h.4.mlp.c_fc.bias": {
+      "checkpoint_key": "transformer.h.4.mlp.c_fc.bias",
+      "equal": true
+    },
+    "transformer.h.4.mlp.c_fc.weight": {
+      "checkpoint_key": "transformer.h.4.mlp.c_fc.weight",
+      "equal": true
+    },
+    "transformer.h.4.mlp.c_proj.bias": {
+      "checkpoint_key": "transformer.h.4.mlp.c_proj.bias",
+      "equal": true
+    },
+    "transformer.h.4.mlp.c_proj.weight": {
+      "checkpoint_key": "transformer.h.4.mlp.c_proj.weight",
+      "equal": true
+    },
+    "transformer.h.5.attn.c_attn.bias": {
+      "checkpoint_key": "transformer.h.5.attn.c_attn.bias",
+      "equal": true
+    },
+    "transformer.h.5.attn.c_attn.weight": {
+      "checkpoint_key": "transformer.h.5.attn.c_attn.weight",
+      "equal": true
+    },
+    "transformer.h.5.attn.c_proj.bias": {
+      "checkpoint_key": "transformer.h.5.attn.c_proj.bias",
+      "equal": true
+    },
+    "transformer.h.5.attn.c_proj.weight": {
+      "checkpoint_key": "transformer.h.5.attn.c_proj.weight",
+      "equal": true
+    },
+    "transformer.h.5.ln_1.bias": {
+      "checkpoint_key": "transformer.h.5.ln_1.bias",
+      "equal": true
+    },
+    "transformer.h.5.ln_1.weight": {
+      "checkpoint_key": "transformer.h.5.ln_1.weight",
+      "equal": true
+    },
+    "transformer.h.5.ln_2.bias": {
+      "checkpoint_key": "transformer.h.5.ln_2.bias",
+      "equal": true
+    },
+    "transformer.h.5.ln_2.weight": {
+      "checkpoint_key": "transformer.h.5.ln_2.weight",
+      "equal": true
+    },
+    "transformer.h.5.mlp.c_fc.bias": {
+      "checkpoint_key": "transformer.h.5.mlp.c_fc.bias",
+      "equal": true
+    },
+    "transformer.h.5.mlp.c_fc.weight": {
+      "checkpoint_key": "transformer.h.5.mlp.c_fc.weight",
+      "equal": true
+    },
+    "transformer.h.5.mlp.c_proj.bias": {
+      "checkpoint_key": "transformer.h.5.mlp.c_proj.bias",
+      "equal": true
+    },
+    "transformer.h.5.mlp.c_proj.weight": {
+      "checkpoint_key": "transformer.h.5.mlp.c_proj.weight",
+      "equal": true
+    },
+    "transformer.ln_f.bias": {
+      "checkpoint_key": "transformer.ln_f.bias",
+      "equal": true
+    },
+    "transformer.ln_f.weight": {
+      "checkpoint_key": "transformer.ln_f.weight",
+      "equal": true
+    },
+    "transformer.wpe.weight": {
+      "checkpoint_key": "transformer.wpe.weight",
+      "equal": true
+    },
+    "transformer.wte.weight": {
+      "checkpoint_key": "transformer.wte.weight",
+      "equal": true
+    }
+  },
+  "unbound": []
+}

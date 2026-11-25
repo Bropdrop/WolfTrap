@@ -1,0 +1,19 @@
+test_neuron_probe (unittest.loader._FailedTest.test_neuron_probe) ... ERROR
+
+======================================================================
+ERROR: test_neuron_probe (unittest.loader._FailedTest.test_neuron_probe)
+----------------------------------------------------------------------
+ImportError: Failed to import test module: test_neuron_probe
+Traceback (most recent call last):
+  File "${BASE_PYTHON_PREFIX}/lib/python3.12/unittest/loader.py", line 137, in loadTestsFromName
+    module = __import__(module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^
+  File "${STUDY_ROOT}/pilot/test_neuron_probe.py", line 3, in <module>
+    import torch
+ModuleNotFoundError: No module named 'torch'
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+FAILED (errors=1)

@@ -1,0 +1,89 @@
+{
+  "layers": [
+    {
+      "input_shape": [
+        4,
+        6,
+        3072
+      ],
+      "layer": 0,
+      "max_abs": 0.0,
+      "output_shape": [
+        4,
+        6,
+        768
+      ]
+    },
+    {
+      "input_shape": [
+        4,
+        6,
+        3072
+      ],
+      "layer": 1,
+      "max_abs": 0.0,
+      "output_shape": [
+        4,
+        6,
+        768
+      ]
+    },
+    {
+      "input_shape": [
+        4,
+        6,
+        3072
+      ],
+      "layer": 2,
+      "max_abs": 0.0,
+      "output_shape": [
+        4,
+        6,
+        768
+      ]
+    },
+    {
+      "input_shape": [
+        4,
+        6,
+        3072
+      ],
+      "layer": 3,
+      "max_abs": 0.0,
+      "output_shape": [
+        4,
+        6,
+        768
+      ]
+    },
+    {
+      "input_shape": [
+        4,
+        6,
+        3072
+      ],
+      "layer": 4,
+      "max_abs": 0.0,
+      "output_shape": [
+        4,
+        6,
+        768
+      ]
+    },
+    {
+      "input_shape": [
+        4,
+        6,
+        3072
+      ],
+      "layer": 5,
+      "max_abs": 0.0,
+      "output_shape": [
+        4,
+        6,
+        768
+      ]
+    }
+  ],
+  "limit_from_pilot": 0.0001
+}

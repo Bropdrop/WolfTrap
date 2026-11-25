@@ -1,0 +1,39 @@
+[
+  {
+    "case": "version",
+    "args": [
+      "--version"
+    ],
+    "exit": 0,
+    "stdout": "0.3.0a1+ns.neuron.1\n",
+    "stderr": ""
+  },
+  {
+    "case": "help",
+    "args": [
+      "neuron",
+      "--help"
+    ],
+    "exit": 0,
+    "stdout": "usage: __main__.py neuron [-h] --model-dir MODEL_DIR --out OUT\n\noptions:\n  -h, --help            show this help message and exit\n  --model-dir MODEL_DIR\n                        verified local seven-file DistilGPT2 directory\n  --out OUT             fresh evidence directory\n",
+    "stderr": ""
+  },
+  {
+    "case": "missing-pins",
+    "args": [
+      "neuron",
+      "--model-dir",
+      "${SMOKE_TMP}/model",
+      "--out",
+      "${SMOKE_TMP}/refused"
+    ],
+    "exit": 2,
+    "stdout": "",
+    "stderr": "{\"status\": \"INCONCLUSIVE\", \"error_type\": \"ValueError\", \"reason\": \"model directory does not match the closed pinned inventory\"}\n",
+    "unexpected_exit": true
+  },
+  {
+    "case": "missing-pins-output-exists",
+    "value": false
+  }
+]
