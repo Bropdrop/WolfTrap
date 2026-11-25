@@ -1,0 +1,48 @@
+[
+  {
+    "argv": [
+      "sha256sum",
+      "-c",
+      "SHA256SUMS"
+    ],
+    "cwd": "${STUDY_ROOT}/pilot",
+    "exit_code": 0,
+    "phase": "manifest-check"
+  },
+  {
+    "argv": [
+      "${INPUT_ROOT}/fixture-venv/bin/python",
+      "-m",
+      "unittest",
+      "-v",
+      "test_neuron_probe"
+    ],
+    "cwd": "${STUDY_ROOT}/pilot",
+    "exit_code": 0,
+    "phase": "focused-tests"
+  },
+  {
+    "argv": [
+      "${INPUT_ROOT}/fixture-venv/bin/python",
+      "review_evidence.py"
+    ],
+    "cwd": "${STUDY_ROOT}/pilot",
+    "exit_code": 0,
+    "phase": "stored-arithmetic"
+  },
+  {
+    "argv": [
+      "${INPUT_ROOT}/fixture-venv/bin/python",
+      "neuron_probe.py",
+      "--mode",
+      "fixture",
+      "--replay-weights",
+      "evidence/fixture-run-001/fixture.safetensors",
+      "--out",
+      "${STUDY_ROOT}/fixture/attempt-002/saved-weights-replay"
+    ],
+    "cwd": "${STUDY_ROOT}/pilot",
+    "exit_code": 1,
+    "phase": "saved-weights"
+  }
+]

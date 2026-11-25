@@ -1,0 +1,49 @@
+{
+  "argv": [
+    "pretrained/verify_pretrained.py",
+    "--preflight",
+    "--model-dir",
+    "<pinned-model-dir>",
+    "--out",
+    "pretrained/recovered-input-check"
+  ],
+  "comparison_count": 0,
+  "executable": "<reference-python>",
+  "limits_absolute": {
+    "ablation_subtraction": 0.0005,
+    "batch_singleton": 0.0005,
+    "direction": 1e-06,
+    "gradient_fd": 0.04,
+    "noop": 1e-05,
+    "projection": 0.0001,
+    "reported_effect": 0.0005,
+    "score": 0.0001
+  },
+  "model_revision": "2290a62682d06624634c1f46a6ad5be0f47f38aa",
+  "model_sha256": {
+    "README.md": "111f8d09ac565c745d91df88929147159eaa62b2e58e03943a2e03c1a1439ad7",
+    "config.json": "4ec5947c1d59fee6212cdf3b0ec1a53eac02092554c5ff0a733488cbd2c64f3a",
+    "merges.txt": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+    "model.safetensors": "e1ff18884359fe8beb795a5f414feb85a6ce3d929ad019c0d958c039d2b94a1b",
+    "tokenizer.json": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6",
+    "tokenizer_config.json": "5e04eb606e3a1583530a42e36c2a6b6615c86f34fe77e44d9ddeb43ff940931f",
+    "vocab.json": "196139668be63f3b5d6574427317ae82f612a97c5d1cdaf36ed2256dbf636783"
+  },
+  "phase": "input_preflight",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "reviewer_sha256": "ba127b626abfad0d64a3859b6e9180fedae1008a0548b692137ae0157dcd9797",
+  "source_sha256": {
+    "neuron_probe.py": "6372d218768d98f487bf89e41230da111bcb16532a8d95818796043f962ef8ce",
+    "review_evidence.py": "64d04f7f40bc98f149d3fdd7ee38e7c9feba3a8ea4192f1a1408e7d0428233fe",
+    "test_neuron_probe.py": "1d3e38d115f4c954318b66611565a8d63f99b9402f9763d37cfd1284c3aa2027"
+  },
+  "status": "INPUT_PREFLIGHT_ONLY",
+  "versions": {
+    "numpy": "2.3.5",
+    "safetensors": "0.8.0",
+    "tokenizers": "0.23.3",
+    "torch": "2.15.0+cpu",
+    "transformers": "5.24.0"
+  }
+}

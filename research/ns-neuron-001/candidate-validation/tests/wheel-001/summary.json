@@ -1,0 +1,29 @@
+{
+  "wheel": "wolftrap_neuralscope-0.3.0a1+ns.neuron.1-py3-none-any.whl",
+  "size": 111621,
+  "sha256": "52d3f15f64be93668ccd3ee972748c2baad59ac55fd901a4ca61444707985ef5",
+  "runtime": "${INPUT_ROOT}/package-validation/venv/bin/python",
+  "study_status": "MEASURED",
+  "compared": {
+    "protocol.json": {
+      "standalone_sha256": "45d7425959432611354b4bcebde7a08625a5e7d2d992912e8089989ba57fd561",
+      "installed_sha256": "45d7425959432611354b4bcebde7a08625a5e7d2d992912e8089989ba57fd561"
+    },
+    "discovery.json": {
+      "standalone_sha256": "602dd73ddb0ebe60c71c0bd4358fda67f1c52a72d0179d1c62d5c1ad0fac037c",
+      "installed_sha256": "602dd73ddb0ebe60c71c0bd4358fda67f1c52a72d0179d1c62d5c1ad0fac037c"
+    },
+    "selection.json": {
+      "standalone_sha256": "03d17526a26d08ba238b2e594c0ebc91ebf8f1d98f6fad4b91dca0550fcbd02f",
+      "installed_sha256": "03d17526a26d08ba238b2e594c0ebc91ebf8f1d98f6fad4b91dca0550fcbd02f"
+    },
+    "results.json": {
+      "standalone_sha256": "96126215c388507c52c1d911c13453ec89df09c846802de8b0f2c7c912563bbb",
+      "installed_sha256": "96126215c388507c52c1d911c13453ec89df09c846802de8b0f2c7c912563bbb"
+    }
+  },
+  "byte_identical": true,
+  "wheel_retained_at": "${INPUT_ROOT}/package-validation/build-001/wheels/wolftrap_neuralscope-0.3.0a1+ns.neuron.1-py3-none-any.whl",
+  "manifest_sha256": "8e36c30aff823121058aad1cabd56eafe0a5f3caddc3d5871e45f62f7405726b",
+  "package_py_files_matched_to_candidate": 19
+}

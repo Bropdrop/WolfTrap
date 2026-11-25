@@ -1,0 +1,323 @@
+{
+  "excluded_records": [
+    {
+      "original_sha256": "eaa1fb3011680f732c2d8feb76c676cab5f17e32fdf113d1bac98bafaec8f1ef",
+      "reason": "Superseded acquisition artifacts, machine-specific setup or operational records."
+    },
+    {
+      "original_sha256": "6188aebce033123624887c77ba6af58f09f2370f2fb57b856158600abfd2f525",
+      "reason": "Superseded acquisition artifacts, machine-specific setup or operational records."
+    },
+    {
+      "original_sha256": "ac226e6f5c19ee04a76b42f78e5ba9d700ab896f4509f202d4aa026b69e5745b",
+      "reason": "Superseded acquisition artifacts, machine-specific setup or operational records."
+    },
+    {
+      "original_sha256": "58c76c279a0caae37ab0e3905be63b8b2a806d0c5c34870dd6a94b566ca76327",
+      "reason": "Superseded acquisition artifacts, machine-specific setup or operational records."
+    },
+    {
+      "original_sha256": "6c103968492be5c425b0494368f52d1adefee9d6980e3028e43f744369ff02f8",
+      "reason": "Superseded acquisition artifacts, machine-specific setup or operational records."
+    },
+    {
+      "original_sha256": "7fc2310f517c8b3d0adb5f60aef734418169659270efd52fe5cf13cb407e196e",
+      "reason": "Superseded acquisition artifacts, machine-specific setup or operational records."
+    },
+    {
+      "original_sha256": "bba4c349590dc729ee7065b3df1c51aa18ca6d7be7a393c6297fdea91a4f73d1",
+      "reason": "Superseded acquisition artifacts, machine-specific setup or operational records."
+    },
+    {
+      "original_sha256": "d868c2b50c951314797df9b42aee9bad40ea910322e1618db12dd7542fa4d6b2",
+      "reason": "Superseded acquisition artifacts, machine-specific setup or operational records."
+    },
+    {
+      "original_sha256": "9cdfd9a12fe2cff2889f953ad5685d03185b2120cb4ab0b3a5f599e7a8b89984",
+      "reason": "Superseded acquisition artifacts, machine-specific setup or operational records."
+    },
+    {
+      "original_sha256": "062c3db2e7a02007e86a97a52db066356112b5bcb86f01699381c875fac03234",
+      "reason": "Superseded acquisition artifacts, machine-specific setup or operational records."
+    },
+    {
+      "original_sha256": "4546596194153fbe58e3450f0afdae6b2b29f791a9387b88788c9b5897d79812",
+      "reason": "Superseded acquisition artifacts, machine-specific setup or operational records."
+    },
+    {
+      "original_sha256": "28cab3a5c72beba4d6c97bcd72291a11d226b664ee082449261aa78113036915",
+      "reason": "Superseded acquisition artifacts, machine-specific setup or operational records."
+    },
+    {
+      "original_sha256": "ce7aa9c79d02497ecbb29b074fee1db02782176d80c12922dcf2d6b9de8c2f5f",
+      "reason": "Superseded acquisition artifacts, machine-specific setup or operational records."
+    },
+    {
+      "original_sha256": "02fc0302523065741a55519ab2e43520cc84d291c058b91b1ae7e268ea4f7f21",
+      "reason": "Superseded acquisition artifacts, machine-specific setup or operational records."
+    },
+    {
+      "original_sha256": "e0a748e905487949c0465ca9d374cb7dcd1919a4537744d2861f1ec310a59e80",
+      "reason": "Superseded acquisition artifacts, machine-specific setup or operational records."
+    },
+    {
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "reason": "Superseded acquisition artifacts, machine-specific setup or operational records."
+    },
+    {
+      "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "reason": "Superseded acquisition artifacts, machine-specific setup or operational records."
+    },
+    {
+      "original_sha256": "540ed002db5babc97943ec2f778bfbb304e843a7a8b5d1e2adbc387cda95e7fe",
+      "reason": "Superseded acquisition artifacts, machine-specific setup or operational records."
+    }
+  ],
+  "included": {
+    "acquisition/README.md": {
+      "change": "New release and checkpoint verification guide.",
+      "public_sha256": "51da4dd9eef3862eeab1e77e367e762711675fb10c15bfd5a9f09e6cc4f714aa"
+    },
+    "acquisition/acquire_snapshot.py": {
+      "change": "Read the identical release pin from the public layout. Omit the local directory from the receipt.",
+      "original_sha256": "56329bf881e93c7f2905a9aee096cdc845e2a123a0aea6d688323a4c643553e5",
+      "public_sha256": "8db15a0776d00f3159a6844666fcec6df5e64e0803f1cd884f8fb637c5175607",
+      "source": "acquisition/acquire_snapshot.py"
+    },
+    "acquisition/distilgpt2-pin.json": {
+      "change": "Copied the historical specification into the standalone publication layout.",
+      "original_sha256": "2303d3e65bcec8b33b6ef998525807981daef4a96788416c56095fc22aa75745",
+      "public_sha256": "2303d3e65bcec8b33b6ef998525807981daef4a96788416c56095fc22aa75745",
+      "source": "recovered/wolftrap-neuralscope/examples/distilgpt2-pin.json"
+    },
+    "acquisition/model-attempt-001/README.md.json": {
+      "change": "verbatim",
+      "original_sha256": "454499e1806b16458c703114851278af83351b76081a4af81d1a0e83a98c6786",
+      "public_sha256": "454499e1806b16458c703114851278af83351b76081a4af81d1a0e83a98c6786",
+      "source": "acquisition/model-attempt-001/README.md.json"
+    },
+    "acquisition/model-attempt-001/config.json.json": {
+      "change": "verbatim",
+      "original_sha256": "2425313c55e3743e93ec5c3814c6ce86dd08ed829a6ce2c42da9ba77f3c29666",
+      "public_sha256": "2425313c55e3743e93ec5c3814c6ce86dd08ed829a6ce2c42da9ba77f3c29666",
+      "source": "acquisition/model-attempt-001/config.json.json"
+    },
+    "acquisition/model-attempt-001/merges.txt.json": {
+      "change": "verbatim",
+      "original_sha256": "bb3bfc3a69ca604992781c3ffa8c1e8419c2f4447915db047fa8cce9f6636b05",
+      "public_sha256": "bb3bfc3a69ca604992781c3ffa8c1e8419c2f4447915db047fa8cce9f6636b05",
+      "source": "acquisition/model-attempt-001/merges.txt.json"
+    },
+    "acquisition/model-attempt-001/model.safetensors.json": {
+      "change": "verbatim",
+      "original_sha256": "9c8dcd0aeac8ba8449856e2a752d0cb01b80dc303d55232f7289f9ac30283081",
+      "public_sha256": "9c8dcd0aeac8ba8449856e2a752d0cb01b80dc303d55232f7289f9ac30283081",
+      "source": "acquisition/model-attempt-001/model.safetensors.json"
+    },
+    "acquisition/model-attempt-001/summary.json": {
+      "change": "Removed local storage location.",
+      "original_sha256": "b8d60bcc4a6d008af8356b349090af0bb3ed7cfe5891a343cba9110043a4c3a3",
+      "public_sha256": "102a759d29eefc3f04e2c8770fa8beda18f1608ab6117d57e104f59002e35d35",
+      "source": "acquisition/model-attempt-001/summary.json"
+    },
+    "acquisition/model-attempt-001/tokenizer.json.json": {
+      "change": "verbatim",
+      "original_sha256": "8b51a4820b979e19b83c4e75db65b72154c69533001cb72fa84fe44b015b5fef",
+      "public_sha256": "8b51a4820b979e19b83c4e75db65b72154c69533001cb72fa84fe44b015b5fef",
+      "source": "acquisition/model-attempt-001/tokenizer.json.json"
+    },
+    "acquisition/model-attempt-001/tokenizer_config.json.json": {
+      "change": "verbatim",
+      "original_sha256": "111ceac16f17b8c9b9d5bde5cf41bd8df6b378bf5a7c550783f99661cb9cee31",
+      "public_sha256": "111ceac16f17b8c9b9d5bde5cf41bd8df6b378bf5a7c550783f99661cb9cee31",
+      "source": "acquisition/model-attempt-001/tokenizer_config.json.json"
+    },
+    "acquisition/model-attempt-001/vocab.json.json": {
+      "change": "verbatim",
+      "original_sha256": "61de18a3efffd53d2591a44e064364b73ee5423005f3811e04ce83eac2fb200e",
+      "public_sha256": "61de18a3efffd53d2591a44e064364b73ee5423005f3811e04ce83eac2fb200e",
+      "source": "acquisition/model-attempt-001/vocab.json.json"
+    },
+    "acquisition/release-bundle-check.json": {
+      "change": "verbatim",
+      "original_sha256": "5a7c5c14a7e0c4b19d73277f91131721c629e913c25ce6bc1ced4cba909b0c19",
+      "public_sha256": "5a7c5c14a7e0c4b19d73277f91131721c629e913c25ce6bc1ced4cba909b0c19",
+      "source": "acquisition/release-bundle-check.json"
+    },
+    "acquisition/release-recovery.json": {
+      "change": "Removed local input path. All extraction digests and component-manifest results are preserved.",
+      "original_sha256": "1db80919fdc2810f16d11b6cbdbfd21ea5a251d0ae36e8a1a4d089b98b6c3807",
+      "public_sha256": "fb8d24a26a9c5e4aa7d3ece4b44e64df2901e8ee97ee8522814a5e3bdff48f89",
+      "source": "acquisition/release-recovery.json"
+    },
+    "acquisition/verify_bundle.py": {
+      "change": "Portable verification against retained historical receipts. No local execution paths are required.",
+      "original_sha256": "4537d370c246ea4b5e35022c4ddf5c1292bce16800a800a73d0768f47005bbb2",
+      "public_sha256": "be69298ec6a168e3090c06f57ec4ef030912e8ca3b3ec53446931b4ad88f9683",
+      "source": "acquisition/verify_bundle.py"
+    },
+    "adapter-review/POST_ACQUISITION.md": {
+      "change": "Kept the scientific findings and supplied portable audit commands.",
+      "original_sha256": "cd95dc7c9cf132ed1d692e0f761521c8d29e6a8f71e1cff441a38042de72a047",
+      "public_sha256": "93bcc4c54cbfadc01b195e2e943666303704b7d0c5a8787136adce85b088a01d",
+      "source": "adapter-review/POST_ACQUISITION.md"
+    },
+    "adapter-review/REVIEW.md": {
+      "change": "Kept the pre-execution scientific design review and removed operational search details.",
+      "original_sha256": "65aabd1d4c6e478f14d05922006bcafdad07e7d7b6ef331c95b3c415a5844127",
+      "public_sha256": "d5fcbf3dfd934999b7e10bc2494fe4b3ace1478f4dbe2c32bfc5b49ce44b7564",
+      "source": "adapter-review/REVIEW.md"
+    },
+    "adapter-review/acquired-preflight.json": {
+      "change": "Removed interpreter location, recorded model presence as a boolean and made imported module paths package-relative.",
+      "original_sha256": "d257a05ced203dd0b74a49651e596b5b59a6a3ce39cfa9b5dc456ee60117aa14",
+      "public_sha256": "eb2e14d34d8bc309b84e9d26105a4f65cdbf205656fabdbf912922814bcc014e",
+      "source": "adapter-review/acquired-preflight.json"
+    },
+    "adapter-review/audit_installed.py": {
+      "change": "Emit package-relative source locations.",
+      "original_sha256": "e093a6eb37a850df34f218347e5f3c0129acd55c6b0ee3c677b2f437bb49dfe9",
+      "public_sha256": "1b4d48b283f36e3c740c24b7ce5f9c72398919bcd528bdfca80bde8ba623c70b",
+      "source": "adapter-review/audit_installed.py"
+    },
+    "adapter-review/installed-001.log": {
+      "change": "verbatim",
+      "original_sha256": "53f4bc20011a69f3f0f1976e67cbbcd5bcb022563742ed012ce17c8b71be469f",
+      "public_sha256": "53f4bc20011a69f3f0f1976e67cbbcd5bcb022563742ed012ce17c8b71be469f",
+      "source": "adapter-review/installed-001.log"
+    },
+    "adapter-review/installed-001/discovery-projections.json": {
+      "change": "verbatim",
+      "original_sha256": "31b5f83fd640ecad93526c193fafa674ce71efb71322ea67a0c56b0912e8690c",
+      "public_sha256": "31b5f83fd640ecad93526c193fafa674ce71efb71322ea67a0c56b0912e8690c",
+      "source": "adapter-review/installed-001/discovery-projections.json"
+    },
+    "adapter-review/installed-001/loaded.json": {
+      "change": "Made installed source locations package-relative.",
+      "original_sha256": "e57eba8fdeaefaf9df92d75985a905aaa65f224c3e6f571a1bf81b2ca28ae30f",
+      "public_sha256": "6a8a6154d2a42e8b7f708774a7de9e4a8ba1f8308e19df2da39d8475d01ac8bf",
+      "source": "adapter-review/installed-001/loaded.json"
+    },
+    "adapter-review/installed-001/parameter-bindings.json": {
+      "change": "verbatim",
+      "original_sha256": "9e50b80962bf996471c88271c4bfb070e41271f00b9c45c4f51f48a81d83769f",
+      "public_sha256": "9e50b80962bf996471c88271c4bfb070e41271f00b9c45c4f51f48a81d83769f",
+      "source": "adapter-review/installed-001/parameter-bindings.json"
+    },
+    "adapter-review/installed-001/tokenization.json": {
+      "change": "verbatim",
+      "original_sha256": "88a6246d6e8176cf4272dc0de2c921c7b9f1fe6611dc437cfcec67b0c829cb8c",
+      "public_sha256": "88a6246d6e8176cf4272dc0de2c921c7b9f1fe6611dc437cfcec67b0c829cb8c",
+      "source": "adapter-review/installed-001/tokenization.json"
+    },
+    "adapter-review/preflight.py": {
+      "change": "Emit portable dependency and model inventory metadata.",
+      "original_sha256": "31e1f133769dccd683665e3bac18c30eb16483255236255b1621eb6ec8ec3fb9",
+      "public_sha256": "eb876ad9ec54300aa02ee630ae62357672ad4503b89c58b90a7b69778879df76",
+      "source": "adapter-review/preflight.py"
+    },
+    "dependencies/README.md": {
+      "change": "Replaced local commands with exact wheel-receipt acquisition and offline installation commands.",
+      "original_sha256": "e2c28f9f237648ad57c96fa6d64a1154e54bc477ad58ebb47be8f7d381965c86",
+      "public_sha256": "3d17451a3e012b61ef1be33f9db30bc9aa7a91d6b7a209d5dfeb46999752077f",
+      "source": "dependencies/README.md"
+    },
+    "dependencies/acquire.py": {
+      "change": "Portable verification against retained historical receipts. No local execution paths are required.",
+      "original_sha256": "245f3fe8cd56e4796089066038cd8373e0723b9ad445b9b4d57d53299aa264b6",
+      "public_sha256": "5f5f3b790e1fcca1075b605094a653d0e3485a80c07cb41296b65473b1680dee",
+      "source": "dependencies/acquire.py"
+    },
+    "dependencies/acquisition-differences.json": {
+      "change": "verbatim",
+      "original_sha256": "60290d95281fd8fd4d78adbcefba5f9582887893b9c840d37309bdc4d5ac4e45",
+      "public_sha256": "60290d95281fd8fd4d78adbcefba5f9582887893b9c840d37309bdc4d5ac4e45",
+      "source": "dependencies/acquisition-differences.json"
+    },
+    "dependencies/dependency-check.log": {
+      "change": "verbatim",
+      "original_sha256": "9261363b733079a641c2e4cc9bc46ffa1d8336945a87f807b6cf68847dbc9b09",
+      "public_sha256": "9261363b733079a641c2e4cc9bc46ffa1d8336945a87f807b6cf68847dbc9b09",
+      "source": "dependencies/dependency-check.log"
+    },
+    "dependencies/implementation-receipts.json": {
+      "change": "Rendered installed file locations as package-relative names or basenames. Digests and versions are preserved.",
+      "original_sha256": "c52248e4c9ecac3b70fc5ac39b7b4cbc9c9070449619f9971747c0fe2c25c4f7",
+      "public_sha256": "261256d8621272d396a3c8c5d951f8e89675e9d6471ead90903f407f103c4af3",
+      "source": "dependencies/implementation-receipts.json"
+    },
+    "dependencies/install_offline.sh": {
+      "change": "verbatim",
+      "original_sha256": "8005ced282f5f54975a6cf6f02e80dd5f3f01686ffed5d4bff79abb014d794f7",
+      "public_sha256": "8005ced282f5f54975a6cf6f02e80dd5f3f01686ffed5d4bff79abb014d794f7",
+      "source": "dependencies/install_offline.sh"
+    },
+    "dependencies/installed-packages.json": {
+      "change": "verbatim",
+      "original_sha256": "776bf8b7207a233b6765c790a7debc0ad053f79d4ad00748035d222fec8e82ba",
+      "public_sha256": "776bf8b7207a233b6765c790a7debc0ad053f79d4ad00748035d222fec8e82ba",
+      "source": "dependencies/installed-packages.json"
+    },
+    "dependencies/reference/requirements.lock": {
+      "change": "verbatim",
+      "original_sha256": "0f0f7341881623b050d8025391a109f9bd43f5089884e1f0e70f5fb26cb8ad78",
+      "public_sha256": "0f0f7341881623b050d8025391a109f9bd43f5089884e1f0e70f5fb26cb8ad78",
+      "source": "dependencies/reference/requirements.lock"
+    },
+    "dependencies/reference/version-lock.txt": {
+      "change": "Copied the historical specification into the standalone publication layout.",
+      "original_sha256": "8d0337f309c40542179666b552320ee366893d73a3c4c5c381cb84297c271e8b",
+      "public_sha256": "8d0337f309c40542179666b552320ee366893d73a3c4c5c381cb84297c271e8b",
+      "source": "recovered/wolftrap-neuralscope/requirements-reference-lock.txt"
+    },
+    "dependencies/reference/wheel-receipts.json": {
+      "change": "verbatim",
+      "original_sha256": "c2567346cd84d233a025f5c78b47dba84458b56c73de4b0f0fd784ff2614e81f",
+      "public_sha256": "c2567346cd84d233a025f5c78b47dba84458b56c73de4b0f0fd784ff2614e81f",
+      "source": "dependencies/reference/wheel-receipts.json"
+    },
+    "dependencies/runtime-check.json": {
+      "change": "Removed local interpreter location.",
+      "original_sha256": "b5148ecfffaf1d08b1eb8943b14668baa2f75c960915148e56e46b3d486086cf",
+      "public_sha256": "1607f0c4f569e456486402bed89b47813f6626ed6265471cb46c7b527a5602de",
+      "source": "dependencies/runtime-check.json"
+    },
+    "dependencies/verify_installed.py": {
+      "change": "Emit package-relative filenames in runtime checks.",
+      "original_sha256": "f5029a4b40a945ebd3f85e448a56c3870f1a1b49c063f2d44b1994f0a9373f84",
+      "public_sha256": "1bf68fc482967159a51675b1da948a541421bbe5229d4a798a4a59cdc059a842",
+      "source": "dependencies/verify_installed.py"
+    },
+    "fixture-deps/README.md": {
+      "change": "Documented the failed dependency import and portable, hash-locked acquisition and installation.",
+      "original_sha256": "7fe40ee12a5583b2305e4abe70f78298bd74880619c9b46d43b7a68930aa5b9c",
+      "public_sha256": "c02589148d1621cf0aa6632fe4abfcc560cdbebf5a0361f2918689cf569600e1",
+      "source": "fixture-deps/README.md"
+    },
+    "fixture-deps/additional-requirement.txt": {
+      "change": "verbatim",
+      "original_sha256": "b484a40a00c91ebdf6bd9346ae5c6b4d8fe60984f956d8527dac66e7c3506efa",
+      "public_sha256": "b484a40a00c91ebdf6bd9346ae5c6b4d8fe60984f956d8527dac66e7c3506efa",
+      "source": "fixture-deps/additional-requirement.txt"
+    },
+    "fixture-deps/official-cpu-wheel.url": {
+      "change": "verbatim",
+      "original_sha256": "3d63783c5759de9b80d5576b740cc98375ac09f21b28c299e101b8eecc3d5ab8",
+      "public_sha256": "3d63783c5759de9b80d5576b740cc98375ac09f21b28c299e101b8eecc3d5ab8",
+      "source": "fixture-deps/official-cpu-wheel.url"
+    },
+    "fixture-deps/requirements-hashed.txt": {
+      "change": "verbatim",
+      "original_sha256": "015e617f9679e65bc605cdfba64cc1a5989e7222a604561b856161b9d4109d32",
+      "public_sha256": "015e617f9679e65bc605cdfba64cc1a5989e7222a604561b856161b9d4109d32",
+      "source": "fixture-deps/requirements-hashed.txt"
+    },
+    "fixture-deps/verified-wheels.json": {
+      "change": "verbatim",
+      "original_sha256": "d445ad928e640b4ba7f805a49582fdddb42af1751aed8626d8ecfc8b36058c64",
+      "public_sha256": "d445ad928e640b4ba7f805a49582fdddb42af1751aed8626d8ecfc8b36058c64",
+      "source": "fixture-deps/verified-wheels.json"
+    }
+  },
+  "scope": "Input acquisition, adapter verification and dependency evidence. Source path labels identify files in the study evidence. Excluded operational records are represented only by SHA-256."
+}

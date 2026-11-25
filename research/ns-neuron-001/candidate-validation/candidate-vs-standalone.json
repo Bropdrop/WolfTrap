@@ -1,0 +1,55 @@
+{
+  "all_match": true,
+  "candidate_seal": {
+    "concurrency_scope": "quiescent local evidence directory",
+    "externally_pinned_receipt": true,
+    "files": 4,
+    "manifest_sha256": "8e36c30aff823121058aad1cabd56eafe0a5f3caddc3d5871e45f62f7405726b",
+    "publisher_authenticated": false,
+    "scientific_claims_verified": false,
+    "status": "INTEGRITY_MATCH"
+  },
+  "cli": {
+    "manifest_sha256": "8e36c30aff823121058aad1cabd56eafe0a5f3caddc3d5871e45f62f7405726b",
+    "mechanism_checks_passed": true,
+    "output": "${STUDY_ROOT}/candidate-validation/pretrained-run",
+    "selection": {
+      "direction_norm": 10.131855010986328,
+      "layer": 0,
+      "neuron": 874,
+      "sign": 1
+    },
+    "status": "MEASURED"
+  },
+  "closed_output_names": [
+    "discovery.json",
+    "manifest.json",
+    "protocol.json",
+    "results.json",
+    "selection.json"
+  ],
+  "numerical_evidence": {
+    "discovery.json": {
+      "byte_identical_to_replay": true,
+      "byte_identical_to_study": true,
+      "candidate_sha256": "602dd73ddb0ebe60c71c0bd4358fda67f1c52a72d0179d1c62d5c1ad0fac037c"
+    },
+    "protocol.json": {
+      "byte_identical_to_replay": true,
+      "byte_identical_to_study": true,
+      "candidate_sha256": "45d7425959432611354b4bcebde7a08625a5e7d2d992912e8089989ba57fd561"
+    },
+    "results.json": {
+      "byte_identical_to_replay": true,
+      "byte_identical_to_study": true,
+      "candidate_sha256": "96126215c388507c52c1d911c13453ec89df09c846802de8b0f2c7c912563bbb"
+    },
+    "selection.json": {
+      "byte_identical_to_replay": true,
+      "byte_identical_to_study": true,
+      "candidate_sha256": "03d17526a26d08ba238b2e594c0ebc91ebf8f1d98f6fad4b91dca0550fcbd02f"
+    }
+  },
+  "packaged_pilot_sha256": "6372d218768d98f487bf89e41230da111bcb16532a8d95818796043f962ef8ce",
+  "pilot_source_sha256": "6372d218768d98f487bf89e41230da111bcb16532a8d95818796043f962ef8ce"
+}

@@ -1,0 +1,83 @@
+{
+  "attention-summary_evidence": {
+    "added": {},
+    "changed": {},
+    "removed": [],
+    "unchanged": 14
+  },
+  "candidate_vs_historical_archive": {
+    "added": {
+      "NEURON.md": "cbc25162d332d81f031540ba34d739a2b7f8d6c29872d96842e1d6b55ec66fa0",
+      "examples/neuron-protocol.json": "45d7425959432611354b4bcebde7a08625a5e7d2d992912e8089989ba57fd561",
+      "historical/v0.3.0a1-bundle-inventory.json": "fd6eb55d488502667475d9bb680e5b66cddbc7220ceeb2fa60c4f42de0ce657a",
+      "neuralscope/neuron_probe.py": "6372d218768d98f487bf89e41230da111bcb16532a8d95818796043f962ef8ce",
+      "neuralscope/neuron_run.py": "b57e86dffd90cf5d7100573a8b591339496bccbecaaa7e7a1df1d85c73f4d5d3",
+      "tests/test_neuron_cli.py": "00abedcacbf745eada1565ff59601baafd240301cbfd844c345fc58eadadc83e",
+      "tests/test_neuron_probe.py": "a17d4430d8bd60ab9cb5044463d9bf5ea6aaf396880bd9ca39638063eff08b35"
+    },
+    "changed": {
+      "README.md": [
+        "15a8af0c97d3023ba6dbc0f34f7e037a486dca0820421f81bb42716955f5d1b8",
+        "6567507d872c0338929566330cd15f96dab0117c2f79f9224224331f03d72b88"
+      ],
+      "build_bundle.py": [
+        "6497da50ad79af2e5072c1d04c3f0b5ec3e855859649c5bd731d0fe4f12452fe",
+        "8298826ba226e4fc6b3144dd00cbfca9db5af44ef7e751a8dfa77e4fab547575"
+      ],
+      "neuralscope/__init__.py": [
+        "f1d7d8e80d7f191eb12e1ef125389bf6ea55d9aad4636663988bfa31a6d68ec6",
+        "fa88704f5597a2e59715701e97e5b0a0ffddf59e3aa379f98736ecc3d78593b5"
+      ],
+      "neuralscope/__main__.py": [
+        "b8d12771be525746818ab2fe2dcb526dd990d3e3556f648c322f26a2cb670f3d",
+        "ed4556b4d76290d09158063c95d324303a347a96c1515fdf1508c23a2b9d743c"
+      ],
+      "pyproject.toml": [
+        "4ad31ea2f870720288f02af869e8511135c5e70b365cae1938fcd6f8189c5a58",
+        "3c68cedb2dcdd546d8e6278e299b9a0e4882a165ad787993239b2410dcf5b290"
+      ]
+    },
+    "removed": [
+      "bundle-inventory.json"
+    ],
+    "unchanged": 84
+  },
+  "example-api-dry-run_evidence": {
+    "added": {},
+    "changed": {},
+    "removed": [],
+    "unchanged": 3
+  },
+  "example-run_evidence": {
+    "added": {},
+    "changed": {},
+    "removed": [],
+    "unchanged": 14
+  },
+  "historical_zip_sha256": "392dcc885ac32688d803d841335a29f2e545db9ccb99f86e42841e1c0f77121a",
+  "pilot_vs_archive": {
+    "added": {},
+    "changed": {},
+    "removed": [],
+    "unchanged": 21
+  },
+  "pilot_zip_sha256": "f291462a6a9bf8d161c9585ffca2c9be7ed3f196e07a6e8cd12398a4757c3c0a",
+  "pretrained-summary_evidence": {
+    "added": {},
+    "changed": {},
+    "removed": [],
+    "unchanged": 11
+  },
+  "recovered_vs_archive": {
+    "added": {},
+    "changed": {},
+    "removed": [],
+    "unchanged": 90
+  },
+  "standalone_replay_vs_run": {
+    "added": {},
+    "changed": {},
+    "removed": [],
+    "unchanged": 4
+  }
+}

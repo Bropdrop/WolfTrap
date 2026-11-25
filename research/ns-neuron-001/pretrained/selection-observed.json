@@ -1,0 +1,11 @@
+{
+  "stage": "Independent observation of the pilot artifact directory before reviewer loading",
+  "files": [
+    "discovery.json",
+    "protocol.json",
+    "results.json",
+    "selection.json"
+  ],
+  "observed_utc": "2026-11-25T00:28:55.024560+00:00",
+  "selection_sha256": "03d17526a26d08ba238b2e594c0ebc91ebf8f1d98f6fad4b91dca0550fcbd02f"
+}

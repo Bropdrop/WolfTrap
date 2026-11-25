@@ -1,0 +1,49 @@
+{
+  "closed_manifest_inventory_excluding_manifest": true,
+  "focused_suite_exit": 0,
+  "manifest_entry_count": 20,
+  "manifest_passed": true,
+  "replay_comparison": {
+    "discovery.json": {
+      "current_sha256": null,
+      "historical_sha256": "5c789c82b31c42dc0373bda7083a070bf3bb89ef6311ef35a7ea943535734bd6"
+    },
+    "fixture.safetensors": {
+      "current_sha256": null,
+      "historical_sha256": "04270ba8a80677b53e08219936971a6a9e1aeb3f0ece2f42f18af3db0d8129aa"
+    },
+    "protocol.json": {
+      "current_sha256": null,
+      "historical_sha256": "4cf16e607fd33278732e3a3e6323552d22323f8b91cdc225808f64da4184cbea"
+    },
+    "results.json": {
+      "current_sha256": null,
+      "historical_sha256": "ede0508fe0bd3d99a35c17a574afe71682fdd019a7aea2b299d562f5833c3abc"
+    },
+    "selection.json": {
+      "current_sha256": null,
+      "historical_sha256": "b5d3eb176c7727baa559f2ff0bf3aabd628d92a133598c0ad65cd18e291549d2"
+    }
+  },
+  "saved_weights_replay_exit": 1,
+  "stored_arithmetic_exit": 0,
+  "stored_arithmetic_json_matches_historical": true,
+  "stored_arithmetic_stdout_byte_matches_historical": true,
+  "test_names_in_source": [
+    "test_split_disjoint",
+    "test_matched_contexts",
+    "test_projection_orientation",
+    "test_zero_only_one_index_and_position",
+    "test_invalid_neuron",
+    "test_invalid_direction",
+    "test_delta_batch_and_only_final_position",
+    "test_margin_rejects_invalid_targets",
+    "test_noop",
+    "test_projection_reconstruct",
+    "test_ablate_matches_subtract",
+    "test_hooks_removed_on_failure",
+    "test_local_gradient_matches_finite_difference",
+    "test_pins_reject_modified_missing_extra",
+    "test_no_model_mutation"
+  ]
+}

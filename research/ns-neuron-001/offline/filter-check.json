@@ -1,0 +1,50 @@
+{
+  "child": {
+    "all_denied_with_eperm": true,
+    "errno_by_operation": {
+      "AF_INET/SOCK_DGRAM": 1,
+      "AF_INET/SOCK_STREAM": 1,
+      "AF_INET6/SOCK_DGRAM": 1,
+      "AF_INET6/SOCK_STREAM": 1,
+      "AF_NETLINK/SOCK_DGRAM": 1,
+      "AF_NETLINK/SOCK_STREAM": 1,
+      "AF_UNIX/SOCK_DGRAM": 1,
+      "AF_UNIX/SOCK_STREAM": 1,
+      "connect": 1,
+      "io_uring_enter": 1,
+      "io_uring_register": 1,
+      "io_uring_setup": 1,
+      "socketpair": 1
+    },
+    "pid": 1385,
+    "proc_status": {
+      "NoNewPrivs": 1,
+      "Seccomp": 2,
+      "Seccomp_filters": 2
+    }
+  },
+  "parent": {
+    "all_denied_with_eperm": true,
+    "errno_by_operation": {
+      "AF_INET/SOCK_DGRAM": 1,
+      "AF_INET/SOCK_STREAM": 1,
+      "AF_INET6/SOCK_DGRAM": 1,
+      "AF_INET6/SOCK_STREAM": 1,
+      "AF_NETLINK/SOCK_DGRAM": 1,
+      "AF_NETLINK/SOCK_STREAM": 1,
+      "AF_UNIX/SOCK_DGRAM": 1,
+      "AF_UNIX/SOCK_STREAM": 1,
+      "connect": 1,
+      "io_uring_enter": 1,
+      "io_uring_register": 1,
+      "io_uring_setup": 1,
+      "socketpair": 1
+    },
+    "pid": 1384,
+    "proc_status": {
+      "NoNewPrivs": 1,
+      "Seccomp": 2,
+      "Seccomp_filters": 2
+    }
+  }
+}

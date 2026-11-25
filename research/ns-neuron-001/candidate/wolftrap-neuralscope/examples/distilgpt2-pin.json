@@ -1,0 +1,47 @@
+{
+  "files": {
+    "README.md": {
+      "bytes": 10992,
+      "git_blob_sha1": "86f7c9ae4422de194e6b6104b0acc9c8b9d2cd0a",
+      "sha256": "111f8d09ac565c745d91df88929147159eaa62b2e58e03943a2e03c1a1439ad7"
+    },
+    "config.json": {
+      "bytes": 762,
+      "git_blob_sha1": "fed02aafb76b46aa5da200966f9e42262e758023",
+      "sha256": "4ec5947c1d59fee6212cdf3b0ec1a53eac02092554c5ff0a733488cbd2c64f3a"
+    },
+    "merges.txt": {
+      "bytes": 456318,
+      "git_blob_sha1": "226b0752cac7789c48f0cb3ec53eda48b7be36cc",
+      "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5"
+    },
+    "model.safetensors": {
+      "bytes": 352824413,
+      "git_blob_sha1": "4a39931cbb1d0cbf2285b4f9afde21d69fca9dce",
+      "sha256": "e1ff18884359fe8beb795a5f414feb85a6ce3d929ad019c0d958c039d2b94a1b"
+    },
+    "tokenizer.json": {
+      "bytes": 1355256,
+      "git_blob_sha1": "4b988bccc9dc5adacd403c00b4704976196548f8",
+      "sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+    },
+    "tokenizer_config.json": {
+      "bytes": 26,
+      "git_blob_sha1": "be4d21d94f3b4687e5a54d84bf6ab46ed0f8defd",
+      "sha256": "5e04eb606e3a1583530a42e36c2a6b6615c86f34fe77e44d9ddeb43ff940931f"
+    },
+    "vocab.json": {
+      "bytes": 1042301,
+      "git_blob_sha1": "1f1d9aaca301414e7f6c9396df506798ff4eb9a6",
+      "sha256": "196139668be63f3b5d6574427317ae82f612a97c5d1cdaf36ed2256dbf636783"
+    }
+  },
+  "license": "Apache-2.0",
+  "license_basis": "The pinned README model card declares Apache-2.0; the repository has no standalone LICENSE file.",
+  "pin_basis": "Small files matched the repository API Git blob IDs; the weight SHA-256 and size come from its Git LFS pointer. Acquisition verifies every full file against SHA-256 and size.",
+  "publisher_signature": "NOT_VERIFIED",
+  "repo_id": "distilbert/distilgpt2",
+  "revision": "2290a62682d06624634c1f46a6ad5be0f47f38aa",
+  "schema": "wolftrap.neuralscope.pretrained-pin/v1",
+  "source_url": "https://huggingface.co/distilbert/distilgpt2/tree/2290a62682d06624634c1f46a6ad5be0f47f38aa"
+}

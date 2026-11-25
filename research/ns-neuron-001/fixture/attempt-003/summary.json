@@ -1,0 +1,60 @@
+{
+  "closed_manifest_inventory_excluding_manifest": true,
+  "focused_suite_exit": 0,
+  "manifest_entry_count": 20,
+  "manifest_passed": true,
+  "replay_comparison": {
+    "discovery.json": {
+      "byte_identical": false,
+      "changed_leaves": 160,
+      "current_sha256": "50d5ea7506b1f8e1a41b75d3131997934e2f01e4f62b336e633a3e37b68b6ae2",
+      "historical_sha256": "5c789c82b31c42dc0373bda7083a070bf3bb89ef6311ef35a7ea943535734bd6",
+      "max_numeric_difference_including_changed_ids": 1.9073486328125e-06
+    },
+    "fixture.safetensors": {
+      "byte_identical": true,
+      "current_sha256": "04270ba8a80677b53e08219936971a6a9e1aeb3f0ece2f42f18af3db0d8129aa",
+      "historical_sha256": "04270ba8a80677b53e08219936971a6a9e1aeb3f0ece2f42f18af3db0d8129aa"
+    },
+    "protocol.json": {
+      "byte_identical": true,
+      "current_sha256": "4cf16e607fd33278732e3a3e6323552d22323f8b91cdc225808f64da4184cbea",
+      "historical_sha256": "4cf16e607fd33278732e3a3e6323552d22323f8b91cdc225808f64da4184cbea"
+    },
+    "results.json": {
+      "byte_identical": false,
+      "changed_leaves": 40,
+      "current_sha256": "128da8150c4f7e0475210bac98963e5c794133bed1366fecc481e5946c2eccf0",
+      "historical_sha256": "ede0508fe0bd3d99a35c17a574afe71682fdd019a7aea2b299d562f5833c3abc",
+      "max_numeric_difference_including_changed_ids": 8.940696716308594e-08
+    },
+    "selection.json": {
+      "byte_identical": false,
+      "changed_leaves": 3,
+      "current_sha256": "c049462e1546745dc2c22e2dc42d3d1d6eff02d2de1db2c67589c5e790df18f6",
+      "historical_sha256": "b5d3eb176c7727baa559f2ff0bf3aabd628d92a133598c0ad65cd18e291549d2",
+      "max_numeric_difference_including_changed_ids": 1.1920928955078125e-07
+    }
+  },
+  "saved_weights_replay_exit": 0,
+  "stored_arithmetic_exit": 0,
+  "stored_arithmetic_json_matches_historical": true,
+  "stored_arithmetic_stdout_byte_matches_historical": true,
+  "test_names_in_source": [
+    "test_split_disjoint",
+    "test_matched_contexts",
+    "test_projection_orientation",
+    "test_zero_only_one_index_and_position",
+    "test_invalid_neuron",
+    "test_invalid_direction",
+    "test_delta_batch_and_only_final_position",
+    "test_margin_rejects_invalid_targets",
+    "test_noop",
+    "test_projection_reconstruct",
+    "test_ablate_matches_subtract",
+    "test_hooks_removed_on_failure",
+    "test_local_gradient_matches_finite_difference",
+    "test_pins_reject_modified_missing_extra",
+    "test_no_model_mutation"
+  ]
+}

@@ -1,0 +1,324 @@
+{
+  "builder_performs_inference": false,
+  "cases": {
+    "cases": [
+      {
+        "alternative_id": 4077,
+        "alternative_text": " green",
+        "clean_ids": [
+          2266,
+          4171,
+          2266,
+          4171,
+          2266
+        ],
+        "clean_text": " red blue red blue red",
+        "corrupt_ids": [
+          2266,
+          4077,
+          2266,
+          4077,
+          2266
+        ],
+        "corrupt_text": " red green red green red",
+        "id": "repeat_colors",
+        "positions": [
+          4
+        ],
+        "split": "discovery",
+        "target_id": 4171,
+        "target_text": " blue"
+      },
+      {
+        "alternative_id": 6512,
+        "alternative_text": " bird",
+        "clean_ids": [
+          3797,
+          3290,
+          3797,
+          3290,
+          3797
+        ],
+        "clean_text": " cat dog cat dog cat",
+        "corrupt_ids": [
+          3797,
+          6512,
+          3797,
+          6512,
+          3797
+        ],
+        "corrupt_text": " cat bird cat bird cat",
+        "id": "repeat_animals",
+        "positions": [
+          4
+        ],
+        "split": "discovery",
+        "target_id": 3290,
+        "target_text": " dog"
+      },
+      {
+        "alternative_id": 10598,
+        "alternative_text": " Rome",
+        "clean_ids": [
+          6342,
+          3576,
+          6342,
+          3576,
+          6342
+        ],
+        "clean_text": " Paris London Paris London Paris",
+        "corrupt_ids": [
+          6342,
+          10598,
+          6342,
+          10598,
+          6342
+        ],
+        "corrupt_text": " Paris Rome Paris Rome Paris",
+        "id": "repeat_cities",
+        "positions": [
+          4
+        ],
+        "split": "discovery",
+        "target_id": 3576,
+        "target_text": " London"
+      },
+      {
+        "alternative_id": 7586,
+        "alternative_text": " brown",
+        "clean_ids": [
+          2042,
+          2330,
+          2042,
+          2330,
+          2042
+        ],
+        "clean_text": " black white black white black",
+        "corrupt_ids": [
+          2042,
+          7586,
+          2042,
+          7586,
+          2042
+        ],
+        "corrupt_text": " black brown black brown black",
+        "id": "repeat_shades",
+        "positions": [
+          4
+        ],
+        "split": "validation",
+        "target_id": 2330,
+        "target_text": " white"
+      },
+      {
+        "alternative_id": 3491,
+        "alternative_text": " star",
+        "clean_ids": [
+          4252,
+          8824,
+          4252,
+          8824,
+          4252
+        ],
+        "clean_text": " sun moon sun moon sun",
+        "corrupt_ids": [
+          4252,
+          3491,
+          4252,
+          3491,
+          4252
+        ],
+        "corrupt_text": " sun star sun star sun",
+        "id": "repeat_sky",
+        "positions": [
+          4
+        ],
+        "split": "validation",
+        "target_id": 8824,
+        "target_text": " moon"
+      },
+      {
+        "alternative_id": 1115,
+        "alternative_text": " three",
+        "clean_ids": [
+          530,
+          734,
+          530,
+          734,
+          530
+        ],
+        "clean_text": " one two one two one",
+        "corrupt_ids": [
+          530,
+          1115,
+          530,
+          1115,
+          530
+        ],
+        "corrupt_text": " one three one three one",
+        "id": "repeat_numbers",
+        "positions": [
+          4
+        ],
+        "split": "validation",
+        "target_id": 734,
+        "target_text": " two"
+      }
+    ],
+    "claim_scope": "six predeclared repeated-token contrasts in one pinned pretrained DistilGPT2; final-position MLP patches only",
+    "minimum_gap": 0.05,
+    "schema": "wolftrap.neuralscope.cases/v1",
+    "sites": [
+      "blocks.0.mlp_out",
+      "blocks.1.mlp_out",
+      "blocks.2.mlp_out",
+      "blocks.3.mlp_out",
+      "blocks.4.mlp_out",
+      "blocks.5.mlp_out"
+    ]
+  },
+  "freeze_requirement": "write and retain this registration's SHA-256 before the first pretrained-model inference; no independent timestamp is asserted",
+  "model_identity": {
+    "files": {
+      "README.md": {
+        "bytes": 10992,
+        "git_blob_sha1": "86f7c9ae4422de194e6b6104b0acc9c8b9d2cd0a",
+        "sha256": "111f8d09ac565c745d91df88929147159eaa62b2e58e03943a2e03c1a1439ad7"
+      },
+      "config.json": {
+        "bytes": 762,
+        "git_blob_sha1": "fed02aafb76b46aa5da200966f9e42262e758023",
+        "sha256": "4ec5947c1d59fee6212cdf3b0ec1a53eac02092554c5ff0a733488cbd2c64f3a"
+      },
+      "merges.txt": {
+        "bytes": 456318,
+        "git_blob_sha1": "226b0752cac7789c48f0cb3ec53eda48b7be36cc",
+        "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5"
+      },
+      "model.safetensors": {
+        "bytes": 352824413,
+        "git_blob_sha1": "4a39931cbb1d0cbf2285b4f9afde21d69fca9dce",
+        "sha256": "e1ff18884359fe8beb795a5f414feb85a6ce3d929ad019c0d958c039d2b94a1b"
+      },
+      "tokenizer.json": {
+        "bytes": 1355256,
+        "git_blob_sha1": "4b988bccc9dc5adacd403c00b4704976196548f8",
+        "sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+      },
+      "tokenizer_config.json": {
+        "bytes": 26,
+        "git_blob_sha1": "be4d21d94f3b4687e5a54d84bf6ab46ed0f8defd",
+        "sha256": "5e04eb606e3a1583530a42e36c2a6b6615c86f34fe77e44d9ddeb43ff940931f"
+      },
+      "vocab.json": {
+        "bytes": 1042301,
+        "git_blob_sha1": "1f1d9aaca301414e7f6c9396df506798ff4eb9a6",
+        "sha256": "196139668be63f3b5d6574427317ae82f612a97c5d1cdaf36ed2256dbf636783"
+      }
+    },
+    "license": "Apache-2.0",
+    "license_basis": "The pinned README model card declares Apache-2.0; the repository has no standalone LICENSE file.",
+    "pin_basis": "Small files matched the repository API Git blob IDs; the weight SHA-256 and size come from its Git LFS pointer. Acquisition verifies every full file against SHA-256 and size.",
+    "publisher_signature": "NOT_VERIFIED",
+    "repo_id": "distilbert/distilgpt2",
+    "revision": "2290a62682d06624634c1f46a6ad5be0f47f38aa",
+    "schema": "wolftrap.neuralscope.pretrained-pin/v1",
+    "source_url": "https://huggingface.co/distilbert/distilgpt2/tree/2290a62682d06624634c1f46a6ad5be0f47f38aa"
+  },
+  "protocol": {
+    "baseline_behavior_support": "report clean_margin>0 and corrupt_margin<0 separately from a positive clean-minus-corrupt gap",
+    "controls": [
+      "clean self-copy",
+      "corrupt self-copy",
+      "reverse donor patch",
+      "zero ablation"
+    ],
+    "exclude_or_rewrite_failed_cases": false,
+    "hypothesis": "copying a final-position MLP output from the clean to the changed pattern can increase the clean continuation's logit contrast",
+    "inactive_control": "none: no pretrained component is assumed inactive",
+    "limits": [
+      "six related synthetic contrasts are not independent population samples",
+      "selected sites are whole MLP outputs, not individual neurons or a complete circuit",
+      "zero ablation may be outside the model's ordinary activation distribution",
+      "restoration ratios are unbounded effect measures, not probabilities or safety scores"
+    ],
+    "metric": "final-token logit(target) minus logit(alternative)",
+    "minimum_baseline_gap": 0.05,
+    "normalization": "(patched_corrupt_margin-corrupt_margin)/(clean_margin-corrupt_margin)",
+    "population_confidence_interval": null,
+    "relative_gap_floor": "1e-5 * max(abs(clean_margin),abs(corrupt_margin),1)",
+    "retain_all_cases": true,
+    "selection": "largest mean normalized restoration among all six MLP sites with all three discovery cases normalizable; select no site unless the best mean is strictly positive",
+    "selection_tie_break": "first site in the predeclared ascending-layer list",
+    "self_patch_margin_atol": 1e-06,
+    "study_forward_passes": 192,
+    "validation": "report the selected site's three untouched validation cases and every tested site; never select or adjust cases using validation outcomes"
+  },
+  "reference_comparison": {
+    "activation_atol": 0.0002,
+    "activation_rtol": 0.0002,
+    "additional_unhooked_reference_baselines": 12,
+    "argmax_requirement": "not a gate: numerical tolerance and near-tie margins are reported",
+    "arithmetic": "CPU float32; deterministic evaluation; eager attention; no KV cache",
+    "baseline_cases": "both inputs of all six cases, twelve full-logit arrays",
+    "failure_policy": "retain the failing comparison and stop interpretation; changing tolerances requires a separate declared experiment",
+    "forward_passes_per_engine": 57,
+    "full_logit_max_abs_error": 0.001,
+    "full_logit_rmse": 0.0001,
+    "hooked_baseline_vs_unhooked": "bitwise identical",
+    "intervention_case": "repeat_colors",
+    "intervention_operations": [
+      "restore",
+      "reverse",
+      "self_clean",
+      "self_corrupt",
+      "ablate"
+    ],
+    "intervention_positions": [
+      4
+    ],
+    "intervention_sites": [
+      "blocks.0.attn.head.0",
+      "blocks.2.attn.head.0",
+      "blocks.5.attn.head.0",
+      "blocks.0.mlp_out",
+      "blocks.1.mlp_out",
+      "blocks.2.mlp_out",
+      "blocks.3.mlp_out",
+      "blocks.4.mlp_out",
+      "blocks.5.mlp_out"
+    ],
+    "patch_donor_policy": "each engine uses its own captured donor and recipient; baseline activation discrepancies are checked separately",
+    "self_patch_margin_atol": 1e-06,
+    "total_reference_forward_passes": 69
+  },
+  "schema": "wolftrap.neuralscope.pretrained-study/v1",
+  "title": "DistilGPT2 fixed repeated-token continuation study",
+  "tokenizer_identity": {
+    "add_special_tokens": false,
+    "files": {
+      "merges.txt": {
+        "bytes": 456318,
+        "git_blob_sha1": "226b0752cac7789c48f0cb3ec53eda48b7be36cc",
+        "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5"
+      },
+      "tokenizer.json": {
+        "bytes": 1355256,
+        "git_blob_sha1": "4b988bccc9dc5adacd403c00b4704976196548f8",
+        "sha256": "8414cab924d8b9b33013f0d221c5862f365ee9be39c5c2bfae8a5a9e970478a6"
+      },
+      "tokenizer_config.json": {
+        "bytes": 26,
+        "git_blob_sha1": "be4d21d94f3b4687e5a54d84bf6ab46ed0f8defd",
+        "sha256": "5e04eb606e3a1583530a42e36c2a6b6615c86f34fe77e44d9ddeb43ff940931f"
+      },
+      "vocab.json": {
+        "bytes": 1042301,
+        "git_blob_sha1": "1f1d9aaca301414e7f6c9396df506798ff4eb9a6",
+        "sha256": "196139668be63f3b5d6574427317ae82f612a97c5d1cdaf36ed2256dbf636783"
+      }
+    },
+    "repo_id": "distilbert/distilgpt2",
+    "revision": "2290a62682d06624634c1f46a6ad5be0f47f38aa"
+  }
+}

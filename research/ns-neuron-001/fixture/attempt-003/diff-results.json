@@ -1,0 +1,241 @@
+[
+  {
+    "after": "c049462e1546745dc2c22e2dc42d3d1d6eff02d2de1db2c67589c5e790df18f6",
+    "before": "b5d3eb176c7727baa559f2ff0bf3aabd628d92a133598c0ad65cd18e291549d2",
+    "path": "$.selection_sha256"
+  },
+  {
+    "absolute_difference": 9.313225746154785e-10,
+    "after": -0.01011903490871191,
+    "before": -0.010119035840034485,
+    "path": "$.validation.validation_control.first_order_prediction[1]"
+  },
+  {
+    "absolute_difference": 9.313225746154785e-10,
+    "after": -0.010447213426232338,
+    "before": -0.010447212494909763,
+    "path": "$.validation.validation_control.first_order_prediction[2]"
+  },
+  {
+    "absolute_difference": 1.862645149230957e-09,
+    "after": -0.010780280455946922,
+    "before": -0.010780282318592072,
+    "path": "$.validation.validation_control.first_order_prediction[3]"
+  },
+  {
+    "absolute_difference": 9.313225746154785e-10,
+    "after": -0.011708504520356655,
+    "before": -0.01170850545167923,
+    "path": "$.validation.validation_control.first_order_prediction[4]"
+  },
+  {
+    "absolute_difference": 1.862645149230957e-09,
+    "after": -0.009542190469801426,
+    "before": -0.009542188607156277,
+    "path": "$.validation.validation_control.first_order_prediction[5]"
+  },
+  {
+    "absolute_difference": 9.313225746154785e-10,
+    "after": -0.010819444432854652,
+    "before": -0.010819443501532078,
+    "path": "$.validation.validation_control.first_order_prediction[6]"
+  },
+  {
+    "absolute_difference": 9.313225746154785e-10,
+    "after": -0.011158658191561699,
+    "before": -0.011158657260239124,
+    "path": "$.validation.validation_control.first_order_prediction[7]"
+  },
+  {
+    "absolute_difference": 9.313225746154785e-10,
+    "after": -0.011232094839215279,
+    "before": -0.011232095770537853,
+    "path": "$.validation.validation_control.first_order_prediction[10]"
+  },
+  {
+    "absolute_difference": 1.4901161193847656e-08,
+    "after": 0.23246292769908905,
+    "before": 0.23246294260025024,
+    "path": "$.validation.validation_control.mechanism_checks.gradient[0]"
+  },
+  {
+    "absolute_difference": 2.9802322387695312e-08,
+    "after": 0.22859320044517517,
+    "before": 0.22859323024749756,
+    "path": "$.validation.validation_control.mechanism_checks.gradient[1]"
+  },
+  {
+    "absolute_difference": 1.4901161193847656e-08,
+    "after": 0.23789729177951813,
+    "before": 0.23789727687835693,
+    "path": "$.validation.validation_control.mechanism_checks.gradient[4]"
+  },
+  {
+    "absolute_difference": 5.960464477539063e-08,
+    "after": 0.21500025689601898,
+    "before": 0.2150001972913742,
+    "path": "$.validation.validation_control.mechanism_checks.gradient[5]"
+  },
+  {
+    "absolute_difference": 1.4901161193847656e-08,
+    "after": 0.24075552821159363,
+    "before": 0.24075551331043243,
+    "path": "$.validation.validation_control.mechanism_checks.gradient[6]"
+  },
+  {
+    "absolute_difference": 2.9802322387695312e-08,
+    "after": 0.2545144259929657,
+    "before": 0.2545144557952881,
+    "path": "$.validation.validation_control.mechanism_checks.gradient[7]"
+  },
+  {
+    "absolute_difference": 1.4901161193847656e-08,
+    "after": 0.2223181575536728,
+    "before": 0.22231817245483398,
+    "path": "$.validation.validation_control.mechanism_checks.gradient[9]"
+  },
+  {
+    "absolute_difference": 2.9802322387695312e-08,
+    "after": 0.25551968812942505,
+    "before": 0.25551971793174744,
+    "path": "$.validation.validation_control.mechanism_checks.gradient[10]"
+  },
+  {
+    "absolute_difference": 2.9802322387695312e-08,
+    "after": 0.2538302540779114,
+    "before": 0.25383028388023376,
+    "path": "$.validation.validation_control.mechanism_checks.gradient[11]"
+  },
+  {
+    "absolute_difference": 2.9802322387695312e-08,
+    "after": 0.0005310177803039551,
+    "before": 0.0005310475826263428,
+    "path": "$.validation.validation_control.mechanism_checks.gradient_vs_central_difference_max_abs"
+  },
+  {
+    "absolute_difference": 2.60770320892334e-08,
+    "after": 0.05384339019656181,
+    "before": 0.0538434162735939,
+    "path": "$.validation.validation_positive.first_order_prediction[0]"
+  },
+  {
+    "absolute_difference": 2.60770320892334e-08,
+    "after": 0.058999061584472656,
+    "before": 0.058999087661504745,
+    "path": "$.validation.validation_positive.first_order_prediction[1]"
+  },
+  {
+    "absolute_difference": 3.725290298461914e-09,
+    "after": 0.05834059417247772,
+    "before": 0.058340590447187424,
+    "path": "$.validation.validation_positive.first_order_prediction[3]"
+  },
+  {
+    "absolute_difference": 5.21540641784668e-08,
+    "after": 0.05102350190281868,
+    "before": 0.05102355405688286,
+    "path": "$.validation.validation_positive.first_order_prediction[4]"
+  },
+  {
+    "absolute_difference": 1.1175870895385742e-08,
+    "after": 0.05272476375102997,
+    "before": 0.052724774926900864,
+    "path": "$.validation.validation_positive.first_order_prediction[5]"
+  },
+  {
+    "absolute_difference": 1.4901161193847656e-08,
+    "after": 0.053410228341817856,
+    "before": 0.05341024324297905,
+    "path": "$.validation.validation_positive.first_order_prediction[6]"
+  },
+  {
+    "absolute_difference": 7.450580596923828e-09,
+    "after": 0.06305713951587677,
+    "before": 0.06305714696645737,
+    "path": "$.validation.validation_positive.first_order_prediction[7]"
+  },
+  {
+    "absolute_difference": 7.450580596923828e-09,
+    "after": 0.05102589353919029,
+    "before": 0.05102590098977089,
+    "path": "$.validation.validation_positive.first_order_prediction[8]"
+  },
+  {
+    "absolute_difference": 7.450580596923828e-09,
+    "after": 0.057411544024944305,
+    "before": 0.05741153657436371,
+    "path": "$.validation.validation_positive.first_order_prediction[9]"
+  },
+  {
+    "absolute_difference": 2.60770320892334e-08,
+    "after": 0.052592407912015915,
+    "before": 0.052592433989048004,
+    "path": "$.validation.validation_positive.first_order_prediction[10]"
+  },
+  {
+    "absolute_difference": 1.862645149230957e-08,
+    "after": 0.05355503410100937,
+    "before": 0.05355505272746086,
+    "path": "$.validation.validation_positive.first_order_prediction[11]"
+  },
+  {
+    "absolute_difference": 4.470348358154297e-08,
+    "after": 0.10800299793481827,
+    "before": 0.10800304263830185,
+    "path": "$.validation.validation_positive.mechanism_checks.gradient[0]"
+  },
+  {
+    "absolute_difference": 6.705522537231445e-08,
+    "after": 0.11512382328510284,
+    "before": 0.11512389034032822,
+    "path": "$.validation.validation_positive.mechanism_checks.gradient[1]"
+  },
+  {
+    "absolute_difference": 7.450580596923828e-09,
+    "after": 0.11649734526872635,
+    "before": 0.11649733781814575,
+    "path": "$.validation.validation_positive.mechanism_checks.gradient[3]"
+  },
+  {
+    "absolute_difference": 8.940696716308594e-08,
+    "after": 0.10362697392702103,
+    "before": 0.10362706333398819,
+    "path": "$.validation.validation_positive.mechanism_checks.gradient[4]"
+  },
+  {
+    "absolute_difference": 1.4901161193847656e-08,
+    "after": 0.09789144992828369,
+    "before": 0.09789146482944489,
+    "path": "$.validation.validation_positive.mechanism_checks.gradient[5]"
+  },
+  {
+    "absolute_difference": 1.4901161193847656e-08,
+    "after": 0.10888956487178802,
+    "before": 0.10888957977294922,
+    "path": "$.validation.validation_positive.mechanism_checks.gradient[6]"
+  },
+  {
+    "absolute_difference": 7.450580596923828e-09,
+    "after": 0.1239825189113617,
+    "before": 0.12398252636194229,
+    "path": "$.validation.validation_positive.mechanism_checks.gradient[7]"
+  },
+  {
+    "absolute_difference": 2.9802322387695312e-08,
+    "after": 0.11051367968320847,
+    "before": 0.11051364988088608,
+    "path": "$.validation.validation_positive.mechanism_checks.gradient[9]"
+  },
+  {
+    "absolute_difference": 3.725290298461914e-08,
+    "after": 0.10612167418003082,
+    "before": 0.10612171143293381,
+    "path": "$.validation.validation_positive.mechanism_checks.gradient[10]"
+  },
+  {
+    "absolute_difference": 1.4901161193847656e-08,
+    "after": 0.00037825852632522583,
+    "before": 0.0003782734274864197,
+    "path": "$.validation.validation_positive.mechanism_checks.gradient_vs_central_difference_max_abs"
+  }
+]

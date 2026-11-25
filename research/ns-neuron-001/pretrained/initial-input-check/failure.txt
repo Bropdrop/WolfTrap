@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "pretrained/verify_pretrained.py", line 462, in main
+    pin_model(args.model_dir, pins)
+  File "pretrained/verify_pretrained.py", line 52, in pin_model
+    require(path.is_dir(), f"Missing pinned model directory: {path}")
+  File "pretrained/verify_pretrained.py", line 39, in require
+    raise ValueError(message)
+ValueError: Missing pinned model directory: <original-unavailable-model-dir>

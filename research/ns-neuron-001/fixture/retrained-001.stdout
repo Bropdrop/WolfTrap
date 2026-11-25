@@ -1,0 +1,11 @@
+{
+  "status": "MEASURED",
+  "mode": "fixture",
+  "selection": {
+    "layer": 1,
+    "neuron": 19,
+    "sign": 1,
+    "direction_norm": 0.5030826926231384
+  },
+  "mechanism_checks_passed": true
+}

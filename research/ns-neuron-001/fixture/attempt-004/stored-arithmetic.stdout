@@ -1,0 +1,41 @@
+{
+  "replayed_files": 5,
+  "scope": "stored evidence arithmetic and binding review; no fresh scientific or runtime execution",
+  "selected": {
+    "layer": 1,
+    "neuron": 19
+  },
+  "status": "ARTIFACT_CONSISTENCY_MATCH",
+  "summaries": {
+    "validation_control": {
+      "cross_layer": [
+        {
+          "layer": 0,
+          "mean_selected_minus_random": 0.12706167126695314
+        },
+        {
+          "layer": 1,
+          "mean_selected_minus_random": 0.12182262850304444
+        }
+      ],
+      "mean_exact_margin_decrease": -0.010871211687723795,
+      "mean_random_neuron_decrease": 0.005808472633361816,
+      "positive_sign_count": 0
+    },
+    "validation_positive": {
+      "cross_layer": [
+        {
+          "layer": 0,
+          "mean_selected_minus_random": 0.07467706936101119
+        },
+        {
+          "layer": 1,
+          "mean_selected_minus_random": 0.07435491432746251
+        }
+      ],
+      "mean_exact_margin_decrease": 0.05761432647705078,
+      "mean_random_neuron_decrease": -0.004820042186313205,
+      "positive_sign_count": 12
+    }
+  }
+}

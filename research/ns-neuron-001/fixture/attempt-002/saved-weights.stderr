@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "${STUDY_ROOT}/pilot/neuron_probe.py", line 225, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "${STUDY_ROOT}/pilot/neuron_probe.py", line 212, in main
+    from safetensors.torch import save_file,load_file
+  File "${INPUT_ROOT}/fixture-venv/lib/python3.13/site-packages/safetensors/torch.py", line 5, in <module>
+    from packaging.version import Version
+ModuleNotFoundError: No module named 'packaging'

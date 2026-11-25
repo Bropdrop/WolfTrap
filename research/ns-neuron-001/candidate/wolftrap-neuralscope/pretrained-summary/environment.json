@@ -1,0 +1,86 @@
+{
+  "duration_seconds": 37.303914595000606,
+  "machine": "x86_64",
+  "numpy": "2.3.5",
+  "peak_process_rss_kib": 1166048,
+  "peak_rss_scope": "whole process, including both engines; reported in KiB only on Linux",
+  "platform": "Linux",
+  "python": "3.12.14",
+  "reference": {
+    "attention_implementation": "eager",
+    "baseline_instrumentation": "observing hooks; no replacement when unpatched",
+    "cache_enabled": false,
+    "device": "cpu",
+    "dtype": "float32",
+    "evaluation_mode": true,
+    "head_intervention": "HF c_proj output + (replacement - original head contribution)",
+    "implementation": "transformers.GPT2LMHeadModel",
+    "model_downloads": false,
+    "model_repository_code_executed": false,
+    "modeling_gpt2_sha256": "7b7ad00ce7f7be4283704b4aaeccdbd0d637981af1e8694f3a8c1aa5c3c4253b",
+    "numpy": "2.3.5",
+    "torch": "2.15.0+cpu",
+    "transformers": "5.24.0",
+    "validated_excluded_buffers": [],
+    "validation_shared_with": "neuralscope.core.GPT2Model (no forward reuse)"
+  },
+  "source_files": {
+    "__init__.py": {
+      "bytes": 106,
+      "sha256": "2252d7ecfd5aeb079f52679e492d597f866335bd8d53c84e35346d80f5d49f76"
+    },
+    "__main__.py": {
+      "bytes": 10561,
+      "sha256": "48239d9fc3f20e7f4adfab71a5a0970b8a554260798a33223c5b676c222e7419"
+    },
+    "api_lab.py": {
+      "bytes": 22478,
+      "sha256": "94a6c284537ec03f8f4751c940ba93cae7b47554d5961378eec7b2f7a798a6e4"
+    },
+    "core.py": {
+      "bytes": 17304,
+      "sha256": "1e1db1505c6a3baaf682edfb890d7d0271821943c6cfb8d3edfb7c6e97168e87"
+    },
+    "evidence.py": {
+      "bytes": 7171,
+      "sha256": "4370e8acff85f91fe401fc15415f3d3950a6915080e517c6f1b99be9e2c6ab9d"
+    },
+    "experiment.py": {
+      "bytes": 16762,
+      "sha256": "60cfc9c4f5d25e9a34aa2322805e635c1782e6912dc61761bd1aa2294794b9f8"
+    },
+    "pretrained.py": {
+      "bytes": 12236,
+      "sha256": "47bf1029d9b7c9a17f79edb9c9ce898eaf67f3c73f9b61323d8a5aaee21f3946"
+    },
+    "pretrained_report.py": {
+      "bytes": 19575,
+      "sha256": "0cd0032941fe3306b88e05772c6a3f248941a254ccaecf6ec3baa5f2564e9e51"
+    },
+    "qualification.py": {
+      "bytes": 20021,
+      "sha256": "7505f8e284fed1e04a0d27605d7a79f3161486f0d8cbe6b4d2447d75ba1838e4"
+    },
+    "reference.py": {
+      "bytes": 17618,
+      "sha256": "d2171de73886e6b24894d880f2d9d7ebe967d3a6abbd37bd716102ca02925c9b"
+    },
+    "report.py": {
+      "bytes": 4193,
+      "sha256": "d9639f66dc1ee7a11e36e2212166a5b2134f197a919703a80cf1d54cfacf292f"
+    },
+    "study.py": {
+      "bytes": 15848,
+      "sha256": "19001a741dd8d3d82c97e0c30f5bb41eb3d799ba1ab89b36f9132c6bc777009f"
+    },
+    "weights.py": {
+      "bytes": 17649,
+      "sha256": "9fe4a08ab02c059d4dee111e5fcc96ad0fd345abc85e53aa0e8a26f0e01739df"
+    }
+  },
+  "thread_environment": {
+    "MKL_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "status": "MATCH",
+  "scope": "separate process, same host, same saved weights and runtime; not external reproduction",
+  "files": [
+    {
+      "file": "fixture.safetensors",
+      "sha256": "04270ba8a80677b53e08219936971a6a9e1aeb3f0ece2f42f18af3db0d8129aa",
+      "byte_identical": true
+    },
+    {
+      "file": "protocol.json",
+      "sha256": "4cf16e607fd33278732e3a3e6323552d22323f8b91cdc225808f64da4184cbea",
+      "byte_identical": true
+    },
+    {
+      "file": "discovery.json",
+      "sha256": "5c789c82b31c42dc0373bda7083a070bf3bb89ef6311ef35a7ea943535734bd6",
+      "byte_identical": true
+    },
+    {
+      "file": "selection.json",
+      "sha256": "b5d3eb176c7727baa559f2ff0bf3aabd628d92a133598c0ad65cd18e291549d2",
+      "byte_identical": true
+    },
+    {
+      "file": "results.json",
+      "sha256": "ede0508fe0bd3d99a35c17a574afe71682fdd019a7aea2b299d562f5833c3abc",
+      "byte_identical": true
+    }
+  ]
+}

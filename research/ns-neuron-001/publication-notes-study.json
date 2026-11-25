@@ -1,0 +1,89 @@
+{
+  "directories": [
+    "cross-engine",
+    "pretrained",
+    "pretrained-runs",
+    "scoring-review",
+    "offline",
+    "pilot",
+    "report"
+  ],
+  "source_file_count": 108,
+  "published_file_count": 108,
+  "byte_identical_files": 98,
+  "changed": [
+    {
+      "file": "cross-engine/README.md",
+      "original_sha256": "0747ad59c3351af98ac08a70c0c856299084fe66445b320e2d9897ef4599d21a",
+      "public_sha256": "c46310e16a42aae57a394ab79361ac4d5cc3002b8cd4625c535ec4b855972cad",
+      "note": "Document portable wrapper paths and inputs."
+    },
+    {
+      "file": "cross-engine/replay.sh",
+      "original_sha256": "708d39456964d9d90bf4f9bfcc5a3f395ffc6aaf262c81d1cf1740a9c3a445e2",
+      "public_sha256": "bcee2367ff86b05ae388112df0b489e37dc47020a6c2e48b257e4b7dc9f6b390",
+      "note": "The public wrapper uses an activated environment or NS_PYTHON and requires NS_MODEL."
+    },
+    {
+      "file": "cross-engine/run.sh",
+      "original_sha256": "1eabb371d6c3a9bd7940e65b379c614ac3d93a25d3bb84ad59873ed7f7da417b",
+      "public_sha256": "6f2f2156d0a205c49361dcf17e26f36235bf5ae37bb796edc73562ecc5e3cf50",
+      "note": "The public wrapper uses an activated environment or NS_PYTHON and requires NS_MODEL."
+    },
+    {
+      "file": "pretrained/README.md",
+      "original_sha256": "fc1c3cede6da060fffb66763e046705d1220565506b65bb8d1dd842ef5117dda",
+      "public_sha256": "b05ea0182540e5a1def9e5de7b9af73d4a15c84a59cb294742375f52546af8d6",
+      "note": "Reproduction examples use portable environment variables in place of host-local interpreter and model paths."
+    },
+    {
+      "file": "pretrained/initial-input-check/audit.json",
+      "original_sha256": "74ccef9a8dff3da1aecb5be92efea3e65b7561a79d134ec0960f53f8c8137de2",
+      "public_sha256": "5ea9a35404c530d5ce69533cf610a308a6ccd6f0e186fbd673aff6d079dec10a",
+      "note": "Public copy replaces host-local paths. All underlying comparisons, errors, and observations are retained."
+    },
+    {
+      "file": "pretrained/initial-input-check/failure.txt",
+      "original_sha256": "117e1015a9b25e06f84a65ed7496030bfbe144ae1036fd94692ce2ebe11ed476",
+      "public_sha256": "53f1728d6454aa9a5f2a9edc2980837df655f91e83c589e0e02614f3a66b8d09",
+      "note": "Public copy replaces host-local paths. All underlying comparisons, errors, and observations are retained."
+    },
+    {
+      "file": "pretrained/recovered-input-check/audit.json",
+      "original_sha256": "a90c58f007f0acf33043490357f4946c8693287eb60fb7242a34208e6f4f5996",
+      "public_sha256": "e530374ff2bd68585a24592954d33130d86fbfa55e858af3e70532b20ac559d8",
+      "note": "Public copy replaces host-local paths. All underlying comparisons, errors, and observations are retained."
+    },
+    {
+      "file": "pretrained/review-001/audit.json",
+      "original_sha256": "c481f765fdb6bfeafa6b48381a4524444b34cd1b92bdace2f94d03dd176d162c",
+      "public_sha256": "f5936727203d49b9409014a62579921201c00b60e97846fb3036f4ccf19758ab",
+      "note": "Public copy replaces host-local paths. All underlying comparisons, errors, and observations are retained."
+    },
+    {
+      "file": "pretrained/review-002/audit.json",
+      "original_sha256": "4b4a1ff9211cbcd455839af393eaff7c1d2cfe59607c92fdd7b6947413000894",
+      "public_sha256": "469310da61b309b8a5471b4e789ec97828665b9ee9d463ed64db491f9d30a38b",
+      "note": "Public copy replaces host-local paths. All underlying comparisons, errors, and observations are retained."
+    },
+    {
+      "file": "pretrained-runs/RUNS.md",
+      "original_sha256": "9094aa7b19f1f3681c9b6b73dfb53387d3aed0fd3119463e11d4d79af35e1dff",
+      "public_sha256": "7a3e9c8b26ccafba18c12d9f489f6567c9d502533494bd94ff96d2eb405c9816",
+      "note": "Reproduction examples use portable environment variables in place of host-local interpreter and model paths."
+    }
+  ],
+  "excluded": [],
+  "pilot_manifest_entries_verified": 20,
+  "binary_review": {
+    "cross_engine_npz_files": 8,
+    "non_object_numpy_float32_arrays": 992,
+    "scoring_numpy_arrays": 1,
+    "scoring_dtype": "float32",
+    "pilot_fixture_safetensors_files": 2,
+    "pilot_tensors_per_file": 30,
+    "pilot_dtype": "F32",
+    "figure_png_metadata": "Matplotlib software identifier and DPI"
+  },
+  "note": "Scientific controls, measurement source, hash assertions, both complete pretrained runs, intermediate traces, historical fixture evidence, and generated CSVs were preserved byte-for-byte. Public examples use environment variables. Angle-bracket placeholders in audit reports denote redacted host-local paths."
+}

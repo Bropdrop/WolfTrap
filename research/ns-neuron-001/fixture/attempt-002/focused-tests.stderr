@@ -1,0 +1,20 @@
+test_ablate_matches_subtract (test_neuron_probe.TestNeuronProbe.test_ablate_matches_subtract) ... ok
+test_delta_batch_and_only_final_position (test_neuron_probe.TestNeuronProbe.test_delta_batch_and_only_final_position) ... ok
+test_hooks_removed_on_failure (test_neuron_probe.TestNeuronProbe.test_hooks_removed_on_failure) ... ok
+test_invalid_direction (test_neuron_probe.TestNeuronProbe.test_invalid_direction) ... ok
+test_invalid_neuron (test_neuron_probe.TestNeuronProbe.test_invalid_neuron) ... ok
+test_local_gradient_matches_finite_difference (test_neuron_probe.TestNeuronProbe.test_local_gradient_matches_finite_difference) ... ok
+test_margin_rejects_invalid_targets (test_neuron_probe.TestNeuronProbe.test_margin_rejects_invalid_targets) ... ok
+test_matched_contexts (test_neuron_probe.TestNeuronProbe.test_matched_contexts) ... ok
+test_no_model_mutation (test_neuron_probe.TestNeuronProbe.test_no_model_mutation) ... ok
+test_noop (test_neuron_probe.TestNeuronProbe.test_noop) ... ok
+test_pins_reject_modified_missing_extra (test_neuron_probe.TestNeuronProbe.test_pins_reject_modified_missing_extra) ... ok
+test_projection_orientation (test_neuron_probe.TestNeuronProbe.test_projection_orientation) ... ok
+test_projection_reconstruct (test_neuron_probe.TestNeuronProbe.test_projection_reconstruct) ... ok
+test_split_disjoint (test_neuron_probe.TestNeuronProbe.test_split_disjoint) ... ok
+test_zero_only_one_index_and_position (test_neuron_probe.TestNeuronProbe.test_zero_only_one_index_and_position) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.744s
+
+OK

@@ -1,0 +1,16 @@
+{
+  "bytes": 10992,
+  "completed_utc": "2026-11-25T00:26:48.308877+00:00",
+  "curl_exit": 0,
+  "error": "",
+  "expected_bytes": 10992,
+  "expected_sha256": "111f8d09ac565c745d91df88929147159eaa62b2e58e03943a2e03c1a1439ad7",
+  "final_host": "huggingface.co",
+  "http": "200",
+  "passed_size_sha256_http_tls": true,
+  "redirects": 1,
+  "sha256": "111f8d09ac565c745d91df88929147159eaa62b2e58e03943a2e03c1a1439ad7",
+  "source_url": "https://huggingface.co/distilbert/distilgpt2/resolve/2290a62682d06624634c1f46a6ad5be0f47f38aa/README.md",
+  "started_utc": "2026-11-25T00:26:47.802994+00:00",
+  "tls_verify_result": 0
+}

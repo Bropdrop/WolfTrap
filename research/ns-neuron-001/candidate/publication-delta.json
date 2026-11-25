@@ -1,0 +1,76 @@
+{
+  "method": "Three output-directory values in each tree retain only the run basename. Other JSON tokens and file formatting are preserved.",
+  "original_source_archives": {
+    "candidate_sha256": "ff4868ad7248e1135821eab3d1af3145185a32c0fa66c436d15b0046b8ec1456",
+    "recovered_sha256": "392dcc885ac32688d803d841335a29f2e545db9ccb99f86e42841e1c0f77121a"
+  },
+  "qualified_review_archive_inventory": {
+    "covered_files": 96,
+    "file": "candidate/qualified-review-inventory.json",
+    "scope": "Original 96 member digests, copied byte for byte from the qualified 97-member candidate archive; the additional member is the receipt itself.",
+    "sha256": "4a985b532e7d5716933a9d87d2f593aad40bf54cdccf0f19dfef3c9c6ca20a73"
+  },
+  "scope": "Publication copies of the candidate and recovered source trees",
+  "trees": {
+    "candidate": {
+      "files_containing_the_original_changed_file_digests": [
+        "historical/v0.3.0a1-bundle-inventory.json"
+      ],
+      "historical_inventory": "historical/v0.3.0a1-bundle-inventory.json",
+      "historical_inventory_sha256": "fd6eb55d488502667475d9bb680e5b66cddbc7220ceeb2fa60c4f42de0ce657a",
+      "json_changes": [
+        {
+          "file": "validation.json",
+          "original_sha256": "6919b85136560b417cee392d945774b21d0ea86b78812c3b98db1acaffdff0e8",
+          "publication_sha256": "fe28b11799e42bb60c6f163d4ddc4e7668c9806e421f9d9689e8e63928481752",
+          "publication_values": {
+            "/attention_execution/result/output": "neuralscope-attention-run-001",
+            "/constructed_fixture_and_api_dry_run/demo/output": "neuralscope-demo-v03"
+          }
+        },
+        {
+          "file": "attention-summary/execution-validation.json",
+          "original_sha256": "f0c4c2e693f57bb05cf5bcc93c7caa7e00c772cccceedeaf813996cd453dab15",
+          "publication_sha256": "4923c7fd8ee5f070e99d3e673e0eb1e6824ca979492e688b190772f0ae86690f",
+          "publication_values": {
+            "/result/output": "neuralscope-attention-run-001"
+          }
+        }
+      ],
+      "path": "candidate/wolftrap-neuralscope",
+      "source_and_tests_identical": true,
+      "total_files": 96,
+      "unchanged_files": 94
+    },
+    "recovered": {
+      "files_containing_the_original_changed_file_digests": [
+        "bundle-inventory.json"
+      ],
+      "historical_inventory": "bundle-inventory.json",
+      "historical_inventory_sha256": "fd6eb55d488502667475d9bb680e5b66cddbc7220ceeb2fa60c4f42de0ce657a",
+      "json_changes": [
+        {
+          "file": "validation.json",
+          "original_sha256": "6919b85136560b417cee392d945774b21d0ea86b78812c3b98db1acaffdff0e8",
+          "publication_sha256": "fe28b11799e42bb60c6f163d4ddc4e7668c9806e421f9d9689e8e63928481752",
+          "publication_values": {
+            "/attention_execution/result/output": "neuralscope-attention-run-001",
+            "/constructed_fixture_and_api_dry_run/demo/output": "neuralscope-demo-v03"
+          }
+        },
+        {
+          "file": "attention-summary/execution-validation.json",
+          "original_sha256": "f0c4c2e693f57bb05cf5bcc93c7caa7e00c772cccceedeaf813996cd453dab15",
+          "publication_sha256": "4923c7fd8ee5f070e99d3e673e0eb1e6824ca979492e688b190772f0ae86690f",
+          "publication_values": {
+            "/result/output": "neuralscope-attention-run-001"
+          }
+        }
+      ],
+      "path": "recovered/wolftrap-neuralscope",
+      "source_and_tests_identical": true,
+      "total_files": 90,
+      "unchanged_files": 88
+    }
+  }
+}

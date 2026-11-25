@@ -1,0 +1,135 @@
+[
+  {
+    "command": [
+      "${BASE_PYTHON_PREFIX}/bin/python",
+      "-B",
+      "${STUDY_ROOT}/offline/offline_exec.py",
+      "--",
+      "${INPUT_ROOT}/package-validation/venv/bin/python",
+      "-m",
+      "pip",
+      "--isolated",
+      "wheel",
+      "--disable-pip-version-check",
+      "--no-index",
+      "--no-deps",
+      "--no-build-isolation",
+      "-w",
+      "${INPUT_ROOT}/package-validation/build-001/wheels",
+      "."
+    ],
+    "cwd": "${INPUT_ROOT}/package-validation/build-001/source",
+    "exit": 0,
+    "log": "build-wheel.log"
+  },
+  {
+    "command": [
+      "${BASE_PYTHON_PREFIX}/bin/python",
+      "-B",
+      "${STUDY_ROOT}/offline/offline_exec.py",
+      "--",
+      "${INPUT_ROOT}/package-validation/venv/bin/python",
+      "-m",
+      "pip",
+      "--isolated",
+      "install",
+      "--disable-pip-version-check",
+      "--no-index",
+      "--no-deps",
+      "${INPUT_ROOT}/package-validation/build-001/wheels/wolftrap_neuralscope-0.3.0a1+ns.neuron.1-py3-none-any.whl"
+    ],
+    "cwd": "${INPUT_ROOT}/package-validation/build-001",
+    "exit": 0,
+    "log": "install-wheel.log"
+  },
+  {
+    "command": [
+      "${BASE_PYTHON_PREFIX}/bin/python",
+      "-B",
+      "${STUDY_ROOT}/offline/offline_exec.py",
+      "--",
+      "${INPUT_ROOT}/package-validation/venv/bin/python",
+      "-m",
+      "pip",
+      "--isolated",
+      "check"
+    ],
+    "cwd": "${INPUT_ROOT}/package-validation/build-001",
+    "exit": 0,
+    "log": "check-installed.log"
+  },
+  {
+    "command": [
+      "${BASE_PYTHON_PREFIX}/bin/python",
+      "-B",
+      "${STUDY_ROOT}/offline/offline_exec.py",
+      "--",
+      "${INPUT_ROOT}/package-validation/venv/bin/python",
+      "-c",
+      "import sys, importlib.metadata, neuralscope.neuron_run as m; from pathlib import Path; print(importlib.metadata.version('wolftrap-neuralscope'), m.__file__); assert Path(m.__file__).is_relative_to(sys.prefix)"
+    ],
+    "cwd": "${INPUT_ROOT}/package-validation/build-001",
+    "exit": 0,
+    "log": "import-installed.log"
+  },
+  {
+    "command": [
+      "${BASE_PYTHON_PREFIX}/bin/python",
+      "-B",
+      "${STUDY_ROOT}/offline/offline_exec.py",
+      "--",
+      "${INPUT_ROOT}/package-validation/venv/bin/wolftrap-neuralscope",
+      "--help"
+    ],
+    "cwd": "${INPUT_ROOT}/package-validation/build-001",
+    "exit": 0,
+    "log": "cli-help.log"
+  },
+  {
+    "command": [
+      "${BASE_PYTHON_PREFIX}/bin/python",
+      "-B",
+      "${STUDY_ROOT}/offline/offline_exec.py",
+      "--",
+      "${INPUT_ROOT}/package-validation/venv/bin/wolftrap-neuralscope",
+      "neuron",
+      "--help"
+    ],
+    "cwd": "${INPUT_ROOT}/package-validation/build-001",
+    "exit": 0,
+    "log": "neuron-help.log"
+  },
+  {
+    "command": [
+      "${BASE_PYTHON_PREFIX}/bin/python",
+      "-B",
+      "${STUDY_ROOT}/offline/offline_exec.py",
+      "--",
+      "${INPUT_ROOT}/package-validation/venv/bin/wolftrap-neuralscope",
+      "neuron",
+      "--model-dir",
+      "${INPUT_ROOT}/model",
+      "--out",
+      "${STUDY_ROOT}/candidate-validation/tests/wheel-001/installed-neuron-run"
+    ],
+    "cwd": "${INPUT_ROOT}/package-validation/build-001",
+    "exit": 0,
+    "log": "cli-neuron.log"
+  },
+  {
+    "command": [
+      "${BASE_PYTHON_PREFIX}/bin/python",
+      "-B",
+      "${STUDY_ROOT}/offline/offline_exec.py",
+      "--",
+      "${INPUT_ROOT}/package-validation/venv/bin/wolftrap-neuralscope",
+      "verify",
+      "${STUDY_ROOT}/candidate-validation/tests/wheel-001/installed-neuron-run",
+      "--manifest-sha256",
+      "8e36c30aff823121058aad1cabd56eafe0a5f3caddc3d5871e45f62f7405726b"
+    ],
+    "cwd": "${INPUT_ROOT}/package-validation/build-001",
+    "exit": 0,
+    "log": "verify-cli-receipt.log"
+  }
+]

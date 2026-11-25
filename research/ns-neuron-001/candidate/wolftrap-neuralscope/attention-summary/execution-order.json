@@ -1,0 +1,30 @@
+{
+  "events": [
+    {
+      "event": "protocol_frozen",
+      "sha256": "3ab76c64122a02396d0c42963c44e29912390eed96f81b62ba209d0091def540"
+    },
+    {
+      "event": "discovery_started"
+    },
+    {
+      "event": "discovery_finished",
+      "status": "PASS"
+    },
+    {
+      "event": "selection_frozen",
+      "selected_site": "blocks.5.attn.head.2",
+      "sha256": "2d9875a49336190f3874ed0a5aebccd28d4620cd0eda72984bdbd70c7cf3021f"
+    },
+    {
+      "event": "validation_started",
+      "selected_site": "blocks.5.attn.head.2"
+    },
+    {
+      "event": "validation_finished",
+      "status": "PASS"
+    }
+  ],
+  "schema": "wolftrap.neuralscope.execution-order/v1",
+  "scope": "deterministic program-order record; not independently witnessed or timestamped"
+}

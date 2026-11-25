@@ -1,0 +1,19 @@
+[
+  {
+    "absolute_difference": 1.1920928955078125e-07,
+    "after": 0.05788755416870117,
+    "before": 0.05788743495941162,
+    "path": "$.discovery_exact_mean"
+  },
+  {
+    "absolute_difference": 3.725290298461914e-09,
+    "after": 0.05508221685886383,
+    "before": 0.05508221313357353,
+    "path": "$.discovery_predicted_mean"
+  },
+  {
+    "after": "50d5ea7506b1f8e1a41b75d3131997934e2f01e4f62b336e633a3e37b68b6ae2",
+    "before": "5c789c82b31c42dc0373bda7083a070bf3bb89ef6311ef35a7ea943535734bd6",
+    "path": "$.discovery_sha256"
+  }
+]

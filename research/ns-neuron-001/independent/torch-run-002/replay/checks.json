@@ -1,0 +1,173 @@
+{
+  "checks": {
+    "validation_control.ablate.singleton.L0.activation": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_control.ablate.singleton.L0.projected": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_control.ablate.singleton.L0.residual": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_control.ablate.singleton.L1.activation": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_control.ablate.singleton.L1.projected": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_control.ablate.singleton.L1.residual": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_control.ablate.singleton.logits": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_control.ablate_vs_subtract": {
+      "limit": 0.0005,
+      "max_abs": 4.76837158203125e-07
+    },
+    "validation_control.baseline.singleton.L0.activation": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_control.baseline.singleton.L0.projected": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_control.baseline.singleton.L0.residual": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_control.baseline.singleton.L1.activation": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_control.baseline.singleton.L1.projected": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_control.baseline.singleton.L1.residual": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_control.baseline.singleton.logits": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_control.baseline_after_exception": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_control.captured_vs_unhooked": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_control.pilot_ablate_vs_independent_hook": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_control.pilot_subtract_vs_independent_hook": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_control.zero_direction_vs_baseline": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_positive.ablate.singleton.L0.activation": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_positive.ablate.singleton.L0.projected": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_positive.ablate.singleton.L0.residual": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_positive.ablate.singleton.L1.activation": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_positive.ablate.singleton.L1.projected": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_positive.ablate.singleton.L1.residual": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_positive.ablate.singleton.logits": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_positive.ablate_vs_subtract": {
+      "limit": 0.0005,
+      "max_abs": 4.76837158203125e-07
+    },
+    "validation_positive.baseline.singleton.L0.activation": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_positive.baseline.singleton.L0.projected": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_positive.baseline.singleton.L0.residual": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_positive.baseline.singleton.L1.activation": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_positive.baseline.singleton.L1.projected": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_positive.baseline.singleton.L1.residual": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_positive.baseline.singleton.logits": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_positive.baseline_after_exception": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_positive.captured_vs_unhooked": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_positive.pilot_ablate_vs_independent_hook": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_positive.pilot_subtract_vs_independent_hook": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    },
+    "validation_positive.zero_direction_vs_baseline": {
+      "limit": 1e-05,
+      "max_abs": 0.0
+    }
+  },
+  "external_hook_survived_exception": true,
+  "failures": [],
+  "original_hook_registry_restored": true,
+  "selection_sha256": "7f31347bd946496c1aa994ebdd9c1e903a76b0f4e0a647e3804456b58ed4d50e",
+  "source_sha256": "6372d218768d98f487bf89e41230da111bcb16532a8d95818796043f962ef8ce",
+  "torch_default_dtype": "torch.float32",
+  "torch_probe_sha256": "dabbcce2c94bae83c8637b982bb721485c3f92c720ad42f9ed296f4bcced8433",
+  "torch_version": "2.10.0+cpu",
+  "weights_sha256": "04270ba8a80677b53e08219936971a6a9e1aeb3f0ece2f42f18af3db0d8129aa"
+}

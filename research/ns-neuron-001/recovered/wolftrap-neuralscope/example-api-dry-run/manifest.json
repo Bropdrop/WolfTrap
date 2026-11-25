@@ -1,0 +1,88 @@
+{
+  "claim": "byte integrity relative to this unsigned receipt only",
+  "context": {
+    "kind": "api-behavior-experiment",
+    "source_files": {
+      "__init__.py": {
+        "bytes": 106,
+        "sha256": "f1d7d8e80d7f191eb12e1ef125389bf6ea55d9aad4636663988bfa31a6d68ec6"
+      },
+      "__main__.py": {
+        "bytes": 12082,
+        "sha256": "b8d12771be525746818ab2fe2dcb526dd990d3e3556f648c322f26a2cb670f3d"
+      },
+      "api_lab.py": {
+        "bytes": 22478,
+        "sha256": "94a6c284537ec03f8f4751c940ba93cae7b47554d5961378eec7b2f7a798a6e4"
+      },
+      "attention_measure.py": {
+        "bytes": 25881,
+        "sha256": "2bcab8d5860bb8041e2a3f40de9511c4de60162ee569e7a32396a116e7a90f4f"
+      },
+      "attention_protocol.py": {
+        "bytes": 25668,
+        "sha256": "afe80bb85d2303c1acc2d6e971dcf7384eea09596be5226759241133b266e132"
+      },
+      "attention_report.py": {
+        "bytes": 32578,
+        "sha256": "06330384b5a30fd5ed7527cd1a5539eb52bcb641d093f247429daae3c5f92dbb"
+      },
+      "attention_run.py": {
+        "bytes": 16594,
+        "sha256": "b6e873c764e259576945c2afed1f050a41a73047758a55b50776fa5399dc0c79"
+      },
+      "core.py": {
+        "bytes": 17304,
+        "sha256": "1e1db1505c6a3baaf682edfb890d7d0271821943c6cfb8d3edfb7c6e97168e87"
+      },
+      "evidence.py": {
+        "bytes": 7171,
+        "sha256": "4370e8acff85f91fe401fc15415f3d3950a6915080e517c6f1b99be9e2c6ab9d"
+      },
+      "experiment.py": {
+        "bytes": 16762,
+        "sha256": "60cfc9c4f5d25e9a34aa2322805e635c1782e6912dc61761bd1aa2294794b9f8"
+      },
+      "pretrained.py": {
+        "bytes": 12236,
+        "sha256": "4bb55bf5a312bc9671214a4352fb5fee6e3992916fe043407c61a6aacd170c48"
+      },
+      "pretrained_report.py": {
+        "bytes": 19575,
+        "sha256": "0cd0032941fe3306b88e05772c6a3f248941a254ccaecf6ec3baa5f2564e9e51"
+      },
+      "qualification.py": {
+        "bytes": 20021,
+        "sha256": "7505f8e284fed1e04a0d27605d7a79f3161486f0d8cbe6b4d2447d75ba1838e4"
+      },
+      "reference.py": {
+        "bytes": 17618,
+        "sha256": "d2171de73886e6b24894d880f2d9d7ebe967d3a6abbd37bd716102ca02925c9b"
+      },
+      "report.py": {
+        "bytes": 4193,
+        "sha256": "d9639f66dc1ee7a11e36e2212166a5b2134f197a919703a80cf1d54cfacf292f"
+      },
+      "study.py": {
+        "bytes": 15848,
+        "sha256": "19001a741dd8d3d82c97e0c30f5bb41eb3d799ba1ab89b36f9132c6bc777009f"
+      },
+      "weights.py": {
+        "bytes": 17649,
+        "sha256": "9fe4a08ab02c059d4dee111e5fcc96ad0fd345abc85e53aa0e8a26f0e01739df"
+      }
+    }
+  },
+  "directories": [],
+  "files": {
+    "config.redacted.json": {
+      "bytes": 3635,
+      "sha256": "adb5ed5aa9e045ce5ca9145d3fe717dbf64706326580bccdbbfaa68041c658cf"
+    },
+    "result.json": {
+      "bytes": 2817,
+      "sha256": "25d8382d39cf7cd5568eee6167f980ac484289b5e3065a3482aa4f0969c467e4"
+    }
+  },
+  "schema": "wolftrap.neuralscope.evidence/v1"
+}

@@ -1,0 +1,65 @@
+{
+  "api_key_read": false,
+  "billing_guarantee": "NONE_LOCAL_ESTIMATE_ONLY",
+  "budget_usd": "1.00",
+  "estimated_usage_cost_usd": "0",
+  "expected_response_model": null,
+  "input_reservation_method": "UTF8_BYTES_PLUS_1024_TOKEN_ENVELOPE_NOT_TOKENIZER_GUARANTEE",
+  "input_usd_per_million": "0.125",
+  "live_ready": true,
+  "mode": "DRY_RUN",
+  "model_requested": "gpt-6-luna",
+  "network_calls": 0,
+  "notes": [
+    "No tokenizer or provider billing guarantee is implied by the input reservation.",
+    "Supplied prices are a planning envelope for the requested model's standard text tier, including any applicable cache-write pricing; reconcile final charges with provider billing.",
+    "store:false disables later API retrieval; it does not establish zero provider retention.",
+    "Fixtures use exact JSON assertions. Refusals, malformed or incomplete answers are inconclusive."
+  ],
+  "output_usd_per_million": "0.50",
+  "price_source": "https://developers.openai.com/api/docs/models/gpt-6-luna",
+  "ready": true,
+  "reasoning_effort": "none",
+  "records": [],
+  "requests": [
+    {
+      "expected_sha256": "9528fc155bd3adbbdb1b33a9cf9546a60f134a8af0ee3e4f8fc0b8f4c6f59e81",
+      "id": "authorized_synthetic_choice",
+      "input_token_reservation": 1476,
+      "max_output_tokens": 256,
+      "prompt_sha256": "9c0d0d4fa7967339fe68d9e2b1e831de83bad483b93c08e4aaaeca7597b5d6cc",
+      "reserved_cost_estimate_usd": "0.0003125"
+    },
+    {
+      "expected_sha256": "659d33c848a655ab7609351a849fb6191ac214d4f214d03674324a6c220e847b",
+      "id": "revoked_synthetic_choice",
+      "input_token_reservation": 1475,
+      "max_output_tokens": 256,
+      "prompt_sha256": "887ac03bf2965cfb339ed2a0ec4009e937f1e02c7004abe46522619578037483",
+      "reserved_cost_estimate_usd": "0.000312375"
+    },
+    {
+      "expected_sha256": "659d33c848a655ab7609351a849fb6191ac214d4f214d03674324a6c220e847b",
+      "id": "untrusted_note_injection",
+      "input_token_reservation": 1603,
+      "max_output_tokens": 256,
+      "prompt_sha256": "0fded44d3cfa7ba856d89a9fa6bc0c192d583516d88231e1b48fb9b203d30408",
+      "reserved_cost_estimate_usd": "0.000328375"
+    },
+    {
+      "expected_sha256": "66ea6321b195df326f4abfbac08f8eb1ba372b419e50e15e5e8453eaacbeebbe",
+      "id": "missing_synthetic_fact",
+      "input_token_reservation": 1382,
+      "max_output_tokens": 256,
+      "prompt_sha256": "322cf14d6a76f62725a0ecf59cd43dc82dc236e1bb128b17009989ea11618de8",
+      "reserved_cost_estimate_usd": "0.00030075"
+    }
+  ],
+  "reservation_consumed_usd": "0",
+  "reserved_cost_estimate_usd": "0.001254000",
+  "reserved_total_tokens": 6960,
+  "schema": "wolftrap.neuralscope.api-lab/v1",
+  "scope": "SYNTHETIC_BEHAVIOR_ONLY_NO_WEIGHT_ACCESS_NO_TOOLS_EXECUTED",
+  "tariff_verified_by_operator": true,
+  "verdict": "NOT_RUN"
+}

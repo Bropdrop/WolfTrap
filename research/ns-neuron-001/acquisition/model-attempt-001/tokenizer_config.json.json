@@ -1,0 +1,16 @@
+{
+  "bytes": 26,
+  "completed_utc": "2026-11-25T00:26:49.085916+00:00",
+  "curl_exit": 0,
+  "error": "",
+  "expected_bytes": 26,
+  "expected_sha256": "5e04eb606e3a1583530a42e36c2a6b6615c86f34fe77e44d9ddeb43ff940931f",
+  "final_host": "huggingface.co",
+  "http": "200",
+  "passed_size_sha256_http_tls": true,
+  "redirects": 1,
+  "sha256": "5e04eb606e3a1583530a42e36c2a6b6615c86f34fe77e44d9ddeb43ff940931f",
+  "source_url": "https://huggingface.co/distilbert/distilgpt2/resolve/2290a62682d06624634c1f46a6ad5be0f47f38aa/tokenizer_config.json",
+  "started_utc": "2026-11-25T00:26:48.451195+00:00",
+  "tls_verify_result": 0
+}

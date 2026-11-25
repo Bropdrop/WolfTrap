@@ -1,0 +1,9 @@
+Processing ${INPUT_ROOT}/package-validation/build-001/source
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Building wheels for collected packages: wolftrap-neuralscope
+  Building wheel for wolftrap-neuralscope (pyproject.toml): started
+  Building wheel for wolftrap-neuralscope (pyproject.toml): finished with status 'done'
+  Created wheel for wolftrap-neuralscope: filename=wolftrap_neuralscope-0.3.0a1+ns.neuron.1-py3-none-any.whl size=111621 sha256=52d3f15f64be93668ccd3ee972748c2baad59ac55fd901a4ca61444707985ef5
+  Stored in directory: ${EPHEMERAL_WHEEL_CACHE}
+Successfully built wolftrap-neuralscope

@@ -1,0 +1,27 @@
+{
+  "source": "${STUDY_ROOT}/recovered/wolftrap-neuralscope",
+  "working_copy": "${INPUT_ROOT}/test-copies/recovered-002",
+  "command": [
+    "${BASE_PYTHON_PREFIX}/bin/python",
+    "-B",
+    "${STUDY_ROOT}/offline/offline_exec.py",
+    "--",
+    "${INPUT_ROOT}/venv/bin/python",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-v"
+  ],
+  "exit": 0,
+  "reported_count": 194,
+  "per_case_count": 194,
+  "cases_by_outcome": {
+    "ok": 194
+  },
+  "elapsed_seconds": 17.232,
+  "changes_in_copy": [],
+  "source_verified_against_initial_snapshot": true
+}

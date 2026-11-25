@@ -1,0 +1,568 @@
+{
+  "lm_head.weight": [
+    "float32",
+    [
+      50257,
+      768
+    ],
+    "d502923f9730f0fa6644f847162f403dc4e40a403cf4b47853a9d65f248cb776"
+  ],
+  "transformer.h.0.attn.c_attn.bias": [
+    "float32",
+    [
+      2304
+    ],
+    "c96a4ed77f642697396c044fac76d58f823aa79faa4f9c0c6b4eddad731fc80a"
+  ],
+  "transformer.h.0.attn.c_attn.weight": [
+    "float32",
+    [
+      768,
+      2304
+    ],
+    "a001595b2fe7187f2507c14c135efb00518beb8a743521585fdb170329e9784b"
+  ],
+  "transformer.h.0.attn.c_proj.bias": [
+    "float32",
+    [
+      768
+    ],
+    "502c6ae1ac4958bd6128f2fc6527a9c76d5ecb5bf0964c8975c838aa0522b563"
+  ],
+  "transformer.h.0.attn.c_proj.weight": [
+    "float32",
+    [
+      768,
+      768
+    ],
+    "87254951e9c338bd27b6ed8032d32fe4e08150898b9a156a4e494058d2c39619"
+  ],
+  "transformer.h.0.ln_1.bias": [
+    "float32",
+    [
+      768
+    ],
+    "80bd4490d060cf6f4baf2e49f65cec4ba0b3a5b1af99ddce59c6dd115aa29136"
+  ],
+  "transformer.h.0.ln_1.weight": [
+    "float32",
+    [
+      768
+    ],
+    "d008efd795de720cc887c0eca35f9d24348df60f0378ad95f5dea67f6257c72c"
+  ],
+  "transformer.h.0.ln_2.bias": [
+    "float32",
+    [
+      768
+    ],
+    "a7da00b7bf5b76bd73d993446f4124e2159125da3a97c89fb629bcb104aa1919"
+  ],
+  "transformer.h.0.ln_2.weight": [
+    "float32",
+    [
+      768
+    ],
+    "f1176e12cea8372b1a765bc50198e88e45df2285403a0183ff24fae33736631f"
+  ],
+  "transformer.h.0.mlp.c_fc.bias": [
+    "float32",
+    [
+      3072
+    ],
+    "8c8efff02631ce84f27eb67f54152bba6d1e468e801e6a40a6ea88c6333c25dc"
+  ],
+  "transformer.h.0.mlp.c_fc.weight": [
+    "float32",
+    [
+      768,
+      3072
+    ],
+    "1903347321344e523a0773221dbfe055c292e776b4a26d6d3efddba0303bbeb9"
+  ],
+  "transformer.h.0.mlp.c_proj.bias": [
+    "float32",
+    [
+      768
+    ],
+    "a64d7f4b9ebddd1b48ccc288907797637252e76216b6a4e23c1d6a23d4e19cfb"
+  ],
+  "transformer.h.0.mlp.c_proj.weight": [
+    "float32",
+    [
+      3072,
+      768
+    ],
+    "8538f2200a97598492c58bf3cfa528c7468ea9a05a6f5c8887998c39b99f5f1e"
+  ],
+  "transformer.h.1.attn.c_attn.bias": [
+    "float32",
+    [
+      2304
+    ],
+    "e460f82147ee96e03d60a20494941b8660eeb11e5f38bd9f0ad69e07f9db02ee"
+  ],
+  "transformer.h.1.attn.c_attn.weight": [
+    "float32",
+    [
+      768,
+      2304
+    ],
+    "ad74a03f79c8be056073463eb8e5fa5cdd04a93a09c0a25b8689bde9f49392bc"
+  ],
+  "transformer.h.1.attn.c_proj.bias": [
+    "float32",
+    [
+      768
+    ],
+    "c608a293d045d485c4bf45d97494301f1061a2f85eceabae5bb9c375f478cc76"
+  ],
+  "transformer.h.1.attn.c_proj.weight": [
+    "float32",
+    [
+      768,
+      768
+    ],
+    "7afcfef567944474145c9319deb29cd503afc262c586b55d786908d548a3d520"
+  ],
+  "transformer.h.1.ln_1.bias": [
+    "float32",
+    [
+      768
+    ],
+    "3cc91185c23c483f430ccef24c86ada870266a0b0ba982ee4a43535f2f76bace"
+  ],
+  "transformer.h.1.ln_1.weight": [
+    "float32",
+    [
+      768
+    ],
+    "db752ea9afa2617dbac35b45aa5e28760f5d8c23930fabccafa379ceedf14c55"
+  ],
+  "transformer.h.1.ln_2.bias": [
+    "float32",
+    [
+      768
+    ],
+    "dcf66e94b30f72ba69b39b9847d6d6a45622863c7510fe836d953100d4808d2a"
+  ],
+  "transformer.h.1.ln_2.weight": [
+    "float32",
+    [
+      768
+    ],
+    "2d0bd7330819c9164ccafdc9ef7f48252519d56e9bd9db1155b2079978a4662f"
+  ],
+  "transformer.h.1.mlp.c_fc.bias": [
+    "float32",
+    [
+      3072
+    ],
+    "daf42bac834dcf3f86331ea3dd656f85a811bd196253ffb41514cdd766b61a4c"
+  ],
+  "transformer.h.1.mlp.c_fc.weight": [
+    "float32",
+    [
+      768,
+      3072
+    ],
+    "69f5920ce4ac735a66d9c304fb62fadd836193e65d03291f804a5cf150dc6fb3"
+  ],
+  "transformer.h.1.mlp.c_proj.bias": [
+    "float32",
+    [
+      768
+    ],
+    "c094e5bf39be26edf789fc9345ff89c5799e6ed54814091cabd6b46c9b7a6ea0"
+  ],
+  "transformer.h.1.mlp.c_proj.weight": [
+    "float32",
+    [
+      3072,
+      768
+    ],
+    "76c02649b936ba9b56089ba9abcdf65b61fe0f2ac80cf44c854ca7030cd25743"
+  ],
+  "transformer.h.2.attn.c_attn.bias": [
+    "float32",
+    [
+      2304
+    ],
+    "801a3428b7119d9fcb9e81c64c14b4f7bd2a6ab5f31a638b58c86f793ec00e14"
+  ],
+  "transformer.h.2.attn.c_attn.weight": [
+    "float32",
+    [
+      768,
+      2304
+    ],
+    "51b72114fa458d9e5ad6d5265ff5cddac25a7c14f2cb7588a1bc019f60e15faa"
+  ],
+  "transformer.h.2.attn.c_proj.bias": [
+    "float32",
+    [
+      768
+    ],
+    "ba6a65edc76f2f9f09776cbe066c9eeee315e84d4737d4dae95a4b76bf36f9fc"
+  ],
+  "transformer.h.2.attn.c_proj.weight": [
+    "float32",
+    [
+      768,
+      768
+    ],
+    "cd6f201bcd46d65d6c4f70261060b9e2f016723104cc7d59205620b66dcfed59"
+  ],
+  "transformer.h.2.ln_1.bias": [
+    "float32",
+    [
+      768
+    ],
+    "cdd69d9513453efa0d633182622fe0d08da57b5f6b2b3a33d70fcd2765ac42f4"
+  ],
+  "transformer.h.2.ln_1.weight": [
+    "float32",
+    [
+      768
+    ],
+    "919060c25b31b189a037cf1aa9f3af024b5d9ca77820b1ba143be5b72b8a3e5b"
+  ],
+  "transformer.h.2.ln_2.bias": [
+    "float32",
+    [
+      768
+    ],
+    "22daa3bfa6e5483eb18b50d288303477db9dc8261824b490cfd84082438e1531"
+  ],
+  "transformer.h.2.ln_2.weight": [
+    "float32",
+    [
+      768
+    ],
+    "9ddc6781d8f4f5055c840fe6379b05b13f00a753f18c10bc0256da5fff97d5af"
+  ],
+  "transformer.h.2.mlp.c_fc.bias": [
+    "float32",
+    [
+      3072
+    ],
+    "3e686422f72f452bf07d0481a811a4ab754d8a46cdbc4c4469cd64701b76f759"
+  ],
+  "transformer.h.2.mlp.c_fc.weight": [
+    "float32",
+    [
+      768,
+      3072
+    ],
+    "8ac75b1286f1fc44ee12d8a10f052c9710c222ede366383ba4d5791935166acf"
+  ],
+  "transformer.h.2.mlp.c_proj.bias": [
+    "float32",
+    [
+      768
+    ],
+    "3ac3ef7956dacf4609daf95ab0b456c7b02939cdd5e234bf8c43536d01b9158c"
+  ],
+  "transformer.h.2.mlp.c_proj.weight": [
+    "float32",
+    [
+      3072,
+      768
+    ],
+    "57f1cc3bd4782dabf7e5d516a2138fe4afc3f7eddb0458681f228fc4c83067c3"
+  ],
+  "transformer.h.3.attn.c_attn.bias": [
+    "float32",
+    [
+      2304
+    ],
+    "408277fc317ccba51f1fffa9bcc653c0e768ab6adb9a2495eb3104fa011c4336"
+  ],
+  "transformer.h.3.attn.c_attn.weight": [
+    "float32",
+    [
+      768,
+      2304
+    ],
+    "1bee76ac2d0be18bc542c7ad4ad5d225519d48da879bec3342c1bca7d16c940d"
+  ],
+  "transformer.h.3.attn.c_proj.bias": [
+    "float32",
+    [
+      768
+    ],
+    "4a0d6b28bf26303ba11742c81638803e283109d31113b133007a40e7438339ad"
+  ],
+  "transformer.h.3.attn.c_proj.weight": [
+    "float32",
+    [
+      768,
+      768
+    ],
+    "0d2efa2b7812d76948ab6ee50a05cd9279de723c200550b5db682a1bde4b718e"
+  ],
+  "transformer.h.3.ln_1.bias": [
+    "float32",
+    [
+      768
+    ],
+    "773b4698626eea402b5bd990267acb5789b9033cd842d7bd2d4972f187217478"
+  ],
+  "transformer.h.3.ln_1.weight": [
+    "float32",
+    [
+      768
+    ],
+    "40286a2daa91949374ceed02165ad1da0951c81711050705ab13dfee7dfd8901"
+  ],
+  "transformer.h.3.ln_2.bias": [
+    "float32",
+    [
+      768
+    ],
+    "46dc31267d515234e6692988b83269c1483d47070eab64bf6ba7871641e2d8bb"
+  ],
+  "transformer.h.3.ln_2.weight": [
+    "float32",
+    [
+      768
+    ],
+    "f911206ee54f36a50ce9298b61c9fbe2516af71086e2eafee4ece930f756cdbf"
+  ],
+  "transformer.h.3.mlp.c_fc.bias": [
+    "float32",
+    [
+      3072
+    ],
+    "af8b43a9c103e6303795641a3f22b54d4887f8878d16fd866494b0b41b0a8e4d"
+  ],
+  "transformer.h.3.mlp.c_fc.weight": [
+    "float32",
+    [
+      768,
+      3072
+    ],
+    "9c701adfe4e11468cecec10bfeefdd0cdf65cacb3ef708f29c254acf0c662b63"
+  ],
+  "transformer.h.3.mlp.c_proj.bias": [
+    "float32",
+    [
+      768
+    ],
+    "9cb38ac5bde8f02054d31d64dc31ac458d713bdad5465810e103d2055781d883"
+  ],
+  "transformer.h.3.mlp.c_proj.weight": [
+    "float32",
+    [
+      3072,
+      768
+    ],
+    "fbd701de30aaa8c026f7d49176d5de33c83ff4cb6b04001b0eeecd5f82d29a85"
+  ],
+  "transformer.h.4.attn.c_attn.bias": [
+    "float32",
+    [
+      2304
+    ],
+    "e383cc32162b3d1c63b75788e2db994d6babcab61cb76df5a25152daa4d21004"
+  ],
+  "transformer.h.4.attn.c_attn.weight": [
+    "float32",
+    [
+      768,
+      2304
+    ],
+    "7ecdd021958f6ebcb1006922d09c54ee1bed2e52181b7fbc3344a52599d2cf87"
+  ],
+  "transformer.h.4.attn.c_proj.bias": [
+    "float32",
+    [
+      768
+    ],
+    "8cba9245e14ed5d4117c2b6bca913f3d8f9d9c4c1ad38c3d8f6f04ce397d389d"
+  ],
+  "transformer.h.4.attn.c_proj.weight": [
+    "float32",
+    [
+      768,
+      768
+    ],
+    "af72e72684001dedcaf1cf72028cdc192a91aebaf2b0ac50eeadafbb1d90cd41"
+  ],
+  "transformer.h.4.ln_1.bias": [
+    "float32",
+    [
+      768
+    ],
+    "25e0fdb8fdc3a7411521ed31cb33091af4dd3c53b8d24096db8052c9e03b3155"
+  ],
+  "transformer.h.4.ln_1.weight": [
+    "float32",
+    [
+      768
+    ],
+    "3e6fd5bc34789e1868c40b4c475c5c2694df6d44401df16ac417ffbc8f23836d"
+  ],
+  "transformer.h.4.ln_2.bias": [
+    "float32",
+    [
+      768
+    ],
+    "af832a4fe6d6550c9fcfc7f470629e347da30c91ead5d7dab1218eea4c18d2ed"
+  ],
+  "transformer.h.4.ln_2.weight": [
+    "float32",
+    [
+      768
+    ],
+    "cf429aba632ce1d97497120548bbb6ac4b264136d5b48220bbeba084133cdee6"
+  ],
+  "transformer.h.4.mlp.c_fc.bias": [
+    "float32",
+    [
+      3072
+    ],
+    "a5660da81cf88d638b1491afe2b3f09b4dacdf01ec28869ecc55b37780eb57ac"
+  ],
+  "transformer.h.4.mlp.c_fc.weight": [
+    "float32",
+    [
+      768,
+      3072
+    ],
+    "5704cf2e8b3af2d9e056eee8c3735c634a80d96c2f11a8b1fc68c9a020e8e030"
+  ],
+  "transformer.h.4.mlp.c_proj.bias": [
+    "float32",
+    [
+      768
+    ],
+    "34c6db89ace568eb9ae096b21f9e48fff9493839e12f549a865e27d9fe9fd2bc"
+  ],
+  "transformer.h.4.mlp.c_proj.weight": [
+    "float32",
+    [
+      3072,
+      768
+    ],
+    "d47f87398652c05f903f19ff75019890acd26534f7a092d4f699ee294733b05c"
+  ],
+  "transformer.h.5.attn.c_attn.bias": [
+    "float32",
+    [
+      2304
+    ],
+    "23fbafb6c67d8534a452577bf659ede24a271eca744dba96df42d05721c52634"
+  ],
+  "transformer.h.5.attn.c_attn.weight": [
+    "float32",
+    [
+      768,
+      2304
+    ],
+    "882beaf625fb183599d3824b414d0d819fc7561f8899da06245ead6d15a0c003"
+  ],
+  "transformer.h.5.attn.c_proj.bias": [
+    "float32",
+    [
+      768
+    ],
+    "9c618ae0ea256707f7929db7318f4402d29b4abb11dafa0c27321ca929ca586b"
+  ],
+  "transformer.h.5.attn.c_proj.weight": [
+    "float32",
+    [
+      768,
+      768
+    ],
+    "dd663440fa35245f936a75d00e8d68e6d92d7020a7aa4d31c306fb997afc9b52"
+  ],
+  "transformer.h.5.ln_1.bias": [
+    "float32",
+    [
+      768
+    ],
+    "019d3c86368a08992e4e39dd7862b0f161eceedbe34995d9bea1c7b5da299d50"
+  ],
+  "transformer.h.5.ln_1.weight": [
+    "float32",
+    [
+      768
+    ],
+    "f830d07f749a2d4582587529499505d46a0acc0701fa518052fb57e7915b8793"
+  ],
+  "transformer.h.5.ln_2.bias": [
+    "float32",
+    [
+      768
+    ],
+    "1e492664be6d5b8eddf4fb55da2ea206805416fb831740270b3e420c002cb119"
+  ],
+  "transformer.h.5.ln_2.weight": [
+    "float32",
+    [
+      768
+    ],
+    "06795d431815ab8d770247b2a3c484fdc8e7daba5b1bf5efd36de611c888dca1"
+  ],
+  "transformer.h.5.mlp.c_fc.bias": [
+    "float32",
+    [
+      3072
+    ],
+    "93b22494fec2270af1b089634084d589c2fa417043b077d67be100ae92a9feff"
+  ],
+  "transformer.h.5.mlp.c_fc.weight": [
+    "float32",
+    [
+      768,
+      3072
+    ],
+    "76136e696da5e7c366bfb79074f645ed5b45ee518fd709db34df176a3e78401f"
+  ],
+  "transformer.h.5.mlp.c_proj.bias": [
+    "float32",
+    [
+      768
+    ],
+    "28fcca23fd3beafa190de33a1641145f281847be2d783a0ed6da840dace11869"
+  ],
+  "transformer.h.5.mlp.c_proj.weight": [
+    "float32",
+    [
+      3072,
+      768
+    ],
+    "26b478a67c89b984ecc5c039fe5de9a481d2638e52ff91769d77f1d16b069263"
+  ],
+  "transformer.ln_f.bias": [
+    "float32",
+    [
+      768
+    ],
+    "228dea24cfa35ee8d25017419eff5ab8b4dc8e9f2b96795d5a5a7b8d4884ad0d"
+  ],
+  "transformer.ln_f.weight": [
+    "float32",
+    [
+      768
+    ],
+    "23fce43f7d83f5756ddb02253c01a261879c00d3e322325bab3fd3ed8b8ee1ad"
+  ],
+  "transformer.wpe.weight": [
+    "float32",
+    [
+      1024,
+      768
+    ],
+    "29c69587e2af826b7c159c38620a32e549a925e6d9a0dc37cb563f377f5be772"
+  ],
+  "transformer.wte.weight": [
+    "float32",
+    [
+      50257,
+      768
+    ],
+    "d502923f9730f0fa6644f847162f403dc4e40a403cf4b47853a9d65f248cb776"
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "all_cases_retained": true,
+  "case_count": 6,
+  "cases": [
+    {
+      "baseline_gap": 0.7397575378417969,
+      "both_answer_preferences_present": true,
+      "clean_margin": 0.5923194885253906,
+      "clean_prefers_target": true,
+      "corrupt_margin": -0.14743804931640625,
+      "corrupt_prefers_alternative": true,
+      "id": "repeat_colors",
+      "positive_normalizable_contrast": true,
+      "split": "discovery"
+    },
+    {
+      "baseline_gap": 6.879005432128906,
+      "both_answer_preferences_present": true,
+      "clean_margin": 6.230640411376953,
+      "clean_prefers_target": true,
+      "corrupt_margin": -0.6483650207519531,
+      "corrupt_prefers_alternative": true,
+      "id": "repeat_animals",
+      "positive_normalizable_contrast": true,
+      "split": "discovery"
+    },
+    {
+      "baseline_gap": 4.653354644775391,
+      "both_answer_preferences_present": true,
+      "clean_margin": 4.610595703125,
+      "clean_prefers_target": true,
+      "corrupt_margin": -0.042758941650390625,
+      "corrupt_prefers_alternative": true,
+      "id": "repeat_cities",
+      "positive_normalizable_contrast": true,
+      "split": "discovery"
+    },
+    {
+      "baseline_gap": 3.1459274291992188,
+      "both_answer_preferences_present": true,
+      "clean_margin": 1.8462104797363281,
+      "clean_prefers_target": true,
+      "corrupt_margin": -1.2997169494628906,
+      "corrupt_prefers_alternative": true,
+      "id": "repeat_shades",
+      "positive_normalizable_contrast": true,
+      "split": "validation"
+    },
+    {
+      "baseline_gap": 7.990592956542969,
+      "both_answer_preferences_present": true,
+      "clean_margin": 1.6890373229980469,
+      "clean_prefers_target": true,
+      "corrupt_margin": -6.301555633544922,
+      "corrupt_prefers_alternative": true,
+      "id": "repeat_sky",
+      "positive_normalizable_contrast": true,
+      "split": "validation"
+    },
+    {
+      "baseline_gap": 1.9126358032226562,
+      "both_answer_preferences_present": true,
+      "clean_margin": 1.5283966064453125,
+      "clean_prefers_target": true,
+      "corrupt_margin": -0.38423919677734375,
+      "corrupt_prefers_alternative": true,
+      "id": "repeat_numbers",
+      "positive_normalizable_contrast": true,
+      "split": "validation"
+    }
+  ],
+  "claim": "finite predeclared repeated-token contrasts and tested MLP outputs only; no population inference or security certification",
+  "registration_sha256": "47215ccf548bd3c612b9349e3ba816d8ad8939016e28cbe402d364717bd3abeb",
+  "schema": "wolftrap.neuralscope.pretrained-behavior/v1",
+  "selected_site": "blocks.2.mlp_out",
+  "selected_validation_cases": 3,
+  "selected_validation_mean": 0.016694508502519943,
+  "selected_validation_usable_cases": 3,
+  "selection_outcome": "POSITIVE_DISCOVERY_EFFECT",
+  "split_summary": {
+    "discovery": {
+      "both_answer_preferences_present": 3,
+      "cases": 3,
+      "positive_normalizable_contrasts": 3
+    },
+    "validation": {
+      "both_answer_preferences_present": 3,
+      "cases": 3,
+      "positive_normalizable_contrasts": 3
+    }
+  },
+  "tested_sites": [
+    {
+      "discovery_mean": 0.010913695781310462,
+      "discovery_usable_cases": 3,
+      "site": "blocks.0.mlp_out",
+      "validation_values": [
+        0.0018976919700346556,
+        0.033249374846635725,
+        -0.003793484461073903
+      ]
+    },
+    {
+      "discovery_mean": -0.007273013430471532,
+      "discovery_usable_cases": 3,
+      "site": "blocks.1.mlp_out",
+      "validation_values": [
+        0.031798769471047164,
+        0.05292249053080032,
+        -0.00013961299278400274
+      ]
+    },
+    {
+      "discovery_mean": 0.017388331292756687,
+      "discovery_usable_cases": 3,
+      "site": "blocks.2.mlp_out",
+      "validation_values": [
+        -0.05254969770312579,
+        0.06981619202114303,
+        0.032817031189542586
+      ]
+    },
+    {
+      "discovery_mean": -0.05071916045878092,
+      "discovery_usable_cases": 3,
+      "site": "blocks.3.mlp_out",
+      "validation_values": [
+        -0.07127561277868183,
+        0.14998429358863333,
+        0.07204429321919639
+      ]
+    },
+    {
+      "discovery_mean": -0.5433971145889878,
+      "discovery_usable_cases": 3,
+      "site": "blocks.4.mlp_out",
+      "validation_values": [
+        -0.06148885757730821,
+        0.021661003128869913,
+        -0.3012828439565524
+      ]
+    },
+    {
+      "discovery_mean": -0.059374620664165,
+      "discovery_usable_cases": 3,
+      "site": "blocks.5.mlp_out",
+      "validation_values": [
+        -0.03816846654362994,
+        0.043579801459502764,
+        0.26184217349507166
+      ]
+    }
+  ]
+}

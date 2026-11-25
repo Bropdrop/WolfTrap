@@ -1,0 +1,9 @@
+{
+  "concurrency_scope": "quiescent local evidence directory",
+  "externally_pinned_receipt": true,
+  "files": 4,
+  "manifest_sha256": "8e36c30aff823121058aad1cabd56eafe0a5f3caddc3d5871e45f62f7405726b",
+  "publisher_authenticated": false,
+  "scientific_claims_verified": false,
+  "status": "INTEGRITY_MATCH"
+}

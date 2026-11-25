@@ -1,0 +1,7 @@
+usage: wolftrap-neuralscope neuron [-h] --model-dir MODEL_DIR --out OUT
+
+options:
+  -h, --help            show this help message and exit
+  --model-dir MODEL_DIR
+                        verified local seven-file DistilGPT2 directory
+  --out OUT             fresh evidence directory
