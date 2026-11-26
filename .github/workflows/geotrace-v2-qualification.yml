@@ -1,0 +1,35 @@
+name: GeoTrace R01 offline integration qualification
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/geotrace-v2-qualification.yml'
+      - 'qualification/geotrace/r01/**'
+      - 'src/wolftrap/**'
+      - 'tests/test_geotrace_v2.py'
+      - 'plugins/wolftrap-security/**'
+permissions:
+  contents: read
+jobs:
+  qualify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - name: Reproduce baseline, characterize boundaries and qualify candidate interfaces
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo unshare --net -- setpriv --reuid="$(id -u)" --regid="$(id -g)" \
+            --clear-groups --no-new-privs -- env -i PATH="$PATH" PYTHONDONTWRITEBYTECODE=1 \
+            bash -eu -c '
+              r=qualification/geotrace/r01
+              python3 "$r/verify_source.py"
+              python3 -S -m unittest discover -s "$r/wolftrap-api-geotrace-v1/tests" -v
+              python3 -S -m unittest discover -s "$r/independent_tests" -v
+              PYTHONPATH=src python3 -m unittest tests.test_geotrace_v2 -v
+              python3 "$r/qualify_mutations.py"
+              PYTHONPATH=src python3 -m unittest discover -s qualification/geotrace/r01 -p test_candidate_cli.py -k geotrace -v
+            '

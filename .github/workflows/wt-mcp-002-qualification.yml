@@ -1,0 +1,37 @@
+name: WT-MCP-002 offline evaluation
+on:
+  pull_request:
+    branches: [feat/wt-mcp-001-readonly]
+    paths:
+      - 'qualification/wt_mcp_002/**'
+      - 'qualification/wt_mcp_001/**'
+      - 'qualification/wt_zt_001/offline.py'
+      - 'src/wolftrap/**'
+      - '.github/workflows/wt-mcp-002-qualification.yml'
+permissions:
+  contents: read
+jobs:
+  offline:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'feat/wt-mcp-002-release-hardening'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - name: Qualify the exact source with egress disabled
+        shell: bash
+        run: |
+          set -eu
+          sudo unshare --net -- setpriv --reuid="$(id -u)" --regid="$(id -g)" --clear-groups --no-new-privs \
+            env -i PATH=/usr/bin:/bin PYTHONDONTWRITEBYTECODE=1 python3 -B \
+            qualification/wt_mcp_002/qualify_release.py --hosted --output "$RUNNER_TEMP/wt-mcp-002"
+      - name: Retain sanitized qualification status
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: wt-mcp-002-safety-case
+          path: ${{ runner.temp }}/wt-mcp-002/safety-case.json
+          retention-days: 5
+          if-no-files-found: error
