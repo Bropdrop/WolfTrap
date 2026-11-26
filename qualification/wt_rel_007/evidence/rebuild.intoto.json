@@ -1,0 +1,34 @@
+{
+  "_type": "https://in-toto.io/Statement/v1",
+  "predicate": {
+    "builds": [
+      {
+        "outputSha256": "f4d6188d47bb6c4fdcde3c76b54cb5ac0430c927d3d43b82b15b79c427c535dd",
+        "python": "Python 3.12.14",
+        "pythonSha256": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
+        "reportSha256": "e2f018b3913d1d764d62cc076bf25b83a1c4a0b8ebc4a04afe9da3081c597aed"
+      },
+      {
+        "outputSha256": "f4d6188d47bb6c4fdcde3c76b54cb5ac0430c927d3d43b82b15b79c427c535dd",
+        "python": "Python 3.13.5",
+        "pythonSha256": "889c603f0d17cb54060951bcf4c4f9b8c9ebd9e52b392c70209bbb9755d797d9",
+        "reportSha256": "e2f018b3913d1d764d62cc076bf25b83a1c4a0b8ebc4a04afe9da3081c597aed"
+      }
+    ],
+    "driverSha256": "ea6f28b4727480369c5fd20322c686ddbd8ff7ca5d9ca14a7b9bd9595fa03d00",
+    "git": "git version 2.56.1",
+    "scope": "unsigned local reproducibility observation",
+    "sourceCommit": "4d39dbee2aca4a680cd1a916bc4beb0f54cccb30",
+    "sourceTree": "a04d65fd3535c74ea8991e557b14d1e6899caa8e",
+    "toolingCommit": "8a33bc6d2230bff0a05aff77648a8362ed8e84eb"
+  },
+  "predicateType": "https://github.com/Bropdrop/WolfTrap/qualification/wt-rel-006/rebuild/v1",
+  "subject": [
+    {
+      "digest": {
+        "sha256": "f4d6188d47bb6c4fdcde3c76b54cb5ac0430c927d3d43b82b15b79c427c535dd"
+      },
+      "name": "wolftrap-wt-pkg-005-linux-evaluation.zip"
+    }
+  ]
+}

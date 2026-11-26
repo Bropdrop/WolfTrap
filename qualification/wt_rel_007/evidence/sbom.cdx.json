@@ -1,0 +1,425 @@
+{
+  "bomFormat": "CycloneDX",
+  "metadata": {
+    "component": {
+      "bom-ref": "wolftrap-evaluation",
+      "components": [
+        {
+          "bom-ref": "LICENSE",
+          "hashes": [
+            {
+              "alg": "SHA-256",
+              "content": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+            }
+          ],
+          "name": "LICENSE",
+          "type": "file"
+        },
+        {
+          "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip",
+          "components": [
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/LICENSE",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/LICENSE",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/plugins/wolftrap-security/plugin.json",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "5a7e7e3f62913b465685b92c44c1fceb6fe0bdf259fe52a0631f9b277dd9e9c2"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/plugins/wolftrap-security/plugin.json",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/pyproject.toml",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "e48982869ee597245ade97da44cd5bf248d1b9aac63d876878ca9abf34d8ad18"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/pyproject.toml",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_001/engine_entry.py",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "a9227bef65845c4bfd7c1f142c464a08c7a8b0b1bae9c64f37b0f3f7960c544c"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_001/engine_entry.py",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_001/isolation.py",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "bb60971bc7f03bf6ae3a37d1fef267ee44241b29cb69b28eea949189ccab1b7e"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_001/isolation.py",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/broker.py",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "a2f55ff3efa669469bcbc3f462cd3a0344d90288fa6e31b508cc43526b55eeec"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/broker.py",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/engine_role.py",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "690e9b0471deeafe38303de138ef972b5d3ff8f8eaf6815d2eb4b27b61b21574"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/engine_role.py",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/front.py",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "d7db70eddb17fef9b4f14dc78b75d38ce4fad662a76fd7d33f736c67a8e159c9"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/front.py",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/job_wire.py",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "09a866442a806f0440a510bbbd6da21129d553decc58d9e6ad315961a3b81437"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/job_wire.py",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/launch.py",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "484c77ce83eaaeeb6cbdd5e98e87e73a5caa6f701c2f0b8f006de6a43a75530e"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/launch.py",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/locked_worker.py",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "686c582e3e6f92c2f939dcef0c87bc174519f30cf12566db9e6470c76daa60dc"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/locked_worker.py",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/owner.py",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "2c7bef885ee78bb915b7af598bc66e55b1c58bd080b1e2c8d97d5e5e212fe668"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/owner.py",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/profile.py",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "960394bd0e0e945e3ef645fd5d76d2812952c869d64db6755b795dde7423db3a"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/profile.py",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/reference_pin.py",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "213cf9dbae4b1ebf70b3300b333ef8bfbc15fe7742e0337d088f3ae368c5f461"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/reference_pin.py",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/sibling.py",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "15c2ee8e590f6155cdb825750e146a1826a2ed0e57703464e662bcd0145ae63a"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/sibling.py",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/store.py",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "f5de2a38b51ac729948baf7e5a00bfef077627dbbc008b35dbb62384a7bc858a"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/store.py",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/worker_client.py",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "717e939bb48e63825b4bc62b2b88f9be2206dfa839d8f838b35d1ab14d2a7bce"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_mcp_002/worker_client.py",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_zt_001/offline.py",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "46932277df8e39c55f5da9e78a21c5b0b9a995f763cde2e54b2c231905f37e4c"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/qualification/wt_zt_001/offline.py",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/receipt.json",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "8810b6cfd28fe84af072769a4033d232c135238c79bcb251741f87e8fe609059"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/receipt.json",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/src/wolftrap/__init__.py",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "1018588db24fe7a5bf94745ec332f629a92b49569c1026c24d02080877eed703"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/src/wolftrap/__init__.py",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/src/wolftrap/_geotrace_v1.py",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "774f9a20a952789b3560e5efdf515465a8e45e64adabc4f808ce2da6032950c1"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/src/wolftrap/_geotrace_v1.py",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/src/wolftrap/agent_rules.py",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "1f9591c5e96f0a108bf6246970bae64612d85a5d694a1938504fb086cf88135c"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/src/wolftrap/agent_rules.py",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/src/wolftrap/agent_scan.py",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "af51f10f2315afac803081d968700974abe2a3d6ea40ea161153b96777f4ca31"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/src/wolftrap/agent_scan.py",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/src/wolftrap/geotrace.py",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "7d205574b6f0a262624ebc7a21e9e90c6264d557a1e32c6679b0dad8a18eab63"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/src/wolftrap/geotrace.py",
+              "type": "file"
+            },
+            {
+              "bom-ref": "adapter/wolftrap-local-evaluation-0.3.0.zip!/src/wolftrap/geotrace_cli.py",
+              "hashes": [
+                {
+                  "alg": "SHA-256",
+                  "content": "7fe26ca3446f3b53d10a653815ca38cd46427741e91352bdaf71c171f6bb0bf4"
+                }
+              ],
+              "name": "adapter/wolftrap-local-evaluation-0.3.0.zip!/src/wolftrap/geotrace_cli.py",
+              "type": "file"
+            }
+          ],
+          "hashes": [
+            {
+              "alg": "SHA-256",
+              "content": "ee05c9f82ebc718973fa8b937c776be093c77c15bb1b0209bf004177e3d489f0"
+            }
+          ],
+          "name": "adapter/wolftrap-local-evaluation-0.3.0.zip",
+          "type": "file"
+        },
+        {
+          "bom-ref": "assembly-receipt.json",
+          "hashes": [
+            {
+              "alg": "SHA-256",
+              "content": "99908db69909ec0af22d8513f116b4f17b667e4a692d232ff1f28751c2e26ed6"
+            }
+          ],
+          "name": "assembly-receipt.json",
+          "type": "file"
+        },
+        {
+          "bom-ref": "plugins/wolftrap-security/README.md",
+          "hashes": [
+            {
+              "alg": "SHA-256",
+              "content": "38db2e3c66e5bb9ecc9b945e806c7302d78db63dc5c489b2ef792dab62ab29de"
+            }
+          ],
+          "name": "plugins/wolftrap-security/README.md",
+          "type": "file"
+        },
+        {
+          "bom-ref": "plugins/wolftrap-security/UPGRADES.md",
+          "hashes": [
+            {
+              "alg": "SHA-256",
+              "content": "047a30586166c1042ca68ef8cbe63f97bbf35c05a8d3a969de6651e9d4b13f88"
+            }
+          ],
+          "name": "plugins/wolftrap-security/UPGRADES.md",
+          "type": "file"
+        },
+        {
+          "bom-ref": "plugins/wolftrap-security/plugin.json",
+          "hashes": [
+            {
+              "alg": "SHA-256",
+              "content": "5a7e7e3f62913b465685b92c44c1fceb6fe0bdf259fe52a0631f9b277dd9e9c2"
+            }
+          ],
+          "name": "plugins/wolftrap-security/plugin.json",
+          "type": "file"
+        },
+        {
+          "bom-ref": "plugins/wolftrap-security/skills/wolftrap-audit/SKILL.md",
+          "hashes": [
+            {
+              "alg": "SHA-256",
+              "content": "f2702cd6204c6c2e74e4f9d2c0402e00570314ca13d4b5c5c66b07d2fda46638"
+            }
+          ],
+          "name": "plugins/wolftrap-security/skills/wolftrap-audit/SKILL.md",
+          "type": "file"
+        },
+        {
+          "bom-ref": "plugins/wolftrap-security/skills/wolftrap-evidence-review/SKILL.md",
+          "hashes": [
+            {
+              "alg": "SHA-256",
+              "content": "a169d6d440c6eb7be4e1f857142c81607004dea43c9e8864a890fe984333fe48"
+            }
+          ],
+          "name": "plugins/wolftrap-security/skills/wolftrap-evidence-review/SKILL.md",
+          "type": "file"
+        },
+        {
+          "bom-ref": "qualification/wt_mcp_002/README.md",
+          "hashes": [
+            {
+              "alg": "SHA-256",
+              "content": "f05caa1ed2705325c8c66b36a97aed3ca1edce7db8f733fc767c9b61f0d99a98"
+            }
+          ],
+          "name": "qualification/wt_mcp_002/README.md",
+          "type": "file"
+        },
+        {
+          "bom-ref": "qualification/wt_mcp_002/audit.py",
+          "hashes": [
+            {
+              "alg": "SHA-256",
+              "content": "f0928a20f6d208092d6a24e740fc459200cac6085afa335d90a46766c1eb9374"
+            }
+          ],
+          "name": "qualification/wt_mcp_002/audit.py",
+          "type": "file"
+        },
+        {
+          "bom-ref": "qualification/wt_mcp_002/reference.json",
+          "hashes": [
+            {
+              "alg": "SHA-256",
+              "content": "3421ee83fb916dba6177bf21709d2ff9a24839f9d2a8b4e77eba8a708b980877"
+            }
+          ],
+          "name": "qualification/wt_mcp_002/reference.json",
+          "type": "file"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f4d6188d47bb6c4fdcde3c76b54cb5ac0430c927d3d43b82b15b79c427c535dd"
+        }
+      ],
+      "name": "wolftrap-wt-pkg-005-linux-evaluation.zip",
+      "type": "application",
+      "version": "WT-PKG-005"
+    }
+  },
+  "properties": [
+    {
+      "name": "wolftrap:inventory:scope",
+      "value": "ZIP contents only. CPython, Bubblewrap, host libraries and kernel are external."
+    }
+  ],
+  "specVersion": "1.6",
+  "version": 1
+}

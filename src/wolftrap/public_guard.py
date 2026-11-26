@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import ast
+import hashlib
 import json
 import os
 import platform
@@ -165,13 +166,67 @@ def _path_parts(value: str) -> tuple[str, ...]:
     return parts
 
 
-def _content_signals(text: str) -> set[str]:
+# Only these source contexts have a reviewed non-contact interpretation.
+_GEO_TEST = "qualification/geotrace/r01/wolftrap-api-geotrace-v1/tests/test_api_geotrace.py"
+_ORIGIN_CHECKS = {
+    "qualification/wt_mcp_001/qualify.py": ("remote", ast.In),
+    "qualification/wt_mcp_003/catalog_check.py": ("origin", ast.NotIn),
+}
+_ORIGIN_URL = "https://github.com/Bropdrop/WolfTrap"
+_ORIGIN_SSH = "git" + "@github.com:Bropdrop/WolfTrap"
+_GEO_USERINFO = "api.fr.test" + "@evil.test"
+_GEO_CASES = ("https://api.fr.test/v1", "api.fr.test/path", _GEO_USERINFO, "api.fr.test:443")
+
+
+def _reviewed_literal(parts: tuple[str, ...], source: str) -> tuple[int, int] | None:
+    """Identify one literal in the reviewed Python construct. AST columns count UTF-8 bytes."""
+    path = "/".join(parts)
+    if path != _GEO_TEST and path not in _ORIGIN_CHECKS:
+        return None
+    tree = ast.parse(source)
+    candidates = []
+    if path == _GEO_TEST:
+        for method in ast.walk(tree):
+            if isinstance(method, ast.FunctionDef) and method.name == "test_deny_url_and_not_confuse_host_with_tld":
+                for loop in method.body:
+                    if isinstance(loop, ast.For) and isinstance(loop.target, ast.Name) and loop.target.id == "value":
+                        candidates.append(loop.iter)
+        expected, index = _GEO_CASES, 2
+    else:
+        name, operator = _ORIGIN_CHECKS[path]
+        for check in ast.walk(tree):
+            if (isinstance(check, ast.Compare) and isinstance(check.left, ast.Name)
+                    and check.left.id == name and len(check.ops) == 1 and isinstance(check.ops[0], operator)):
+                candidates.append(check.comparators[0])
+        expected, index = (_ORIGIN_URL, _ORIGIN_SSH), 1
+    literals = [
+        node.elts[index] for node in candidates if isinstance(node, ast.Tuple)
+        and all(isinstance(item, ast.Constant) for item in node.elts)
+        and tuple(item.value for item in node.elts) == expected
+    ]
+    if len(literals) != 1:
+        return None
+    literal = literals[0]
+    # Require an ordinary, single quoted token. Concatenation, comments, escapes
+    # and multiline spellings must never extend the exempt span.
+    token = ast.get_source_segment(source, literal)
+    if token not in ('"' + literal.value + '"', "'" + literal.value + "'"):
+        return None
+    lines = re.split(r"(?<=\n)|(?<=\r)(?!\n)", source)
+    line = lines[literal.lineno - 1]
+    column = len(line.encode("utf-8")[:literal.col_offset].decode("utf-8"))
+    start = sum(map(len, lines[:literal.lineno - 1])) + column + 1
+    return start, start + len(literal.value.split(":")[0])
+
+
+def _content_signals(text: str, reviewed_literal: tuple[int, int] | None = None) -> set[str]:
     signals = set()
     if _SECRET_PATTERN.search(text):
         signals.add("credential-shape")
     if any(
         match[1].casefold() not in _PUBLIC_EMAIL_DOMAINS
         and match[0].casefold() not in _PUBLIC_EMAIL_ADDRESSES
+        and match.span() != reviewed_literal
         for match in _EMAIL_PATTERN.finditer(text)
     ):
         signals.add("contact-address")
@@ -302,6 +357,7 @@ def _is_workflow(parts: tuple[str, ...]) -> bool:
 
 def _source_signals(
     parts: tuple[str, ...], raw: bytes, workflow_dependencies: bool, lock_present: bool,
+    cryptofall_lab: bool = False,
 ) -> set[str]:
     suffix = PurePosixPath(parts[-1]).suffix.lower()
     if suffix in _SOURCE_IMAGE_SIGNATURES:
@@ -313,7 +369,7 @@ def _source_signals(
     source = raw.decode("utf-8")
     if "\x00" in source:
         raise GuardInputError
-    signals = _content_signals(source)
+    signals = _content_signals(source, _reviewed_literal(parts, source))
     if suffix == ".py":
         signals.update(_python_import_signals(source))
     if suffix in _JS_SUFFIXES and any(_has_private_module(module) for module in _JS_IMPORT.findall(source)):
@@ -328,13 +384,26 @@ def _source_signals(
         parts[-1].lower() in _DEPENDENCY_FILES
         or re.fullmatch(r"requirements[^/]*\.(?:txt|in)", parts[-1], re.IGNORECASE)
     ):
-        signals.add("unreviewed-dependency-manifest")
+        if not (cryptofall_lab and parts == ("experiments", "cryptofall", "requirements.txt")
+                and hashlib.sha256(raw).hexdigest() == _LAB_MANIFEST):
+            signals.add("unreviewed-dependency-manifest")
     if workflow_dependencies and _is_workflow(parts):
         signals.update(_workflow_dependency_signals(source, lock_present))
     return signals
 
 
-def scan_source(root: Path, ref: str, scan: GuardScan, *, workflow_dependencies: bool = False) -> None:
+# An opt-in assessment of one historical tree. An updated product, experiment
+# or distribution requires a new review. The evidence pins belong to the scanner.
+_LAB_TREE = "814a03473e23d94cd9af84ed6f2a567c19badfcd"
+_LAB_MANIFEST = "56e6301f491d336997805ec0e824b163ce5797a708440d68f52b6c3e60d63909"
+_LAB_EVIDENCE = {
+    "proposed-cp312-linux-x86_64.lock": "2e8819bac1fad1821481d9903518ffba82e23d53ce7bbd47eab22112f54a640c",
+    "cryptography-provenance.json": "9e1794f79265b1056325979564153dd64df1cc538d06f170286d9dad2db87a6a",
+}
+
+
+def scan_source(root: Path, ref: str, scan: GuardScan, *, workflow_dependencies: bool = False,
+                cryptofall_evidence: Path | None = None) -> None:
     """Read immutable tracked objects without following worktree files or Git links."""
     try:
         scan.commit = _git_object(root, ref + "^{commit}")
@@ -347,6 +416,18 @@ def scan_source(root: Path, ref: str, scan: GuardScan, *, workflow_dependencies:
         scan.unknown["git-input"] += 1
         return
 
+    lab = False
+    if cryptofall_evidence is not None:
+        if scan.tree != _LAB_TREE or not workflow_dependencies:
+            scan.signals["laboratory-scope"] += 1
+        else:
+            try:
+                lab = all(hashlib.sha256(_open_report(cryptofall_evidence, (name,))).hexdigest() == digest
+                          for name, digest in _LAB_EVIDENCE.items())
+            except (OSError, GuardInputError):
+                lab = False
+            if not lab:
+                scan.signals["laboratory-evidence"] += 1
     lock_path = b"\t" + "/".join(_APPROVED_LOCK_PATH).encode("ascii")
     lock_present = any(entry.endswith(lock_path) for entry in entries)
     path_spellings: dict[str, str] = {}
@@ -386,7 +467,7 @@ def scan_source(root: Path, ref: str, scan: GuardScan, *, workflow_dependencies:
             raw = _git(root, "cat-file", "blob", object_id)
             if len(raw) != expected_size:
                 raise GuardInputError
-            signals.update(_source_signals(parts, raw, workflow_dependencies, lock_present))
+            signals.update(_source_signals(parts, raw, workflow_dependencies, lock_present, lab))
         except (GuardInputError, UnicodeError, ValueError, SyntaxError, RecursionError):
             scan.unknown["unsupported-source-content"] += 1
         scan.signals.update(signals)
@@ -486,14 +567,22 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--workflow-dependencies", action="store_true", help="check action and install policy using PyYAML")
     parser.add_argument("--report-root", type=Path, help="trusted directory prepared for publication")
     parser.add_argument("--report", action="append", default=[], help="relative report file to review")
+    parser.add_argument("--cryptofall-lab-evidence", type=Path,
+                        help="assess the pinned historical laboratory tree with independently selected evidence")
     args = parser.parse_args(argv)
+    if args.cryptofall_lab_evidence is not None:
+        args.workflow_dependencies = True
     scan = GuardScan()
-    scan_source(args.repo, args.ref, scan, workflow_dependencies=args.workflow_dependencies)
+    scan_source(args.repo, args.ref, scan, workflow_dependencies=args.workflow_dependencies,
+                cryptofall_evidence=args.cryptofall_lab_evidence)
     if args.report_root is None and args.report:
         scan.unknown["report-selection"] += 1
     elif args.report_root is not None:
         scan_reports(args.report_root, args.report, scan)
-    print(json.dumps(scan.result(args.workflow_dependencies), sort_keys=True))
+    result = scan.result(args.workflow_dependencies)
+    if args.cryptofall_lab_evidence is not None:
+        result["policy"] = "cryptofall-historical-cp312-linux-x86_64-v1"
+    print(json.dumps(result, sort_keys=True))
     return 2 if scan.unknown else 1 if scan.signals else 0
 
 
