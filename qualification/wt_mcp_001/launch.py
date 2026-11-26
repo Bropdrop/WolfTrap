@@ -1,4 +1,5 @@
 """Operator entry point for the Linux stdio host and its nested worker profiles."""
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -8,6 +9,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from host import private_directory, require
 from isolation import BWRAP, FILTER, HERE, HOST_LIBS, LIBDIR, LIBS, LOADER, PYTHON, ROOT
 
+
+
+# These independently pinned packaging assets stay outside every workload mount.
+HOST_ONLY_PACKAGE_FILES = {
+    "plugins/wolftrap-security/assets/wolftrap.png": "72d9243f6663e100401a3d20719843b364f54f90952e461c4e2a81a1d0bab29c",
+    "plugins/wolftrap-security/tools/skills_package.py": "328e4b31dfc8f8a58e24c63eea97164592000bdc55a6a1eab2718253b156e6de",
+    "plugins/wolftrap-security/tools/test_skills_package.py": "12f8b00baa79fb823192237bffce8341312fc0e42876385bdc8147745dceef1b",
+}
 
 
 def command(state):
@@ -32,7 +41,12 @@ def command(state):
     trees = (ROOT / "src/wolftrap", ROOT / "plugins/wolftrap-security")
     actual = {str(p.relative_to(ROOT)) for tree in trees for p in tree.rglob("*")
               if (p.is_symlink() or p.is_file()) and "__pycache__" not in p.parts and p.suffix != ".pyc"}
-    require(set(published) == actual)
+    require(actual == set(published) | set(HOST_ONLY_PACKAGE_FILES))
+    require(set(published).isdisjoint(HOST_ONLY_PACKAGE_FILES))
+    for rel, digest in HOST_ONLY_PACKAGE_FILES.items():
+        path = ROOT / rel
+        require(path.resolve() == path and path.is_file() and path.stat().st_nlink == 1)
+        require(hashlib.sha256(path.read_bytes()).hexdigest() == digest)
     entry_files = ("catalog.json", "install-files.json", "isolation.py", "host.py", "launch.py",
                    "configuration.py", "frontend.py", "engine_entry.py", "test_profile.py",
                    "qualify.py", "qualify_mutations.py", "codex_client.py", "packet.py")
