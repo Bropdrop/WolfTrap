@@ -45,6 +45,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          echo "e570ebf0b5cb62dd21b578373a7eff72a908242f6a7fb5ae488f8bb07934c711  .github/qualification-requirements.txt" | sha256sum --check --status
           git worktree add --detach "$RUNNER_TEMP/wolftrap-source" ec6c3c1b2a50d702d202bd9b4e40842ba6e395f2
           python -I -m pip --isolated install --no-cache-dir --no-deps --only-binary=:all: --require-hashes --index-url https://pypi.org/simple -r .github/qualification-requirements.txt
       - name: Exercise the public CLI with network isolated
