@@ -1,0 +1,5 @@
+{"control": "witness rollback", "expected": ["witness restored", "witness-rollback", 1, 1], "mutant": ["witness restored", "disposable-permit", 1, 1], "verdict": "DETECTED"}
+{"control": "algorithm downgrade", "expected": ["ordinary downgrade", "profile-transition", 1, 1], "mutant": ["ordinary downgrade", 3, 1, 1], "verdict": "DETECTED"}
+{"control": "permit substitution", "expected": ["substituted permit", "disposable-permit", 0, 0], "mutant": ["substituted permit", 1, 1, 1], "verdict": "DETECTED"}
+{"control": "stale epoch", "expected": ["epoch probe", "current-policy", 0, 0], "mutant": ["epoch probe", 1, 1, 1], "verdict": "DETECTED"}
+{"control": "recovery authority confusion", "expected": ["confused recovery authority", "signature-coordinate", 1, 1], "mutant": ["confused recovery authority", 4, 1, 1], "verdict": "DETECTED"}

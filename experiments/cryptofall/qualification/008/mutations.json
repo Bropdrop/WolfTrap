@@ -1,0 +1,32 @@
+[
+  {
+    "mutation": "unsafe lock release",
+    "reference": 0,
+    "mutant": 3,
+    "detected": true
+  },
+  {
+    "mutation": "cross-view double voting",
+    "reference": 0,
+    "mutant": 3,
+    "detected": true
+  },
+  {
+    "mutation": "stale prepared certificate",
+    "reference": 0,
+    "mutant": 3,
+    "detected": true
+  },
+  {
+    "mutation": "reduced decision threshold",
+    "reference": "UNRESOLVED",
+    "mutant": "COMMITTED",
+    "detected": true
+  },
+  {
+    "mutation": "authority substitution",
+    "reference": "UNRESOLVED",
+    "mutant": "COMMITTED",
+    "detected": true
+  }
+]

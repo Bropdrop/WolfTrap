@@ -1,0 +1,32 @@
+[
+  {
+    "mutation": "unsafe threshold",
+    "reference": "UNRESOLVED",
+    "mutant": "COMMITTED",
+    "detected": true
+  },
+  {
+    "mutation": "conflicting commitments",
+    "reference": "UNRESOLVED",
+    "mutant": "COMMITTED",
+    "detected": true
+  },
+  {
+    "mutation": "rollback against retained floor",
+    "reference": "UNRESOLVED",
+    "mutant": "COMMITTED",
+    "detected": true
+  },
+  {
+    "mutation": "authority substitution",
+    "reference": "UNRESOLVED",
+    "mutant": "COMMITTED",
+    "detected": true
+  },
+  {
+    "mutation": "volatile vote lock",
+    "reference": "locked",
+    "mutant": "SECOND_VALID_SIGNATURE",
+    "detected": true
+  }
+]

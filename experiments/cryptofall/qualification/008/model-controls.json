@@ -1,0 +1,10 @@
+[
+  {
+    "mutation": "ignore carried lock",
+    "counterexample": "AssertionError: (1, (-1, 0, -1), (-1,), (0, 1, 1), (False, True, True))"
+  },
+  {
+    "mutation": "two prepares suffice",
+    "counterexample": "AssertionError: ('conflicting prepares', 0, (0, -1, 1))"
+  }
+]
