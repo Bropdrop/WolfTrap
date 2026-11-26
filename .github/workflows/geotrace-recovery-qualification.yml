@@ -1,0 +1,37 @@
+name: WT-GEO-R00 GeoTrace inert recovery gate
+
+on:
+  pull_request:
+    paths:
+      - 'qualification/geotrace/**'
+      - '.github/workflows/geotrace-recovery-qualification.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  recover-gate:
+    name: Qualify inert ZIP inventory and evidence verifier offline
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONHASHSEED: '0'
+    steps:
+      - name: Check out exact candidate without persisted credentials
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Exercise only fictional ZIPs inside a network namespace
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo unshare --net -- setpriv --reuid="$(id -u)" --regid="$(id -g)" \
+            --clear-groups --no-new-privs -- env -i \
+            PATH="$PATH" PYTHONDONTWRITEBYTECODE=1 PYTHONHASHSEED=0 \
+            bash -eu -c '
+              python3 -m unittest discover -s qualification/geotrace -p "test_recovery*.py" -v
+              python3 qualification/geotrace/qualify_mutations.py
+            '

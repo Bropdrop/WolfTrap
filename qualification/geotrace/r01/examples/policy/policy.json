@@ -1,0 +1,30 @@
+{
+  "schema": "wolftrap.geotrace-policy/v2",
+  "task": "fictional-review",
+  "workload": "workload-a",
+  "valid_from": "2026-11-21",
+  "valid_until": "2026-11-23",
+  "max_age_days": 3,
+  "allowed": {
+    "provider_origin": [
+      "FR"
+    ],
+    "network_egress": [
+      "CA"
+    ],
+    "destination_hop": [
+      "US"
+    ],
+    "execution_region": [
+      "DE"
+    ],
+    "processing_jurisdiction": [
+      "BR"
+    ],
+    "intermediary": [
+      "JP",
+      "SE"
+    ]
+  },
+  "session": "session-a"
+}

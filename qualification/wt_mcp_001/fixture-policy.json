@@ -1,0 +1,38 @@
+{
+  "as_of": "2026-11-22",
+  "expected_bundle": {
+    "geotrace.json": "7876fbf2e5502434ba60edc2986bcf9ace58dcda55bd60985be00ceade0a6e04",
+    "geotrace.md": "d53875df7927357a7ffca8a002cb4d1646a2b1bc04eefea6746efa85f9745836",
+    "geotrace.sarif": "b4b9a12290c76ec0e30f470a6e293d133bdbb59ee91fc0f8ccda8d4b9a2b4955",
+    "manifest.json": "7aceb976f6e5d9f5a44ea46b15373d37f24dd73039478c866b85f2f4e9563412"
+  },
+  "geo_policy_sha256": "7327994f3e6d80e490a4900670dab1dfb853b4abe708e3e2321df9816a6b98f7",
+  "grants": {
+    "wolftrap_capabilities": {
+      "destination": "bundle-a",
+      "operation": "list",
+      "policy_version": "owner-policy-1",
+      "principal": "operator-a",
+      "source": "capture-a",
+      "task": "fictional-review"
+    },
+    "wolftrap_scan_authorized_local": {
+      "destination": "bundle-a",
+      "operation": "scan-geotrace",
+      "policy_version": "owner-policy-1",
+      "principal": "operator-a",
+      "source": "capture-a",
+      "task": "fictional-review"
+    },
+    "wolftrap_verify_evidence": {
+      "destination": "bundle-a",
+      "operation": "verify-geotrace",
+      "policy_version": "owner-policy-1",
+      "principal": "operator-a",
+      "source": "capture-a",
+      "task": "fictional-review"
+    }
+  },
+  "source_sha256": "3e470497e5634e21ee01dc779a3ec23e9f6823862fe53303c8c8445295aada29",
+  "version": 1
+}
