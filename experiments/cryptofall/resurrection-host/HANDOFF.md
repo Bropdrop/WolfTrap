@@ -1,0 +1,18 @@
+# Independent-host qualification kit
+
+**Prepared locally. Independent-host execution and custody are NOT_RUN.** The unit is a template with no installation or enablement step in the local qualification. This lab protocol is suitable only for isolated disposable counters.
+
+| Custodian | Holds | Isolation required |
+|---|---|---|
+| A, B, C, D | One member seed, per-relay secrets, one active SQLite volume and its own SSH host key | Four independently administered physical or virtual hosts, separate storage, restore and root authority |
+| Two relay operators | Only assigned RPC link secrets and authenticated SSH client credentials | Separate from replica storage and all approval or grant keys |
+| Owner, effect witness, permit issuer, executor, recovery authority and policy witness | Corresponding previously defined application keys only | Follow the WT-007 key roles and independent provisioning procedure |
+| Reviewer | Public genesis and evolving height/digest checkpoints | Retain outside all target restore and operator domains |
+
+1. Each replica custodian reviews the patch, verifies the runtime pins, installs it in an isolated lab image and prepares a private disk. As that host's service account run `python resurrection-host/provision.py generate A /var/lib/wt008` with the correct member name and a fresh path. Send only the returned public key to genesis assembly. The file named custody remains secret. Release only the matching per-link secret to each relay over its approved confidential channel.
+2. Assemble a fresh WT-007-shaped public config from the four public keys and the independently generated application public pins. All custodians compare the canonical SHA-256 genesis digest out of band. On each host use `python resurrection-host/provision.py initialize A /var/lib/wt008 --genesis genesis.json --pin HEX`. Verify storage persistence and protected time. Never reinitialize or clone a voting identity after uncertain disk loss. Keep signer state and its volume inseparable.
+3. Review and adapt the supplied service unit to the local runtime paths. The process prints its loopback port on startup. Each relay may reach that port via an individually authorized SSH local forward using a pinned host key, a distinct local port per member, and an account restricted to port forwarding. Supply the local ports and pairwise link keys in the relay job's peers map. Confirm authentication, confidentiality, host identity, access controls, independent stop/start and fault isolation before qualification. Recreate the forward when the replica's ephemeral port changes.
+4. Drive the JSON relay entry point with config, retained floor, role, peers, history, numeric view and candidate. For read-only recovery supply request instead of candidate and history. Keep the reviewer's pins independent. A CERTIFIED response may select a different previously prepared request. Check the signed receipt against the client's exact envelope before reporting any terminal result.
+5. Reproduce the matrix with independent machines, external packet cuts and storage snapshots. Capture coordinator deaths, view promises, prepare and commit signatures, atomic lock persistence, administrative provenance, clock offsets and QC/floor bytes. Run power-loss and host-loss experiments separately. Decommission test identities afterward. Keep native WolfAlibi and actual human approvals as independent verdicts.
+
+The shared-host test driver centrally generates fixture credentials and uses disposable directories. Independent-host runs require custodian-provisioned credentials and the external fault controls described above. This packet contains no host addresses, private credentials or authorization to deploy.

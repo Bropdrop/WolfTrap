@@ -1,0 +1,4 @@
+{"control": "unsafe release", "reference": "UNRESOLVED", "mutant": "NOT_COMMITTED", "verdict": "DETECTED"}
+{"control": "false reconciliation", "reference": "no-positive-proof", "mutant": "COMMITTED", "verdict": "DETECTED"}
+{"control": "substituted trust anchor", "reference": "certificate", "mutant": "OK", "verdict": "DETECTED"}
+{"control": "unilateral recovery", "reference": "certificate", "mutant": "NOT_COMMITTED", "verdict": "DETECTED"}

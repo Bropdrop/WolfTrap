@@ -1,0 +1,9 @@
+{"comparison": "all-four-at-thirty-seconds", "profile": "hybrid", "expected": "EVIDENCE_ACCEPTED", "original": "EVIDENCE_ACCEPTED", "successor": "EVIDENCE_ACCEPTED", "evaluations_per_version": 1, "disposable_effects": 0}
+{"comparison": "repeat-evidence-without-effect", "profile": "hybrid", "expected": "EVIDENCE_ACCEPTED", "original": "EVIDENCE_ACCEPTED", "successor": "EVIDENCE_ACCEPTED", "evaluations_per_version": 2, "disposable_effects": 0}
+{"comparison": "one-algorithm-per-role", "profile": "hybrid", "expected": "DENY", "original": "DENY", "successor": "DENY", "evaluations_per_version": 1, "disposable_effects": 0}
+{"comparison": "thirty-one-seconds", "profile": "hybrid", "expected": "DENY", "original": "DENY", "successor": "DENY", "evaluations_per_version": 1, "disposable_effects": 0}
+{"comparison": "different-request-id", "profile": "hybrid", "expected": "DENY", "original": "DENY", "successor": "DENY", "evaluations_per_version": 1, "disposable_effects": 0}
+{"boundary": "genuine-v1-signatures-at-v2-counter", "result": "DENY", "disposable_effects": 0}
+{"comparison": "explicit-pq-only-after-classical-revocation", "profile": "pq-only", "expected": "EVIDENCE_ACCEPTED", "original": "EVIDENCE_ACCEPTED", "successor": "EVIDENCE_ACCEPTED", "evaluations_per_version": 1, "disposable_effects": 0}
+{"comparison": "pq-only-needs-witness", "profile": "pq-only", "expected": "DENY", "original": "DENY", "successor": "DENY", "evaluations_per_version": 1, "disposable_effects": 0}
+{"boundary": "supplied-archive", "classification": "HISTORICAL_BYTES_ONLY", "altered_bytes": "DENY", "disposable_effects": 0}

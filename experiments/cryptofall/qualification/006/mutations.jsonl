@@ -1,0 +1,6 @@
+{"mutant": "split commit", "reference": [0, 0], "weakened": [1, 0], "verdict": "DETECTED"}
+{"mutant": "unspent permit", "reference": "COMMITTED", "weakened": "UNRESOLVED", "verdict": "DETECTED"}
+{"mutant": "stale policy", "reference": "denied", "weakened": "COMMITTED", "verdict": "DETECTED"}
+{"mutant": "receipt substitution", "reference": "denied", "weakened": "COMMITTED", "verdict": "DETECTED"}
+{"mutant": "replicated log authority", "reference": "UNRESOLVED", "weakened": "COMMITTED", "verdict": "DETECTED"}
+{"mutant": "ignored contradiction", "reference": "UNRESOLVED", "weakened": "COMMITTED", "verdict": "DETECTED"}
