@@ -1,0 +1,22 @@
+{
+  "alpha": {
+    "digest": "3e470497e5634e21ee01dc779a3ec23e9f6823862fe53303c8c8445295aada29",
+    "expected": {
+      "geotrace.json": "7876fbf2e5502434ba60edc2986bcf9ace58dcda55bd60985be00ceade0a6e04",
+      "geotrace.md": "d53875df7927357a7ffca8a002cb4d1646a2b1bc04eefea6746efa85f9745836",
+      "geotrace.sarif": "b4b9a12290c76ec0e30f470a6e293d133bdbb59ee91fc0f8ccda8d4b9a2b4955",
+      "manifest.json": "7aceb976f6e5d9f5a44ea46b15373d37f24dd73039478c866b85f2f4e9563412"
+    },
+    "outcome": "NO_PATTERN_MATCH"
+  },
+  "beta": {
+    "digest": "ec0f9cf282092a2cbe8fa3bb5fad4ec6fce3ed1817ff2ad4eb38c09e345bc142",
+    "expected": {
+      "geotrace.json": "5ce41a768959390f53d51a7c171e30532b283013d35cda11f39948c795456281",
+      "geotrace.md": "f4affd1da00a481f60fded4792006323efdf2e0d2130d819f30791d2439f2f76",
+      "geotrace.sarif": "cb90f1607bfc53ba2c9276ea31210cc35a9511281ce065a74e6b9568bb25bdd8",
+      "manifest.json": "cb3f2deadded9ff0351991bcc25762424524834de772c1657cbc5d8c1a8c1632"
+    },
+    "outcome": "REVIEW_REQUIRED"
+  }
+}

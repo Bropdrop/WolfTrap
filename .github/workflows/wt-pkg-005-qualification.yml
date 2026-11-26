@@ -1,0 +1,67 @@
+name: WT-PKG-005 Linux evaluation
+on:
+  pull_request:
+    branches: [feat/wt-mcp-003-sibling-sandbox]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  WT_PKG_005_DRIVER: qualification/wt_pkg_005/wt_pkg_005.py
+
+jobs:
+  portable-integrity:
+    name: Portable package integrity and file rollback
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Rebuild, reject substitution, install and roll back verified files
+        shell: bash
+        run: |
+          set -euo pipefail
+          work=$(mktemp -d "$RUNNER_TEMP/wt-pkg-005-portable.XXXXXX")
+          trap 'rm -rf -- "$work"' EXIT
+          python3 -EBS "$WT_PKG_005_DRIVER" portable --source "$GITHUB_WORKSPACE" --output "$work/result"
+          printf '\n```json\n' >> "$GITHUB_STEP_SUMMARY"
+          cat "$work/result/result.json" >> "$GITHUB_STEP_SUMMARY"
+          printf '```\n' >> "$GITHUB_STEP_SUMMARY"
+
+  os-sandbox:
+    name: Protected Linux runtime (mandatory namespaces and seccomp)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Test the assembled adapter with egress isolated
+        shell: bash
+        run: |
+          set -euo pipefail
+          work=$(mktemp -d "$RUNNER_TEMP/wt-pkg-005-os.XXXXXX")
+          trap 'rm -rf -- "$work"' EXIT
+          status=0
+          unshare --user --map-current-user --net -- setpriv --no-new-privs \
+            /usr/bin/python3 -EBS "$WT_PKG_005_DRIVER" qualify --source "$GITHUB_WORKSPACE" \
+            --output "$work/result" --hosted > "$work/driver.log" 2>&1 || status=$?
+          if [[ -f "$work/result/result.json" ]]; then
+            tee -a "$GITHUB_STEP_SUMMARY" < "$work/result/result.json"
+            exit "$status"
+          fi
+          log=$(< "$work/driver.log")
+          case "$log" in
+            *'uid_map: Read-only file system'*) reason=HOSTED_UID_MAP_READ_ONLY ;;
+            *'uid_map: Operation not permitted'*|*'uid_map: Permission denied'*) reason=HOSTED_UID_MAP_PERMISSION_DENIED ;;
+            *'unshare failed: Operation not permitted'*) reason=HOSTED_NAMESPACE_PERMISSION_DENIED ;;
+            *) reason=HOSTED_ISOLATION_OR_DRIVER_START_UNAVAILABLE ;;
+          esac
+          printf 'BLOCK %s\n' "$reason" | tee -a "$GITHUB_STEP_SUMMARY"
+          exit 2
