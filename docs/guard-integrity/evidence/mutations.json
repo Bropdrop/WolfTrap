@@ -1,0 +1,66 @@
+[
+  {
+    "mutation": "ignore other contact occurrences",
+    "failed_assertions": [
+      "FAIL: test_context_cannot_authorize_another_occurrence (test_guard_integrity.GuardIntegrityTests.test_context_cannot_authorize_another_occurrence)",
+      "FAIL: test_minimal_positive_contexts (test_guard_integrity.GuardIntegrityTests.test_minimal_positive_contexts) (path='qualification/geotrace/r01/wolftrap-api-geotrace-v1/tests/test_api_geotrace.py')",
+      "FAIL: test_minimal_positive_contexts (test_guard_integrity.GuardIntegrityTests.test_minimal_positive_contexts) (path='qualification/wt_mcp_001/qualify.py')",
+      "FAIL: test_minimal_positive_contexts (test_guard_integrity.GuardIntegrityTests.test_minimal_positive_contexts) (path='qualification/wt_mcp_003/catalog_check.py')",
+      "FAIL: test_utf8_offsets_and_newlines (test_guard_integrity.GuardIntegrityTests.test_utf8_offsets_and_newlines)"
+    ]
+  },
+  {
+    "mutation": "accept SSH context in another file",
+    "failed_assertions": [
+      "FAIL: test_minimal_positive_contexts (test_guard_integrity.GuardIntegrityTests.test_minimal_positive_contexts) (path='qualification/wt_mcp_001/qualify.py')"
+    ]
+  },
+  {
+    "mutation": "ignore SSH comparison variable",
+    "failed_assertions": [
+      "FAIL: test_context_cannot_authorize_another_occurrence (test_guard_integrity.GuardIntegrityTests.test_context_cannot_authorize_another_occurrence)"
+    ]
+  },
+  {
+    "mutation": "disable credential detection",
+    "failed_assertions": [
+      "FAIL: test_other_sensitive_data_stays_visible (test_guard_integrity.GuardIntegrityTests.test_other_sensitive_data_stays_visible)"
+    ]
+  },
+  {
+    "mutation": "apply contact exception to reports",
+    "failed_assertions": [
+      "FAIL: test_context_cannot_authorize_another_occurrence (test_guard_integrity.GuardIntegrityTests.test_context_cannot_authorize_another_occurrence)"
+    ]
+  },
+  {
+    "mutation": "implicit laboratory opt-in",
+    "failed_assertions": [
+      "FAIL: test_manifest_requires_scope_content_and_opt_in (test_guard_integrity.GuardIntegrityTests.test_manifest_requires_scope_content_and_opt_in)"
+    ]
+  },
+  {
+    "mutation": "ignore manifest path",
+    "failed_assertions": [
+      "FAIL: test_manifest_requires_scope_content_and_opt_in (test_guard_integrity.GuardIntegrityTests.test_manifest_requires_scope_content_and_opt_in)"
+    ]
+  },
+  {
+    "mutation": "ignore manifest bytes",
+    "failed_assertions": [
+      "FAIL: test_manifest_requires_scope_content_and_opt_in (test_guard_integrity.GuardIntegrityTests.test_manifest_requires_scope_content_and_opt_in)"
+    ]
+  },
+  {
+    "mutation": "ignore scope identity",
+    "failed_assertions": [
+      "FAIL: test_evidence_is_bound_to_both_files_and_scope (test_guard_integrity.GuardIntegrityTests.test_evidence_is_bound_to_both_files_and_scope)"
+    ]
+  },
+  {
+    "mutation": "accept partial evidence",
+    "failed_assertions": [
+      "FAIL: test_evidence_is_bound_to_both_files_and_scope (test_guard_integrity.GuardIntegrityTests.test_evidence_is_bound_to_both_files_and_scope)"
+    ]
+  }
+]
