@@ -11,7 +11,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 BRANCH = "feat/wolftrap-community-onramp-v0_6"
-PUBLISHED_ACTION_SHA = "4d1f075dadf257375a0ea59d39dea9151d07e3f5"
+PUBLISHED_ACTION_SHA = "343bd56f04a35f37de183d42d82a33b6454765b0"
 PINNED = re.compile(r"^[^@]+@[0-9a-f]{40}$")
 
 
@@ -26,7 +26,7 @@ class CommunityPolicyTests(unittest.TestCase):
         self.assertEqual(steps[0]["with"]["persist-credentials"], "false")
         self.assertTrue(PINNED.fullmatch(steps[0]["uses"]))
         self.assertTrue(PINNED.fullmatch(steps[1]["uses"]))
-        self.assertEqual(steps[1]["uses"], f"GovernableIntelligence/WolfTrap@{PUBLISHED_ACTION_SHA}")
+        self.assertEqual(steps[1]["uses"], f"Bropdrop/WolfTrap@{PUBLISHED_ACTION_SHA}")
         self.assertEqual(steps[1]["with"]["fail-on-findings"], "false")
         self.assertNotIn("secrets.", source)
         self.assertNotIn("pull_request_target", source)

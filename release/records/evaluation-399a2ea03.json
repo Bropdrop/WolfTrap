@@ -1,0 +1,171 @@
+{
+  "archive_sha256": "cb5a657abcdd116c220cf06737abc49e529247c16f06e6a42060090ae86a081c",
+  "commit": "399a2ea03f8c4182b05ebe50e9d5ce3b5f619d42",
+  "manifest": {
+    "commit": "399a2ea03f8c4182b05ebe50e9d5ce3b5f619d42",
+    "files": {
+      "LICENSE": {
+        "bytes": 11358,
+        "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      },
+      "RELEASE-NOTES.md": {
+        "bytes": 1274,
+        "sha256": "562a429ccbd978be8ac0cdc3da50030b4a97532d5ba8432e781140214008c2f6"
+      },
+      "SECURITY.md": {
+        "bytes": 1739,
+        "sha256": "188d3466e722fc977307f77be60a31f8a867d34b951b15ea5a9285df2b7c50d8"
+      },
+      "VERIFY.md": {
+        "bytes": 6302,
+        "sha256": "b3a10d0aac6481434ca9a5d02e28674297be30836fb2c9f3b344e089a6957826"
+      },
+      "core.cdx.json": {
+        "bytes": 1061,
+        "sha256": "7d8ed6be4af323eddaef4a4afe9ade9efb8fe8f6de9e49d7f228f9c36d8dd50a"
+      },
+      "platforms.json": {
+        "bytes": 86,
+        "sha256": "07c858694ed7ccf5ca6889eb7f823e30066c410f732e51dbe3414f6c4ecda65a"
+      },
+      "wolftrap-0.5.4.dev1-py3-none-any.whl": {
+        "bytes": 966256,
+        "sha256": "958ba185438c3abf33dccfdb2dc17106ab874c759476f964b06a7026c9c8b0d8"
+      }
+    },
+    "profile": "EVALUATION_ONLY",
+    "repository": "https://github.com/GovernableIntelligence/WolfTrap",
+    "schema": "awooo.release/v1",
+    "sequence": 1,
+    "tree": "17c8e27c1eef3bd93c286593bb6b2f7c3345f383",
+    "version": "0.5.4.dev1"
+  },
+  "policy": {
+    "authority": {
+      "issuer": "urn:awooo:test:ca",
+      "revoked": false,
+      "root_sha256": "f0b1bdbe284846dc7395966287d107b4931494793cc38c847dcf4fc03581145f",
+      "signer": "urn:awooo:test:builder",
+      "signer_sha256": "ff93bc8b5110cb9b783686d161c9974c3e9fb3f57352252d55504f9b2c1904b5"
+    },
+    "builder": "https://github.com/GovernableIntelligence/WolfTrap/evaluators/ephemeral-cms-v1",
+    "current_sequence": 1,
+    "profile": "EVALUATION_ONLY",
+    "releases": [
+      {
+        "archived_signature_sha256": "4e264751d897df0bb4aff20dbfd90492ad58c5491a3455884590f28fa9711df9",
+        "builder_sha256": "79a81e1a6c7d92da518d4d951c26369eb227950aa76a3b00d97f2c65ece417e9",
+        "commit": "399a2ea03f8c4182b05ebe50e9d5ce3b5f619d42",
+        "dependency_sha256": "ca140b45d5325a9478f880e351484f62fef15f336462e449ca0c03c873d589c2",
+        "lock_sha256": "caa4fc3e1ba3237aa7eabc1e279ef55a592a9ee005f92aa7958a9900007e0dbe",
+        "manifest_sha256": "4f1d0b5a83f0b9033aafdc877a3c83625a02a8418b40303a1a640dbd2e785470",
+        "observed_at": 1795155432,
+        "sequence": 1,
+        "tree": "17c8e27c1eef3bd93c286593bb6b2f7c3345f383",
+        "version": "0.5.4.dev1",
+        "withdrawn": false,
+        "workflow_sha256": "e4e67d84d5c441367bded53dafcffa3295b5ff81985cf06f9741924aa1e25fa5"
+      }
+    ],
+    "repository": "https://github.com/GovernableIntelligence/WolfTrap",
+    "repository_id": "1436465132",
+    "rollback": null,
+    "schema": "awooo.subscriber-policy/v1",
+    "valid_from": 1795155432,
+    "valid_until": 1796365032,
+    "workflow": ".github/workflows/release-trust-qualification.yml"
+  },
+  "policy_sha256": "c37718b6402710b769deea43efeda9cf1e3764b12855d16625259d5b7eaca5ec",
+  "root_certificate": "-----BEGIN CERTIFICATE-----\nMIIDMDCCAhigAwIBAgIUdoVCSccwKKBstYXFBD0BzBcUFAUwDQYJKoZIhvcNAQEL\nBQAwHjEcMBoGA1UEAwwTYXdvb28gZXZhbHVhdGlvbiBDQTAeFw0yNjExMjAwNjE3\nMTFaFw0yNjEyMDQwNjE3MTFaMB4xHDAaBgNVBAMME2F3b29vIGV2YWx1YXRpb24g\nQ0EwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCURIaH5XDSPgwzGjl1\nnTHz79LUl6ZjjurPolVcPEas8eq/WN9xVcGs5mclDJcPtkDNbfHFuh+RKVxz7+mN\ntUaoI2ol8BnYg0Yuu/1fOiUNjTAmsDgK5gCzJkG6Ewnc3CJOSuMD75uofg7AabkD\njisymz6oHYBUTcYpYULE4OC2Q/p33fijSkk7kreppbLyqaDMPgo02Z9lrohH7xbf\ndEc3t8AIyTHPb2KaCh9tD5nauDiDRAeME6Pbyh7VrMDIhggoqa+aR4MUM5BbnxMA\nhc/LMgMEAFbN60KCA2v5xPT8kaLd3sjrtxmPZf4myn3t44HIGJWnMj4PeKBtJScd\nCnWFAgMBAAGjZjBkMB0GA1UdDgQWBBQJ+RpOy5GQf1v7AtGq+iXF4sSkCDAfBgNV\nHSMEGDAWgBQJ+RpOy5GQf1v7AtGq+iXF4sSkCDASBgNVHRMBAf8ECDAGAQH/AgEA\nMA4GA1UdDwEB/wQEAwIBBjANBgkqhkiG9w0BAQsFAAOCAQEAPdLrqOQhu/l6VSYJ\nzbbCMsjCRtAA7m2H8YWuolWtRviTGVSX6vKE7EKpVj1G4/u2UE9Vj3ZN4wZ32Pq4\nPQZiMjTCB0VeuSVR8fHDni9NwWNi/Q8ZeM7We+e2MaxHHvbnAwRAGapWb057lzlj\nPjKLE6C9Md1TnErZlOHLPDDRYR3CSHxQQPfEn+XOee/A6JMc7vCcpbKxi2qKtjtG\ng+5xXy5fru9YB4haOREGmuMwV8AanY0yjPE2+TSJsg94zBhQmEiG5Yad2Nt6q/5l\n/May6SdBkmzG9BvM0Kgx9avba9bm+vbmy0p56yAQds4YAK6GilCi/NXtJdcGOepV\nM7R8HQ==\n-----END CERTIFICATE-----\n",
+  "schema": "awooo.evaluation-recovery/v1",
+  "signature_der_b64": "MIICUAYJKoZIhvcNAQcCoIICQTCCAj0CAQExDTALBglghkgBZQMEAgEwCwYJKoZIhvcNAQcBMYICGjCCAhYCAQEwIzAeMRwwGgYDVQQDDBNhd29vbyBldmFsdWF0aW9uIENBAgECMAsGCWCGSAFlAwQCAaCByzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yNjExMjAwNjE3MTJaMC8GCSqGSIb3DQEJBDEiBCAQlHe3yQdFh2UweZTDvgV/tAAuyA3MugnCdeTDA60vyjBgBgsqhkiG9w0BCRACLzFRME8wTTBLBCASYAeSfVoLS0ann5f2YUiRkrN2AKrnmVktfLGFdWmruzAnMCKkIDAeMRwwGgYDVQQDDBNhd29vbyBldmFsdWF0aW9uIENBAgECMA0GCSqGSIb3DQEBAQUABIIBABBheGUDEL5lqm56yE9ZzFbPLaI+DtD0stgdDWGD8CnPA5eg60qiX8ZWe3K0lmDnYsw9WYgHAoEHaTFFjT5GQaYQSHjkvbnlC1q+6Ux3WpJ6qGJzlcmrWM0Azl8zjQO9X/cFEAWwQbAEf2GXIKSdMgE4NkONbkSuAFshLHHWiz/IXBp1zuuSVyTjBe5gT1VeRADTtjFfR9+EOthEmrMg1TpeY33XNn3umSyVqhzarfjpuvZDhEi+6HgQ9/DlMKAmwRcGot3gFXWnBa2IqglixfqJ9j3QiAjrpOV0jtC9vnVqK79oRMBdwgwUUmpjS2TCwwqVGPyUzphyBsx3z+wBIzE=",
+  "signer_certificate": "-----BEGIN CERTIFICATE-----\nMIIDYDCCAkigAwIBAgIBAjANBgkqhkiG9w0BAQsFADAeMRwwGgYDVQQDDBNhd29v\nbyBldmFsdWF0aW9uIENBMB4XDTI2MTEyMDA2MTcxMVoXDTI2MTEyNzA2MTcxMVow\nIzEhMB8GA1UEAwwYYXdvb28gZXZhbHVhdGlvbiBidWlsZGVyMIIBIjANBgkqhkiG\n9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlULWrgqRkRIVgW3n5np3bJgPBMmmqPRJvAQ3\nmQktoM4qAB2+FjZBv0ixDGJsdhr6+mc2V+UMyQqEnJ/pOkmuQtR5NbdkGNB1LUxM\nvbtOF+cMKaYRUo10ylQSoUXuCJf5S/Rgxt/cICLrTdmW7jfdevbGT/ZKEvgBxM0z\n5vGqxRY+QQ5oYxrOVwdxTmukVeoHVGiiqUSYAbdosE2+suA79KfnXkTXdpdybx3b\nmSnvH0RPTXX0pA5IticeaeUWf/pw1NA+en4WnqkIsbQqNS2k2V5OxaDCuIs2MT+l\njKqkAcA8myqro52TFaauvxhr85qB0w+qIqHue7KlTPQM/2KN8wIDAQABo4GjMIGg\nMAwGA1UdEwEB/wQCMAAwDgYDVR0PAQH/BAQDAgeAMB0GA1UdJQQWMBQGCCsGAQUF\nBwMEBggrBgEFBQcDAzAdBgNVHQ4EFgQUGNbv691EUKbW/xN2JFsp6H0W48YwHwYD\nVR0jBBgwFoAUCfkaTsuRkH9b+wLRqvolxeLEpAgwIQYDVR0RBBowGIYWdXJuOmF3\nb29vOnRlc3Q6YnVpbGRlcjANBgkqhkiG9w0BAQsFAAOCAQEAS1x8PML4IBZhbxox\n48svu8CXgcjA9o3iiypJ1kVLDz1kVm3qI1/wOtV4B2BveXtvk7qfEiFIwWMD3TpV\nlVk01QSeUMWcGzfcU7nXmzEb0ejMEpLrPM2u0zs3xfOAIK69UcroLpfh/PPivPOH\nR2jd5+md/ruPhim16jX6a5lAkGuUgxPVjsScugUrvf4lvgxrhsA/gXAFj1Cdqn16\nh7zlTQRsoDuVDCnQyzRzW/8JEZ5avSXvzaFc7qPjzj4WwCA/Y/PA+s7jNWIGxTB4\nebVciO7pj3gXDDv6R3GhfjhR21z2yH6/gL3VnbQYyE6+rxz9G/EKHJTFTbHyVYWv\n10l+dQ==\n-----END CERTIFICATE-----\n",
+  "statement": {
+    "_type": "https://in-toto.io/Statement/v1",
+    "predicate": {
+      "buildDefinition": {
+        "buildType": "https://github.com/GovernableIntelligence/WolfTrap/build-types/offline-wheel/v1",
+        "externalParameters": {
+          "declaredPlatforms": [
+            "ubuntu-24.04-aarch64-cpython-3.12.14",
+            "ubuntu-24.04-x86_64-cpython-3.12.14"
+          ],
+          "issuer": "urn:awooo:test:ca",
+          "profile": "EVALUATION_ONLY",
+          "repository": "https://github.com/GovernableIntelligence/WolfTrap",
+          "repositoryId": "1436465132",
+          "sequence": 1,
+          "signer": "urn:awooo:test:builder",
+          "sourceCommit": "399a2ea03f8c4182b05ebe50e9d5ce3b5f619d42",
+          "sourceTree": "17c8e27c1eef3bd93c286593bb6b2f7c3345f383",
+          "version": "0.5.4.dev1",
+          "workflow": ".github/workflows/release-trust-qualification.yml",
+          "workflowRevision": "399a2ea03f8c4182b05ebe50e9d5ce3b5f619d42"
+        },
+        "internalParameters": {
+          "network": "loopback-only",
+          "sourceDateEpoch": 315532800
+        },
+        "resolvedDependencies": [
+          {
+            "digest": {
+              "gitTree": "17c8e27c1eef3bd93c286593bb6b2f7c3345f383"
+            },
+            "uri": "git+https://github.com/GovernableIntelligence/WolfTrap@399a2ea03f8c4182b05ebe50e9d5ce3b5f619d42"
+          },
+          {
+            "digest": {
+              "sha256": "e4e67d84d5c441367bded53dafcffa3295b5ff81985cf06f9741924aa1e25fa5"
+            },
+            "uri": "https://github.com/GovernableIntelligence/WolfTrap/blob/399a2ea03f8c4182b05ebe50e9d5ce3b5f619d42/.github/workflows/release-trust-qualification.yml"
+          },
+          {
+            "digest": {
+              "sha256": "79a81e1a6c7d92da518d4d951c26369eb227950aa76a3b00d97f2c65ece417e9"
+            },
+            "uri": "https://github.com/GovernableIntelligence/WolfTrap/blob/399a2ea03f8c4182b05ebe50e9d5ce3b5f619d42/scripts/build-product.py"
+          },
+          {
+            "digest": {
+              "sha256": "caa4fc3e1ba3237aa7eabc1e279ef55a592a9ee005f92aa7958a9900007e0dbe"
+            },
+            "uri": "https://github.com/GovernableIntelligence/WolfTrap/blob/399a2ea03f8c4182b05ebe50e9d5ce3b5f619d42/.github/product-builder.lock"
+          },
+          {
+            "digest": {
+              "sha256": "ca140b45d5325a9478f880e351484f62fef15f336462e449ca0c03c873d589c2"
+            },
+            "uri": "pkg:pypi/setuptools@84.2.1"
+          }
+        ]
+      },
+      "runDetails": {
+        "builder": {
+          "id": "https://github.com/GovernableIntelligence/WolfTrap/evaluators/ephemeral-cms-v1"
+        }
+      }
+    },
+    "predicateType": "https://slsa.dev/provenance/v1",
+    "subject": [
+      {
+        "digest": {
+          "sha256": "7d8ed6be4af323eddaef4a4afe9ade9efb8fe8f6de9e49d7f228f9c36d8dd50a"
+        },
+        "name": "core.cdx.json"
+      },
+      {
+        "digest": {
+          "sha256": "4f1d0b5a83f0b9033aafdc877a3c83625a02a8418b40303a1a640dbd2e785470"
+        },
+        "name": "release.json"
+      },
+      {
+        "digest": {
+          "sha256": "958ba185438c3abf33dccfdb2dc17106ab874c759476f964b06a7026c9c8b0d8"
+        },
+        "name": "wolftrap-0.5.4.dev1-py3-none-any.whl"
+      }
+    ]
+  },
+  "tree": "17c8e27c1eef3bd93c286593bb6b2f7c3345f383"
+}

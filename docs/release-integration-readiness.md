@@ -1,0 +1,19 @@
+# Release integration readiness
+
+The Product Foundation and four draft engines have separate review histories. Public repository ID 1436465132 was checked before branching. The base at PR #24 was `67811c4ed073572aea2da894b5368c4e45eb7002` (tree `e3545cfdc8265ad81ec4dccc1aa21f52bfb44d8b`) with four passing checks. Main was `ec6c3c1b2a50d702d202bd9b4e40842ba6e395f2` (tree `cfcda2adf37f8862451601d96292f9cbf32e3a7f`). Both are ancestors of their intended descendants.
+
+| Draft | Commit | Tree | Checks at inspection |
+| --- | --- | --- | --- |
+| #16, Bloodhound and Cursorial integration | `80af479d6eb6908de6dc69ea3e7bf533e44cb956` | `4120bdf9208581fcd7c403816e665589b31dcb72` | 4 passed. Its parents are the exact #13 and #14 heads. |
+| #17, WolfPrint on the integration | `0c537d128eb78554dc9fb938d650eb0c532bf48b` | `9eef80970e12811e5212cb9dc4c3facb4d6779d0` | 5 passed. |
+| #22, WolfNet on WolfPrint | `67d66a93c75e3be881953fd31d50ceab88a7815b` | `330ec2e12f2cc3a94a140003deda65841f45f688` | 6 passed. |
+
+A detached checkout combines the exact WolfNet and Product Foundation parents at disposable commit `163e805c11405178770fd87f5a87c7fd8e750039`, tree `8cf8fb9a3aa2a13c17988112ebf6760d62564653`. Git's three-way merge preserves both README sections and both sets of CLI registrations. The resulting CLI exposes the independent draft commands alongside the four product commands. Quickscan selects its original seven static rules. No merge conflict or hand-edited resolution was needed. A second disposable tree adds the release-trust candidate. The exact resulting tree and qualification indices for the candidate are reported on the stacked PR, avoiding a self-referential commit record.
+
+Run `git merge-tree --write-tree WOLFNET_SHA CANDIDATE_SHA` in a disposable full clone. Create a local test commit with that tree and both parents and check it out detached. Run the existing research, product, MCP, Cursorial, WolfPrint and WolfNet qualification scripts at its exact revision in a fresh loopback-only namespace. Run the release harness at that same revision. Keep separate output directories and the approved research, build and WolfNet crypto prerequisites. Re-run the public-source guard with workflow dependency screening. The combined research test count includes the narrower suites.
+
+The Product Foundation plus WolfNet checkout was exercised again for this task in a separate loopback-only namespace. It passed all 544 regressions with zero failures, errors or skips. Its independent qualification and replay gates reported 178 Bloodhound, 156 Cursorial, 256 WolfPrint and 427 WolfNet deterministic cases with zero expectation mismatches. The original product qualification and research suites passed. These figures overlap across the regression and module-specific gates.
+
+A release-trust implementation was then tested at commit `edf32c21da876d5ad03e81a00d3867c8945fd620`. Its conflict-free combination with the same WolfNet parent produced tree `5218245b7c524ffd179669520b84b764a237ccdf`, with 559 passing regressions and matching independent release and research replays. The PR records the final retest after tightening the SBOM and installer checks.
+
+For any future combined distribution, obtain independent review of the exact combined tree, verified wheel payload and SBOM, feature-specific runtime dependencies and licenses, and platform installation coverage. Reissue version-specific subscriber approval and independently qualify both supported architectures before permitting combined installation. WolfNet release metadata cannot grant host permission; architecture resemblance cannot identify a principal. Cursorial, WolfPrint and Bloodhound retain their existing evidence and authority boundaries. The combined build in this exercise is local evaluation evidence. The stacked feature PR distributes the Product Foundation scope only.
