@@ -1,0 +1,38 @@
+test_01_hybrid_real_signatures (test_cryptofall.Lab.test_01_hybrid_real_signatures) ... ok
+test_02_missing_pq (test_cryptofall.Lab.test_02_missing_pq) ... ok
+test_03_missing_classical (test_cryptofall.Lab.test_03_missing_classical) ... ok
+test_04_missing_witness (test_cryptofall.Lab.test_04_missing_witness) ... ok
+test_05_duplicate_slot (test_cryptofall.Lab.test_05_duplicate_slot) ... ok
+test_06_corrupt_signature (test_cryptofall.Lab.test_06_corrupt_signature) ... ok
+test_07_wrong_effect (test_cryptofall.Lab.test_07_wrong_effect) ... ok
+test_08_wrong_request (test_cryptofall.Lab.test_08_wrong_request) ... ok
+test_09_expired (test_cryptofall.Lab.test_09_expired) ... ok
+test_10_future (test_cryptofall.Lab.test_10_future) ... ok
+test_11_epoch_rollback (test_cryptofall.Lab.test_11_epoch_rollback) ... ok
+test_12_future_epoch (test_cryptofall.Lab.test_12_future_epoch) ... ok
+test_13_relabel_algorithm (test_cryptofall.Lab.test_13_relabel_algorithm) ... ok
+test_14_unknown_algorithm (test_cryptofall.Lab.test_14_unknown_algorithm) ... ok
+test_15_policy_revocation (test_cryptofall.Lab.test_15_policy_revocation) ... ok
+test_16_key_revocation (test_cryptofall.Lab.test_16_key_revocation) ... ok
+test_17_new_pq_epoch (test_cryptofall.Lab.test_17_new_pq_epoch) ... ok
+test_18_policy_digest_tamper (test_cryptofall.Lab.test_18_policy_digest_tamper) ... ok
+test_19_reused_key (test_cryptofall.Lab.test_19_reused_key) ... ok
+test_20_long_lifetime_even_signed (test_cryptofall.Lab.test_20_long_lifetime_even_signed) ... ok
+test_21_boolean_epoch (test_cryptofall.Lab.test_21_boolean_epoch) ... ok
+test_22_extra_claim_field (test_cryptofall.Lab.test_22_extra_claim_field) ... ok
+test_23_backend_unavailable (test_cryptofall.Lab.test_23_backend_unavailable) ... ok
+test_24_backend_timeout (test_cryptofall.Lab.test_24_backend_timeout) ... ok
+test_25_cross_role_signature (test_cryptofall.Lab.test_25_cross_role_signature) ... ok
+test_26_claim_tampering (test_cryptofall.Lab.test_26_claim_tampering) ... ok
+test_27_malformed_key_algorithm (test_cryptofall.Lab.test_27_malformed_key_algorithm) ... ok
+test_28_stale_signed_policy (test_cryptofall.Lab.test_28_stale_signed_policy) ... ok
+test_29_unknown_signer (test_cryptofall.Lab.test_29_unknown_signer) ... ok
+test_30_replay_is_evidence_only (test_cryptofall.Lab.test_30_replay_is_evidence_only) ... ok
+test_31_bad_signature_type (test_cryptofall.Lab.test_31_bad_signature_type) ... ok
+test_32_different_realm_even_signed (test_cryptofall.Lab.test_32_different_realm_even_signed) ... ok
+test_33_same_epoch_policy_change_requires_new_claim (test_cryptofall.Lab.test_33_same_epoch_policy_change_requires_new_claim) ... ok
+
+----------------------------------------------------------------------
+Ran 33 tests in 0.334s
+
+OK
