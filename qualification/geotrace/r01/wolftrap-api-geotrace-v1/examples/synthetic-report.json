@@ -1,0 +1,182 @@
+{
+  "events": [
+    {
+      "destination_hop": {
+        "basis": "OFFLINE_IP_GEO_ESTIMATE",
+        "country": "US",
+        "evidence_ref": "synthetic-geo-us",
+        "verified_on": "2026-11-22"
+      },
+      "destination_ip_digest": "sha256:d6c4658934c37a9020ca98a1444fcc5b1b672262e13cc274a30648d7f2f5bc11",
+      "destination_role": "api_endpoint",
+      "event_id": "fr-from-ca-via-us",
+      "flags": [],
+      "host_observation": "OBSERVED_TLS_SNI_OR_HTTP_HOST",
+      "hostname_digest": "sha256:6f11240a12c5d1864776cc37ec59ebf07f59f4a6b7c81a11da0522cd2079dc10",
+      "malicious_attribution": false,
+      "network_path_countries": null,
+      "policy_status": "ADVISORY_ONLY",
+      "processing_country": {
+        "basis": "NOT_OBSERVED",
+        "country": null,
+        "evidence_ref": null,
+        "verified_on": null
+      },
+      "provider_id": "example-fr",
+      "provider_name": "Synthetic France Provider",
+      "provider_origin": {
+        "basis": "PROVIDER_REGISTRY_CLAIM",
+        "country": "FR",
+        "evidence_ref": "synthetic-provider-registry-fr-v1",
+        "verified_on": "2026-11-22"
+      },
+      "source_egress": {
+        "basis": "OFFLINE_IP_GEO_ESTIMATE",
+        "country": "CA",
+        "evidence_ref": "synthetic-geo-ca",
+        "verified_on": "2026-11-22"
+      },
+      "source_ip_digest": "sha256:6d99cbd08fc6c99cdb2d942a4cbb097c6b54496bbbc3ffd6351b145508dd2935",
+      "source_role": "client_egress"
+    },
+    {
+      "destination_hop": {
+        "basis": "OFFLINE_IP_GEO_ESTIMATE",
+        "country": "US",
+        "evidence_ref": "synthetic-geo-us",
+        "verified_on": "2026-11-22"
+      },
+      "destination_ip_digest": "sha256:4e50f98a756e96ccc6b1d8cabf50cfddc5f3820699a94c24d616875f0d104b24",
+      "destination_role": "proxy_hop",
+      "event_id": "cn-from-jp-via-proxy",
+      "flags": [
+        "DESTINATION_IS_INTERMEDIARY_NOT_FINAL_API_REGION",
+        "PROVIDER_COUNTRY_OUTSIDE_POLICY",
+        "SOURCE_IS_INTERMEDIARY_NOT_CLIENT_ORIGIN"
+      ],
+      "host_observation": "OBSERVED_TLS_SNI_OR_HTTP_HOST",
+      "hostname_digest": "sha256:61520f6dfe2e1ccdbf078750766892ba81c54ecb578f85003c5d92253aa4faf8",
+      "malicious_attribution": false,
+      "network_path_countries": null,
+      "policy_status": "REVIEW_REQUIRED",
+      "processing_country": {
+        "basis": "NOT_OBSERVED",
+        "country": null,
+        "evidence_ref": null,
+        "verified_on": null
+      },
+      "provider_id": "example-cn",
+      "provider_name": "Synthetic China Provider",
+      "provider_origin": {
+        "basis": "PROVIDER_REGISTRY_CLAIM",
+        "country": "CN",
+        "evidence_ref": "synthetic-provider-registry-cn-v1",
+        "verified_on": "2026-11-22"
+      },
+      "source_egress": {
+        "basis": "OFFLINE_IP_GEO_ESTIMATE",
+        "country": "JP",
+        "evidence_ref": "synthetic-geo-jp",
+        "verified_on": "2026-11-22"
+      },
+      "source_ip_digest": "sha256:419ea8cca9295010ce4e91d8e9129cdb45626116312deead4640e2baae408a15",
+      "source_role": "proxy_egress"
+    },
+    {
+      "destination_hop": {
+        "basis": "NO_CURRENT_GEO_EVIDENCE",
+        "country": null,
+        "evidence_ref": null,
+        "verified_on": null
+      },
+      "destination_ip_digest": "sha256:cb823c583add3f31d8a125b2821c04c6730fcf17142f5fb5b5ac56ef45b97970",
+      "destination_role": "unknown",
+      "event_id": "br-origin-unlocated",
+      "flags": [
+        "DESTINATION_ROLE_UNVERIFIED",
+        "UNKNOWN_DESTINATION_HOP_COUNTRY"
+      ],
+      "host_observation": "OBSERVED_TLS_SNI_OR_HTTP_HOST",
+      "hostname_digest": "sha256:3b6739d6dc79cd17114c93b88b449aa581c052252244e3cd2e2bfe5b94edcec1",
+      "malicious_attribution": false,
+      "network_path_countries": null,
+      "policy_status": "REVIEW_REQUIRED",
+      "processing_country": {
+        "basis": "NOT_OBSERVED",
+        "country": null,
+        "evidence_ref": null,
+        "verified_on": null
+      },
+      "provider_id": "example-br",
+      "provider_name": "Synthetic Brazil Provider",
+      "provider_origin": {
+        "basis": "PROVIDER_REGISTRY_CLAIM",
+        "country": "BR",
+        "evidence_ref": "synthetic-provider-registry-br-v1",
+        "verified_on": "2026-11-22"
+      },
+      "source_egress": {
+        "basis": "OFFLINE_IP_GEO_ESTIMATE",
+        "country": "CA",
+        "evidence_ref": "synthetic-geo-ca",
+        "verified_on": "2026-11-22"
+      },
+      "source_ip_digest": "sha256:997c7ba95aa3f7c552c8ce042ea48b12fd2617f818f75492ab81747706f2c3bb",
+      "source_role": "client_egress"
+    },
+    {
+      "destination_hop": {
+        "basis": "OFFLINE_IP_GEO_ESTIMATE",
+        "country": "US",
+        "evidence_ref": "synthetic-geo-us",
+        "verified_on": "2026-11-22"
+      },
+      "destination_ip_digest": "sha256:e183220b699c10a83ca7be3433d228ed0860a5ecf9480f83e9655f16bad58908",
+      "destination_role": "api_endpoint",
+      "event_id": "unknown-is-not-cn",
+      "flags": [
+        "UNATTRIBUTED_PROVIDER"
+      ],
+      "host_observation": "OBSERVED_TLS_SNI_OR_HTTP_HOST",
+      "hostname_digest": "sha256:b0101bd2f8e024cb1a3ac42d0eaebff876a9aecd6f9eb7bc43080ef35149d30f",
+      "malicious_attribution": false,
+      "network_path_countries": null,
+      "policy_status": "REVIEW_REQUIRED",
+      "processing_country": {
+        "basis": "NOT_OBSERVED",
+        "country": null,
+        "evidence_ref": null,
+        "verified_on": null
+      },
+      "provider_id": null,
+      "provider_name": null,
+      "provider_origin": {
+        "basis": "UNKNOWN_PROVIDER",
+        "country": null,
+        "evidence_ref": null,
+        "verified_on": null
+      },
+      "source_egress": {
+        "basis": "OFFLINE_IP_GEO_ESTIMATE",
+        "country": "CA",
+        "evidence_ref": "synthetic-geo-ca",
+        "verified_on": "2026-11-22"
+      },
+      "source_ip_digest": "sha256:a823b83a25d1af618351e48458d23bce176ddc6382e43243053d22f5cabffba6",
+      "source_role": "client_egress"
+    }
+  ],
+  "network_contacted": false,
+  "qualification": "NOT_A_SECURITY_CERTIFICATION",
+  "schema": "wolftrap.api-geotrace-report/v1",
+  "scope": "OFFLINE_METADATA_ONLY",
+  "snapshot_date": "2026-11-22",
+  "source_sha256": "sha256:8848a3408cefd27b8e481022d6978bc06e35cce3a5215f9c545d619f2c6e870b",
+  "summary": {
+    "events": 4,
+    "provider_attributed": 3,
+    "review_required": 3,
+    "unknown_providers": 1
+  },
+  "synthetic_input": true
+}
