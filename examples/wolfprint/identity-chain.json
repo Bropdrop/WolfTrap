@@ -1,0 +1,224 @@
+{
+  "chain": {
+    "mode": "behavior",
+    "schema": "wolftrap.cursorial-chain/v1",
+    "sources": {
+      "agent": {
+        "alias": "fixture-agent-1",
+        "events": [
+          {
+            "at": 12,
+            "chain": 2,
+            "claim": "none",
+            "definition": 5,
+            "grant": 1,
+            "id": 6,
+            "kind": "agent_proposal",
+            "operation": {
+              "resource": 2,
+              "schema_rev": 1,
+              "server": 1,
+              "tool": 1,
+              "value": 1,
+              "verb": "label"
+            },
+            "slot": 1
+          }
+        ]
+      },
+      "catalog": {
+        "alias": "fixture-catalog-1",
+        "events": [
+          {
+            "at": 4,
+            "chain": 2,
+            "id": 2,
+            "indicator": "none",
+            "kind": "tool_definition_observed",
+            "schema_rev": 1,
+            "server": 8,
+            "tool": 8
+          },
+          {
+            "at": 10,
+            "chain": 2,
+            "id": 5,
+            "indicator": "none",
+            "kind": "tool_definition_observed",
+            "schema_rev": 1,
+            "server": 1,
+            "tool": 1
+          }
+        ]
+      },
+      "host": {
+        "alias": "fixture-host-1",
+        "events": [
+          {
+            "at": 2,
+            "chain": 2,
+            "epoch": 1,
+            "id": 1,
+            "kind": "chain_opened",
+            "owner": 1,
+            "registry": "complete",
+            "tenant": 2
+          },
+          {
+            "at": 6,
+            "chain": 2,
+            "delegate": 2,
+            "epoch": 1,
+            "expires": 190,
+            "id": 3,
+            "issuer": 1,
+            "kind": "delegation_observed",
+            "parent": 0,
+            "tenant": 2
+          },
+          {
+            "at": 8,
+            "chain": 2,
+            "digest": "db9c7c1e2e2e87e6a77dac08f02a3b27a9d9d223f5067f2a488c98963027496d",
+            "epoch": 1,
+            "expires": 190,
+            "grant": 1,
+            "grant_chain": 2,
+            "grantee": 2,
+            "id": 4,
+            "kind": "grant_state",
+            "since": 0,
+            "slot": 1,
+            "state": "active",
+            "tenant": 2
+          },
+          {
+            "actor": 2,
+            "at": 14,
+            "chain": 2,
+            "delegation": 3,
+            "digest": "db9c7c1e2e2e87e6a77dac08f02a3b27a9d9d223f5067f2a488c98963027496d",
+            "id": 7,
+            "kind": "request_bound",
+            "proposal": 6,
+            "tenant": 2
+          },
+          {
+            "at": 16,
+            "binding": 7,
+            "chain": 2,
+            "decision": "allow",
+            "digest": "db9c7c1e2e2e87e6a77dac08f02a3b27a9d9d223f5067f2a488c98963027496d",
+            "id": 8,
+            "kind": "gate_decision",
+            "phase": "prepare"
+          },
+          {
+            "at": 18,
+            "binding": 7,
+            "chain": 2,
+            "decision": "allow",
+            "digest": "db9c7c1e2e2e87e6a77dac08f02a3b27a9d9d223f5067f2a488c98963027496d",
+            "id": 9,
+            "kind": "gate_decision",
+            "phase": "commit"
+          },
+          {
+            "at": 22,
+            "attempts": 1,
+            "binding": 0,
+            "chain": 2,
+            "id": 11,
+            "kind": "recovery_checkpoint",
+            "phase": "closed"
+          }
+        ]
+      },
+      "ledger": {
+        "alias": "fixture-ledger-1",
+        "events": [
+          {
+            "after_count": 1,
+            "after_hash": "e64326b6a83cb2acd0a9eb8a13523e228092375a03c334170a58981efe1a18bd",
+            "at": 20,
+            "before_count": 0,
+            "before_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "chain": 2,
+            "commit": 9,
+            "id": 10,
+            "kind": "effect_observed",
+            "records": [
+              {
+                "actor": 2,
+                "at": 18,
+                "binding": 7,
+                "chain": 2,
+                "grant": 1,
+                "operation": {
+                  "resource": 2,
+                  "schema_rev": 1,
+                  "server": 1,
+                  "tool": 1,
+                  "value": 1,
+                  "verb": "label"
+                },
+                "slot": 1,
+                "tenant": 2
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "identity_witnesses": [
+    {
+      "binding": 7,
+      "claim": {
+        "architecture_sha256": "1eb831471e151d55469c3c49ed25cb699d2c6230fa093499b5935437032629ed",
+        "audience": 2,
+        "delegation": [
+          1,
+          2
+        ],
+        "expires": 145,
+        "instance": 12,
+        "issued": 2,
+        "issuer": 1,
+        "key_revision": 1,
+        "nonce": 22,
+        "policy_revision": 1,
+        "principal": 2,
+        "tenant": 2,
+        "trust_domain": 1
+      },
+      "phase": "prepare",
+      "schema": "wolftrap.identity-witness/v1"
+    },
+    {
+      "binding": 7,
+      "claim": {
+        "architecture_sha256": "1eb831471e151d55469c3c49ed25cb699d2c6230fa093499b5935437032629ed",
+        "audience": 2,
+        "delegation": [
+          1,
+          2
+        ],
+        "expires": 145,
+        "instance": 12,
+        "issued": 2,
+        "issuer": 1,
+        "key_revision": 1,
+        "nonce": 22,
+        "policy_revision": 1,
+        "principal": 2,
+        "tenant": 2,
+        "trust_domain": 1
+      },
+      "phase": "commit",
+      "schema": "wolftrap.identity-witness/v1"
+    }
+  ],
+  "profile": "wolfprint-fixture/v1",
+  "schema": "wolftrap.cursorial-identity-chain/v2"
+}

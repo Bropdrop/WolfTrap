@@ -45,7 +45,7 @@ def _reject_number(_: str) -> None:
     raise Gap("unsupported-number")
 
 
-def decode(raw: bytes) -> dict:
+def decode_json(raw: bytes, *, canonical_numbers: bool = False) -> Any:
     need(0 < len(raw) <= LIMITS["bytes"], "input-byte-limit")
     try:
         text = raw.decode("utf-8")
@@ -70,7 +70,11 @@ def decode(raw: bytes) -> dict:
             elif c in ":,":
                 separators += 1
                 need(separators <= LIMITS["json_nodes"], "json-complexity-limit")
-        obj = json.loads(text, object_pairs_hook=_pairs, parse_int=_integer,
+        def integer(token: str) -> int:
+            need(not canonical_numbers or token != "-0", "noncanonical-negative-zero")
+            return _integer(token)
+
+        obj = json.loads(text, object_pairs_hook=_pairs, parse_int=integer,
                          parse_float=_reject_number, parse_constant=_reject_number)
     except Gap:
         raise
@@ -86,6 +90,11 @@ def decode(raw: bytes) -> dict:
         elif isinstance(item, list):
             stack.extend(item)
         need(nodes <= LIMITS["json_nodes"], "json-complexity-limit")
+    return obj
+
+
+def decode(raw: bytes) -> dict:
+    obj = decode_json(raw)
     validate(obj, "chain")
     return obj
 
