@@ -1,0 +1,125 @@
+{
+  "schema": "wolftrap.geotrace-input/v2",
+  "task": "fictional-review",
+  "workload": "workload-a",
+  "capture": {
+    "schema": "wolftrap.api-geotrace-input/v1",
+    "snapshot_date": "2026-11-22",
+    "synthetic": true,
+    "providers": [
+      {
+        "id": "example-fr",
+        "name": "Synthetic France Provider",
+        "origin_country": "FR",
+        "domains": [
+          "api.fr.test"
+        ],
+        "evidence_ref": "synthetic-provider-registry-fr-v1",
+        "verified_on": "2026-11-22"
+      },
+      {
+        "id": "example-cn",
+        "name": "Synthetic China Provider",
+        "origin_country": "CN",
+        "domains": [
+          "api.cn.test"
+        ],
+        "evidence_ref": "synthetic-provider-registry-cn-v1",
+        "verified_on": "2026-11-22"
+      },
+      {
+        "id": "example-br",
+        "name": "Synthetic Brazil Provider",
+        "origin_country": "BR",
+        "domains": [
+          "api.br.test"
+        ],
+        "evidence_ref": "synthetic-provider-registry-br-v1",
+        "verified_on": "2026-11-22"
+      }
+    ],
+    "geo_ranges": [
+      {
+        "network": "192.0.2.0/24",
+        "country": "CA",
+        "evidence_ref": "synthetic-geo-ca",
+        "verified_on": "2026-11-22"
+      },
+      {
+        "network": "198.51.100.0/24",
+        "country": "US",
+        "evidence_ref": "synthetic-geo-us",
+        "verified_on": "2026-11-22"
+      },
+      {
+        "network": "203.0.113.0/24",
+        "country": "JP",
+        "evidence_ref": "synthetic-geo-jp",
+        "verified_on": "2026-11-22"
+      }
+    ],
+    "events": [
+      {
+        "id": "fr-from-ca-via-us",
+        "source_ip": "192.0.2.10",
+        "destination_ip": "198.51.100.45",
+        "tls_sni": "api.fr.test",
+        "source_role": "vpn_egress",
+        "destination_role": "gateway_hop"
+      }
+    ],
+    "policy": {
+      "allowed_provider_countries": [
+        "CA",
+        "FR",
+        "BR",
+        "JP",
+        "US"
+      ],
+      "review_unknowns": true
+    }
+  },
+  "observations": [
+    {
+      "event": "fr-from-ca-via-us",
+      "kind": "execution_region",
+      "hop": 0,
+      "country": "de",
+      "source": "runtime-a",
+      "observed_on": "2026-11-21",
+      "valid_until": "2026-11-23",
+      "binding_sha256": "7ce3ca22e0611cc3f2d97b035b4517d89cf45774e34a12c14b27e8e3aa2924c4"
+    },
+    {
+      "event": "fr-from-ca-via-us",
+      "kind": "processing_jurisdiction",
+      "hop": 0,
+      "country": "BR",
+      "source": "processing-a",
+      "observed_on": "2026-11-21",
+      "valid_until": "2026-11-23",
+      "binding_sha256": "7ce3ca22e0611cc3f2d97b035b4517d89cf45774e34a12c14b27e8e3aa2924c4"
+    },
+    {
+      "event": "fr-from-ca-via-us",
+      "kind": "intermediary",
+      "hop": 1,
+      "country": "JP",
+      "source": "relay-a",
+      "observed_on": "2026-11-21",
+      "valid_until": "2026-11-23",
+      "binding_sha256": "7ce3ca22e0611cc3f2d97b035b4517d89cf45774e34a12c14b27e8e3aa2924c4"
+    },
+    {
+      "event": "fr-from-ca-via-us",
+      "kind": "intermediary",
+      "hop": 2,
+      "country": "SE",
+      "source": "relay-b",
+      "observed_on": "2026-11-21",
+      "valid_until": "2026-11-23",
+      "binding_sha256": "7ce3ca22e0611cc3f2d97b035b4517d89cf45774e34a12c14b27e8e3aa2924c4"
+    }
+  ],
+  "session": "session-a"
+}
