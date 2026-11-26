@@ -1,0 +1,47 @@
+{
+  "handoff": {
+    "bytes": 27105,
+    "sha256": "954f953d9056930587e733aa177b897be6a6f94f30e8621029434327a913fc41"
+  },
+  "original": {
+    "bytes": 17236,
+    "sha256": "793df00656593d1a63d11e66d2c292d14104aaaf493beec58bf7773f4b273be3"
+  },
+  "members": [
+    {
+      "bytes": 5322,
+      "path": "wolftrap-api-geotrace-v1/README.md",
+      "sha256": "ddc618841cdeeebec31a5fd9a749e838f86e36ca8efdf63eb15abbeeeee99c6c"
+    },
+    {
+      "bytes": 5129,
+      "path": "wolftrap-api-geotrace-v1/docs/api-geotrace.md",
+      "sha256": "87f94fbc6c984d223724fa4c8f09b1b38bb616185b2a85af3658fe71417545ca"
+    },
+    {
+      "bytes": 1964,
+      "path": "wolftrap-api-geotrace-v1/examples/synthetic-multi-country.json",
+      "sha256": "407c2630120ce4d818852e8f887c1af72a9b557932366aea0f2bafb30a49dda8"
+    },
+    {
+      "bytes": 6425,
+      "path": "wolftrap-api-geotrace-v1/examples/synthetic-report.json",
+      "sha256": "45d8905b122cec368a7372a2be35dd2f9f8d498e36c926e9a43f0ee51c6e6d98"
+    },
+    {
+      "bytes": 20613,
+      "path": "wolftrap-api-geotrace-v1/src/wolftrap/api_geotrace.py",
+      "sha256": "f80ab891fb5a5b0ecf92fd6e3da256cf641e55eb8c2ea39e51cc9dae0022215d"
+    },
+    {
+      "bytes": 9206,
+      "path": "wolftrap-api-geotrace-v1/tests/test_api_geotrace.py",
+      "sha256": "f29b68f46e4a44723a6421664217acdfd2f4faf630ec37047c04ab6063cf4c6b"
+    }
+  ],
+  "independent_probe": {
+    "bytes": 3537,
+    "sha256": "97b2ec4f56ebb25b2ac6b1d5d6d939482bf25172ba09cadadb792973d8dfcb60"
+  },
+  "custody": "User-supplied handoff. Historical publisher and source commit unverified."
+}
