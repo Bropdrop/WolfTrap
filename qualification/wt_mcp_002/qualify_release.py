@@ -14,6 +14,7 @@ import tempfile
 import audit
 import package
 import selection_controls
+import supervisor_controls
 from fixtures import REF,arguments,provision
 from profile import HERE,ROOT,SCAN,encode,measurement,sha
 from recovery import pin_for
@@ -71,12 +72,12 @@ def audit_controls(out,runs):
 def run(out,hosted):
     src=source()
     check({name for _,name in socket.if_nameindex()}=={"lo"},"qualification requires isolated network")
-    summary={"schema":"wolftrap.release-safety/v2","source":src,"stages":{},"real_model":"NOT_TESTED",
+    summary={"schema":"wolftrap.release-safety/v3","source":src,"stages":{},"real_model":"NOT_TESTED",
              "public_release":"BLOCKED","publisher_provenance":"UNVERIFIED","platform":platform.platform()}
     def save():
         (out/"safety-case.json").write_text(json.dumps(summary,indent=2,sort_keys=True)+"\n")
     raw,receipt=package.build(src["commit"])
-    bundle=out/"wolftrap-local-evaluation-0.2.0.zip"
+    bundle=out/"wolftrap-local-evaluation-0.3.0.zip"
     bundle.write_bytes(raw)
     digest=sha(raw)
     check(package.build(src["commit"])[0]==raw,"non-reproducible package")
@@ -109,6 +110,7 @@ def run(out,hosted):
     try:
         from confinement import run as check_profiles
         summary["worker_profiles"]=check_profiles()
+        summary["supervisor_controls"]=supervisor_controls.run()
     except (ValueError,OSError,AssertionError,subprocess.SubprocessError):
         summary["os_gate"]="BLOCKED: explicit worker profile could not demonstrate confinement"
         save()

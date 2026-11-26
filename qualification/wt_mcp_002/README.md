@@ -1,6 +1,8 @@
-# WT-MCP-002 local evaluation, version 0.2.0
+# WolfTrap local evaluation adapter 0.3.0
 
 This separate adapter exposes the three WT-MCP-001 tool names for operator-selected synthetic GeoTrace v2 captures. The skills plugin is version 0.2.0 and the engine is version 0.6.0. The release package has its own inventory and contains the engine modules required for this profile. A side-by-side install leaves the existing CLI and plugin under their existing pins.
+
+For the Crostini failure, sibling topology and device reproduction, see the [WT-MCP-003 compatibility record](../wt_mcp_003/README.md).
 
 ## Trust boundary
 
@@ -9,16 +11,16 @@ This separate adapter exposes the three WT-MCP-001 tool names for operator-selec
 | Operator and private stdio session | A trusted supervisor selects the owner approval digest, session, measured client and qualified installation. Possession of that session allows use of outstanding matching approvals. Multiuser caller authentication is unsupported. |
 | Transport and frontend | The broker parses bounded UTF-8 JSON-RPC frames. Discovery negotiates MCP 2025-11-25. Identifiers have a session budget. Unknown notifications have no effect. The frontend runs in a separate worker and can only propose the original call or catalog. The broker discards transport metadata before authorization. |
 | Host broker | The broker matches canonical typed arguments to the pinned per-request grant. An approval binds tool, operation, tenant, principal, session, task, resource, source, destination, generation, expiry and policy. An operator-supplied digest anchors the separate GeoTrace policy. |
-| OS and engine | The outer namespace exposes an allowlisted runtime, reviewed installation, read-only control and sources, and private effect slots. The inner worker sees selected files and a private writable staging directory only where the scan needs it. The inherited network filter precedes a second filter that prevents process creation and replacement before loading the worker role. |
+| OS and engine | The broker namespace exposes an allowlisted runtime, reviewed installation, read-only control and sources, and private effect slots. An owner-held supervisor launches the broker and each disposable worker in sibling user, network and mount namespaces. A worker receives selected bytes and gets private writable scratch space only for scans. The inherited network filter precedes a second filter that prevents process creation and replacement before loading the worker role. |
 | Slot and external verifier | Each destination is a private SQLite database. A durable dispatch reservation precedes work. One local transaction inserts all four artifacts and the commitment journal event. Independent observers read the database through a read-only connection. The external verifier derives the expected phase sequence, grant digest and file inventory separately. |
 
-The earlier adapter used a prebound grant and one fixed capture. Its launcher, host, six historical mutations and original evidence verifier are preserved in `qualification/wt_mcp_001`. Its direct app-server run exercised client-selected calls without model inference. The new profile reuses its Linux mount builder and reviewed GeoTrace entry point. Its existing filesystem-based receipt semantics remain reproducible at PR #32.
+The earlier adapter used a prebound grant and one fixed capture. Its launcher, host, six historical mutations and original evidence verifier are preserved in `qualification/wt_mcp_001`. Its direct app-server run exercised client-selected calls without model inference. The sibling profile reuses the reviewed GeoTrace entry point. Its existing filesystem-based receipt semantics remain reproducible at PR #32.
 
 ## Owner workflow
 
 The supervisor supplies a canonical local captures directory, a GeoTrace policy, a selection document and the expected SHA-256 of that document through an independently controlled channel. The selection schema and full fictional grant examples are in `fixtures.py` and the validation contract is in `owner.py`. Commissioning snapshots up to eight explicitly named JSON files, checks source hashes against the owner's selections, and records each resulting local inode and change time. The external examples use two distinct captures with different review outcomes. Owner approval of a digest assumes trusted local provisioning. Publisher identity is unverified.
 
-Keep a reviewed supervisor copy of `launch.py` and `reference_pin.py` in an owner-controlled directory separate from the package. It independently measures the candidate, places the accepted application bytes in sealed memory files, and mounts those bytes read-only before any candidate code executes. Start the supervisor from this trusted directory. Use a fresh state path in a private operator directory. All path arguments below are absolute. Keep control and storage under the same supervisor, protect them from other writers and use the supplied revocation command.
+Keep a reviewed supervisor copy of `launch.py`, `reference_pin.py`, `job_wire.py` and `sibling.py` in an owner-controlled directory separate from the package. It independently measures the candidate, places the accepted application bytes in sealed memory files, and mounts those bytes read-only before any candidate code executes. Start the supervisor from this trusted directory. Use a fresh state path in a private operator directory. All path arguments below are absolute. Keep control and storage under the same supervisor, protect them from other writers and use the supplied revocation command.
 
 ```bash
 q=qualification/wt_mcp_002
@@ -41,13 +43,13 @@ Use a clean checkout and an existing Debian 13 x86-64 environment with Bubblewra
 out=$(mktemp -d)
 q=qualification/wt_mcp_002
 unshare --user --map-current-user --net python3 -B "$q/qualify_release.py" --output "$out/run"
-python3 -B "$q/package.py" verify --zip "$out/run/wolftrap-local-evaluation-0.2.0.zip" \
+python3 -B "$q/package.py" verify --zip "$out/run/wolftrap-local-evaluation-0.3.0.zip" \
   --commit "$expected_commit" --tree "$expected_tree" --sha256 "$expected_package_sha256"
 python3 -B "$q/audit.py" --state "$out/run/trials/state" --handle alpha \
   --owner-pin "$approved_owner_pin" --reference-pin "$reviewed_reference_pin"
 ```
 
-The package verifier checks each file against an object from the selected commit, the expected tree, exact ZIP bytes and an externally supplied digest. Use `package.py install` with the same arguments and a new private `--destination`. Retain the previous verified installation and separately review a launch-profile change to switch versions. Rollback selects a retained installation with its original pins. The two versioned profiles have different state formats. Retain the corresponding state and audit records. Never restore a spent approval for use in a new session.
+The package verifier checks each file against an object from the selected commit, the expected tree, exact ZIP bytes and an externally supplied digest. Use `package.py install` with the same arguments and a new private `--destination`. Retain the previous verified installation and separately review a launch-profile change to switch versions. Rollback selects a retained installation with its original pins. Retain the state format and configuration pin for each evaluated installation. Retain the corresponding state and audit records. Never restore a spent approval for use in a new session.
 
 The safety case records actual protocol decisions, journal and artifact observations, installed client traces, per-case mutation/restoration records, package contents, commands and configuration identities. Qualification creates its output outside the checkout. Cases use disposable sources and state. Hosted CI attempts the exact OS profile after network isolation. Unavailable facilities block that job. A real-model run needs a separate, authorized local inference runtime.
 

@@ -27,7 +27,7 @@ def build(commit):
         require(len(row)==4 and row[:2]==["100644","blob"] and row[-1]==name)
         contents[name]=git("cat-file","blob",row[2])
     receipt={"schema":"wolftrap.evaluation-package/v2","repository":"Bropdrop/WolfTrap","commit":commit,"tree":tree,
-             "adapter":"0.2.0","engine":"0.6.0","plugin":"wolftrap-security 0.2.0","protocol":"2025-11-25",
+             "adapter":"0.3.0","engine":"0.6.0","plugin":"wolftrap-security 0.2.0","protocol":"2025-11-25",
              "members":{name:{"bytes":len(raw),"sha256":sha(raw)} for name,raw in contents.items()},
              "runtime":["Linux x86-64 user and network namespaces","Debian CPython 3.13",
                         "Bubblewrap","libseccomp","SQLite","standard library and dynamic system libraries"],
