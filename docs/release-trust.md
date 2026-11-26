@@ -1,0 +1,54 @@
+# awooo release trust boundaries
+
+The free Apache-2.0 WolfTrap engine and offline product interfaces are preserved. This branch is stacked on the Product Foundation. The independent verifier and evaluation issuer live outside the wheel. The subscriber runs a separately reviewed verifier against the candidate before pip or installed code runs. [Subscriber instructions](release-verification.md) · [Integration readiness](release-integration-readiness.md) · [Engineering charter](https://github.com/GovernableIntelligence/WolfTrap/issues/20)
+
+## Provenance and signing choice
+
+The evaluation uses in-toto Statement v1 and the SLSA Build Provenance predicate `https://slsa.dev/provenance/v1`, as specified in SLSA v1.2. The three SHA-256 subjects are the exact wheel, CycloneDX SBOM and release manifest. The manifest binds the license, disclosure policy, limitations, platform matrix, subscriber instructions and payloads. The typed build definition binds the public repository identifier and URL, exact Git commit/tree, workflow URI at that same immutable revision, workflow bytes, builder script bytes, lock bytes, pinned build wheel digest, build parameters, version, sequence, declared platform set and profile. The builder ID and signer/issuer names are explicitly scoped to the evaluation harness. The protected production workflow has a different identity and cannot sign. A caller must select the independently approved input tuple and manifest.
+
+The detached envelope is RFC 5652 CMS SignedData with SHA-256, RSA and a CAdES signing-certificate attribute. OpenSSL 3 validates the chain, time, signer identity and exact detached statement using only the subscriber's pinned certificates. The profile requires a single signer, no embedded roots, intermediates, CRLs or content, and a canonical transport. Two public certificate fingerprints in the pinned policy map a signer to an issuer and workflow. The signer name inside the statement is insufficient. GnuPG gpgsm/libksba independently checks the actual CMS signature, pinned signer and payload tamper rejection in qualification. Its isolated keyring contains exactly the two independently checked public fixture certificates. Its legacy key selector operates inside that keyring; external certificate pins use SHA-256. The issuer creates fresh test keys in a temporary directory per run and destroys them. No signing key is part of the source, evidence or subscriber tool. [CMS](https://www.rfc-editor.org/rfc/rfc5652) · [OpenSSL CMS](https://docs.openssl.org/3.0/man1/openssl-cms/) · [in-toto Statement v1](https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md) · [SLSA provenance](https://slsa.dev/spec/v1.2/provenance)
+
+GitHub artifact attestations and Sigstore/Cosign provide a path to independently authenticated CI workload identity through OIDC, certificates and transparency evidence. Offline verification requires separately acquired trusted roots, inclusion evidence and identity constraints. The repository inspection found unprotected main, zero configured release environments and draft source without independent release approval. Issuing an OIDC credential in PR CI or trusting an alleged builder inside an attestation would bypass that boundary. V1 selects CMS for the executable evaluation harness on the two existing Linux profiles. A production issuer, independently managed review policy and Sigstore/GitHub bundle verification profile are **BLOCKED**. No SLSA level, Sigstore interoperability or genuine CI signer is claimed for the CMS fixture. [GitHub artifact attestations](https://docs.github.com/en/actions/concepts/security/artifact-attestations) · [Cosign verification](https://docs.sigstore.dev/cosign/verifying/verify/)
+
+## Seven release boundaries
+
+| Boundary | Attacker or failure | Enforced control and remaining trust |
+| --- | --- | --- |
+| Source and review | Different repository, commit/tree, workflow or stale approval | Subscriber-pinned catalog binds GitHub repository ID, source tree and exact reviewed inputs. Production needs independent approval records, protected refs and a trusted review policy. |
+| Builder and dependencies | Substituted dependency, hostile PR, altered workflow | Immutable Actions, unpersisted credentials, read-only jobs, immutable Git blobs and hash-locked build-only setuptools. Two fresh builds must agree. Bootstrap Python, OS, pip and runner images remain trusted prerequisites. |
+| Artifact and SBOM | Byte substitution, mismatched SBOM, parser differential or malicious ZIP | Canonical, bounded archive inventory and JSON. Check subject digests, manifest, SBOM source/wheel, wheel metadata, source-member digests and PEP 427 RECORD. A signed malicious program can still contain vulnerabilities. |
+| Signing identity | Counterfeit root, revoked leaf, forged signature or copied attestation | Subscriber-pinned root and signer, direct X.509 chain, explicit profile, expiry, stored revocation and independent public-key verification. Production additionally needs authenticated builder identity, key custody, protected signing and trusted time evidence. |
+| Distribution and storage | Stale mirror, incomplete signing, overwrite, split history | Explicit sequence floor, current policy and withdrawal, bounded rollback authorization, exact historical witness, fsync and exclusive publication in a private vault. Independent replication, WORM storage, monitoring and operator policy updates are external dependencies. |
+| Verifier | False success from bundle-provided code/roots, missing crypto or missing evidence | Independently sourced Python directory, absolute OpenSSL path, no installed WolfTrap imports, closed schemas, deadlines, policy pin. A hostile verifier, OS, clock or owner of the independent trust channel can subvert local decisions. |
+| Installer and runtime | Files replaced between check and pip, pre-existing install, project side effects | In-memory verified snapshot, isolated venv, second policy check, required wheel hash, offline pip with no dependencies. Shared-user attackers controlling Python or directories, network filesystems and hostile mounts are outside the profile. Verification creates no agent or host authority. |
+
+OpenSSL is an OS prerequisite under its Apache-2.0 licensing. GnuPG is a separately installed qualification-only GPL tool and is never bundled. The wheel includes the existing Apache-2.0 project and minimal core SBOM. Setuptools 84.2.1 remains the single pinned MIT build-only wheel. The optional research PyYAML lock and all existing source controls remain in force. The pinned Actions and interpreter build are infrastructure inputs. There is no claim of a hermetic or externally certified builder.
+
+## Operational gates and retained evidence
+
+The protected workflow accepts only a manual dispatch, on protected main, for the exact immutable main SHA. Separate jobs build, qualify both Ubuntu architectures and present a release-review environment. The production signing job has an empty permission set and fails unconditionally. Publication has its own gate and empty permissions. No tag, release, deployment, package registry or external signing service is used. A maintainer must separately design and approve any future privilege changes, configure required reviewers with self-approval prevention, authenticate the reviewed source, pin the signer/workflow and enable immutable release storage. An environment name or a passing PR check alone proves none of these controls.
+
+PR qualification runs the real offline builder twice, creates an ephemeral CA and signer, authenticates the capsule, exercises the verifier and installer, verifies the demo, and runs a second cryptographic implementation. The evaluator has no OIDC, publication permissions or production secrets. Only allowlisted output names are uploaded. The public-source guard screens tracked source, dependencies and JSON evidence. The verifier checks binary wheel inventory and public certificate-only syntax before custody. Product and research qualification retain their original scope. Reproducible bytes include the wheel, SBOM, manifest and provenance statement. Fresh certificates, signing times, CMS signatures, recovery receipts, timing records and the whole newly signed transport vary between signings. Recovering an existing signature must reproduce the *original* transport byte for byte.
+
+For a clean replay from a trusted checkout and separately acquired locked wheelhouse:
+
+```bash
+head=$(git rev-parse HEAD)
+ns=$(readlink /proc/self/ns/net)
+unshare -Urn -- env -i PATH="$PATH" PYTHONDONTWRITEBYTECODE=1 PYTHONHASHSEED=0 \
+  python3.12 -I release/qualification --expected-head "$head" --parent-netns "$ns" \
+  --wheelhouse "$wheelhouse" --output-dir "$fresh"
+```
+
+Use `--require-install` on the two qualified Ubuntu profiles. A different Linux can audit a selected supported target. Its install gate must refuse the unsupported host. Evidence records test outcomes separately from fresh-signature identity and measurements. Installation time, transfer time and human onboarding are distinct measurements. No human usability study has been completed.
+
+For durable recovery use the separately pinned public receipt, a fresh checkout of its exact commit/tree, and `scripts/build-product.py` at that commit to reproduce the wheel/SBOM. With the reviewed tool, run:
+
+```bash
+python3.12 -I release/recover.py --source "$checkout" --kit "$rebuilt_kit" --record "$receipt" \
+  --record-sha256 "$independent_receipt_pin" --output "$private_dir/restored.zip"
+```
+
+The restored digest must equal the original. Recovery uses the *existing* signature. It does not issue a replacement or establish a new trust root. Keep original evaluation capsules, receipts, independently selected pins and verifier copies in local or organizational storage beyond Actions expiry. Production custody, durable replication and external sign-off remain release blockers. The selected name requires separate clearance. [Recovery and withdrawal](release-verification.md) · [Naming issue #21](https://github.com/GovernableIntelligence/WolfTrap/issues/21)
+
+The permanent public evaluation receipt is from commit `399a2ea03f8c4182b05ebe50e9d5ce3b5f619d42`, tree `17c8e27c1eef3bd93c286593bb6b2f7c3345f383`. Its SHA-256 is `0f7ce82039f1b378d7f3fb0c979c34963249d03b0a2b87a3879b12c6bee23292`. Every release qualification uses full local Git history, rebuilds that earlier wheel and reconstructs the original signed transport digest `cb5a657abcdd116c220cf06737abc49e529247c16f06e6a42060090ae86a081c`. The original observation-time signature is checked independently of present-day install authorization. The public receipt contains certificates and a detached signature only. No live signing service, expiring CI URL or signing key is needed to restore these bytes. [Archived fixture receipt](../release/records/evaluation-399a2ea03.json)
