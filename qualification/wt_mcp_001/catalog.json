@@ -1,0 +1,112 @@
+{
+  "tools": [
+    {
+      "description": "List the qualified local GeoTrace operations.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "destination": {
+            "type": "string"
+          },
+          "operation": {
+            "type": "string"
+          },
+          "policy_version": {
+            "type": "string"
+          },
+          "principal": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "task": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "destination",
+          "operation",
+          "policy_version",
+          "principal",
+          "source",
+          "task"
+        ],
+        "type": "object"
+      },
+      "name": "wolftrap_capabilities"
+    },
+    {
+      "description": "Scan the owner-selected fictional capture into its approved evidence slot.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "destination": {
+            "type": "string"
+          },
+          "operation": {
+            "type": "string"
+          },
+          "policy_version": {
+            "type": "string"
+          },
+          "principal": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "task": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "destination",
+          "operation",
+          "policy_version",
+          "principal",
+          "source",
+          "task"
+        ],
+        "type": "object"
+      },
+      "name": "wolftrap_scan_authorized_local"
+    },
+    {
+      "description": "Replay the selected capture and check the approved evidence bundle.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "destination": {
+            "type": "string"
+          },
+          "operation": {
+            "type": "string"
+          },
+          "policy_version": {
+            "type": "string"
+          },
+          "principal": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "task": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "destination",
+          "operation",
+          "policy_version",
+          "principal",
+          "source",
+          "task"
+        ],
+        "type": "object"
+      },
+      "name": "wolftrap_verify_evidence"
+    }
+  ]
+}
