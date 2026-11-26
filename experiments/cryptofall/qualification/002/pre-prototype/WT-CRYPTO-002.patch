@@ -1,0 +1,960 @@
+diff --git a/experiments/cryptofall/challenge.py b/experiments/cryptofall/challenge.py
+new file mode 100644
+index 0000000..7b2a0c2
+--- /dev/null
++++ b/experiments/cryptofall/challenge.py
+@@ -0,0 +1,354 @@
++"""Black-box outcomes and independent signing inputs for the disposable lab."""
++
++import hashlib
++import json
++from concurrent.futures import ThreadPoolExecutor
++from contextlib import closing
++from pathlib import Path
++import sqlite3
++import subprocess
++import sys
++import tempfile
++from threading import Event
++from unittest.mock import patch
++
++from cryptography.hazmat.primitives.asymmetric import ed25519, mldsa
++from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
++
++import counter
++import verifier
++
++REALM = "wolftrap:cryptofall:disposable:v2"
++OWNER = "owner-test"
++WITNESS = "effect-witness-test"
++RECOVERY = "recovery-test"
++POLICY_WITNESS = "policy-witness-test"
++
++
++def encode(value):
++    return json.dumps(value, ensure_ascii=True, separators=(",", ":"), sort_keys=True).encode("ascii")
++
++
++def sha(raw):
++    return hashlib.sha256(raw).hexdigest()
++
++
++class Fixture:
++    def __init__(self, path):
++        self.path = Path(path)
++        self.now = 100
++        self.private = {role: mldsa.MLDSA65PrivateKey.generate()
++                        for role in (WITNESS, RECOVERY, POLICY_WITNESS, "wrong")}
++        for role in (OWNER, "replacement"):
++            self.private[role] = ed25519.Ed25519PrivateKey.generate()
++        self.keys = {role: {"public": private.public_key().public_bytes_raw().hex(),
++                            "algorithm": "ed25519-v1" if role in (OWNER, "replacement") else "ml-dsa-65-v1"}
++                     for role, private in self.private.items()}
++        self.genesis = {"v": 2, "realm": REALM, "mode": "active", "epoch": 0, "predecessor": "0" * 64,
++                        "keys": {role: self.keys[role] for role in (OWNER, WITNESS)},
++                        "revoked_keys": [], "revoked_algorithms": []}
++        genesis = encode(self.genesis)
++        self.anchor = counter.Checkpoint(genesis, sha(genesis), self.keys[RECOVERY],
++                                         self.keys[POLICY_WITNESS], "specimen", lambda: self.now)
++        self.counter = counter.Counter(self.path / "counter.db", self.anchor)
++        self.counter.initialize()
++        self.request = encode({"action": "increment", "instance": "specimen"})
++        self.nonce = "23" * 16
++
++    def seal(self, domain, body, role, signer):
++        key = sha(encode(self.keys[signer]))
++        algorithm = self.keys[signer]["algorithm"]
++        message = encode([REALM, domain, role, key, algorithm, body])
++        return {"key": key, "algorithm": algorithm, "role": role,
++                "signature": self.private[signer].sign(message).hex()}
++
++    def claim(self, *, roles=(OWNER, WITNESS), owner=OWNER, **changes):
++        current = json.loads(self.anchor.policy)
++        body = {"v": 2, "realm": REALM, "policy": sha(self.anchor.policy), "epoch": current["epoch"],
++                "nonce": self.nonce, "request": sha(self.request), "issued": self.now, "expires": self.now + 20}
++        body.update(changes)
++        return {"claim": body, "signatures": [self.seal("effect", body, role, owner if role == OWNER else role)
++                                              for role in roles]}
++
++    def transition(self, action="rotate", *, signers=None, body_changes=None, **changes):
++        new = json.loads(self.anchor.policy)
++        new.update(epoch=new["epoch"] + 1, predecessor=sha(self.anchor.policy))
++        new.update(changes)
++        body = {"action": action, "next": new, "realm": REALM, "instance": "specimen",
++                "issued": self.now, "expires": self.now + 20}
++        body.update(body_changes or {})
++        role = OWNER if action == "rotate" else RECOVERY
++        signers = signers if signers is not None else ((role, role), (POLICY_WITNESS, POLICY_WITNESS))
++        return {"transition": body, "signatures": [self.seal("transition", body, role, key)
++                                                  for role, key in signers]}
++
++    def advance(self, transition):
++        self.anchor.transition(encode(transition))
++        self.counter.synchronize()
++
++    def quarantine(self, **changes):
++        self.advance(self.transition("emergency-quarantine", mode="quarantine", **changes))
++
++    def apply(self, claim):
++        return self.counter.apply(self.request, encode(claim))
++
++    def counts(self):
++        with closing(sqlite3.connect(self.counter.path)) as db:
++            return [db.execute("SELECT value FROM state").fetchone()[0],
++                    db.execute("SELECT count(*) FROM receipts").fetchone()[0]]
++
++
++def check(condition, message):
++    if not condition:
++        raise AssertionError(message)
++
++
++def corrupted(signature):
++    return ("00" if signature[:2] != "00" else "01") + signature[2:]
++
++
++def expect_denied(call, reason):
++    try:
++        call()
++    except verifier.Denied as exc:
++        check(str(exc) == reason, str(exc))
++    else:
++        raise AssertionError("unexpected authority")
++
++
++def race(f):
++    old = f.claim()
++    started, proceed = Event(), Event()
++
++    def pending():
++        verifier.evaluate(encode(old), f.request, f.genesis, f.now)
++        started.set()
++        check(proceed.wait(5), "race synchronization")
++        return f.apply(old)
++
++    with ThreadPoolExecutor(1) as pool:
++        future = pool.submit(pending)
++        try:
++            check(started.wait(5), "race synchronization")
++            keys = {OWNER: f.keys["replacement"], WITNESS: f.keys[WITNESS]}
++            f.advance(f.transition(keys=keys, revoked_keys=[sha(encode(f.keys[OWNER]))]))
++            f.apply(f.claim(owner="replacement", nonce="24" * 16))
++        finally:
++            proceed.set()
++        future.result()
++
++
++def crash(f):
++    # Kill a child holding an uncommitted SQLite write. The independent model
++    # reserves first, so restart sees a mismatch and freezes.
++    claim = f.claim()
++    f.anchor.sequence = 1
++    program = """
++import os, sqlite3, sys
++db = sqlite3.connect(sys.argv[1])
++db.execute("UPDATE state SET value = 1")
++db.execute("INSERT INTO receipts VALUES ('uncommitted', x'00', x'00', 1)")
++os._exit(17)
++"""
++    result = subprocess.run([sys.executable, "-c", program, str(f.counter.path)], check=False)
++    check(result.returncode == 17, "crash injection")
++    f.counter = counter.Counter(f.counter.path, f.anchor)
++    f.apply(claim)
++
++
++def scenario(name, f):
++    if name in {"positive-hybrid", "missing-signature", "duplicate-signature", "wrong-role",
++                "unknown-algorithm", "algorithm-substitution", "bad-ed25519", "bad-ml-dsa"}:
++        doc = f.claim()
++        seals = doc["signatures"]
++        if name == "missing-signature":
++            seals.pop()
++        elif name == "duplicate-signature":
++            seals[1] = seals[0]
++        elif name == "wrong-role":
++            seals.reverse()
++        elif name == "unknown-algorithm":
++            seals[0]["algorithm"] = "unknown-v1"
++        elif name == "algorithm-substitution":
++            seals[0] = f.seal("effect", doc["claim"], OWNER, WITNESS)
++        elif name.startswith("bad-"):
++            seal = seals[name == "bad-ml-dsa"]
++            seal["signature"] = corrupted(seal["signature"])
++        f.apply(doc)
++    elif name in {"wrong-realm", "request-binding", "stale-epoch"}:
++        changes = {"wrong-realm": {"realm": "foreign"}, "request-binding": {"request": "ab" * 32},
++                   "stale-epoch": {"epoch": 1}}
++        f.apply(f.claim(**changes[name]))
++    elif name in {"stale-clock", "checkpoint-unavailable", "commit-expiry"}:
++        doc = f.claim()
++        if name == "commit-expiry":
++            clock = iter([100, 100, 121])
++            f.anchor.clock = lambda: next(clock)
++        else:
++            f.now = 99
++            f.anchor.available = name != "checkpoint-unavailable"
++        f.apply(doc)
++    elif name in {"backend-unavailable", "backend-identity"}:
++        doc = f.claim()
++        with patch.object(verifier, "version", side_effect=ImportError) if name == "backend-unavailable" else patch.object(
++                verifier, "version", return_value="0"):
++            f.apply(doc)
++    elif name in {"duplicate-field", "oversized-wire", "deep-wire", "noncanonical-wire"}:
++        malformed = {"duplicate-field": b'{"a":0,"a":1}', "oversized-wire": b" " * 32769,
++                     "deep-wire": b"[" * 2000 + b"]" * 2000, "noncanonical-wire": b'{ "a": 0 }'}
++        f.counter.apply(f.request, malformed[name])
++    elif name in {"forged-policy", "foreign-transition", "expired-transition",
++                  "same-epoch", "wrong-predecessor", "compromised-owner"}:
++        variants = {"foreign-transition": {"body_changes": {"instance": "foreign"}},
++                    "expired-transition": {"body_changes": {"issued": 70, "expires": 100}},
++                    "same-epoch": {"epoch": 0, "revoked_algorithms": ["ed25519-v1"]}, "wrong-predecessor": {"predecessor": "ab" * 32},
++                    "compromised-owner": {"action": "emergency-quarantine", "mode": "quarantine",
++                                          "signers": ((RECOVERY, OWNER), (POLICY_WITNESS, POLICY_WITNESS))}}
++        doc = f.transition(**variants.get(name, {}))
++        if name == "forged-policy":
++            doc["transition"]["next"]["revoked_algorithms"] = ["ed25519-v1"]
++        f.advance(doc)
++    elif name in {"reintroduced-key", "dropped-revocation", "algorithm-revocation"}:
++        if name == "algorithm-revocation":
++            f.advance(f.transition(revoked_algorithms=["ed25519-v1"]))
++            f.apply(f.claim())
++        else:
++            revoked = sha(encode(f.keys[OWNER]))
++            f.advance(f.transition(keys={OWNER: f.keys["replacement"], WITNESS: f.keys[WITNESS]},
++                                   revoked_keys=[revoked]))
++            doc = f.transition(revoked_keys=[] if name == "dropped-revocation" else [revoked])
++            if name == "reintroduced-key":
++                doc["transition"]["next"]["keys"] = f.genesis["keys"]
++            f.advance(doc)
++    elif name == "same-epoch-claim-pin":
++        f.apply(f.claim(policy="ab" * 32))
++    elif name == "foreign-effect":
++        foreign = encode({"action": "increment", "instance": "different-counter"})
++        doc = f.claim(request=sha(foreign))
++        f.counter.apply(foreign, encode(doc))
++    elif name == "rotate-while-quarantined":
++        f.quarantine()
++        f.advance(f.transition(mode="active"))
++    elif name in {"revoked-owner-after-recovery", "recovery-success"}:
++        keys = {OWNER: f.keys["replacement"], WITNESS: f.keys[WITNESS]}
++        f.quarantine(keys=keys, revoked_keys=[sha(encode(f.keys[OWNER]))])
++        f.advance(f.transition("recover", mode="active"))
++        f.apply(f.claim(owner=OWNER if name == "revoked-owner-after-recovery" else "replacement"))
++    elif name == "quarantine":
++        f.quarantine()
++        f.apply(f.claim())
++    elif name == "revoked-recovery-root":
++        f.quarantine(revoked_keys=[sha(encode(f.keys[RECOVERY]))])
++        f.advance(f.transition("recover", mode="active"))
++    elif name.startswith("recovery-"):
++        if name != "recovery-without-quarantine":
++            f.quarantine(**({"revoked_algorithms": ["ed25519-v1"]} if name == "recovery-revoked-algorithm" else {}))
++        variants = {"recovery-without-witness": {"signers": ((RECOVERY, RECOVERY),)},
++                    "recovery-wrong-root": {"signers": ((RECOVERY, "wrong"), (POLICY_WITNESS, POLICY_WITNESS))}}
++        doc = f.transition("recover", mode="active", **variants.get(name, {}))
++        if name == "recovery-stale-checkpoint":
++            f.anchor.available = False
++        if name == "recovery-backend-failure":
++            with patch.object(verifier, "version", side_effect=ImportError):
++                f.advance(doc)
++        f.advance(doc)
++        f.apply(f.claim())
++    elif name == "commit-revocation-race":
++        race(f)
++    elif name == "exact-receipt-and-replay":
++        doc = f.claim()
++        f.apply(doc)
++        f.counter = counter.Counter(f.counter.path, f.anchor)
++        check(f.counter.receipt(f.nonce, f.request, encode(doc)) == 1, "receipt recovery")
++        expect_denied(lambda: f.counter.receipt(f.nonce, f.request, encode(f.claim())), "receipt-binding")
++        f.apply(doc)
++    elif name == "concurrent-replay":
++        doc = f.claim()
++        with ThreadPoolExecutor(2) as pool:
++            jobs = [pool.submit(f.apply, doc) for _ in range(2)]
++            outcomes = []
++            for job in jobs:
++                try:
++                    outcomes.append(job.result())
++                except verifier.Denied as exc:
++                    outcomes.append(str(exc))
++        check(outcomes.count(1) == 1 and outcomes.count("authorization-used") == 1, "one-use race")
++        raise verifier.Denied("authorization-used")
++    elif name == "receipt-after-quarantine":
++        doc = f.claim()
++        f.apply(doc)
++        f.quarantine()
++        f.now += 21
++        check(f.counter.receipt(f.nonce, f.request, encode(doc)) == 1, "historical exact receipt")
++        f.apply(doc)
++    elif name == "tampered-archive":
++        raw = encode(f.claim())
++        check(verifier.historical_archive(raw, sha(raw)) == "HISTORICAL_BYTES_ONLY", "historical")
++        verifier.historical_archive(raw + b"x", sha(raw))
++    elif name == "restored-db":
++        before = f.counter.path.read_bytes()
++        doc = f.claim()
++        f.apply(doc)
++        f.counter.path.write_bytes(before)
++        f.counter = counter.Counter(f.counter.path, f.anchor)
++        f.apply(doc)
++    elif name == "crash-before-commit":
++        crash(f)
++    else:
++        raise AssertionError(name)
++
++
++def ed25519_known_answer():
++    # RFC 8032 section 7.1, TEST 1 (empty message).
++    public = bytes.fromhex("d75a980182b10ab7d54bfed3c964073a0ee172f3daa62325af021a68f707511a")
++    signature = bytes.fromhex(
++        "e5564300c360ac729086e2cc806e828a84877f1eb8e5d974d873e06522490155"
++        "5fb8821590a33bacc61e39701cf9b46bd25bf5f0595bbe24655141438e7a100b"
++    )
++    verifier.public_types()["ed25519-v1"].from_public_bytes(public).verify(signature, b"")
++    print(json.dumps({"known_answer": "RFC 8032 section 7.1 TEST 1", "status": "verified"}))
++
++
++def openssl_crosscheck(f):
++    executable = "/usr/bin/openssl"
++    for role in (OWNER, WITNESS):
++        private = f.private[role]
++        raw = b"WT-CRYPTO-002 independent provider verification"
++        sig = private.sign(raw)
++        public = private.public_key().public_bytes(Encoding.PEM, PublicFormat.SubjectPublicKeyInfo)
++        for name, data in (("msg", raw), ("public.pem", public), ("sig", sig)):
++            (f.path / name).write_bytes(data)
++        args = [executable, "pkeyutl", "-verify", "-pubin", "-inkey", "public.pem", "-rawin",
++                "-in", "msg", "-sigfile", "sig"]
++        subprocess.run(args, cwd=f.path, check=True, capture_output=True)
++        (f.path / "msg").write_bytes(raw + b"x")
++        negative = subprocess.run(args, cwd=f.path, capture_output=True)
++        check(negative.returncode == 1, "independent negative verification")
++        print(json.dumps({"provider": "OpenSSL CLI", "role": role, "positive": "verified", "negative": "denied"}))
++
++
++def run(cases):
++    expectations = json.loads(Path(__file__).with_name("expected.json").read_text())
++    mismatches = 0
++    for name in cases or expectations:
++        with tempfile.TemporaryDirectory() as path:
++            f = Fixture(path)
++            reason = "committed"
++            try:
++                scenario(name, f)
++            except verifier.Denied as exc:
++                reason = str(exc)
++            value, receipts = f.counts()
++            match = [reason, value] == expectations[name] and receipts == value
++            print(json.dumps({"case": name, "expected": expectations[name], "observed": [reason, value],
++                              "receipts": receipts, "checkpoint_sequence": f.anchor.sequence, "match": match}))
++            mismatches += not match
++    return mismatches
++
++
++if __name__ == "__main__":
++    if len(sys.argv) == 1:
++        ed25519_known_answer()
++        with tempfile.TemporaryDirectory() as path:
++            openssl_crosscheck(Fixture(path))
++    sys.exit(bool(run(sys.argv[1:])))
+diff --git a/experiments/cryptofall/counter.py b/experiments/cryptofall/counter.py
+new file mode 100644
+index 0000000..df96a3c
+--- /dev/null
++++ b/experiments/cryptofall/counter.py
+@@ -0,0 +1,141 @@
++"""Disposable SQLite counter and a separate, in-memory checkpoint model."""
++
++import sqlite3
++from contextlib import closing, contextmanager
++from threading import Lock
++
++from verifier import (REALM, current_key, digest, endorsements, evaluate, key_id,
++                      natural, parse, policy, require, shape, wire)
++
++
++class Checkpoint:
++    """Trusted model. Keep this object outside the local database restore domain."""
++
++    def __init__(self, genesis, genesis_pin, recovery, witness, instance, clock):
++        document = policy(parse(genesis))
++        require(digest(genesis) == genesis_pin and document["epoch"] == 0
++                and document["predecessor"] == "0" * 64, "genesis-pin")
++        self.roots = parse(wire({"recovery-test": recovery, "policy-witness-test": witness}))
++        self._disjoint(document)
++        require(all(key["algorithm"] == "ml-dsa-65-v1" for key in self.roots.values()), "recovery-algorithm")
++        self.policy = genesis
++        self.instance = instance
++        self.clock = clock
++        self.last_time = 0
++        self.sequence = 0
++        self.available = True
++        self.lock = Lock()
++
++    def _disjoint(self, document):
++        keys = [*document["keys"].values(), *self.roots.values()]
++        require(len({key_id(key) for key in keys}) == len(keys), "shared-trust-key")
++
++    def fresh(self):
++        now = self.clock()
++        require(self.available and natural(now) and now >= self.last_time, "checkpoint-unavailable-or-stale")
++        self.last_time = now
++        return now
++
++    def transition(self, raw):
++        with self.lock:
++            now = self.fresh()
++            envelope = parse(raw)
++            shape(envelope, "transition signatures")
++            body = envelope["transition"]
++            shape(body, "action instance realm issued expires next")
++            require(body["realm"] == REALM and body["instance"] == self.instance, "transition-scope")
++            issued, expires = body["issued"], body["expires"]
++            require(natural(issued) and natural(expires) and issued <= now < expires
++                    and expires - issued <= 60, "transition-time")
++            old, new = parse(self.policy), policy(body["next"])
++            self._disjoint(new)
++            require(new["epoch"] == old["epoch"] + 1 and new["predecessor"] == digest(self.policy),
++                    "policy-predecessor")
++            for field in ("revoked_keys", "revoked_algorithms"):
++                require(set(old[field]) <= set(new[field]), "revocation-regression")
++            action = body["action"]
++            keys = {}
++            if action == "rotate":
++                require(old["mode"] == new["mode"] == "active", "quarantine")
++                keys["owner-test"] = current_key(old, old["keys"]["owner-test"])
++            else:
++                allowed = (action == "emergency-quarantine" and new["mode"] == "quarantine"
++                           or action == "recover" and old["mode"] == "quarantine" and new["mode"] == "active")
++                require(allowed, "transition-action")
++                keys["recovery-test"] = current_key(old, self.roots["recovery-test"])
++                if action == "recover":
++                    for key in new["keys"].values():
++                        current_key(new, key)
++            keys["policy-witness-test"] = current_key(old, self.roots["policy-witness-test"])
++            endorsements("transition", body, envelope["signatures"], keys)
++            require(self.fresh() < expires, "transition-time")
++            self.policy = wire(new)
++
++
++class Counter:
++    def __init__(self, path, checkpoint):
++        self.path = path
++        self.checkpoint = checkpoint
++
++    def initialize(self):
++        anchor = self.checkpoint
++        with anchor.lock, closing(sqlite3.connect(self.path)) as db, db:
++            anchor.fresh()
++            require(anchor.sequence == 0, "checkpoint-already-used")
++            db.execute("CREATE TABLE state (instance TEXT NOT NULL, epoch INTEGER NOT NULL, "
++                       "value INTEGER NOT NULL)")
++            db.execute("INSERT INTO state VALUES (?, 0, 0)", (anchor.instance,))
++            db.execute("CREATE TABLE receipts (nonce TEXT PRIMARY KEY, authorization BLOB NOT NULL, "
++                       "request BLOB NOT NULL, value INTEGER NOT NULL)")
++
++    @contextmanager
++    def _locked_state(self):
++        anchor = self.checkpoint
++        with anchor.lock, closing(sqlite3.connect(self.path)) as db:
++            db.execute("BEGIN IMMEDIATE")
++            anchor.fresh()
++            (state,) = db.execute("SELECT instance, epoch, value FROM state").fetchall()
++            instance, epoch, value = state
++            current = parse(anchor.policy)
++            require(instance == anchor.instance and value == anchor.sequence
++                    and epoch == current["epoch"], "checkpoint-state-mismatch")
++            yield db, current, value
++
++    def synchronize(self):
++        """Apply a trusted policy advance to local metadata. Never restore effect state."""
++        anchor = self.checkpoint
++        with anchor.lock, closing(sqlite3.connect(self.path)) as db, db:
++            db.execute("BEGIN IMMEDIATE")
++            anchor.fresh()
++            (state,) = db.execute("SELECT instance, epoch, value FROM state").fetchall()
++            instance, epoch, value = state
++            epoch_now = parse(anchor.policy)["epoch"]
++            require(instance == anchor.instance and value == anchor.sequence
++                    and epoch <= epoch_now, "checkpoint-state-mismatch")
++            db.execute("UPDATE state SET epoch = ?", (epoch_now,))
++
++    def apply(self, request, authorization):
++        anchor = self.checkpoint
++        operation = parse(request)
++        shape(operation, "action instance")
++        require(operation == {"action": "increment", "instance": anchor.instance}, "disposable-operation")
++        with self._locked_state() as (db, current, value):
++            nonce, expires = evaluate(authorization, request, current, anchor.fresh())
++            require(db.execute("SELECT 1 FROM receipts WHERE nonce = ?", (nonce,)).fetchone()
++                    is None, "authorization-used")
++            db.execute("INSERT INTO receipts VALUES (?, ?, ?, ?)", (nonce, authorization, request, value + 1))
++            db.execute("UPDATE state SET value = ?", (value + 1,))
++            # Reserve at the independent checkpoint before committing. An ambiguous
++            # failure freezes on a mismatch. Never rewind the checkpoint to retry.
++            require(anchor.fresh() < expires, "claim-time")
++            anchor.sequence = value + 1
++            db.commit()
++            return value + 1
++
++    def receipt(self, nonce, request, authorization):
++        """An exact retry is a read, even after revocation or claim expiration."""
++        with self._locked_state() as (db, _, _value):
++            row = db.execute("SELECT authorization, request, value FROM receipts WHERE nonce = ?",
++                             (nonce,)).fetchone()
++            require(row is not None and row[:2] == (authorization, request), "receipt-binding")
++            return row[2]
+diff --git a/experiments/cryptofall/expected.json b/experiments/cryptofall/expected.json
+new file mode 100644
+index 0000000..dd0f380
+--- /dev/null
++++ b/experiments/cryptofall/expected.json
+@@ -0,0 +1,198 @@
++{
++  "positive-hybrid": [
++    "committed",
++    1
++  ],
++  "missing-signature": [
++    "signature-count",
++    0
++  ],
++  "duplicate-signature": [
++    "signature-coordinate",
++    0
++  ],
++  "wrong-role": [
++    "signature-coordinate",
++    0
++  ],
++  "wrong-realm": [
++    "current-policy",
++    0
++  ],
++  "unknown-algorithm": [
++    "signature-coordinate",
++    0
++  ],
++  "bad-ed25519": [
++    "signature-or-backend",
++    0
++  ],
++  "bad-ml-dsa": [
++    "signature-or-backend",
++    0
++  ],
++  "request-binding": [
++    "request-binding",
++    0
++  ],
++  "stale-epoch": [
++    "current-policy",
++    0
++  ],
++  "stale-clock": [
++    "checkpoint-unavailable-or-stale",
++    0
++  ],
++  "commit-expiry": [
++    "claim-time",
++    0
++  ],
++  "checkpoint-unavailable": [
++    "checkpoint-unavailable-or-stale",
++    0
++  ],
++  "backend-unavailable": [
++    "signature-or-backend",
++    0
++  ],
++  "backend-identity": [
++    "backend-identity",
++    0
++  ],
++  "duplicate-field": [
++    "duplicate-field",
++    0
++  ],
++  "oversized-wire": [
++    "wire-size",
++    0
++  ],
++  "deep-wire": [
++    "wire-depth",
++    0
++  ],
++  "noncanonical-wire": [
++    "canonical-wire",
++    0
++  ],
++  "forged-policy": [
++    "signature-or-backend",
++    0
++  ],
++  "foreign-transition": [
++    "transition-scope",
++    0
++  ],
++  "expired-transition": [
++    "transition-time",
++    0
++  ],
++  "same-epoch": [
++    "policy-predecessor",
++    0
++  ],
++  "wrong-predecessor": [
++    "policy-predecessor",
++    0
++  ],
++  "reintroduced-key": [
++    "reintroduced-key",
++    0
++  ],
++  "dropped-revocation": [
++    "revocation-regression",
++    0
++  ],
++  "compromised-owner": [
++    "signature-coordinate",
++    0
++  ],
++  "quarantine": [
++    "current-policy",
++    0
++  ],
++  "recovery-without-witness": [
++    "signature-count",
++    0
++  ],
++  "recovery-wrong-root": [
++    "signature-coordinate",
++    0
++  ],
++  "recovery-revoked-algorithm": [
++    "revoked-signer",
++    0
++  ],
++  "recovery-without-quarantine": [
++    "transition-action",
++    0
++  ],
++  "recovery-success": [
++    "committed",
++    1
++  ],
++  "algorithm-revocation": [
++    "revoked-signer",
++    0
++  ],
++  "commit-revocation-race": [
++    "current-policy",
++    1
++  ],
++  "exact-receipt-and-replay": [
++    "authorization-used",
++    1
++  ],
++  "tampered-archive": [
++    "archive-integrity",
++    0
++  ],
++  "restored-db": [
++    "checkpoint-state-mismatch",
++    0
++  ],
++  "crash-before-commit": [
++    "checkpoint-state-mismatch",
++    0
++  ],
++  "algorithm-substitution": [
++    "signature-coordinate",
++    0
++  ],
++  "recovery-stale-checkpoint": [
++    "checkpoint-unavailable-or-stale",
++    0
++  ],
++  "recovery-backend-failure": [
++    "signature-or-backend",
++    0
++  ],
++  "revoked-recovery-root": [
++    "revoked-signer",
++    0
++  ],
++  "concurrent-replay": [
++    "authorization-used",
++    1
++  ],
++  "receipt-after-quarantine": [
++    "current-policy",
++    1
++  ],
++  "same-epoch-claim-pin": [
++    "current-policy",
++    0
++  ],
++  "revoked-owner-after-recovery": [
++    "signature-coordinate",
++    0
++  ],
++  "rotate-while-quarantined": [
++    "quarantine",
++    0
++  ],
++  "foreign-effect": [
++    "disposable-operation",
++    0
++  ]
++}
+diff --git a/experiments/cryptofall/mutants.py b/experiments/cryptofall/mutants.py
+new file mode 100644
+index 0000000..ff97bf5
+--- /dev/null
++++ b/experiments/cryptofall/mutants.py
+@@ -0,0 +1,64 @@
++"""Run each negative control against an isolated source copy."""
++
++from pathlib import Path
++import json
++import shutil
++import subprocess
++import sys
++import tempfile
++
++BASE = Path(__file__).resolve().parent
++MUTANTS = {
++    "missing-binding": ("request-binding", "verifier.py", [
++        ('require(claim["request"] == digest(request), "request-binding")', 'pass'),
++    ]),
++    "or-instead-of-and": ("missing-signature", "verifier.py", [
++        ('endorsements("effect", claim, envelope["signatures"], keys)',
++         'check_signature("effect", claim, EFFECT_ROLES[0], keys[EFFECT_ROLES[0]], envelope["signatures"][0])'),
++    ]),
++    "disabled-revocation": ("algorithm-revocation", "verifier.py", [
++        ('and key["algorithm"] not in document["revoked_algorithms"]', ''),
++    ]),
++    "stale-policy": ("commit-revocation-race", "counter.py", [
++        ('self.policy = genesis', 'self.policy = genesis\n        self.genesis = genesis'),
++        ('nonce, expires = evaluate(authorization, request, current, anchor.fresh())',
++         'candidate = current if parse(authorization)["claim"]["epoch"] == current["epoch"] else parse(anchor.genesis)\n'
++         '            nonce, expires = evaluate(authorization, request, candidate, anchor.fresh())'),
++    ]),
++    "replay": ("exact-receipt-and-replay", "counter.py", [
++        ('require(db.execute("SELECT 1 FROM receipts WHERE nonce = ?", (nonce,)).fetchone()\n'
++         '                    is None, "authorization-used")', 'pass'),
++        ('INSERT INTO receipts VALUES', 'INSERT OR REPLACE INTO receipts VALUES'),
++    ]),
++    "fail-open": ("backend-unavailable", "verifier.py", [
++        ('raise Denied("signature-or-backend") from exc', 'return'),
++    ]),
++}
++
++
++def main():
++    failures = 0
++    for name, (case, filename, edits) in MUTANTS.items():
++        with tempfile.TemporaryDirectory() as target:
++            root = Path(target)
++            for source in ("verifier.py", "counter.py", "challenge.py", "expected.json"):
++                shutil.copy(BASE / source, root / source)
++            source = root / filename
++            content = source.read_text()
++            for old, new in edits:
++                if content.count(old) != 1:
++                    raise RuntimeError(f"mutation site changed: {name}")
++                content = content.replace(old, new)
++            source.write_text(content)
++            run = subprocess.run([sys.executable, "challenge.py", case], cwd=root, capture_output=True, text=True)
++            if run.stderr:
++                raise RuntimeError(run.stderr)
++            result = json.loads(run.stdout)
++            killed = run.returncode == 1 and result["match"] is False and result["observed"][0] == "committed"
++            print(json.dumps({"mutant": name, "killed": killed, **result}))
++            failures += not killed
++    return bool(failures)
++
++
++if __name__ == "__main__":
++    sys.exit(main())
+diff --git a/experiments/cryptofall/requirements.txt b/experiments/cryptofall/requirements.txt
+new file mode 100644
+index 0000000..2033083
+--- /dev/null
++++ b/experiments/cryptofall/requirements.txt
+@@ -0,0 +1 @@
++cryptography==50.0.0
+diff --git a/experiments/cryptofall/verifier.py b/experiments/cryptofall/verifier.py
+new file mode 100644
+index 0000000..aa83484
+--- /dev/null
++++ b/experiments/cryptofall/verifier.py
+@@ -0,0 +1,166 @@
++"""Evidence-only, opt-in CRYPTOFALL wire verification."""
++
++import hashlib
++import json
++import re
++from importlib.metadata import version
++from types import MappingProxyType
++
++REALM = "wolftrap:cryptofall:disposable:v2"
++BACKEND = ("50.0.0", "OpenSSL 4.0.1 9 Jun 2026")
++REGISTRY = MappingProxyType({"ed25519-v1": (32, 64), "ml-dsa-65-v1": (1952, 3309)})
++EFFECT_ROLES = ("owner-test", "effect-witness-test")
++
++
++class Denied(Exception):
++    """The input supplies no usable authority."""
++
++
++def require(condition, reason):
++    if not condition:
++        raise Denied(reason)
++
++
++def wire(document):
++    return json.dumps(document, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("ascii")
++
++
++def digest(raw):
++    return hashlib.sha256(raw).hexdigest()
++
++
++def unique(pairs):
++    result = dict(pairs)
++    require(len(result) == len(pairs), "duplicate-field")
++    return result
++
++
++def unsupported_number(_):
++    raise Denied("wire-number")
++
++
++def parse(raw):
++    require(type(raw) is bytes and 0 < len(raw) <= 32768, "wire-size")
++    depth = 0
++    for token in re.finditer(rb'"(?:[^"\\]|\\.)*"|[{}\[\]]', raw):
++        symbol = token[0]
++        if symbol in (b"{", b"["):
++            depth += 1
++            require(depth <= 12, "wire-depth")
++        elif symbol in (b"}", b"]"):
++            depth -= 1
++    try:
++        result = json.loads(raw.decode("ascii"), object_pairs_hook=unique,
++                            parse_float=unsupported_number, parse_constant=unsupported_number)
++        require(type(result) is dict and wire(result) == raw, "canonical-wire")
++    except (ValueError, RecursionError, OverflowError) as exc:
++        raise Denied("wire-syntax") from exc
++    return result
++
++
++def shape(document, fields):
++    require(type(document) is dict and set(document) == set(fields.split()), "schema")
++
++
++def natural(value):
++    return type(value) is int and 0 <= value <= 2**53 - 1
++
++
++def unhex(value, size):
++    require(type(value) is str and len(value) == 2 * size
++            and re.fullmatch("[0-9a-f]+", value), "hex-field")
++    return bytes.fromhex(value)
++
++
++def key_id(key):
++    shape(key, "algorithm public")
++    algorithm = key["algorithm"]
++    require(type(algorithm) is str and algorithm in REGISTRY, "algorithm")
++    unhex(key["public"], REGISTRY[algorithm][0])
++    return digest(wire(key))
++
++
++def public_types():
++    from cryptography.hazmat.backends.openssl.backend import backend
++    from cryptography.hazmat.primitives.asymmetric import ed25519, mldsa
++
++    require((version("cryptography"), backend.openssl_version_text()) == BACKEND, "backend-identity")
++    return {"ed25519-v1": ed25519.Ed25519PublicKey, "ml-dsa-65-v1": mldsa.MLDSA65PublicKey}
++
++
++def check_signature(domain, body, role, key, seal):
++    shape(seal, "role key algorithm signature")
++    algorithm = key["algorithm"]
++    require(seal["role"] == role and seal["key"] == key_id(key)
++            and seal["algorithm"] == algorithm, "signature-coordinate")
++    public_size, sign_size = REGISTRY[algorithm]
++    public = unhex(key["public"], public_size)
++    signature = unhex(seal["signature"], sign_size)
++    message = wire([REALM, domain, role, seal["key"], algorithm, body])
++    try:
++        public_types()[algorithm].from_public_bytes(public).verify(signature, message)
++    except Denied:
++        raise
++    except Exception as exc:
++        raise Denied("signature-or-backend") from exc
++
++
++def endorsements(domain, body, seals, keys):
++    require(type(seals) is list and len(seals) == len(keys), "signature-count")
++    for (role, key), seal in zip(keys.items(), seals, strict=True):
++        check_signature(domain, body, role, key, seal)
++
++
++def policy(document):
++    shape(document, "v realm epoch predecessor mode keys revoked_keys revoked_algorithms")
++    require(type(document["v"]) is int and document["v"] == 2
++            and document["realm"] == REALM and natural(document["epoch"]), "policy-coordinate")
++    unhex(document["predecessor"], 32)
++    require(document["mode"] in ("active", "quarantine"), "policy-mode")
++    keys = document["keys"]
++    shape(keys, " ".join(EFFECT_ROLES))
++    ids = {key_id(key) for key in keys.values()}
++    require(len(ids) == len(keys), "shared-effect-key")
++    for field in ("revoked_keys", "revoked_algorithms"):
++        values = document[field]
++        require(type(values) is list and len(values) <= 64
++                and all(type(value) is str for value in values)
++                and values == sorted(set(values)), "revocation-schema")
++    for revoked in document["revoked_keys"]:
++        unhex(revoked, 32)
++    require(set(document["revoked_algorithms"]) <= REGISTRY.keys(), "revoked-algorithm")
++    require(not ids.intersection(document["revoked_keys"]), "reintroduced-key")
++    for role, algorithm in zip(EFFECT_ROLES, REGISTRY, strict=True):
++        require(keys[role]["algorithm"] == algorithm, "role-algorithm")
++    return document
++
++
++def current_key(document, key):
++    require(key_id(key) not in document["revoked_keys"]
++            and key["algorithm"] not in document["revoked_algorithms"], "revoked-signer")
++    return key
++
++
++def evaluate(raw, request, current, now):
++    """Verify evidence about an exact request. Return its one-use coordinate."""
++    envelope = parse(raw)
++    shape(envelope, "claim signatures")
++    claim = envelope["claim"]
++    shape(claim, "v realm epoch policy nonce request issued expires")
++    unhex(claim["nonce"], 16)
++    require(type(claim["v"]) is int and claim["v"] == 2 and claim["realm"] == REALM
++            and natural(claim["epoch"]) and claim["epoch"] == current["epoch"]
++            and claim["policy"] == digest(wire(current)) and current["mode"] == "active", "current-policy")
++    require(claim["request"] == digest(request), "request-binding")
++    issued, expires = claim["issued"], claim["expires"]
++    require(natural(issued) and natural(expires) and issued <= now < expires
++            and 0 < expires - issued <= 60, "claim-time")
++    keys = {role: current_key(current, current["keys"][role]) for role in EFFECT_ROLES}
++    endorsements("effect", claim, envelope["signatures"], keys)
++    return claim["nonce"], expires
++
++
++def historical_archive(raw, retained_digest):
++    """Classify bytes against an independently retained digest, without authority."""
++    require(type(raw) is bytes and len(raw) <= 32768 and digest(raw) == retained_digest, "archive-integrity")
++    return "HISTORICAL_BYTES_ONLY"

@@ -1,0 +1,17 @@
+[Unit]
+Description=Disposable WT-008 replica
+After=network.target
+
+[Service]
+Type=simple
+User=wt008
+Group=wt008
+UMask=0077
+ExecStart=/opt/wt008/venv/bin/python -B /opt/wt008/cryptofall/resurrection_node.py /var/lib/wt008/active
+Restart=on-failure
+NoNewPrivileges=true
+ProtectHome=true
+ProtectSystem=strict
+PrivateTmp=true
+ReadWritePaths=/var/lib/wt008/active
+RestrictAddressFamilies=AF_INET AF_UNIX

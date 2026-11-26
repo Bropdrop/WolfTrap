@@ -1,0 +1,6 @@
+{"mutant": "missing-binding", "killed": true, "case": "request-binding", "expected": ["request-binding", 0], "observed": ["committed", 1], "receipts": 1, "checkpoint_sequence": 1, "match": false}
+{"mutant": "or-instead-of-and", "killed": true, "case": "missing-signature", "expected": ["signature-count", 0], "observed": ["committed", 1], "receipts": 1, "checkpoint_sequence": 1, "match": false}
+{"mutant": "disabled-revocation", "killed": true, "case": "algorithm-revocation", "expected": ["revoked-signer", 0], "observed": ["committed", 1], "receipts": 1, "checkpoint_sequence": 1, "match": false}
+{"mutant": "stale-policy", "killed": true, "case": "commit-revocation-race", "expected": ["current-policy", 1], "observed": ["committed", 2], "receipts": 2, "checkpoint_sequence": 2, "match": false}
+{"mutant": "replay", "killed": true, "case": "exact-receipt-and-replay", "expected": ["authorization-used", 1], "observed": ["committed", 2], "receipts": 1, "checkpoint_sequence": 2, "match": false}
+{"mutant": "fail-open", "killed": true, "case": "backend-unavailable", "expected": ["signature-or-backend", 0], "observed": ["committed", 1], "receipts": 1, "checkpoint_sequence": 1, "match": false}

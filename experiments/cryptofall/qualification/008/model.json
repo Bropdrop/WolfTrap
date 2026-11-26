@@ -1,0 +1,44 @@
+{
+  "replicas": 4,
+  "quorum": 3,
+  "max_faulty": 1,
+  "values": 2,
+  "heights": 1,
+  "views": 4,
+  "within_view_prepare_conflicts": 0,
+  "conflicting_decisions": 0,
+  "levels": [
+    {
+      "view": 0,
+      "incoming_states": 1,
+      "prepare_assignments": 27,
+      "transitions": 125,
+      "successor_states": 17,
+      "undecided": 9
+    },
+    {
+      "view": 1,
+      "incoming_states": 17,
+      "prepare_assignments": 307,
+      "transitions": 1413,
+      "successor_states": 139,
+      "undecided": 69
+    },
+    {
+      "view": 2,
+      "incoming_states": 139,
+      "prepare_assignments": 2195,
+      "transitions": 10077,
+      "successor_states": 827,
+      "undecided": 429
+    },
+    {
+      "view": 3,
+      "incoming_states": 827,
+      "prepare_assignments": 12715,
+      "transitions": 58341,
+      "successor_states": 4183,
+      "undecided": 2313
+    }
+  ]
+}

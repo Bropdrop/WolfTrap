@@ -1,0 +1,40 @@
+# BLACKBOX crash and recovery matrix
+
+Each row reports the recovery verdict and physical target counter after the indicated schedule. Gate loss removes the gate process and its entire writable volume. In rows labeled “both lost,” the target process also dies and restarts on its existing volume. An observed counter value alone cannot establish a terminal verdict.
+
+| Fault or challenge | Recovery verdict | Observed counter |
+| --- | --- | ---: |
+| gate lost at before-prepare | **UNRESOLVED** | 0 |
+| gate lost at before-prepare-cas | **NOT_COMMITTED** | 0 |
+| gate lost at after-prepare-cas | **NOT_COMMITTED** | 0 |
+| gate lost at after-prepare-commit | **NOT_COMMITTED** | 0 |
+| gate lost at after-prepare | **NOT_COMMITTED** | 0 |
+| gate lost at before-target-write | **COMMITTED** | 1 |
+| gate lost at after-counter-write | **COMMITTED** | 1 |
+| gate lost at after-permit-write | **COMMITTED** | 1 |
+| gate lost at after-receipt-write | **COMMITTED** | 1 |
+| gate lost at before-witness-cas | **COMMITTED** | 1 |
+| gate lost at after-witness-cas | **COMMITTED** | 1 |
+| gate lost at after-target-commit | **COMMITTED** | 1 |
+| gate lost at before-client-reply | **COMMITTED** | 1 |
+| both lost at before-prepare-cas | **UNRESOLVED** | 0 |
+| both lost at after-prepare-cas | **UNRESOLVED** | 0 |
+| both lost at after-prepare-commit | **NOT_COMMITTED** | 0 |
+| both lost at before-target-write | **NOT_COMMITTED** | 0 |
+| both lost at after-counter-write | **NOT_COMMITTED** | 0 |
+| both lost at after-permit-write | **NOT_COMMITTED** | 0 |
+| both lost at after-receipt-write | **NOT_COMMITTED** | 0 |
+| both lost at before-witness-cas | **NOT_COMMITTED** | 0 |
+| both lost at after-witness-cas | **UNRESOLVED** | 0 |
+| both lost at after-target-commit | **COMMITTED** | 1 |
+| delayed execution after six replacement attempts | **NOT_COMMITTED** | 0 |
+| eight concurrent executions | **COMMITTED** | 1 |
+| contradictory ordinary replicas | **COMMITTED** | 1 |
+| contradictory authenticated target decisions | **UNRESOLVED** | 1 |
+| replicas only during target loss | **UNRESOLVED** | 1 |
+| reserved before revocation | **UNRESOLVED** | 0 |
+| revoked unresolved execution | **UNRESOLVED** | 0 |
+| target cancellation after revocation | **NOT_COMMITTED** | 0 |
+| explicit PQ recovery and new permit | **COMMITTED** | 1 |
+| before coordinated restoration | **COMMITTED** | 1 |
+| restored gate and target with retained head | **UNRESOLVED** | 0 |

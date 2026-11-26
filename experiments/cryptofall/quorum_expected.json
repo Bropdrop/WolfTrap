@@ -1,0 +1,113 @@
+{
+  "matrix": {
+    "two reachable voters": 2,
+    "unsafe threshold": "UNRESOLVED",
+    "copied ordinary block": "UNRESOLVED",
+    "vote lock survived process death": "locked",
+    "compromised A double voted with isolated D": "UNRESOLVED",
+    "relay killed after durable third vote": -9,
+    "no finalized log after third vote": [],
+    "two new relays recover using client bytes alone": [
+      "COMMITTED",
+      "COMMITTED"
+    ],
+    "signed receipt disclosed from surviving locks": "COMMITTED",
+    "read-only recovery left installed logs empty": [],
+    "two replacement gates recover lost certificate": [
+      "COMMITTED",
+      "COMMITTED"
+    ],
+    "three signatures after lost reply": "COMMITTED",
+    "stale replica D": "UNRESOLVED",
+    "D verified and installed majority branch": "COMMITTED",
+    "substituted disclosure evidence": "UNRESOLVED",
+    "delayed duplicate at next height": "UNRESOLVED",
+    "one logical increment at all replicas": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "conflicting commitments": "UNRESOLVED",
+    "rollback against retained floor": "UNRESOLVED",
+    "authority substitution": "UNRESOLVED",
+    "revocation wins against outstanding vote": "POLICY",
+    "delayed pre-revocation proposal lacks quorum": "UNRESOLVED",
+    "old algorithm rejected at new parent": "UNRESOLVED",
+    "revocation alone leaves effect unresolved": "UNRESOLVED",
+    "ordered dual-authority cancellation": "NOT_COMMITTED",
+    "proved non-commitment": "NOT_COMMITTED",
+    "independently authorized PQ-only recovery": "POLICY",
+    "fresh PQ-only effect": "COMMITTED",
+    "historical fence and PQ recovery chain": "COMMITTED",
+    "two competing recovery proposals under partition": [
+      "UNRESOLVED",
+      "UNRESOLVED"
+    ],
+    "split locks remain blocked after healing": [
+      "UNRESOLVED",
+      "UNRESOLVED"
+    ],
+    "competing dual-approved execution identities": [
+      "REPLACE",
+      "UNRESOLVED"
+    ],
+    "replaced executor packet rejected": "UNRESOLVED",
+    "old key cannot sign for new generation": "UNRESOLVED",
+    "winner alone admits fresh increment": "COMMITTED",
+    "historical decision survives later revocation": "COMMITTED",
+    "31-second hybrid claim denied by all four": 0,
+    "no fresh third vote after expiry": [
+      "A",
+      "B"
+    ],
+    "one identity repeated under another label": "UNRESOLVED",
+    "all four locks occupied by two exact proposals": "UNRESOLVED",
+    "expired claim recovers only already-durable votes": [
+      "A",
+      "B",
+      "C"
+    ],
+    "expired exact request has historical proof": "COMMITTED",
+    "changed receipt breaks commitment proof": "UNRESOLVED",
+    "replica killed between writes": -9,
+    "atomic SQL rows between writes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "reinstalled replica D exact recovery": "COMMITTED",
+    "replica killed after commit": -9,
+    "atomic SQL rows after commit": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "reinstalled replica C exact recovery": "COMMITTED"
+  },
+  "proofs": {
+    "unsafe threshold": "UNRESOLVED",
+    "copied ordinary block": "UNRESOLVED",
+    "compromised A double voted with isolated D": "UNRESOLVED",
+    "signed receipt disclosed from surviving locks": "COMMITTED",
+    "three signatures after lost reply": "COMMITTED",
+    "stale replica D": "UNRESOLVED",
+    "D verified and installed majority branch": "COMMITTED",
+    "substituted disclosure evidence": "UNRESOLVED",
+    "conflicting commitments": "UNRESOLVED",
+    "rollback against retained floor": "UNRESOLVED",
+    "authority substitution": "UNRESOLVED",
+    "revocation alone leaves effect unresolved": "UNRESOLVED",
+    "proved non-commitment": "NOT_COMMITTED",
+    "historical fence and PQ recovery chain": "COMMITTED",
+    "winner alone admits fresh increment": "COMMITTED",
+    "historical decision survives later revocation": "COMMITTED",
+    "one identity repeated under another label": "UNRESOLVED",
+    "expired exact request has historical proof": "COMMITTED",
+    "changed receipt breaks commitment proof": "UNRESOLVED",
+    "reinstalled replica D exact recovery": "COMMITTED",
+    "reinstalled replica C exact recovery": "COMMITTED"
+  }
+}
