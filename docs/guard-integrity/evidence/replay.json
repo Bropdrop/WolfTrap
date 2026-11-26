@@ -1,0 +1,436 @@
+{
+  "31": {
+    "historical": {
+      "environment": {
+        "python": "3.12.14",
+        "system": "Linux"
+      },
+      "limits": {
+        "report_bytes_per_entry": 16777216,
+        "report_entries": 64,
+        "source_bytes_per_entry": 4194304,
+        "source_bytes_total": 83886080,
+        "source_entries": 4096
+      },
+      "report_entries": 0,
+      "schema": "wolftrap.public-guard.v1",
+      "signals": {
+        "contact-address": 1
+      },
+      "source_commit": "5695bb00cf44607383e32e1fe832bd9e0d0c5d7b",
+      "source_entries": 221,
+      "source_tree": "382b7b783376fea567e943cb51d089b73505e7dc",
+      "status": "STATIC REVIEW SIGNAL",
+      "unknown": {},
+      "workflow_dependencies_checked": true
+    },
+    "corrected": {
+      "environment": {
+        "python": "3.12.14",
+        "system": "Linux"
+      },
+      "limits": {
+        "report_bytes_per_entry": 16777216,
+        "report_entries": 64,
+        "source_bytes_per_entry": 4194304,
+        "source_bytes_total": 83886080,
+        "source_entries": 4096
+      },
+      "report_entries": 0,
+      "schema": "wolftrap.public-guard.v1",
+      "signals": {},
+      "source_commit": "5695bb00cf44607383e32e1fe832bd9e0d0c5d7b",
+      "source_entries": 221,
+      "source_tree": "382b7b783376fea567e943cb51d089b73505e7dc",
+      "status": "NO_PATTERN_MATCH",
+      "unknown": {},
+      "workflow_dependencies_checked": true
+    }
+  },
+  "32": {
+    "historical": {
+      "environment": {
+        "python": "3.12.14",
+        "system": "Linux"
+      },
+      "limits": {
+        "report_bytes_per_entry": 16777216,
+        "report_entries": 64,
+        "source_bytes_per_entry": 4194304,
+        "source_bytes_total": 83886080,
+        "source_entries": 4096
+      },
+      "report_entries": 0,
+      "schema": "wolftrap.public-guard.v1",
+      "signals": {
+        "contact-address": 2
+      },
+      "source_commit": "db4aee9709b8b46ecbce1b8af8055f40030e423a",
+      "source_entries": 237,
+      "source_tree": "bb301180815e25ef7ee775ebd0c021cdf8155c31",
+      "status": "STATIC REVIEW SIGNAL",
+      "unknown": {},
+      "workflow_dependencies_checked": true
+    },
+    "corrected": {
+      "environment": {
+        "python": "3.12.14",
+        "system": "Linux"
+      },
+      "limits": {
+        "report_bytes_per_entry": 16777216,
+        "report_entries": 64,
+        "source_bytes_per_entry": 4194304,
+        "source_bytes_total": 83886080,
+        "source_entries": 4096
+      },
+      "report_entries": 0,
+      "schema": "wolftrap.public-guard.v1",
+      "signals": {},
+      "source_commit": "db4aee9709b8b46ecbce1b8af8055f40030e423a",
+      "source_entries": 237,
+      "source_tree": "bb301180815e25ef7ee775ebd0c021cdf8155c31",
+      "status": "NO_PATTERN_MATCH",
+      "unknown": {},
+      "workflow_dependencies_checked": true
+    }
+  },
+  "33": {
+    "historical": {
+      "environment": {
+        "python": "3.12.14",
+        "system": "Linux"
+      },
+      "limits": {
+        "report_bytes_per_entry": 16777216,
+        "report_entries": 64,
+        "source_bytes_per_entry": 4194304,
+        "source_bytes_total": 83886080,
+        "source_entries": 4096
+      },
+      "report_entries": 0,
+      "schema": "wolftrap.public-guard.v1",
+      "signals": {
+        "contact-address": 2
+      },
+      "source_commit": "1801595a2251a0bcdee85589761d8b337348166a",
+      "source_entries": 259,
+      "source_tree": "e228db1b662e84eeedb13600061cd0a3d2370947",
+      "status": "STATIC REVIEW SIGNAL",
+      "unknown": {},
+      "workflow_dependencies_checked": true
+    },
+    "corrected": {
+      "environment": {
+        "python": "3.12.14",
+        "system": "Linux"
+      },
+      "limits": {
+        "report_bytes_per_entry": 16777216,
+        "report_entries": 64,
+        "source_bytes_per_entry": 4194304,
+        "source_bytes_total": 83886080,
+        "source_entries": 4096
+      },
+      "report_entries": 0,
+      "schema": "wolftrap.public-guard.v1",
+      "signals": {},
+      "source_commit": "1801595a2251a0bcdee85589761d8b337348166a",
+      "source_entries": 259,
+      "source_tree": "e228db1b662e84eeedb13600061cd0a3d2370947",
+      "status": "NO_PATTERN_MATCH",
+      "unknown": {},
+      "workflow_dependencies_checked": true
+    }
+  },
+  "34": {
+    "historical": {
+      "environment": {
+        "python": "3.12.14",
+        "system": "Linux"
+      },
+      "limits": {
+        "report_bytes_per_entry": 16777216,
+        "report_entries": 64,
+        "source_bytes_per_entry": 4194304,
+        "source_bytes_total": 83886080,
+        "source_entries": 4096
+      },
+      "report_entries": 0,
+      "schema": "wolftrap.public-guard.v1",
+      "signals": {
+        "contact-address": 3
+      },
+      "source_commit": "04df111889f7fbfcd5be7ddf857f2a87a54bd7c6",
+      "source_entries": 266,
+      "source_tree": "4f767aefd34febc0e8f7aea40a6556dd2df4f3ec",
+      "status": "STATIC REVIEW SIGNAL",
+      "unknown": {},
+      "workflow_dependencies_checked": true
+    },
+    "corrected": {
+      "environment": {
+        "python": "3.12.14",
+        "system": "Linux"
+      },
+      "limits": {
+        "report_bytes_per_entry": 16777216,
+        "report_entries": 64,
+        "source_bytes_per_entry": 4194304,
+        "source_bytes_total": 83886080,
+        "source_entries": 4096
+      },
+      "report_entries": 0,
+      "schema": "wolftrap.public-guard.v1",
+      "signals": {},
+      "source_commit": "04df111889f7fbfcd5be7ddf857f2a87a54bd7c6",
+      "source_entries": 266,
+      "source_tree": "4f767aefd34febc0e8f7aea40a6556dd2df4f3ec",
+      "status": "NO_PATTERN_MATCH",
+      "unknown": {},
+      "workflow_dependencies_checked": true
+    }
+  },
+  "35": {
+    "historical": {
+      "environment": {
+        "python": "3.12.14",
+        "system": "Linux"
+      },
+      "limits": {
+        "report_bytes_per_entry": 16777216,
+        "report_entries": 64,
+        "source_bytes_per_entry": 4194304,
+        "source_bytes_total": 83886080,
+        "source_entries": 4096
+      },
+      "report_entries": 0,
+      "schema": "wolftrap.public-guard.v1",
+      "signals": {
+        "contact-address": 3
+      },
+      "source_commit": "99f148be239309315f4eca16860ad5eb45d8826b",
+      "source_entries": 269,
+      "source_tree": "680578ca7cc0d1bed571db5e95b1c29230b710e5",
+      "status": "STATIC REVIEW SIGNAL",
+      "unknown": {},
+      "workflow_dependencies_checked": true
+    },
+    "corrected": {
+      "environment": {
+        "python": "3.12.14",
+        "system": "Linux"
+      },
+      "limits": {
+        "report_bytes_per_entry": 16777216,
+        "report_entries": 64,
+        "source_bytes_per_entry": 4194304,
+        "source_bytes_total": 83886080,
+        "source_entries": 4096
+      },
+      "report_entries": 0,
+      "schema": "wolftrap.public-guard.v1",
+      "signals": {},
+      "source_commit": "99f148be239309315f4eca16860ad5eb45d8826b",
+      "source_entries": 269,
+      "source_tree": "680578ca7cc0d1bed571db5e95b1c29230b710e5",
+      "status": "NO_PATTERN_MATCH",
+      "unknown": {},
+      "workflow_dependencies_checked": true
+    }
+  },
+  "36": {
+    "historical": {
+      "environment": {
+        "python": "3.12.14",
+        "system": "Linux"
+      },
+      "limits": {
+        "report_bytes_per_entry": 16777216,
+        "report_entries": 64,
+        "source_bytes_per_entry": 4194304,
+        "source_bytes_total": 83886080,
+        "source_entries": 4096
+      },
+      "report_entries": 0,
+      "schema": "wolftrap.public-guard.v1",
+      "signals": {
+        "contact-address": 3
+      },
+      "source_commit": "ff1b7e1ccabcf4abe138d235ecd49674454dd9ea",
+      "source_entries": 278,
+      "source_tree": "38c469b33016b859f4a498c8f5c30ae97cbacd08",
+      "status": "STATIC REVIEW SIGNAL",
+      "unknown": {},
+      "workflow_dependencies_checked": true
+    },
+    "corrected": {
+      "environment": {
+        "python": "3.12.14",
+        "system": "Linux"
+      },
+      "limits": {
+        "report_bytes_per_entry": 16777216,
+        "report_entries": 64,
+        "source_bytes_per_entry": 4194304,
+        "source_bytes_total": 83886080,
+        "source_entries": 4096
+      },
+      "report_entries": 0,
+      "schema": "wolftrap.public-guard.v1",
+      "signals": {},
+      "source_commit": "ff1b7e1ccabcf4abe138d235ecd49674454dd9ea",
+      "source_entries": 278,
+      "source_tree": "38c469b33016b859f4a498c8f5c30ae97cbacd08",
+      "status": "NO_PATTERN_MATCH",
+      "unknown": {},
+      "workflow_dependencies_checked": true
+    }
+  },
+  "39": {
+    "historical": {
+      "environment": {
+        "python": "3.12.14",
+        "system": "Linux"
+      },
+      "limits": {
+        "report_bytes_per_entry": 16777216,
+        "report_entries": 64,
+        "source_bytes_per_entry": 4194304,
+        "source_bytes_total": 83886080,
+        "source_entries": 4096
+      },
+      "report_entries": 0,
+      "schema": "wolftrap.public-guard.v1",
+      "signals": {
+        "unreviewed-dependency-manifest": 1
+      },
+      "source_commit": "ff8059c1d24018c36e03688539184b65537b7334",
+      "source_entries": 251,
+      "source_tree": "814a03473e23d94cd9af84ed6f2a567c19badfcd",
+      "status": "STATIC REVIEW SIGNAL",
+      "unknown": {},
+      "workflow_dependencies_checked": true
+    },
+    "default": {
+      "environment": {
+        "python": "3.12.14",
+        "system": "Linux"
+      },
+      "limits": {
+        "report_bytes_per_entry": 16777216,
+        "report_entries": 64,
+        "source_bytes_per_entry": 4194304,
+        "source_bytes_total": 83886080,
+        "source_entries": 4096
+      },
+      "report_entries": 0,
+      "schema": "wolftrap.public-guard.v1",
+      "signals": {
+        "unreviewed-dependency-manifest": 1
+      },
+      "source_commit": "ff8059c1d24018c36e03688539184b65537b7334",
+      "source_entries": 251,
+      "source_tree": "814a03473e23d94cd9af84ed6f2a567c19badfcd",
+      "status": "STATIC REVIEW SIGNAL",
+      "unknown": {},
+      "workflow_dependencies_checked": true
+    },
+    "opt_in": {
+      "environment": {
+        "python": "3.12.14",
+        "system": "Linux"
+      },
+      "limits": {
+        "report_bytes_per_entry": 16777216,
+        "report_entries": 64,
+        "source_bytes_per_entry": 4194304,
+        "source_bytes_total": 83886080,
+        "source_entries": 4096
+      },
+      "policy": "cryptofall-historical-cp312-linux-x86_64-v1",
+      "report_entries": 0,
+      "schema": "wolftrap.public-guard.v1",
+      "signals": {},
+      "source_commit": "ff8059c1d24018c36e03688539184b65537b7334",
+      "source_entries": 251,
+      "source_tree": "814a03473e23d94cd9af84ed6f2a567c19badfcd",
+      "status": "NO_PATTERN_MATCH",
+      "unknown": {},
+      "workflow_dependencies_checked": true
+    }
+  },
+  "minimal": {
+    "historical": {
+      "environment": {
+        "python": "3.12.14",
+        "system": "Linux"
+      },
+      "limits": {
+        "report_bytes_per_entry": 16777216,
+        "report_entries": 64,
+        "source_bytes_per_entry": 4194304,
+        "source_bytes_total": 83886080,
+        "source_entries": 4096
+      },
+      "report_entries": 0,
+      "schema": "wolftrap.public-guard.v1",
+      "signals": {
+        "contact-address": 3
+      },
+      "source_commit": "f0ebd635a0001065ea26055f890c6c74157b3af6",
+      "source_entries": 3,
+      "source_tree": "b058fe92b239fec20573ac5d6b77f31f91752cda",
+      "status": "STATIC REVIEW SIGNAL",
+      "unknown": {},
+      "workflow_dependencies_checked": true
+    },
+    "corrected": {
+      "environment": {
+        "python": "3.12.14",
+        "system": "Linux"
+      },
+      "limits": {
+        "report_bytes_per_entry": 16777216,
+        "report_entries": 64,
+        "source_bytes_per_entry": 4194304,
+        "source_bytes_total": 83886080,
+        "source_entries": 4096
+      },
+      "report_entries": 0,
+      "schema": "wolftrap.public-guard.v1",
+      "signals": {},
+      "source_commit": "f0ebd635a0001065ea26055f890c6c74157b3af6",
+      "source_entries": 3,
+      "source_tree": "b058fe92b239fec20573ac5d6b77f31f91752cda",
+      "status": "NO_PATTERN_MATCH",
+      "unknown": {},
+      "workflow_dependencies_checked": true
+    },
+    "wrong_scope": {
+      "environment": {
+        "python": "3.12.14",
+        "system": "Linux"
+      },
+      "limits": {
+        "report_bytes_per_entry": 16777216,
+        "report_entries": 64,
+        "source_bytes_per_entry": 4194304,
+        "source_bytes_total": 83886080,
+        "source_entries": 4096
+      },
+      "policy": "cryptofall-historical-cp312-linux-x86_64-v1",
+      "report_entries": 0,
+      "schema": "wolftrap.public-guard.v1",
+      "signals": {
+        "laboratory-scope": 1
+      },
+      "source_commit": "f0ebd635a0001065ea26055f890c6c74157b3af6",
+      "source_entries": 3,
+      "source_tree": "b058fe92b239fec20573ac5d6b77f31f91752cda",
+      "status": "STATIC REVIEW SIGNAL",
+      "unknown": {},
+      "workflow_dependencies_checked": true
+    }
+  }
+}
