@@ -24,3 +24,5 @@ PYTHONPATH=src python -B -m wolftrap.public_guard --repo /path/to/WolfTrap ff805
 ```
 
 [Mutation results](evidence/mutations.json) · [Protected-runtime runner handoff](runner.md)
+
+[Independent review index for #16, #17, #22 and #39](review-index.md)
