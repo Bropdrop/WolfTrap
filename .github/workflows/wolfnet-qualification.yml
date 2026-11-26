@@ -1,0 +1,72 @@
+name: WolfTrap WolfNet registry qualification
+
+on:
+  pull_request:
+    branches: [main, feat/wolftrap-integrated-v1, feat/wolfprint-agent-identity-v1]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qualify:
+    name: Verify signed fictional advisories and subscriber decisions
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      WOLFTRAP_HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+    steps:
+      - name: Check out the exact candidate
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ env.WOLFTRAP_HEAD }}
+          persist-credentials: false
+
+      - name: Qualify and screen in a loopback-only namespace
+        shell: bash
+        run: |
+          set -euo pipefail
+          parent_namespace=$(readlink /proc/self/ns/net)
+          sudo unshare --net -- setpriv --reuid="$(id -u)" --regid="$(id -g)" \
+            --clear-groups --no-new-privs --bounding-set=-all -- env -i \
+            PATH=/usr/bin:/bin PYTHONPATH=src PYTHONDONTWRITEBYTECODE=1 PYTHONHASHSEED=0 \
+            python3 scripts/qualify-wolfnet.py --expected-head "$WOLFTRAP_HEAD" \
+            --parent-netns "$parent_namespace" --output-dir "$RUNNER_TEMP/wolftrap-wolfnet"
+
+      - name: Retain the screened fictional evidence
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: wolftrap-wolfnet-v1
+          path: |
+            ${{ runner.temp }}/wolftrap-wolfnet/qualification.json
+            ${{ runner.temp }}/wolftrap-wolfnet/unit-tests.json
+            ${{ runner.temp }}/wolftrap-wolfnet/challenge/wolfnet.json
+            ${{ runner.temp }}/wolftrap-wolfnet/challenge/wolfnet.md
+            ${{ runner.temp }}/wolftrap-wolfnet/challenge/wolfnet.sarif
+            ${{ runner.temp }}/wolftrap-wolfnet/challenge/wolfnet.manifest.json
+            ${{ runner.temp }}/wolftrap-wolfnet/feed/wolfnet.json
+            ${{ runner.temp }}/wolftrap-wolfnet/feed/wolfnet.md
+            ${{ runner.temp }}/wolftrap-wolfnet/feed/wolfnet.sarif
+            ${{ runner.temp }}/wolftrap-wolfnet/feed/wolfnet.manifest.json
+            ${{ runner.temp }}/wolftrap-wolfnet/feed/wolfnet-checkpoint.json
+            ${{ runner.temp }}/wolftrap-wolfnet/advisory/wolfnet.json
+            ${{ runner.temp }}/wolftrap-wolfnet/advisory/wolfnet.md
+            ${{ runner.temp }}/wolftrap-wolfnet/advisory/wolfnet.sarif
+            ${{ runner.temp }}/wolftrap-wolfnet/advisory/wolfnet.manifest.json
+            ${{ runner.temp }}/wolftrap-wolfnet/opt-in/wolfnet.json
+            ${{ runner.temp }}/wolftrap-wolfnet/opt-in/wolfnet.md
+            ${{ runner.temp }}/wolftrap-wolfnet/opt-in/wolfnet.sarif
+            ${{ runner.temp }}/wolftrap-wolfnet/opt-in/wolfnet.manifest.json
+            ${{ runner.temp }}/wolftrap-wolfnet/withdrawn/wolfnet.json
+            ${{ runner.temp }}/wolftrap-wolfnet/withdrawn/wolfnet.md
+            ${{ runner.temp }}/wolftrap-wolfnet/withdrawn/wolfnet.sarif
+            ${{ runner.temp }}/wolftrap-wolfnet/withdrawn/wolfnet.manifest.json
+            ${{ runner.temp }}/wolftrap-wolfnet/withdrawn/wolfnet-checkpoint.json
+            ${{ runner.temp }}/wolftrap-wolfnet/restored/wolfnet.json
+            ${{ runner.temp }}/wolftrap-wolfnet/restored/wolfnet.md
+            ${{ runner.temp }}/wolftrap-wolfnet/restored/wolfnet.sarif
+            ${{ runner.temp }}/wolftrap-wolfnet/restored/wolfnet.manifest.json
+          if-no-files-found: error
+          retention-days: 14

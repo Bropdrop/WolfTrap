@@ -2,7 +2,7 @@ name: WolfTrap independent public qualification
 
 on:
   pull_request:
-    branches: [main, feat/wolftrap-integrated-v1]
+    branches: [main, feat/wolftrap-integrated-v1, feat/wolfprint-agent-identity-v1]
   push:
     branches: [main]
   workflow_dispatch:
